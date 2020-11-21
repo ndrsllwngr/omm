@@ -3,20 +3,12 @@ import domtoimage from 'dom-to-image'
 import { saveAs } from 'file-saver'
 import { Layout } from '@/components/Layout'
 import { HtmlHead } from '@/components/HtmlHead'
-
-const Meme = ({ myRef, src, alt, top, bottom }) => {
-  return (
-    <div ref={myRef} className="relative">
-      <img src={src} alt={alt} width={640} height={427}></img>
-      <span>{top}</span>
-      <span>{bottom}</span>
-    </div>
-  )
-}
+import { Meme } from '@/components/Meme'
 
 const LandingPage = () => {
-  const [top, setTop] = useState('')
-  const [bottom, setBottom] = useState('')
+  const [top, setTop] = useState('This is fine.')
+  const [bottom, setBottom] = useState(':)')
+  const [image, setImage] = useState('/assets/matt-nelson-aI3EBLvcyu4-unsplash.jpg')
   const memeEl = useRef(null)
 
   const createDownload = () => {
@@ -30,30 +22,52 @@ const LandingPage = () => {
   return (
     <Layout>
       <HtmlHead />
-      <Meme
-        myRef={memeEl}
-        src="/assets/matt-nelson-aI3EBLvcyu4-unsplash.jpg"
-        alt="four dogs on park"
-        top={top}
-        bottom={bottom}
-      />
-      <form>
-        <label>Top</label>
-        <input
-          type="text"
-          name="top"
-          value={top}
-          onChange={(event) => setTop(event.target.value)}
-        ></input>
-        <label>Bottom</label>
-        <input
-          type="text"
-          name="bottom"
-          value={bottom}
-          onChange={(event) => setBottom(event.target.value)}
-        ></input>
-      </form>
-      <button onClick={createDownload}>Export As PNG</button>
+      <div className="flex flex-col md:flex-row">
+        <Meme myRef={memeEl} src={image} alt="Meme image" top={top} bottom={bottom} />
+        <div className="flex flex-col flex-grow mx-4 mt-4 md:mt-0 justify-center">
+          <form className="flex flex-col">
+            <label className="block">
+              <span className="text-gray-700">Top Caption</span>
+              <input
+                className="form-input mt-1 block w-full"
+                placeholder=""
+                type="text"
+                name="top-caption"
+                value={top}
+                onChange={(event) => setTop(event.target.value)}
+              ></input>
+            </label>
+            <label className="block mt-4">
+              <span className="text-gray-700">Bottom Caption</span>
+              <input
+                className="form-input mt-1 block w-full"
+                placeholder=""
+                type="text"
+                name="bottom-caption"
+                value={bottom}
+                onChange={(event) => setBottom(event.target.value)}
+              ></input>
+            </label>
+            <label className="block mt-4">
+              <span className="text-gray-700">Image URL</span>
+              <input
+                className="form-input mt-1 block w-full"
+                placeholder=""
+                type="text"
+                name="image-url"
+                value={image}
+                onChange={(event) => setImage(event.target.value)}
+              ></input>
+            </label>
+          </form>
+          <button
+            className="mt-4 p-2 rounded-md font-sans font-semibold bg-gradient-to-r from-teal-400 to-blue-500 hover:from-pink-500 hover:to-orange-500"
+            onClick={createDownload}
+          >
+            Download
+          </button>
+        </div>
+      </div>
     </Layout>
   )
 }
