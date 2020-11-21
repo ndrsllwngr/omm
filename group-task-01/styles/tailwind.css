@@ -7,6 +7,10 @@
 @import url('https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400;500;700&display=swap');
 
 @layer components {
+  html, body, #__next {
+    @apply h-full;
+  }
+
   .form-input {
     appearance: none;
     background-color: #fff;

@@ -1,24 +1,17 @@
 import React from 'react'
-import PropTypes from 'prop-types'
+import { useMeme } from '@/components/context-meme'
 
-export const Meme = ({ myRef, src, alt, top, bottom }) => {
+export const Meme = () => {
+  const [memeContext] = useMeme()
   return (
-    <div ref={myRef} className="relative">
-      <img src={src} alt={alt} width={640} height={427}></img>
+    <div ref={memeContext.memeRef} className="relative">
+      <img src={memeContext.url} width={640} height={427}></img>
       <span className="absolute text-white text-5xl font-black top-4 left-1/2 meme-shadow transform -translate-x-1/2 text-center uppercase">
-        {top}
+        {memeContext.topCaption}
       </span>
       <span className="absolute text-white text-5xl font-black bottom-4 left-1/2 meme-shadow transform -translate-x-1/2 text-center uppercase">
-        {bottom}
+        {memeContext.bottomCaption}
       </span>
     </div>
   )
-}
-
-Meme.propTypes = {
-  myRef: PropTypes.any,
-  src: PropTypes.string,
-  alt: PropTypes.string,
-  top: PropTypes.string,
-  bottom: PropTypes.string,
 }

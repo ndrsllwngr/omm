@@ -6,7 +6,7 @@ class NextSite extends Document {
     return (
       <Html lang="en">
         <Head></Head>
-        <body className="bg-white">
+        <body className="antialiased font-sans bg-gray-200">
           <Main />
           <NextScript />
         </body>
