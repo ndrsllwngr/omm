@@ -12,14 +12,16 @@ export const MemeSelection = ({ memes }) => {
 
   return (
     <div>
-      <div className="font-bold text-gray-700 block mb-1">Preview</div>
-      <div className="mb-5 flex justify-center border-gray-300 border-solid border-2 rounded-lg">
-        <img
-          className="object-contain w-full h-60"
-          src={memeContext.url}
-          width={640}
-          height={427}
-        ></img>
+      <div className="mb-5">
+        <div className="font-bold mb-1 text-gray-700 block">Preview</div>
+        <div className="flex justify-center border-gray-300 border-solid border-2 rounded-lg">
+          <img
+            className="object-contain w-full h-60"
+            src={memeContext.url}
+            width={640}
+            height={427}
+          ></img>
+        </div>
       </div>
       <div className="mb-5">
         <label htmlFor="image-url" className="font-bold mb-1 text-gray-700 block">
@@ -34,17 +36,19 @@ export const MemeSelection = ({ memes }) => {
           className="w-full px-4 py-3 rounded-lg shadow-sm focus:outline-none focus:shadow-outline text-gray-600 font-medium"
         ></input>
       </div>
-      <div className="font-bold text-gray-700 block mb-1">Gallery</div>
-      <div className="grid grid-cols-3 sm:grid-cols-6 gap-2 items-center mx-auto justify-content-center mb-4">
-        {memes.map((el, index) => (
-          <button
-            key={index}
-            className={`relative w-24 h-24 bg-white overflow-hidden place-self-center justify-self-center`}
-            onClick={() => handleMemeContextChange('url', el.url)}
-          >
-            <Image src={el.url} width={el.width} height={el.height} alt={el.name} />
-          </button>
-        ))}
+      <div className="mb-5">
+        <div className="font-bold mb-1 text-gray-700 block ">Gallery</div>
+        <div className="grid grid-cols-3 sm:grid-cols-6 gap-2 items-center mx-auto justify-content-center">
+          {memes.map((el, index) => (
+            <button
+              key={index}
+              className={`relative w-24 h-24 bg-white overflow-hidden place-self-center justify-self-center`}
+              onClick={() => handleMemeContextChange('url', el.url)}
+            >
+              <Image src={el.url} width={el.width} height={el.height} alt={el.name} />
+            </button>
+          ))}
+        </div>
       </div>
     </div>
   )

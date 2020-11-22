@@ -36,9 +36,11 @@ export const MemeEditor = () => {
           className="w-full px-4 py-3 rounded-lg shadow-sm focus:outline-none focus:shadow-outline text-gray-600 font-medium"
         ></input>
       </div>
-      <div className="font-bold text-gray-700 block">Preview</div>
-      <div className="mb-5 flex justify-center">
-        <Meme />
+      <div className="mb-5">
+        <span className="font-bold mb-1 text-gray-700 block">Preview</span>
+        <div className="flex justify-center border-gray-300 border-solid border-2 rounded-lg">
+          <Meme />
+        </div>
       </div>
     </div>
   )
