@@ -53,7 +53,7 @@ const LandingPage = ({ memes }) => {
     <>
       <HtmlHead />
       {step === STEPS.complete ? (
-        <div className="max-w-3xl mx-auto px-4 py-10 flex flex-col justify-center h-full">
+        <div className="max-w-3xl mx-auto px-4 py-10 flex flex-col justify-center min-h-full">
           <MemeResult setStep={setStep} />
         </div>
       ) : (
