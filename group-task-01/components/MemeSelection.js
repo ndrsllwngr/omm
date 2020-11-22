@@ -3,15 +3,27 @@ import PropTypes from 'prop-types'
 import Image from 'next/image'
 import { useMeme } from '@/components/context-meme'
 
+/**
+ * Offer various options to select a meme
+ * either via custom url
+ * or by selecting a meme of our gallery
+ *
+ * @param memes - array of memes to populate gallery
+ */
 export const MemeSelection = ({ memes }) => {
+  // access context to retrieve & change meme.url
   const [memeContext, setMemeContext] = useMeme()
+
+  // manipulate context by providing property and value
   const handleMemeContextChange = (property, value) => {
     console.log({ property, value })
+    // only change a certain key-value pair, keep all other values
     setMemeContext({ ...memeContext, [property]: value })
   }
 
   return (
     <div>
+      {/* Preview of selected meme */}
       <div className="mb-5">
         <div className="font-bold mb-1 text-gray-700 block">Preview</div>
         <div className="flex justify-center border-gray-300 border-solid border-2 rounded-lg">
@@ -23,6 +35,7 @@ export const MemeSelection = ({ memes }) => {
           ></img>
         </div>
       </div>
+      {/* Image URL input */}
       <div className="mb-5">
         <label htmlFor="image-url" className="font-bold mb-1 text-gray-700 block">
           Image URL
@@ -36,6 +49,7 @@ export const MemeSelection = ({ memes }) => {
           className="w-full px-4 py-3 rounded-lg shadow-sm focus:outline-none focus:shadow-outline text-gray-600 font-medium"
         ></input>
       </div>
+      {/* Meme gallery */}
       <div className="mb-5">
         <div className="font-bold mb-1 text-gray-700 block ">Gallery</div>
         <div className="grid grid-cols-3 sm:grid-cols-6 gap-2 items-center mx-auto justify-content-center">
