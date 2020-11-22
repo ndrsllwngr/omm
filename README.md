@@ -1,4 +1,7 @@
-# Group Task 01
+# OMM - Final project
+
+- Meme generator
+- Preview: https://omm.vercel.app/
 
 ## Stack
 - [Next.js](https://nextjs.org/)
