@@ -2,9 +2,13 @@ import React, { useContext, useState, useMemo } from 'react'
 import PropTypes from 'prop-types'
 
 const emptyState = {
-  topCaption: 'This is fine.',
-  bottomCaption: ':)',
-  url: '/assets/matt-nelson-aI3EBLvcyu4-unsplash.jpg',
+  caption_1_text: 'This is fine.',
+  caption_1_posX: 0,
+  caption_1_posY: 0,
+  caption_2_text: ':)',
+  caption_2_posX: 0,
+  caption_2_posY: 0,
+  image_url: '/assets/matt-nelson-aI3EBLvcyu4-unsplash.jpg',
   memeRef: React.createRef(),
 }
 

@@ -19,29 +19,29 @@ export const MemeEditor = () => {
     <div>
       {/* Top caption input */}
       <div className="mb-5">
-        <label htmlFor="top-caption" className="font-bold mb-1 text-gray-700 block">
+        <label htmlFor="caption_1" className="font-bold mb-1 text-gray-700 block">
           Top text
         </label>
         <input
           placeholder=""
           type="text"
-          name="top-caption"
-          value={memeContext.topCaption}
-          onChange={(event) => handleMemeContextChange('topCaption', event.target.value)}
+          name="caption_1"
+          value={memeContext.caption_1_text}
+          onChange={(event) => handleMemeContextChange('caption_1_text', event.target.value)}
           className="w-full px-4 py-3 rounded-lg shadow-sm focus:outline-none focus:shadow-outline text-gray-600 font-medium"
         ></input>
       </div>
       {/* Bottom caption input */}
       <div className="mb-5">
-        <label htmlFor="bottom-caption" className="font-bold mb-1 text-gray-700 block">
+        <label htmlFor="caption_2" className="font-bold mb-1 text-gray-700 block">
           Bottom text
         </label>
         <input
           placeholder=""
           type="text"
-          name="bottom-caption"
-          value={memeContext.bottomCaption}
-          onChange={(event) => handleMemeContextChange('bottomCaption', event.target.value)}
+          name="caption_2"
+          value={memeContext.caption_2_text}
+          onChange={(event) => handleMemeContextChange('caption_2_text', event.target.value)}
           className="w-full px-4 py-3 rounded-lg shadow-sm focus:outline-none focus:shadow-outline text-gray-600 font-medium"
         ></input>
       </div>

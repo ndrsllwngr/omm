@@ -5,12 +5,12 @@ export const Meme = () => {
   const [memeContext] = useMeme()
   return (
     <div ref={memeContext.memeRef} className="relative">
-      <img src={memeContext.url} width={640} height={427}></img>
+      <img src={memeContext.image_url} width={640} height={427}></img>
       <span className="absolute text-white text-5xl font-black top-4 left-1/2 meme-shadow transform -translate-x-1/2 text-center uppercase">
-        {memeContext.topCaption}
+        {memeContext.caption_1_text}
       </span>
       <span className="absolute text-white text-5xl font-black bottom-4 left-1/2 meme-shadow transform -translate-x-1/2 text-center uppercase">
-        {memeContext.bottomCaption}
+        {memeContext.caption_2_text}
       </span>
     </div>
   )

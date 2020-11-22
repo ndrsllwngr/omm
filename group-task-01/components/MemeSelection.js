@@ -29,7 +29,7 @@ export const MemeSelection = ({ memes }) => {
         <div className="flex justify-center border-gray-300 border-solid border-2 rounded-lg">
           <img
             className="object-contain w-full h-60"
-            src={memeContext.url}
+            src={memeContext.image_url}
             width={640}
             height={427}
           ></img>
@@ -37,15 +37,15 @@ export const MemeSelection = ({ memes }) => {
       </div>
       {/* Image URL input */}
       <div className="mb-5">
-        <label htmlFor="image-url" className="font-bold mb-1 text-gray-700 block">
+        <label htmlFor="image_url" className="font-bold mb-1 text-gray-700 block">
           Image URL
         </label>
         <input
           placeholder=""
           type="text"
-          name="image-url"
-          value={memeContext.url}
-          onChange={(event) => handleMemeContextChange('url', event.target.value)}
+          name="image_url"
+          value={memeContext.image_url}
+          onChange={(event) => handleMemeContextChange('image_url', event.target.value)}
           className="w-full px-4 py-3 rounded-lg shadow-sm focus:outline-none focus:shadow-outline text-gray-600 font-medium"
         ></input>
       </div>
@@ -57,7 +57,7 @@ export const MemeSelection = ({ memes }) => {
             <button
               key={index}
               className={`relative w-24 h-24 bg-white overflow-hidden place-self-center justify-self-center`}
-              onClick={() => handleMemeContextChange('url', el.url)}
+              onClick={() => handleMemeContextChange('image_url', el.url)}
             >
               <Image src={el.url} width={el.width} height={el.height} alt={el.name} />
             </button>
