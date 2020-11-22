@@ -3,7 +3,7 @@
 - Meme generator
 - Preview: https://omm.vercel.app/
 
-## Stack
+## Tech-Stack
 - [Next.js](https://nextjs.org/)
 - [React](https://reactjs.org/)
 - [Tailwind CSS](https://tailwindcss.com/)
