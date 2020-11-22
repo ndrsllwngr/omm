@@ -1,75 +1,109 @@
-import React, { useState, useRef } from 'react'
-import domtoimage from 'dom-to-image'
-import { saveAs } from 'file-saver'
-import { Layout } from '@/components/Layout'
+import React, { useEffect, useState } from 'react'
+import PropTypes from 'prop-types'
+import { STEPS, DIRECTION } from '@/lib/constants'
+import { MemeEditor } from '@/components/MemeEditor'
+import { MemeSelection } from '@/components/MemeSelection'
+import { MemeResult } from '@/components/MemeResult'
+import { NavTop } from '@/components/NavTop'
+import { NavBottom } from '@/components/NavBottom'
 import { HtmlHead } from '@/components/HtmlHead'
-import { Meme } from '@/components/Meme'
 
-const LandingPage = () => {
-  const [top, setTop] = useState('This is fine.')
-  const [bottom, setBottom] = useState(':)')
-  const [image, setImage] = useState('/assets/matt-nelson-aI3EBLvcyu4-unsplash.jpg')
-  const memeEl = useRef(null)
-
-  const createDownload = () => {
-    console.log({ memeEl })
-    if (memeEl !== null && memeEl !== undefined) {
-      domtoimage.toBlob(memeEl.current).then(function (blob) {
-        saveAs(blob, 'my-node.png')
-      })
+const LandingPage = ({ memes }) => {
+  const [step, setStep] = useState(STEPS.one)
+  useEffect(() => {
+    console.log({ memes })
+  }, [memes])
+  const navigate = (direction) => {
+    let page
+    switch (direction) {
+      case DIRECTION.prev:
+        switch (step) {
+          case STEPS.complete:
+            page = STEPS.two
+            break
+          case STEPS.one:
+          case STEPS.two:
+            page = STEPS.one
+            break
+          default:
+            console.error('Step not supported.', { step })
+        }
+        break
+      case DIRECTION.next:
+        switch (step) {
+          case STEPS.complete:
+            page = STEPS.complete
+            break
+          case STEPS.one:
+            page = STEPS.two
+            break
+          case STEPS.two:
+            page = STEPS.complete
+            break
+          default:
+            console.error('Step not supported.', { step })
+        }
+        break
+      default:
+        console.error('Direction not supported.', { direction })
     }
+    setStep(page)
   }
   return (
-    <Layout>
+    <>
       <HtmlHead />
-      <div className="flex flex-col md:flex-row">
-        <Meme myRef={memeEl} src={image} alt="Meme image" top={top} bottom={bottom} />
-        <div className="flex flex-col flex-grow mx-4 mt-4 md:mt-0 justify-center">
-          <form className="flex flex-col">
-            <label className="block">
-              <span className="text-gray-700">Top Caption</span>
-              <input
-                className="form-input mt-1 block w-full"
-                placeholder=""
-                type="text"
-                name="top-caption"
-                value={top}
-                onChange={(event) => setTop(event.target.value)}
-              ></input>
-            </label>
-            <label className="block mt-4">
-              <span className="text-gray-700">Bottom Caption</span>
-              <input
-                className="form-input mt-1 block w-full"
-                placeholder=""
-                type="text"
-                name="bottom-caption"
-                value={bottom}
-                onChange={(event) => setBottom(event.target.value)}
-              ></input>
-            </label>
-            <label className="block mt-4">
-              <span className="text-gray-700">Image URL</span>
-              <input
-                className="form-input mt-1 block w-full"
-                placeholder=""
-                type="text"
-                name="image-url"
-                value={image}
-                onChange={(event) => setImage(event.target.value)}
-              ></input>
-            </label>
-          </form>
-          <button
-            className="mt-4 p-2 rounded-md font-sans font-semibold bg-gradient-to-r from-teal-400 to-blue-500 hover:from-pink-500 hover:to-orange-500"
-            onClick={createDownload}
-          >
-            Download
-          </button>
+      {step === STEPS.complete ? (
+        <div className="max-w-3xl mx-auto px-4 py-10 flex flex-col justify-center min-h-full">
+          <MemeResult setStep={setStep} />
         </div>
-      </div>
-    </Layout>
+      ) : (
+        <>
+          <div className="max-w-3xl mx-auto px-4 py-10">
+            <NavTop step={step} />
+            <div className="py-10">
+              {step === STEPS.one && <MemeSelection memes={memes} />}
+              {step === STEPS.two && <MemeEditor />}
+            </div>
+          </div>
+          <NavBottom step={step} navigate={navigate} />
+        </>
+      )}
+    </>
   )
+}
+
+LandingPage.propTypes = {
+  memes: PropTypes.arrayOf(
+    PropTypes.shape({
+      url: PropTypes.string,
+      width: PropTypes.number,
+      height: PropTypes.number,
+      name: PropTypes.string,
+    })
+  ),
+}
+
+// Fetch data at build time
+export async function getStaticProps() {
+  // Fetch data from external API
+  const res = await fetch(`https://api.imgflip.com/get_memes`)
+  const data = await res.json()
+  let memes = []
+  if (data !== null || data !== undefined) {
+    const dataStripped = data.data.memes.map((meme) => {
+      return {
+        url: meme.url,
+        width: meme.width,
+        height: meme.height,
+        name: meme.name,
+      }
+    })
+    memes = dataStripped
+    console.log({ memes })
+  }
+
+  // Pass data to the page via props
+  return { props: { memes } }
 }
 
 export default LandingPage
