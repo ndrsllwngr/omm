@@ -1,6 +1,6 @@
-# OMM - Final project
+# Meme generator
 
-- Meme generator
+- Online Multimedia - Group project (2020/2021)
 - Preview: https://omm.vercel.app/
 
 ## Tech-Stack
@@ -17,6 +17,17 @@
 ### Setup
 - `node --version && npm --version && yarn --version` - Ensures that required packages are installed.
 - `yarn install` - Installs the project using [Yarn](https://yarnpkg.com/getting-started/install).
+
+## Firebase Configuration
+
+1. _[Create a Firebase project](https://console.firebase.google.com/u/0/) and add a new app to it._
+2. Create a `.env.local` file and copy the contents of `.env.local.example` into it:
+
+```bash
+cp .env.local.example .env.local
+```
+
+3. Set each variable on `.env.local` with your Firebase Configuration (found in "Project settings").
 
 ### Commands
 - `yarn dev` - Runs next which starts Next.js in development mode.

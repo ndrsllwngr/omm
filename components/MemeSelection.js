@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import Image from 'next/image'
-import { useMeme } from '@/components/context-meme'
+import { useMeme } from '@/components/context/memeContext'
 
 /**
  * Offer various options to select a meme

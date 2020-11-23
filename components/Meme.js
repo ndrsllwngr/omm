@@ -1,5 +1,5 @@
 import React from 'react'
-import { useMeme } from '@/components/context-meme'
+import { useMeme } from '@/components/context/memeContext'
 
 export const Meme = () => {
   const [memeContext] = useMeme()

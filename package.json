@@ -38,6 +38,7 @@
     "cors": "2.8.5",
     "dom-to-image": "2.6.0",
     "file-saver": "2.0.5",
+    "firebase": "8.1.1",
     "framer-motion": "2.9.4",
     "next": "10.0.2",
     "next-themes": "0.0.10",
