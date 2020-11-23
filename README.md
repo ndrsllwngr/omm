@@ -1,6 +1,6 @@
-# OMM - Final project
+# Meme generator
 
-- Meme generator
+- Online Multimedia - Group project (2020/2021)
 - Preview: https://omm.vercel.app/
 
 ## Tech-Stack
