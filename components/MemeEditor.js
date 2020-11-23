@@ -1,6 +1,6 @@
 import React from 'react'
 import { Meme } from '@/components/Meme'
-import { useMeme } from '@/components/context-meme'
+import { useMeme } from '@/components/context/memeContext'
 
 /**
  * Editor, allow user to edit top and bottom text of meme
