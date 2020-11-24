@@ -99,24 +99,29 @@ LandingPage.propTypes = {
 // Fetch data at build time
 export async function getStaticProps() {
   // Fetch data from external API
-  const res = await fetch(`https://api.imgflip.com/get_memes`)
-  const data = await res.json()
-  let memes = []
-  if (data !== null || data !== undefined) {
-    const dataStripped = data.data.memes.map((meme) => {
-      return {
-        url: meme.url,
-        width: meme.width,
-        height: meme.height,
-        name: meme.name,
-      }
-    })
-    memes = dataStripped
-    console.log({ memes })
-  }
+  try {
+    const res = await fetch(`https://api.imgflip.com/get_memes`)
+    const data = await res.json()
 
-  // Pass data to the page via props
-  return { props: { memes } }
+    let memes = []
+    if (data !== null || data !== undefined) {
+      const dataStripped = data.data.memes.map((meme) => {
+        return {
+          url: meme.url,
+          width: meme.width,
+          height: meme.height,
+          name: meme.name,
+        }
+      })
+      memes = dataStripped
+      //console.log({ memes })
+    }
+
+    // Pass data to the page via props
+    return { props: { memes } }
+  } catch (err) {
+    console.log('Fetching external API failed ' + err)
+  }
 }
 
 export default LandingPage
