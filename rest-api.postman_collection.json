@@ -1,0 +1,94 @@
+{
+	"info": {
+		"_postman_id": "6a013a27-f32c-4a0e-b9c5-b38906c6f7f7",
+		"name": "OMM",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "All memes",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{url}}/api/memes",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"api",
+						"memes"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Retrieve one meme",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{url}}/api/meme/10203",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"api",
+						"meme",
+						"10203"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Cors",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{url}}/api/cors",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"api",
+						"cors"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"id": "15615149-771e-4040-ad08-6ee8f1998950",
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"id": "0024c04e-1e52-4667-88e0-855beb78f39a",
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"id": "cff5c111-1bc7-491b-b29e-77bd3c9cd91e",
+			"key": "url",
+			"value": "http://localhost:3000"
+		}
+	],
+	"protocolProfileBehavior": {}
+}
