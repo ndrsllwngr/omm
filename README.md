@@ -33,7 +33,9 @@ cp .env.local.example .env.local
 - `yarn dev` - Runs next which starts Next.js in development mode.
 - `yarn build` - Runs next build which creates an optimized production build of your application. The output displays information about each route.
 - `yarn start` - Runs next start which starts a Next.js production server.
-- `yarn export` - Runs next export which allows you to export your app to static HTML, which can be run standalone without the need of a Node.js server.
+- `yarn export` - (Do not use this command, since we are using APIs) Runs next export which allows you to export your app to static HTML, which can be run standalone without the need of a Node.js server.
+- `yarn storybook` - Runs storybook which starts the component explorer
+- `yarn build:analyze` - Runs Webpack Bundle Analyzer which outputs htmls files for server bundle and for the browser bundle.
 
 ##### CUSTOM
 - `yarn preview-export` - Runs a HTTP server (`python3 -m http.server`) in `out/` to preview the static HTML output from `yarn export`.

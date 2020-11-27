@@ -3,9 +3,9 @@ const colors = require('tailwindcss/colors')
 
 module.exports = {
   purge: {
-    content: ['./components/**/*.{js,mdx}', './pages/**/*.{js,mdx}'],
+    content: ['./components/**/*.{js,mdx}', './lib/**/*.{js,mdx}', './pages/**/*.{js,mdx}'],
     options: {
-      whitelist: ['fill-current', 'stroke-current', 'inline-block', 'w-full', 'h-full'],
+      whitelist: [],
     },
   },
   darkMode: 'class',
@@ -67,8 +67,5 @@ module.exports = {
       rotate: ['first', 'last', 'odd', 'even'],
     },
   },
-  plugins: [
-    require('@tailwindcss/typography'), // https://tailwindcss.com/docs/typography-plugin
-    require('@tailwindcss/custom-forms'), // https://github.com/tailwindlabs/tailwindcss-custom-forms
-  ],
+  plugins: [],
 }

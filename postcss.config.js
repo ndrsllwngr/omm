@@ -1,3 +1,8 @@
 module.exports = {
-  plugins: ['tailwindcss', 'postcss-nested', 'autoprefixer'],
+  // this format supports both next and storybook
+  plugins: {
+    tailwindcss: {},
+    'postcss-nested': {},
+    autoprefixer: {},
+  },
 }
