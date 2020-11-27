@@ -16,6 +16,7 @@
     "dev": "next dev",
     "start": "next start",
     "build": "next build",
+    "build:analyze": "ANALYZE=true yarn build",
     "export": "next export",
     "preview-export": "cd out && python3 -m http.server",
     "lint": "eslint ./components/** ./pages/** ./lib/** --ext .js,.jsx",
@@ -36,7 +37,6 @@
     ]
   },
   "dependencies": {
-    "@tailwindcss/typography": "0.3.1",
     "cors": "2.8.5",
     "dom-to-image": "2.6.0",
     "file-saver": "2.0.5",
@@ -51,11 +51,11 @@
     "tailwindcss": "npm:@tailwindcss/postcss7-compat"
   },
   "devDependencies": {
+    "@next/bundle-analyzer": "10.0.3",
     "@storybook/addon-essentials": "6.1.7",
     "@storybook/addon-links": "6.1.7",
     "@storybook/react": "6.1.7",
     "@svgr/webpack": "5.5.0",
-    "@tailwindcss/custom-forms": "0.2.1",
     "@typescript-eslint/eslint-plugin": "4.8.2",
     "@typescript-eslint/parser": "4.8.2",
     "autoprefixer": "9.8.6",
