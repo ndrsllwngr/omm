@@ -41,7 +41,7 @@
     "dom-to-image": "2.6.0",
     "file-saver": "2.0.5",
     "firebase": "8.1.1",
-    "framer-motion": "2.9.4",
+    "framer-motion": "2.9.5",
     "next": "10.0.3",
     "next-themes": "0.0.10",
     "prop-types": "15.7.2",
@@ -52,12 +52,12 @@
   },
   "devDependencies": {
     "@next/bundle-analyzer": "10.0.3",
-    "@storybook/addon-essentials": "6.1.7",
-    "@storybook/addon-links": "6.1.7",
-    "@storybook/react": "6.1.7",
+    "@storybook/addon-essentials": "6.1.9",
+    "@storybook/addon-links": "6.1.9",
+    "@storybook/react": "6.1.9",
     "@svgr/webpack": "5.5.0",
-    "@typescript-eslint/eslint-plugin": "4.8.2",
-    "@typescript-eslint/parser": "4.8.2",
+    "@typescript-eslint/eslint-plugin": "4.9.0",
+    "@typescript-eslint/parser": "4.9.0",
     "autoprefixer": "9.8.6",
     "babel-eslint": "10.1.0",
     "babel-loader": "8.2.2",
@@ -72,6 +72,6 @@
     "file-loader": "6.2.0",
     "postcss": "7.0.35",
     "postcss-nested": "4.2.3",
-    "prettier": "2.2.0"
+    "prettier": "2.2.1"
   }
 }
