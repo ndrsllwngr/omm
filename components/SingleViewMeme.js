@@ -10,10 +10,14 @@ export const SingelViewMeme = ({ memes }) => {
   const meme = memes[0]
 
   return (
-    <div className="slideshow_wrapper">
+    <div className="flex flex-col mx-auto">
+      {/* Titel of Meme*/}
       <div className="titel">{meme.name}</div>
-      <img src={meme.url} />
 
+      {/* Meme itself*/}
+      <img src={meme.url} width={meme.width} height={meme.height} />
+
+      {/* Buttons*/}
       <SingleViewButton
         value="prev"
         className="bg-blue hover:bg-blue-dark text-black font-bold py-2 px-4 rounded"
@@ -22,6 +26,7 @@ export const SingelViewMeme = ({ memes }) => {
         value="next"
         className="bg-blue hover:bg-blue-dark text-black font-bold py-2 px-4 rounded"
       />
+      {/* Meme Info*/}
       <div className="slide_info"></div>
     </div>
   )
