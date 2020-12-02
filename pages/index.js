@@ -9,7 +9,7 @@ import { NavBottom } from '@/components/NavBottom'
 import { HtmlHead } from '@/components/HtmlHead'
 import { useUser } from '@/components/context/userContext'
 import firebase from '@/lib/firebase'
-import { getImgFlipMemes } from '@/lib/fetch-meme-api'
+import { getImgFlipMemes } from '@/lib/external-meme-api'
 
 const LandingPage = ({ memes }) => {
   const [step, setStep] = useState(STEPS.one)
