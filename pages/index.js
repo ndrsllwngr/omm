@@ -22,10 +22,10 @@ const LandingPage = ({ memes }) => {
   useEffect(() => {
     if (!loadingUser) {
       // You know that the user is loaded: either logged in or out!
-      console.log(user)
+      console.log({ user })
     }
     // You also have your firebase app initialized
-    console.log(firebase)
+    console.log({ firebase })
   }, [loadingUser, user])
   const navigate = (direction) => {
     let page
