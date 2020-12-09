@@ -1,8 +1,8 @@
 import firebase from '@/lib/firebaseNode'
 import fs from 'fs'
 
-const tmp = require('tmp')
-const Jimp = require('jimp')
+import tmp from 'tmp'
+import Jimp from 'jimp'
 
 export default async function memeHandler(req, res) {
   const {
@@ -13,6 +13,8 @@ export default async function memeHandler(req, res) {
   const db = firebase.firestore()
   const storage = firebase.storage().bucket()
   const memeCollection = db.collection('meme')
+
+  //TODO generate fonts with https://www.npmjs.com/package/@rtpa/phaser-bitmapfont-generator
 
   switch (method) {
     case 'PUT':
