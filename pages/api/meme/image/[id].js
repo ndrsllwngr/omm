@@ -1,6 +1,7 @@
 import firebase from '@/lib/firebaseNode'
 import tmp from 'tmp'
 import fs from 'fs'
+import writeToImage from '@/helpers/imageProcessing'
 
 export default async function memeHandler(req, res) {
   const {
@@ -28,12 +29,14 @@ export default async function memeHandler(req, res) {
         // Downloads the file
         await storage.file(memeData.img).download(options)
 
-        //res.status(200).json(meme.data())
+        // Write content on meme base img
+        await writeToImage(tmpobj.name, memeData.content)
+
         const imageBuffer = fs.readFileSync(tmpobj.name)
         res.setHeader('Content-Type', 'image/jpg')
         res.send(imageBuffer)
 
-        // Delete the teporary file
+        // Delete the temporary file
         tmpobj.removeCallback()
       } else {
         res.status(404)

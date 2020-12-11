@@ -14,7 +14,9 @@ export default async function memeHandler(req, res) {
       const meme = await memeCollection.doc(id).get()
       // Get data from your database
       if (meme.exists) {
-        res.status(200).json(meme.data())
+        const memeData = meme.data()
+        memeData.downloadURL = 'http://localhost:3000/api/meme/image/' + meme.id
+        res.status(200).json(memeData)
       } else {
         res.status(404)
       }
