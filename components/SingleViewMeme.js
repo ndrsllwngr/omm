@@ -19,12 +19,12 @@ export const SingelViewMeme = ({ memes }) => {
 
       {/* Buttons*/}
       <SingleViewButton
-        name="prev"
         className="bg-blue hover:bg-blue-dark text-black font-bold py-2 px-4 rounded"
+        name="prev"
       />
       <SingleViewButton
-        name="next"
         className="bg-blue hover:bg-blue-dark text-black font-bold py-2 px-4 rounded"
+        name="next"
       />
       {/* Meme Info*/}
       <div className="slide_info"></div>
