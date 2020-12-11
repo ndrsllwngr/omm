@@ -100,8 +100,8 @@ LandingPage.propTypes = {
 // Fetch data at build time
 export async function getStaticProps() {
   // Fetch data from external API
-
   const memes = await getImgFlipMemes()
+  // Pass data to the page via props
   return { props: { memes } }
 }
 
