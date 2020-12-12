@@ -1,8 +1,8 @@
 import React from 'react'
 
-export const SingleViewButton = ({ className, name, trigger }) => {
+export const SingleViewButton = ({ className, name, changeSlide }) => {
   return (
-    <button className={className} onClick={trigger}>
+    <button className={className} onClick={changeSlide}>
       {name}
     </button>
   )
@@ -11,5 +11,5 @@ export const SingleViewButton = ({ className, name, trigger }) => {
 SingleViewButton.propTypes = {
   className: PropTypes.string,
   name: PropTypes.string,
-  trigger: PropTypes.function,
+  changeSlide: PropTypes.function,
 }
