@@ -1,36 +1,22 @@
-import React, { useState } from 'react'
+import React, { useReducer } from 'react'
 import PropTypes from 'prop-types'
 import { SingleViewButton } from '@/components/SingleViewButton'
-/*
-{memes.map((el, index) => (
-	<img key={index} src={el.url} width={el.width} height={el.height} alt={el.name} />
-  ))}
-*/
 
 export const SingelViewMeme = ({ memes }) => {
-  const [allMemes, setAllMemes] = useState(memes)
-  const [meme, setMeme] = useState(allMemes[0])
+  const [meme, setMeme] = useReducer(reducer, memes[0])
 
-  const next = 1
-  const prev = 0
-  //use callback
-  // siehe usecallback hook react
+  //Why do arrow functions not work?
+  function reducer(meme, arg) {
+    switch (arg.type) {
+      case 'next':
+        //console.log('next')
+        return memes[memes.indexOf(meme) + 1]
+      case 'prev':
+        //console.log('prev')
+        if (memes.indexOf(meme) > 0) {
+          return memes[memes.indexOf(meme) - 1]
+        } else return meme
 
-  const changeslide = (arg) => {
-    switch (arg) {
-      case 1:
-        console.log('next')
-        setMeme(allMemes[allMemes.indexOf(meme) + 1])
-
-        break
-      case 0:
-        if (allMemes.indexOf(meme) == 0) {
-          return
-        }
-        console.log('prev')
-        setMeme(allMemes[allMemes.indexOf(meme) - 1])
-
-        break
       default:
         console.error('Argument not supportet.', arg)
     }
@@ -43,16 +29,8 @@ export const SingelViewMeme = ({ memes }) => {
       {/* Meme itself*/}
       <img src={meme.url} width={meme.width} height={meme.height} />
       {/* Buttons*/}
-      <SingleViewButton
-        className="bg-blue hover:bg-blue-dark text-black font-bold py-2 px-4 rounded"
-        name="prev"
-        changeSlide={() => changeslide(prev)}
-      />
-      <SingleViewButton
-        className="bg-blue hover:bg-blue-dark text-black font-bold py-2 px-4 rounded"
-        name="next"
-        changeSlide={() => changeslide(next)}
-      />
+      <SingleViewButton className="" name="prev" changeSlide={() => setMeme({ type: 'prev' })} />
+      <SingleViewButton className="" name="next" changeSlide={() => setMeme({ type: 'next' })} />
       {/* Meme Info*/}
       <div className="slide_info">{meme.name}</div>
     </div>
