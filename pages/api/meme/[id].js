@@ -7,7 +7,7 @@ export default async function memeHandler(req, res) {
   } = req
 
   const db = firebase.firestore()
-  const memeCollection = db.collection('meme')
+  const memeCollection = db.collection('memes')
 
   switch (method) {
     case 'GET':
@@ -15,7 +15,9 @@ export default async function memeHandler(req, res) {
       // Get data from your database
       if (meme.exists) {
         const memeData = meme.data()
+        memeData.template = memeData.template.id
         memeData.downloadURL = 'http://localhost:3000/api/meme/image/' + meme.id
+        console.log(memeData)
         res.status(200).json(memeData)
       } else {
         res.status(404)

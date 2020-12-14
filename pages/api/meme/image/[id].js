@@ -10,34 +10,34 @@ export default async function memeHandler(req, res) {
   } = req
 
   const db = firebase.firestore()
-  const memeCollection = db.collection('meme')
+  const memeCollection = db.collection('memes')
 
   switch (method) {
     case 'GET':
       // Get data from your database
       const meme = await memeCollection.doc(id).get()
+      const template = await meme.data().template.get()
       if (meme.exists) {
         const memeData = meme.data()
         const storage = firebase.storage().bucket()
 
-        const tmpobj = tmp.fileSync({ postfix: '.jpg' })
+        const tmpObj = tmp.fileSync({ postfix: '.jpg' })
         const options = {
-          // The path to which the file should be downloaded, e.g. "./file.txt"
-          destination: tmpobj.name,
+          destination: tmpObj.name,
         }
 
         // Downloads the file
-        await storage.file(memeData.img).download(options)
+        await storage.file(template.data().img).download(options)
 
         // Write content on meme base img
-        await writeToImage(tmpobj.name, memeData.content)
+        await writeToImage(tmpObj.name, memeData.content)
 
-        const imageBuffer = fs.readFileSync(tmpobj.name)
+        const imageBuffer = fs.readFileSync(tmpObj.name)
         res.setHeader('Content-Type', 'image/jpg')
         res.send(imageBuffer)
 
         // Delete the temporary file
-        tmpobj.removeCallback()
+        tmpObj.removeCallback()
       } else {
         res.status(404)
       }
