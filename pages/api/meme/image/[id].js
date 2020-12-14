@@ -1,7 +1,7 @@
 import firebase from '@/lib/firebaseNode'
 import tmp from 'tmp'
 import fs from 'fs'
-import writeToImage from '@/helpers/imageProcessing'
+import { writeMemeContentToImage } from '@/helpers/imageProcessing'
 
 export default async function memeHandler(req, res) {
   const {
@@ -30,7 +30,7 @@ export default async function memeHandler(req, res) {
         await storage.file(template.data().img).download(options)
 
         // Write content on meme base img
-        await writeToImage(tmpObj.name, memeData.content)
+        await writeMemeContentToImage(tmpObj.name, memeData.content)
 
         const imageBuffer = fs.readFileSync(tmpObj.name)
         res.setHeader('Content-Type', 'image/jpg')
