@@ -23,16 +23,17 @@ export const SingelViewMeme = ({ memes }) => {
   }
 
   return (
-    <div className="flex flex-col mx-auto">
-      {/* Titel of Meme*/}
-      <div className="titel">{meme.name}</div>
-      {/* Meme itself*/}
-      <img src={meme.url} width={meme.width} height={meme.height} />
-      {/* Buttons*/}
+    <div className="flex flex-row justify-center">
       <SingleViewButton className="" name="prev" changeSlide={() => setMeme({ type: 'prev' })} />
+      <div className="flex-col max-w-md">
+        <div className="titel">{meme.name}</div>
+        {/* Meme itself*/}
+        <img src={meme.url} width={meme.width} height={meme.height} />
+        {/* Meme Info*/}
+        <div className="slide_info">{meme.name}</div>
+      </div>
+      {/* Titel of Meme*/}
       <SingleViewButton className="" name="next" changeSlide={() => setMeme({ type: 'next' })} />
-      {/* Meme Info*/}
-      <div className="slide_info">{meme.name}</div>
     </div>
   )
 }
