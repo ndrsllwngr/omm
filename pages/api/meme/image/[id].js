@@ -24,12 +24,11 @@ export default async function memeHandler(req, res) {
         break
       }
 
-      const memeData = meme.data()
-
       const template = await meme.data().template.get()
+      const imgFileType = template.data().img.split('.').pop()
 
       // Create temporary object
-      const tmpObj = tmp.fileSync({ postfix: '.jpg' })
+      const tmpObj = tmp.fileSync({ postfix: `.${imgFileType}` })
 
       // Download the file from the Firebase storage
       await storage.file(template.data().img).download({
@@ -38,15 +37,15 @@ export default async function memeHandler(req, res) {
       })
 
       // Write content on meme base img
-      await writeMemeContentToImage(tmpObj.name, memeData.content)
+      await writeMemeContentToImage(tmpObj.name, meme.data().content)
 
       // Read image into buffer
       const imageBuffer = fs.readFileSync(tmpObj.name)
 
       // Set header
-      res.setHeader('Content-Type', 'image/jpg')
+      res.setHeader('Content-Type', `image/${imgFileType}`)
       if (download === 'true') {
-        res.setHeader('Content-disposition', `attachment; filename=${id}.jpg`)
+        res.setHeader('Content-disposition', `attachment; filename=${id}.${imgFileType}`)
       }
       res.send(imageBuffer)
 

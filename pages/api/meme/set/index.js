@@ -44,16 +44,15 @@ export default async function memeHandler(req, res) {
           return
         }
 
-        const memeData = meme.data()
-
         // Get meme from Firestore
-        const template = await memeData.template.get()
+        const template = await meme.data().template.get()
+        const imgFileType = template.data().img.split('.').pop()
 
         // Create temporary file
-        const tmpObj = tmp.fileSync({ postfix: '.jpg' })
+        const tmpObj = tmp.fileSync({ postfix: `.${imgFileType}` })
         // Add object to image files so it can later be removed
         tmpImgFiles.push({
-          name: `${id}.jpg`,
+          name: `${id}.${imgFileType}`,
           file: tmpObj,
         })
 
@@ -64,7 +63,7 @@ export default async function memeHandler(req, res) {
         })
 
         // Write content on meme base img
-        await writeMemeContentToImage(tmpObj.name, memeData.content)
+        await writeMemeContentToImage(tmpObj.name, meme.data().content)
       }
       tmpImgFiles.map((img) => zip.file(img.file.name, { name: img.name }))
 
