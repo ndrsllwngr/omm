@@ -41,7 +41,7 @@ export default async function memeHandler(req, res) {
         // When meme doesn't exist return 404
         if (!meme.exists) {
           res.status(404).end(`Meme with id ${id} Not Found`)
-          break
+          return
         }
 
         const memeData = meme.data()
@@ -52,7 +52,10 @@ export default async function memeHandler(req, res) {
         // Create temporary file
         const tmpObj = tmp.fileSync({ postfix: '.jpg' })
         // Add object to image files so it can later be removed
-        tmpImgFiles.push(tmpObj)
+        tmpImgFiles.push({
+          name: `${id}.jpg`,
+          file: tmpObj,
+        })
 
         // Download the file from the Firebase storage
         await storage.file(template.data().img).download({
@@ -62,15 +65,14 @@ export default async function memeHandler(req, res) {
 
         // Write content on meme base img
         await writeMemeContentToImage(tmpObj.name, memeData.content)
-
-        await zip.file(tmpObj.name, { name: `${id}.jpg` })
       }
+      tmpImgFiles.map((img) => zip.file(img.file.name, { name: img.name }))
 
       // Return zip as response
       await zip.finalize()
 
       // Remove temporary files
-      tmpImgFiles.map((file) => file.removeCallback())
+      tmpImgFiles.map((img) => img.file.removeCallback())
       break
     default:
       res.setHeader('Allow', ['GET'])

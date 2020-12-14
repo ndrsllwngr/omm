@@ -75,7 +75,7 @@
 			"response": []
 		},
 		{
-			"name": "Create a .zip of memes",
+			"name": "Get a .zip of memes",
 			"request": {
 				"method": "POST",
 				"header": [],
@@ -227,7 +227,7 @@
 	],
 	"variable": [
 		{
-			"id": "cff5c111-1bc7-491b-b29e-77bd3c9cd91e",
+			"id": "74dc7521-d50c-4506-8329-4c9d7a5605dd",
 			"key": "url",
 			"value": "http://localhost:3000"
 		}
