@@ -28,7 +28,7 @@ export default async function memeHandler(req, res) {
       await document.set(documentData)
       //TODO improve download URL by dynamically adding HOST_NAME
       documentData.template = template_id
-      documentData.downloadURL = 'http://localhost:3000/api/meme/image/' + document.id
+      documentData.downloadURL = `http://localhost:3000/api/meme/image/${document.id}`
       res.status(200).json(documentData)
       break
     default:
