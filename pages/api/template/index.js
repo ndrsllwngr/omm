@@ -21,14 +21,14 @@ export default async function memeHandler(req, res) {
 
       //Decode base64 image and write to temporary file
       fs.writeFile(tmpObj.name, img, { encoding: 'base64' }, function (err) {
-        console.log('File created')
+        console.log('JPEG img created')
       })
 
       // Create new Firebase document id
-      const document = templateCollection.doc()
+      const meme = templateCollection.doc()
 
       // URI of the image file on the storage
-      const memeDestination = 'templates/' + document.id + '.jpg'
+      const memeDestination = 'templates/' + meme.id + '.jpg'
 
       // Upload temporary file to Firebase storage
       await storage.upload(tmpObj.name, {
@@ -42,12 +42,13 @@ export default async function memeHandler(req, res) {
       tmpObj.removeCallback()
 
       const documentData = {
-        id: document.id,
         name: name,
         img: memeDestination,
         created_at: firebase.firestore.Timestamp.now(),
       }
-      await document.set(documentData)
+      await meme.set(documentData)
+      // Add id to response
+      documentData.id = meme.id
       res.status(200).json(documentData)
       break
     default:
