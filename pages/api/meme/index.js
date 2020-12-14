@@ -19,7 +19,7 @@ export default async function memeHandler(req, res) {
       // Create new meme in Firestore
       const document = memeCollection.doc()
       // Create meme data
-      const documentData = {
+      const memeData = {
         id: document.id,
         content: content,
         template: templatesCollection.doc(template_id),
@@ -27,14 +27,16 @@ export default async function memeHandler(req, res) {
         // TODO CREATED_BY, UP and DOWN votes etc.
       }
       // Upload meme data to Firestore
-      await document.set(documentData)
+      await document.set(memeData)
 
       // Substitute template document ref with template id
-      documentData.template = template_id
+      memeData.template = template_id
       // Add download URL to response
       //TODO improve download URL by dynamically adding HOST_NAME
-      documentData.downloadURL = `http://localhost:3000/api/meme/image/${document.id}`
-      res.status(200).json(documentData)
+      memeData.downloadURL = `http://localhost:3000/api/meme/image/${document.id}`
+      memeData.downloadURL = `http://localhost:3000/api/meme/image/${meme.id}?download=true`
+      memeData.embedURL = `http://localhost:3000/api/meme/image/${meme.id}`
+      res.status(200).json(memeData)
       break
     default:
       res.setHeader('Allow', ['PUT'])

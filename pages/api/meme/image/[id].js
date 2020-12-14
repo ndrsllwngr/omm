@@ -5,7 +5,7 @@ import { writeMemeContentToImage } from '@/helpers/imageProcessing'
 
 export default async function memeHandler(req, res) {
   const {
-    query: { id },
+    query: { id, download },
     method,
   } = req
 
@@ -45,6 +45,9 @@ export default async function memeHandler(req, res) {
 
       // Set header
       res.setHeader('Content-Type', 'image/jpg')
+      if (download === 'true') {
+        res.setHeader('Content-disposition', `attachment; filename=${id}.jpg`)
+      }
       res.send(imageBuffer)
 
       // Delete the temporary file

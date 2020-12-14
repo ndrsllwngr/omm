@@ -25,7 +25,8 @@ export default async function memeHandler(req, res) {
       memeData.template = memeData.template.id
       // Add download URL to response
       //TODO improve download URL by dynamically adding HOST_NAME
-      memeData.downloadURL = `http://localhost:3000/api/meme/image/${meme.id}`
+      memeData.downloadURL = `http://localhost:3000/api/meme/image/${meme.id}?download=true`
+      memeData.embedURL = `http://localhost:3000/api/meme/image/${meme.id}`
       // Return meme data
       res.status(200).json(memeData)
       break
