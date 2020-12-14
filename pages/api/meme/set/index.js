@@ -20,7 +20,6 @@ export default async function memeHandler(req, res) {
     case 'POST':
       // Get ids from request body
       const ids = req.body.ids
-      console.log(ids)
 
       // Initialize empty list of meme image files
       const tmpImgFiles = []
@@ -37,22 +36,17 @@ export default async function memeHandler(req, res) {
 
       // Iterate over all ids passed in the route
       for (let id of ids) {
-        console.log(id)
         // Get meme from Firestore
         const meme = await memeCollection.doc(id).get()
         // When meme doesn't exist return 404
         if (!meme.exists) res.status(404).end(`Meme with id ${id} Not Found`)
 
         const memeData = meme.data()
-        console.log(memeData)
 
         // Get meme from Firestore
         const template = await memeData.template.get()
-        // When template doesn't exist return 404
-        if (!template.exists)
-          res.status(404).end(`Template of meme ${id} with id ${memeData.template.id} Not Found`)
 
-        // Create temporary object
+        // Create temporary file
         const tmpObj = tmp.fileSync({ postfix: '.jpg' })
         // Add object to image files so it can later be removed
         tmpImgFiles.push(tmpObj)
@@ -71,7 +65,9 @@ export default async function memeHandler(req, res) {
 
       // Return zip as response
       await zip.finalize()
-      //tmpImgFiles.map((file) => file.removeCallback())
+
+      // Remove temporary files
+      tmpImgFiles.map((file) => file.removeCallback())
       break
     default:
       res.setHeader('Allow', ['GET'])
