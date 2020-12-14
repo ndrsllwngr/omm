@@ -75,6 +75,34 @@
 			"response": []
 		},
 		{
+			"name": "Create a .zip of memes",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"ids\": [\"DSdKEWTD05S284QtvYGP\", \"U9aFgUEBaLxh9JtPMydf\"]\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{url}}/api/meme/set",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"api",
+						"meme",
+						"set"
+					]
+				}
+			},
+			"response": []
+		},
+		{
 			"name": "Cors",
 			"request": {
 				"method": "GET",
