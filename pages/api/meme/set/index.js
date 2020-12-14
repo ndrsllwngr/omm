@@ -39,7 +39,10 @@ export default async function memeHandler(req, res) {
         // Get meme from Firestore
         const meme = await memeCollection.doc(id).get()
         // When meme doesn't exist return 404
-        if (!meme.exists) res.status(404).end(`Meme with id ${id} Not Found`)
+        if (!meme.exists) {
+          res.status(404).end(`Meme with id ${id} Not Found`)
+          break
+        }
 
         const memeData = meme.data()
 
