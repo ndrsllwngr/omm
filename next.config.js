@@ -51,6 +51,9 @@ module.exports = (phase, { defaultConfig }) => {
     images: {
       domains: ['i.imgflip.com'],
     },
+    serverRuntimeConfig: {
+      PROJECT_ROOT: __dirname,
+    },
   }
   return withBundleAnalyzer(customConfig)
 }

@@ -1,7 +1,42 @@
 import firebase from '@/lib/firebaseNode'
 import tmp from 'tmp'
 import fs from 'fs'
-import { writeMemeContentToImage } from '@/helpers/imageProcessing'
+import path from 'path'
+// import { writeMemeContentToImage } from '@/helpers/imageProcessing'
+import Jimp from 'jimp'
+import getConfig from 'next/config'
+const { serverRuntimeConfig } = getConfig()
+const fontPath = path.resolve('./public/fonts/open-sans/open-sans-64-white/open-sans-64-white.fnt')
+const fontData = require(fontPath)
+
+export const writeMemeContentToImage = async (imgPath, memeContent) => {
+  // console.log({ serverRuntimeConfig })
+  // const foldersTest = fs.readdirSync(serverRuntimeConfig.PROJECT_ROOT)
+  // console.log({ foldersTest })
+  // const dirRelativeToPublicFolder = 'public/fonts'
+  // const dir = path.resolve(serverRuntimeConfig.PROJECT_ROOT, dirRelativeToPublicFolder)
+  // console.log({ dir })
+  // const filenames = fs.readdirSync(dir)
+  // console.log({ filenames })
+  // const files = filenames.map((name) =>
+  //   path.join(dirRelativeToPublicFolder, name, 'open-sans-64-white', 'open-sans-64-white.fnt')
+  // )
+  // const pathToFont = files[0]
+  // console.log({ pathToFont })
+  // console.log(files, files[0])
+  // console.log(fs.readdirSync(path.join(process.cwd(), 'node_modules/'))
+  console.log({ fontData })
+  let jimpImg = await Jimp.read(imgPath)
+  const font = await Jimp.loadFont(fontPath)
+
+  for (let c of memeContent) {
+    const coordX = parseInt(c.coordX)
+    const coordY = parseInt(c.coordY)
+    const text = c.text
+    await jimpImg.print(font, coordX, coordY, text)
+  }
+  await jimpImg.writeAsync(imgPath)
+}
 
 export default async function memeHandler(req, res) {
   const {

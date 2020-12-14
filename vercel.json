@@ -1,0 +1,7 @@
+{
+  "functions": {
+    "pages/api/meme/image/*.js": {
+      "includeFiles": "./public/fonts/open-sans/open-sans-64-white/open-sans-64-white.fnt"
+    }
+  }
+}

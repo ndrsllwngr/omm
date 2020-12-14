@@ -276,3 +276,5 @@ fabric.properties
 .vscode/
 
 storybook-static/
+
+.vercel
