@@ -67,7 +67,7 @@ export default async function memeHandler(req, res) {
       }
       tmpImgFiles.map((img) => zip.file(img.file.name, { name: img.name }))
 
-      // Return zip as response
+      // Finalize stream
       await zip.finalize()
 
       // Remove temporary files
