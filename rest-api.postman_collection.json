@@ -24,7 +24,7 @@
 			"response": []
 		},
 		{
-			"name": "Retrieve meme data by ID",
+			"name": "Meme data by ID",
 			"protocolProfileBehavior": {
 				"disableBodyPruning": true
 			},
@@ -55,7 +55,7 @@
 			"response": []
 		},
 		{
-			"name": "Retrieve meme image by ID",
+			"name": "Meme image by ID",
 			"request": {
 				"method": "GET",
 				"header": [],
@@ -93,7 +93,7 @@
 			"response": []
 		},
 		{
-			"name": "Put Meme",
+			"name": "Meme",
 			"event": [
 				{
 					"listen": "test",
@@ -134,7 +134,7 @@
 			"response": []
 		},
 		{
-			"name": "Put Template",
+			"name": "Template",
 			"event": [
 				{
 					"listen": "test",
