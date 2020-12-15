@@ -2,25 +2,26 @@ import React, { useReducer } from 'react'
 import PropTypes from 'prop-types'
 import { SingleViewButton } from '@/components/SingleViewButton'
 
+const reducer = (meme, arg) => {
+  switch (arg.type) {
+    case 'next':
+      //console.log('next')
+      return memes[memes.indexOf(meme) + 1]
+    case 'prev':
+      //console.log('prev')
+      if (memes.indexOf(meme) > 0) {
+        return memes[memes.indexOf(meme) - 1]
+      } else return meme
+
+    default:
+      console.error('Argument not supportet.', arg)
+  }
+}
+
 export const SingleViewMeme = ({ memes }) => {
   const [meme, setMeme] = useReducer(reducer, memes[0])
 
   //Why do arrow functions not work?
-  function reducer(meme, arg) {
-    switch (arg.type) {
-      case 'next':
-        //console.log('next')
-        return memes[memes.indexOf(meme) + 1]
-      case 'prev':
-        //console.log('prev')
-        if (memes.indexOf(meme) > 0) {
-          return memes[memes.indexOf(meme) - 1]
-        } else return meme
-
-      default:
-        console.error('Argument not supportet.', arg)
-    }
-  }
 
   return (
     <div className="flex flex-row justify-center">
