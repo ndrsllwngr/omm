@@ -43,7 +43,7 @@ export default async function memeHandler(req, res) {
           return
         }
 
-        // Get meme from Firestore
+        // Get template from Firestore
         const template = await meme.data().template.get()
         const imgFileType = template.data().img.split('.').pop()
 
@@ -73,7 +73,7 @@ export default async function memeHandler(req, res) {
       tmpImgFiles.map((img) => img.file.removeCallback())
       break
     default:
-      res.setHeader('Allow', ['GET'])
+      res.setHeader('Allow', ['POST'])
       res.status(405).end(`Method ${method} Not Allowed`)
   }
 }
