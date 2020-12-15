@@ -14,5 +14,5 @@ export const SingleViewButton = ({ className, name, changeSlide }) => {
 SingleViewButton.propTypes = {
   className: PropTypes.string,
   name: PropTypes.string,
-  changeSlide: PropTypes.function,
+  changeSlide: PropTypes.func,
 }
