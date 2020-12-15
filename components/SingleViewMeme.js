@@ -2,7 +2,7 @@ import React, { useReducer } from 'react'
 import PropTypes from 'prop-types'
 import { SingleViewButton } from '@/components/SingleViewButton'
 
-export const SingelViewMeme = ({ memes }) => {
+export const SingleViewMeme = ({ memes }) => {
   const [meme, setMeme] = useReducer(reducer, memes[0])
 
   //Why do arrow functions not work?
@@ -38,7 +38,7 @@ export const SingelViewMeme = ({ memes }) => {
   )
 }
 
-SingelViewMeme.propTypes = {
+SingleViewMeme.propTypes = {
   memes: PropTypes.arrayOf(
     PropTypes.shape({
       url: PropTypes.string,
