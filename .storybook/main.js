@@ -18,6 +18,7 @@ module.exports = {
       '@/assets': path.resolve(__dirname, '../public/assets'),
       '@/pages': path.resolve(__dirname, '../pages'),
       '@/lib': path.resolve(__dirname, '../lib'),
+      '@/helpers': path.resolve(__dirname, '../helpers'),
       '@/styles': path.resolve(__dirname, '../styles'),
     }
 

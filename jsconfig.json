@@ -6,6 +6,7 @@
       "@/assets/*": ["./public/assets/*"],
       "@/pages/*": ["./pages/*"],
       "@/lib/*": ["./lib/*"],
+      "@/helpers/*": ["./helpers/*"],
       "@/styles/*": ["./styles/*"]
     }
   },
