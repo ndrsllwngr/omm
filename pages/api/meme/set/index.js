@@ -1,7 +1,6 @@
 import firebase from '@/lib/firebaseNode'
 import tmp from 'tmp'
 import { writeMemeContentToImage } from '@/helpers/imageProcessing'
-import fs from 'fs'
 import Archiver from 'archiver'
 
 export default async function memeHandler(req, res) {
