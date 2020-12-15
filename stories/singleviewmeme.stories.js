@@ -1,15 +1,13 @@
 import React from 'react'
-import { SingleViewMeme } from '@/components/SingleViewMeme'
+import { Slideshow } from '@/components/Slideshow'
 import { getImgFlipMemes } from '@/lib/external-meme-api'
 
 export default {
-  title: 'Single View',
+  title: 'Meme Single View',
 }
 
-export const SingleView = (args, { loaded: { memes } }) => (
-  <SingleViewMeme {...args} memes={memes} />
-)
-SingleView.loaders = [
+export const MemeSingleView = (args, { loaded: { memes } }) => <Slideshow {...args} memes={memes} />
+MemeSingleView.loaders = [
   async () => ({
     memes: await getImgFlipMemes(),
   }),

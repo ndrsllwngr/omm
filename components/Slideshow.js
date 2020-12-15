@@ -1,12 +1,11 @@
 import React, { useReducer } from 'react'
 import PropTypes from 'prop-types'
-import { SingleViewButton } from '@/components/SingleViewButton'
+import { SlideshowButton } from '@/components/SlideshowButton'
 
 const reducer = (state, arg) => {
   switch (arg.type) {
     case 'next':
       return { ...state, slideIndex: state.slideIndex + 1 }
-
     case 'prev':
       return {
         ...state,
@@ -17,14 +16,14 @@ const reducer = (state, arg) => {
   }
 }
 
-export const SingleViewMeme = ({ memes }) => {
+export const Slideshow = ({ memes }) => {
   const [state, setMeme] = useReducer(reducer, { slideIndex: 0 })
-  console.log(state.slideIndex)
+  //onsole.log(state.slideIndex)
   const meme = memes[state.slideIndex]
 
   return (
     <div className="flex flex-row justify-center">
-      <SingleViewButton className="" name="prev" changeSlide={() => setMeme({ type: 'prev' })} />
+      <SlideshowButton name="prev" changeSlide={() => setMeme({ type: 'prev' })} />
 
       <div className="flex-col max-w-md">
         <div className="titel">{meme.name}</div>
@@ -33,14 +32,13 @@ export const SingleViewMeme = ({ memes }) => {
         {/* Meme Info*/}
         <div className="slide_info">{meme.name}</div>
       </div>
-      {/* Titel of Meme*/}
 
-      <SingleViewButton className="" name="next" changeSlide={() => setMeme({ type: 'next' })} />
+      <SlideshowButton name="next" changeSlide={() => setMeme({ type: 'next' })} />
     </div>
   )
 }
 
-SingleViewMeme.propTypes = {
+Slideshow.propTypes = {
   memes: PropTypes.arrayOf(
     PropTypes.shape({
       url: PropTypes.string,
