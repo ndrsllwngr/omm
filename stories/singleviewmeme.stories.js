@@ -1,19 +1,22 @@
 import React from 'react'
 import { Slideshow } from '@/components/Slideshow'
-import { getImgFlipMemes } from '@/lib/external-meme-api'
+import { SlideshowButton } from '@/components/SlideshowButton'
+import mockData from '@/assets/mockData'
+const memes = mockData.data.memes
 
 export default {
-  title: 'Meme Single View',
+  title: 'Meme Slideshow',
 }
-//Workaround to get rid of storyboard experimental loaders
-export const MemeSingleView = () => <Slideshow />
 
-//
-/*
-export const MemeSingleView = (args, { loaded: { memes } }) => <Slideshow {...args} memes={memes} />
-MemeSingleView.loaders = [
-  async () => ({
-    memes: await getImgFlipMemes(),
-  }),
-]
-*/
+export const MemeSlideshow = () => {
+  return <Slideshow memes={memes} />
+}
+
+export const MemeSlideshowButtons = () => {
+  return (
+    <>
+      <SlideshowButton name="prev" changeSlide={() => console.log('clickedPrev')} />
+      <SlideshowButton name="next" changeSlide={() => console.log('clickedNext')} />
+    </>
+  )
+}
