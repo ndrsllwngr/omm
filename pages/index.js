@@ -1,12 +1,16 @@
-import React, { useEffect } from 'react'
+import React, { useState, useEffect } from 'react'
 import PropTypes from 'prop-types'
 import { HtmlHead } from '@/components/HtmlHead'
 import { useUser } from '@/components/context/userContext'
 import firebase from '@/lib/firebase'
 import { getImgFlipMemes } from '@/lib/external-meme-api'
 import { Slideshow } from '@/components/Slideshow'
+import { useDatabaseMemes } from '@/components/hooks/useDatabaseMemes'
 
 const LandingPage = ({ memes }) => {
+  const meme = useDatabaseMemes()
+  console.log('The Memes', { meme })
+
   useEffect(() => {
     console.log({ memes })
   }, [memes])
@@ -22,6 +26,7 @@ const LandingPage = ({ memes }) => {
     console.log({ firebase })
   }, [loadingUser, user])
 
+  if (!(meme.length > 0)) return <div>loading...</div>
   return (
     <>
       <HtmlHead />
