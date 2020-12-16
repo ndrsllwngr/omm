@@ -1,4 +1,5 @@
 import React from 'react'
+import PropTypes from 'prop-types'
 
 export const SlideshowButton = ({ name, changeSlide }) => {
   return (
@@ -12,9 +13,7 @@ export const SlideshowButton = ({ name, changeSlide }) => {
     </button>
   )
 }
-
 SlideshowButton.propTypes = {
-  className: PropTypes.string,
   name: PropTypes.string,
   changeSlide: PropTypes.func,
 }

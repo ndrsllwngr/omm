@@ -2,6 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import Image from 'next/image'
 import { useMeme } from '@/components/context/memeContext'
+import { Slideshow } from '@/components/Slideshow'
 
 /**
  * Offer various options to select a meme
@@ -23,6 +24,7 @@ export const MemeSelection = ({ memes }) => {
 
   return (
     <div>
+      <Slideshow />
       {/* Preview of selected meme */}
       <div className="mb-5">
         <div className="font-bold mb-1 text-gray-700 block">Preview</div>
