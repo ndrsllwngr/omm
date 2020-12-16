@@ -39,6 +39,7 @@ cp .env.local.example .env.local
 
 ##### CUSTOM
 - `yarn preview-export` - Runs a HTTP server (`python3 -m http.server`) in `out/` to preview the static HTML output from `yarn export`.
+- `ncu -x postcss,postcss-nested,autoprefixer -u` - Update all dependencies but keep postcss at Version 7.
 
 ### Dependency management
 - `yarn add <package...>` - Installs the “latest” version of the package.
