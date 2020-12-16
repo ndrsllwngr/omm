@@ -2,10 +2,6 @@ import React, { useReducer } from 'react'
 import PropTypes from 'prop-types'
 import { SlideshowButton } from '@/components/SlideshowButton'
 
-//Workaround to get rid of storyboard experimental loaders
-import mockData from '../public/assets/mockData'
-const memes = mockData.data.memes
-
 const reducer = (slideIndex, arg) => {
   switch (arg.type) {
     case 'next':
@@ -17,7 +13,7 @@ const reducer = (slideIndex, arg) => {
   }
 }
 
-export const Slideshow = () => {
+export const Slideshow = ({ memes }) => {
   const [slideIndex, setSlideIndex] = useReducer(reducer, 0)
   const meme = memes[slideIndex > memes.length - 1 ? memes.length - 1 : slideIndex]
   if (!memes || !meme) return <div>loading..</div>
