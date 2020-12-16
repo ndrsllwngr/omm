@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react'
 import firebase from '@/lib/firebase'
 
 export const useDatabaseMemes = () => {
-  const [stuff, setStuff] = useState([])
+  const [Memes, setMemes] = useState([])
 
   useEffect(() => {
     async function getMemes() {
@@ -18,7 +18,7 @@ export const useDatabaseMemes = () => {
       .catch(function (error) {
         console.log({ error })
       })
-  }, [setStuff])
+  }, [setMemes])
 
-  return stuff
+  return Memes
 }
