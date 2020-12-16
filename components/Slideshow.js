@@ -1,6 +1,7 @@
 import React, { useReducer } from 'react'
 import PropTypes from 'prop-types'
 import { SlideshowButton } from '@/components/SlideshowButton'
+import { Slide } from '@/components/Slide'
 
 const reducer = (slideIndex, arg) => {
   switch (arg.type) {
@@ -22,14 +23,7 @@ export const Slideshow = ({ memes }) => {
       {slideIndex !== 0 && (
         <SlideshowButton name="prev" changeSlide={() => setSlideIndex({ type: 'prev' })} />
       )}
-
-      <div className="flex-col max-w-md">
-        <div className="title">{meme.name}</div>
-        {/* Meme itself*/}
-        <img src={meme.url} width={meme.width} height={meme.height} />
-        {/* Meme Info*/}
-        <div className="slide-info">{meme.name}</div>
-      </div>
+      <Slide meme={meme} />
 
       {slideIndex !== memes.length - 1 && (
         <SlideshowButton name="next" changeSlide={() => setSlideIndex({ type: 'next' })} />
