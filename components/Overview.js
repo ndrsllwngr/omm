@@ -1,8 +1,7 @@
 import React, { useEffect } from 'react'
-import { useDatabaseMemes } from '@/components/hooks/useDatabaseMemes'
+import PropTypes from 'prop-types'
 
-export const Overview = () => {
-  const memes = useDatabaseMemes()
+export const Overview = ({ memes }) => {
   useEffect(() => {
     console.log({ memes })
   }, [memes])
@@ -19,4 +18,15 @@ export const Overview = () => {
       ))}
     </div>
   )
+}
+//TODO Proptypes
+Overview.propTypes = {
+  memes: PropTypes.arrayOf(
+    PropTypes.shape({
+      url: PropTypes.string,
+      width: PropTypes.number,
+      height: PropTypes.number,
+      name: PropTypes.string,
+    })
+  ),
 }

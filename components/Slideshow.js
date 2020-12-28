@@ -1,4 +1,4 @@
-import React, { useReducer } from 'react'
+import React, { useEffect, useReducer } from 'react'
 import PropTypes from 'prop-types'
 import { SlideshowButton } from '@/components/SlideshowButton'
 import { Slide } from '@/components/Slide'
@@ -16,6 +16,11 @@ const reducer = (slideIndex, arg) => {
 
 export const Slideshow = ({ memes }) => {
   const [slideIndex, setSlideIndex] = useReducer(reducer, 0)
+
+  useEffect(() => {
+    console.log(memes)
+  }, [memes])
+
   const meme = memes[slideIndex > memes.length - 1 ? memes.length - 1 : slideIndex]
   if (!memes || !meme) return <div>loading..</div>
   return (
@@ -35,7 +40,7 @@ export const Slideshow = ({ memes }) => {
 Slideshow.propTypes = {
   memes: PropTypes.arrayOf(
     PropTypes.shape({
-      url: PropTypes.string,
+      embedURL: PropTypes.string,
       width: PropTypes.number,
       height: PropTypes.number,
       name: PropTypes.string,

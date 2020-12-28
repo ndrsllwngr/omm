@@ -5,10 +5,10 @@ import { useUser } from '@/components/context/userContext'
 import { getImgFlipMemes } from '@/lib/external-meme-api'
 import { Slideshow } from '@/components/Slideshow'
 import { Overview } from '@/components/Overview'
+import { useDatabaseMemes } from '@/components/hooks/useDatabaseMemes'
 
 const LandingPage = ({ memes }) => {
-  //const dbMemes = useDatabaseMemes()
-  //console.log('The Memes', { meme })
+  const dbMemes = useDatabaseMemes()
 
   useEffect(() => {
     console.log({ memes })
@@ -30,7 +30,7 @@ const LandingPage = ({ memes }) => {
     <>
       <HtmlHead />
       <Slideshow memes={memes} />
-      <Overview></Overview>
+      <Overview memes={dbMemes} />
     </>
   )
 }

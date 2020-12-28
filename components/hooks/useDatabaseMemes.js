@@ -5,6 +5,7 @@ export const useDatabaseMemes = () => {
   const [Memes, setMemes] = useState([])
 
   useEffect(() => {
+    //TODO subscribe adden
     async function getMemes() {
       const docs = await firebase.firestore().collection('memes').get()
       let dbMemes = []
