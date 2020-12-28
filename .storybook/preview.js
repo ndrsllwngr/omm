@@ -1,6 +1,6 @@
 import { ThemeProvider } from 'next-themes'
 import { addDecorator } from '@storybook/react'
-import UserProvider from '@/components/context/userContext'
+import UserProvider from '@/components/context/authContext'
 import { MemeProvider } from '@/components/context/memeContext'
 
 import '../styles/tailwind.css'
