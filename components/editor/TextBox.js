@@ -1,6 +1,6 @@
 /* eslint-disable react/prop-types */
 import React, { useEffect } from 'react'
-import { Stage, Layer, Text, Transformer } from 'react-konva'
+import { Text, Transformer } from 'react-konva'
 
 export const TextBox = ({ shapeProps, isSelected, onSelect, onChange }) => {
   const shapeRef = React.useRef()
@@ -69,41 +69,3 @@ export const TextBox = ({ shapeProps, isSelected, onSelect, onChange }) => {
     </>
   )
 }
-
-// const App = () => {
-//   const [circles, setCircles] = React.useState(initialCircles)
-//   const [selectedId, selectShape] = React.useState(null)
-
-//   return (
-//     <Stage
-//       width={window.innerWidth}
-//       height={window.innerHeight}
-// onMouseDown={(e) => {
-//   const clickedOnEmpty = e.target === e.target.getStage()
-//   if (clickedOnEmpty) {
-//     selectShape(null)
-//   }
-// }}
-//     >
-//       <Layer>
-//         {circles.map((circ, i) => {
-//           return (
-//             <Circ
-//               key={i}
-//               shapeProps={circ}
-//               isSelected={circ.id === selectedId}
-//               onSelect={() => {
-//                 selectShape(circ.id)
-//               }}
-//               onChange={(newAttrs) => {
-//                 const circs = circles.slice()
-//                 circs[i] = newAttrs
-//                 setCircles(circs)
-//               }}
-//             />
-//           )
-//         })}
-//       </Layer>
-//     </Stage>
-//   )
-// }

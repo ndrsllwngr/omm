@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useRef } from 'react'
 import PropTypes from 'prop-types'
 import { HtmlHead } from '@/components/HtmlHead'
-import { Stage, Layer, Star, Text } from 'react-konva'
+import { Stage, Layer } from 'react-konva'
 import { useWindowSize } from '@/components/hooks/useWindowSize'
 import { TextBox } from '@/components/editor/TextBox'
 
