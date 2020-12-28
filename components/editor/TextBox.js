@@ -2,15 +2,7 @@
 import React, { useEffect } from 'react'
 import { Text, Transformer } from 'react-konva'
 
-export const TextBox = ({
-  shapeProps,
-  isSelected,
-  onSelect,
-  onChange,
-  layerRef,
-  stageRef,
-  containerRef,
-}) => {
+export const TextBox = ({ shapeProps, isSelected, onSelect, onChange, layerRef, containerRef }) => {
   const shapeRef = React.useRef(null)
   const trRef = React.useRef(null)
 
