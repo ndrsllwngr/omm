@@ -7,28 +7,14 @@ export const useDatabaseMemes = () => {
   useEffect(() => {
     async function getMemes() {
       const docs = await firebase.firestore().collection('memes').get()
-
       let dbMemes = []
-      //https://advancedweb.hu/how-to-use-async-functions-with-array-foreach-in-javascript/
-      await Promise.all(
-        docs.map((doc) => {
-          async function getTemplate() {
-            const temp = (await doc.data().template.get()).data()
-            return firebase
-              .storage()
-              .ref(temp.img)
-              .getDownloadURL()
-              .then((res) => {
-                return res
-              })
-          }
-          const url = async () => {
-            const result = await getTemplate()
-            return result
-          }
-          dbMemes.push({ id: doc.id, ...doc.data(), url: url() })
-        })
-      )
+      for (let i = 0; i < docs.size; i++) {
+        const doc = docs.docs[i]
+        const templateData = (await doc.data().template.get()).data()
+        const imgPath = await firebase.storage().ref(templateData.img).getDownloadURL()
+
+        dbMemes.push({ id: doc.id, ...doc.data(), imgPath })
+      }
 
       return dbMemes
     }

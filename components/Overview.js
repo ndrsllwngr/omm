@@ -14,7 +14,7 @@ export const Overview = () => {
           key={index}
           className={`relative w-24 h-24 bg-white overflow-hidden place-self-center justify-self-center`}
         >
-          <img src={el.url} width={el.width} height={el.height} alt={el.name} />
+          <img src={el.imgPath} />
         </button>
       ))}
     </div>

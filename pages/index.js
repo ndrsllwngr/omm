@@ -4,7 +4,6 @@ import { HtmlHead } from '@/components/HtmlHead'
 import { useUser } from '@/components/context/userContext'
 import { getImgFlipMemes } from '@/lib/external-meme-api'
 import { Slideshow } from '@/components/Slideshow'
-import { useDatabaseMemes } from '@/components/hooks/useDatabaseMemes'
 import { Overview } from '@/components/Overview'
 
 const LandingPage = ({ memes }) => {
