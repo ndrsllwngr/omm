@@ -1,13 +1,33 @@
 import React, { useEffect, useState, useRef } from 'react'
 import PropTypes from 'prop-types'
 import { HtmlHead } from '@/components/HtmlHead'
-import { Stage, Layer } from 'react-konva'
+import { Stage, Layer, Text } from 'react-konva'
 import { useWindowSize } from '@/components/hooks/useWindowSize'
 import { TextBox } from '@/components/editor/TextBox'
 
 const INITIAL_STATE = [
-  { id: 1, x: 50, y: 50, width: 200, height: 50, text: 'oh no', rotation: 0, isDragging: false },
-  { id: 2, x: 50, y: 100, width: 200, height: 50, text: 'hi', rotation: 0, isDragging: false },
+  {
+    id: 1,
+    x: 50,
+    y: 50,
+    width: 50,
+    height: 50,
+    text: 'oh no',
+    rotation: 0,
+    isDragging: false,
+    fontSize: 20,
+  },
+  {
+    id: 2,
+    x: 50,
+    y: 100,
+    width: 50,
+    height: 50,
+    text: 'hi',
+    rotation: 0,
+    isDragging: false,
+    fontSize: 30,
+  },
 ]
 
 // Download URI
@@ -24,6 +44,8 @@ function downloadURI(uri, name) {
 const Edit = () => {
   const { width, height } = useWindowSize()
   const stageRef = useRef(null)
+  const layerRef = useRef(null)
+  const containerRef = useRef(null)
   const [items, setItems] = useState(INITIAL_STATE)
   const [texts, setTexts] = useState(INITIAL_STATE)
   const [caption1Text, setCaption1Text] = useState('1')
@@ -125,41 +147,45 @@ const Edit = () => {
       </div>
       <button onClick={handleExport}>Click here to log stage data URL</button>
       <button onClick={toggleMode}>Toggle Edit/View</button>
-      <Stage
-        ref={stageRef}
-        width={width}
-        height={height}
-        onMouseDown={(e) => {
-          const clickedOnEmpty = e.target === e.target.getStage()
-          if (clickedOnEmpty) {
-            selectShape(null)
-          }
-        }}
-      >
-        <Layer>
-          <Text text="Try to drag a star" />
-          {texts.map((text, i) => {
-            console.log({ src: 'edit.js - map', text, i, selectedId })
-            return (
-              <TextBox
-                key={i}
-                shapeProps={{ ...text }}
-                isSelected={text.id === selectedId}
-                onSelect={() => {
-                  console.log(text.id)
-                  selectShape(text.id)
-                }}
-                onChange={(newAttrs) => {
-                  const textArr = texts.slice()
-                  console.log({ src: 'edit.js - onChange', newAttrs })
-                  textArr[i] = newAttrs
-                  setTexts(textArr)
-                }}
-              />
-            )
-          })}
-        </Layer>
-        {/* <Layer>
+      <div ref={containerRef} className=".container flex flex-row">
+        <Stage
+          ref={stageRef}
+          width={width}
+          height={height}
+          onMouseDown={(e) => {
+            const clickedOnEmpty = e.target === e.target.getStage()
+            if (clickedOnEmpty) {
+              selectShape(null)
+            }
+          }}
+        >
+          <Layer ref={layerRef}>
+            <Text text="Try to drag a star" />
+            {texts.map((text, i) => {
+              console.log({ src: 'edit.js - map', text, i, selectedId })
+              return (
+                <TextBox
+                  key={i}
+                  layerRef={layerRef.current}
+                  stageRef={stageRef.current}
+                  containerRef={containerRef.current}
+                  shapeProps={{ ...text }}
+                  isSelected={text.id === selectedId}
+                  onSelect={() => {
+                    console.log(text.id)
+                    selectShape(text.id)
+                  }}
+                  onChange={(newAttrs) => {
+                    const textArr = texts.slice()
+                    console.log({ src: 'edit.js - onChange', newAttrs })
+                    textArr[i] = newAttrs
+                    setTexts(textArr)
+                  }}
+                />
+              )
+            })}
+          </Layer>
+          {/* <Layer>
           {items &&
             items.map((item) => (
               <Star
@@ -186,7 +212,8 @@ const Edit = () => {
               />
             ))}
         </Layer> */}
-      </Stage>
+        </Stage>
+      </div>
     </>
   )
 }
