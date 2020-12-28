@@ -19,7 +19,11 @@ export default function User() {
       const templateData = (await doc.data().template.get()).data()
       const imgPath = await firebase.storage().ref(templateData.img).getDownloadURL()
 
-      const docprev = await memeRef.where('created_at', '<', doc.data().created_at).limit(1).get()
+      const docprev = await memeRef
+        .where('created_at', '<', doc.data().created_at)
+        .orderBy('created_at', 'desc')
+        .limit(1)
+        .get()
       const docnext = await memeRef.where('created_at', '>', doc.data().created_at).limit(1).get()
 
       Meme.push({ id: docprev.docs[0].id })
