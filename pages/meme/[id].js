@@ -24,11 +24,18 @@ export default function User() {
         .orderBy('created_at', 'desc')
         .limit(1)
         .get()
+      // if (!(docprev.docs.size > 0) && !docprev.docs[0].exists) {
+      //   console.log({ docprev: docprev })
+      // }
       const docnext = await memeRef.where('created_at', '>', doc.data().created_at).limit(1).get()
-
-      Meme.push({ id: docprev.docs[0].id })
+      // console.log({ docnext: docnext })
+      Meme.push({
+        id: !(docprev.docs.length > 0) ? '' : docprev.docs[0].id,
+      })
       Meme.push({ id: doc.id, ...doc.data(), imgPath })
-      Meme.push({ id: docnext.docs[0].id })
+      Meme.push({
+        id: !(docnext.docs.length > 0) ? '' : docnext.docs[0].id,
+      })
 
       return Meme
     }
@@ -50,14 +57,14 @@ export default function User() {
       <div> {router.query.id}</div>
       <div> {Memes[1].id}</div>
       <img className="w-10" src={Memes[1].imgPath} />
-      <button
+      {/* <button
         className="w-20 h-20 absolute"
         name="prev"
         onClick={(e) => {
           e.preventDefault()
           router.push(Memes[Memes.length - 1].id)
         }}
-      ></button>
+      ></button> */}
       <Slideshow memes={Memes}></Slideshow>
     </div>
   )
