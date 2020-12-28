@@ -46,7 +46,7 @@ const Edit = () => {
   const stageRef = useRef(null)
   const layerRef = useRef(null)
   const containerRef = useRef(null)
-  const [items, setItems] = useState(INITIAL_STATE)
+  // const [items, setItems] = useState(INITIAL_STATE)
   const [texts, setTexts] = useState(INITIAL_STATE)
   const [caption1Text, setCaption1Text] = useState('1')
   const [caption2Text, setCaption2Text] = useState('2')
@@ -66,33 +66,33 @@ const Edit = () => {
   // }, [height, width])
 
   // drag start function
-  const handleDragStart = (e) => {
-    // TODO
-    // set the pressed item to dragging = true
-    const id = e.target.id()
-    setItems(
-      items.map((item) => {
-        return {
-          ...item,
-          isDragging: item.id === id,
-        }
-      })
-    )
-  }
+  // const handleDragStart = (e) => {
+  //   // TODO
+  //   // set the pressed item to dragging = true
+  //   const id = e.target.id()
+  //   setItems(
+  //     items.map((item) => {
+  //       return {
+  //         ...item,
+  //         isDragging: item.id === id,
+  //       }
+  //     })
+  //   )
+  // }
 
-  // drag end function
-  const handleDragEnd = (e) => {
-    // TODO
-    // set all items to dragging = false
-    setItems(
-      items.map((item) => {
-        return {
-          ...item,
-          isDragging: false,
-        }
-      })
-    )
-  }
+  // // drag end function
+  // const handleDragEnd = (e) => {
+  //   // TODO
+  //   // set all items to dragging = false
+  //   setItems(
+  //     items.map((item) => {
+  //       return {
+  //         ...item,
+  //         isDragging: false,
+  //       }
+  //     })
+  //   )
+  // }
 
   const handleText = (target, value) => {
     if (target === 'caption1Text') {
@@ -167,7 +167,6 @@ const Edit = () => {
                 <TextBox
                   key={i}
                   layerRef={layerRef.current}
-                  stageRef={stageRef.current}
                   containerRef={containerRef.current}
                   shapeProps={{ ...text }}
                   isSelected={text.id === selectedId}

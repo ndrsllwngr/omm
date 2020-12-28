@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 // adapted from https://github.com/tajo/react-portal/blob/55ed77ab823b03d1d4c45b950ba26ea5d687e85c/src/LegacyPortal.js
 
 import React from 'react'
@@ -8,7 +9,7 @@ export class Portal extends React.Component {
     this.renderPortal()
   }
 
-  componentDidUpdate(props) {
+  componentDidUpdate(_props) {
     this.renderPortal()
   }
 
@@ -20,7 +21,7 @@ export class Portal extends React.Component {
     this.defaultNode = null
   }
 
-  renderPortal(props) {
+  renderPortal(_props) {
     if (!this.props.node && !this.defaultNode) {
       this.defaultNode = document.createElement('div')
       document.body.appendChild(this.defaultNode)
