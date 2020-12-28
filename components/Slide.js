@@ -7,7 +7,7 @@ export const Slide = ({ meme }) => {
       {/* Meme Title*/}
       <div className="title">{meme.name}</div>
       {/* Meme itself*/}
-      <img src={meme.embedURL} width={meme.width} height={meme.height} className="min-w-full" />
+      <img src={meme.imgPath} width={meme.width} height={meme.height} className="min-w-full" />
       {/* Meme additional Info*/}
       <div className="slide-info">{meme.name}</div>
     </div>
@@ -16,7 +16,7 @@ export const Slide = ({ meme }) => {
 
 Slide.propTypes = {
   meme: PropTypes.shape({
-    embedURL: PropTypes.string,
+    imgPath: PropTypes.string,
     width: PropTypes.number,
     height: PropTypes.number,
     name: PropTypes.string,

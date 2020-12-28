@@ -1,43 +1,60 @@
 import React, { useEffect, useState } from 'react'
 import { useRouter } from 'next/router'
 import firebase from '@/lib/firebase'
+import { Slideshow } from '@/components/Slideshow'
 
 export default function User() {
   const router = useRouter()
 
-  const [Meme, setMeme] = useState([])
+  const [Memes, setMemes] = useState([])
 
   useEffect(() => {
     //TODO subscribe adden
-    async function getMeme() {
+    async function getMemes() {
       let Meme = []
-      const doc = await firebase.firestore().collection('memes').doc(router.query.id).get()
+      const db = firebase.firestore()
+      const memeRef = db.collection('memes')
+
+      const doc = await memeRef.doc(router.query.id).get()
       const templateData = (await doc.data().template.get()).data()
-      //console.log(templateData)
       const imgPath = await firebase.storage().ref(templateData.img).getDownloadURL()
 
+      const docprev = await memeRef.where('created_at', '<', doc.data().created_at).limit(1).get()
+      const docnext = await memeRef.where('created_at', '>', doc.data().created_at).limit(1).get()
+
+      Meme.push({ id: docprev.docs[0].id })
       Meme.push({ id: doc.id, ...doc.data(), imgPath })
-      //console.log(Meme)
+      Meme.push({ id: docnext.docs[0].id })
+
       return Meme
     }
 
-    getMeme()
+    getMemes()
       .then((res) => {
-        console.log({ res })
-        setMeme(res)
+        //console.log({ res })
+        setMemes(res)
       })
       .catch(function (error) {
         console.log({ error })
       })
-  }, [setMeme, router.query.id])
+  }, [setMemes, router.query.id])
 
-  if (!Meme || !(Meme.length > 0)) return <div>Loading...</div>
+  if (!Memes || !(Memes.length > 0)) return <div>Loading...</div>
 
   return (
-    <div>
+    <div className="flex flex-col">
       <div> {router.query.id}</div>
-      <div> {Meme[0].id}</div>
-      <img src={Meme[0].imgPath} />
+      <div> {Memes[1].id}</div>
+      <img className="w-10" src={Memes[1].imgPath} />
+      <button
+        className="w-20 h-20 absolute"
+        name="prev"
+        onClick={(e) => {
+          e.preventDefault()
+          router.push(Memes[Memes.length - 1].id)
+        }}
+      ></button>
+      <Slideshow memes={Memes}></Slideshow>
     </div>
   )
 }

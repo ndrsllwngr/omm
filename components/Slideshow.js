@@ -20,8 +20,9 @@ export const Slideshow = ({ memes }) => {
   useEffect(() => {
     console.log(memes)
   }, [memes])
-
-  const meme = memes[slideIndex > memes.length - 1 ? memes.length - 1 : slideIndex]
+  //console.log(memes[1])
+  //const meme = memes[slideIndex > memes.length - 1 ? memes.length - 1 : slideIndex]
+  const meme = memes[1]
   if (!memes || !meme) return <div>loading..</div>
   return (
     <div className="flex flex-row justify-center">
@@ -40,7 +41,7 @@ export const Slideshow = ({ memes }) => {
 Slideshow.propTypes = {
   memes: PropTypes.arrayOf(
     PropTypes.shape({
-      embedURL: PropTypes.string,
+      imgURL: PropTypes.string,
       width: PropTypes.number,
       height: PropTypes.number,
       name: PropTypes.string,

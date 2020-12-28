@@ -6,6 +6,7 @@ export const useDatabaseMemes = () => {
 
   useEffect(() => {
     //TODO subscribe adden
+    //TODO Pagination
     async function getMemes() {
       const docs = await firebase.firestore().collection('memes').get()
       let dbMemes = []
@@ -22,7 +23,7 @@ export const useDatabaseMemes = () => {
 
     getMemes()
       .then((res) => {
-        console.log({ res })
+        //console.log({ res })
         setMemes(res)
       })
       .catch(function (error) {
