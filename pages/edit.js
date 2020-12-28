@@ -6,8 +6,8 @@ import { useWindowSize } from '@/components/hooks/useWindowSize'
 import { TextBox } from '@/components/editor/TextBox'
 
 const INITIAL_STATE = [
-  { id: 1, type: 'text', x: 50, y: 50, text: 'oh no', rotation: 0, isDragging: false },
-  { id: 2, type: 'text', x: 50, y: 100, text: 'hi', rotation: 0, isDragging: false },
+  { id: 1, x: 50, y: 50, width: 200, height: 50, text: 'oh no', rotation: 0, isDragging: false },
+  { id: 2, x: 50, y: 100, width: 200, height: 50, text: 'hi', rotation: 0, isDragging: false },
 ]
 
 // Download URI
@@ -31,11 +31,11 @@ const Edit = () => {
   const [selectedId, selectShape] = React.useState(null)
 
   useEffect(() => {
-    console.log({ texts })
+    console.log({ src: 'edit.js - useEffect', texts })
   }, [texts])
 
   useEffect(() => {
-    console.log({ selectedId })
+    console.log({ src: 'edit.js - useEffect', selectedId })
   }, [selectedId])
 
   // useEffect(() => {
@@ -139,18 +139,19 @@ const Edit = () => {
         <Layer>
           <Text text="Try to drag a star" />
           {texts.map((text, i) => {
-            console.log('map', { text, i, selectedId })
+            console.log({ src: 'edit.js - map', text, i, selectedId })
             return (
               <TextBox
                 key={i}
-                shapeProps={{ x: text.x, y: text.y, width: 200, height: 50, text: text.text }}
+                shapeProps={{ ...text }}
                 isSelected={text.id === selectedId}
                 onSelect={() => {
+                  console.log(text.id)
                   selectShape(text.id)
                 }}
                 onChange={(newAttrs) => {
                   const textArr = texts.slice()
-                  console.log('onChange', { newAttrs })
+                  console.log({ src: 'edit.js - onChange', newAttrs })
                   textArr[i] = newAttrs
                   setTexts(textArr)
                 }}

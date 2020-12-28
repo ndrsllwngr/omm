@@ -8,7 +8,7 @@ export const TextBox = ({ shapeProps, isSelected, onSelect, onChange }) => {
 
   useEffect(() => {
     if (isSelected) {
-      trRef.current.setNode(shapeRef.current)
+      trRef.current.nodes([shapeRef.current])
       trRef.current.getLayer().batchDraw()
     }
   }, [isSelected])
@@ -21,28 +21,38 @@ export const TextBox = ({ shapeProps, isSelected, onSelect, onChange }) => {
         {...shapeProps}
         draggable
         onDragEnd={(e) => {
-          // console.log('onDragEnd', { shapeProps, target: e.target })
-          onChange({
+          // const node = shapeRef.current
+          const newAttrs = {
             ...shapeProps,
             x: e.target.x(),
             y: e.target.y(),
-          })
+          }
+          console.log({ src: 'TextBox.js - onDragEnd', newAttrs, shapeProps, target: e.target })
+          onChange(newAttrs)
         }}
         onTransformEnd={(e) => {
           const node = shapeRef.current
-          // console.log('onTransformEnd', { shapeProps, target: e.target, node })
+          console.log({ src: 'onTransformEnd', shapeProps, target: e.target, node })
           const scaleX = node.scaleX()
           const scaleY = node.scaleY()
 
           node.scaleX(1)
           node.scaleY(1)
-          onChange({
+          const newAttrs = {
             ...shapeProps,
             x: node.x(),
             y: node.y(),
             width: Math.max(5, node.width() * scaleX),
             height: Math.max(node.height() * scaleY),
+          }
+          console.log({
+            src: 'TextBox.js - onTransformEnd',
+            newAttrs,
+            shapeProps,
+            target: e.target,
+            node,
           })
+          onChange(newAttrs)
         }}
       />
       {isSelected && (
