@@ -2,14 +2,14 @@ import React, { useEffect } from 'react'
 import PropTypes from 'prop-types'
 import { HtmlHead } from '@/components/HtmlHead'
 import { useUser } from '@/components/context/userContext'
-import firebase from '@/lib/firebase'
 import { getImgFlipMemes } from '@/lib/external-meme-api'
 import { Slideshow } from '@/components/Slideshow'
 import { useDatabaseMemes } from '@/components/hooks/useDatabaseMemes'
+import { Overview } from '@/components/Overview'
 
 const LandingPage = ({ memes }) => {
-  const meme = useDatabaseMemes()
-  console.log('The Memes', { meme })
+  //const dbMemes = useDatabaseMemes()
+  //console.log('The Memes', { meme })
 
   useEffect(() => {
     console.log({ memes })
@@ -20,17 +20,18 @@ const LandingPage = ({ memes }) => {
   useEffect(() => {
     if (!loadingUser) {
       // You know that the user is loaded: either logged in or out!
-      console.log({ user })
+      //console.log({ user })
     }
     // You also have your firebase app initialized
-    console.log({ firebase })
+    //console.log({ firebase })
   }, [loadingUser, user])
 
-  if (!(meme.length > 0)) return <div>loading...</div>
+  if (!(memes.length > 0)) return <div>loading...</div>
   return (
     <>
       <HtmlHead />
       <Slideshow memes={memes} />
+      <Overview></Overview>
     </>
   )
 }
