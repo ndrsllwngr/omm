@@ -1,14 +1,15 @@
 import React, { useEffect, useState, useRef } from 'react'
-import PropTypes from 'prop-types'
+// import PropTypes from 'prop-types'
 import { HtmlHead } from '@/components/HtmlHead'
-import { Stage, Layer } from 'react-konva'
+import { Stage, Layer, Image } from 'react-konva'
 import { useWindowSize } from '@/components/hooks/useWindowSize'
 import { TextBox } from '@/components/editor/TextBox'
 import { useImmer } from 'use-immer'
+import useImage from 'use-image'
 
 const INITIAL_STATE = [
   {
-    template: 'url',
+    template: 'https://i.imgflip.com/1if1k1.jpg?a447020',
     created_at: '1609268374',
     title: 'My Meme',
     content: [
@@ -51,12 +52,13 @@ function downloadURI(uri, name) {
   document.body.removeChild(link)
 }
 
-const Edit = () => {
+const CreatePage = () => {
   const { width, height } = useWindowSize()
   const stageRef = useRef(null)
   const layerRef = useRef(null)
   const containerRef = useRef(null)
   const [meme, updateMeme] = useImmer(INITIAL_STATE)
+  const [templateImage] = useImage(meme[0].template, 'Anonymous')
   const [selectedId, selectShape] = useState(null)
 
   function updateTextAttrs(textAttrs) {
@@ -196,8 +198,24 @@ const Edit = () => {
         </div>
       </div>
 
-      <button onClick={handleExport}>Click here to log stage data URL</button>
-      <button onClick={toggleMode}>Toggle Edit/View</button>
+      <button
+        className="bg-indigo-600 hover:bg-indigo-700 focus:ring-indigo-500 focus:ring-offset-indigo-200 text-white transition ease-in duration-200 text-center text-base font-semibold py-2 px-4 rounded-lg shadow-md focus:outline-none focus:ring-2 focus:ring-offset-2"
+        onClick={handleExport}
+      >
+        Download
+      </button>
+      <button
+        className="bg-green-600 hover:bg-green-700 focus:ring-green-500 focus:ring-offset-green-200 text-white transition ease-in duration-200 text-center text-base font-semibold py-2 px-4 rounded-lg shadow-md focus:outline-none focus:ring-2 focus:ring-offset-2"
+        onClick={handleExport}
+      >
+        Generate
+      </button>
+      <button
+        className="bg-yellow-600 hover:bg-yellow-700 focus:ring-yellow-500 focus:ring-offset-yellow-200 text-white transition ease-in duration-200 text-center text-base font-semibold py-2 px-4 rounded-lg shadow-md focus:outline-none focus:ring-2 focus:ring-offset-2"
+        onClick={toggleMode}
+      >
+        Toggle Edit/View
+      </button>
       <div ref={containerRef} className=".container flex flex-row">
         <Stage
           ref={stageRef}
@@ -210,6 +228,9 @@ const Edit = () => {
             }
           }}
         >
+          <Layer>
+            <Image image={templateImage}></Image>
+          </Layer>
           <Layer ref={layerRef}>
             {meme[0].content.map((text, i) => {
               console.log({ src: 'edit.js - map', text, i, selectedId })
@@ -237,15 +258,4 @@ const Edit = () => {
   )
 }
 
-Edit.propTypes = {
-  memes: PropTypes.arrayOf(
-    PropTypes.shape({
-      url: PropTypes.string,
-      width: PropTypes.number,
-      height: PropTypes.number,
-      name: PropTypes.string,
-    })
-  ),
-}
-
-export default Edit
+export default CreatePage

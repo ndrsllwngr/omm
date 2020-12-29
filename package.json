@@ -57,6 +57,7 @@
     "swr": "0.3.11",
     "tailwindcss": "npm:@tailwindcss/postcss7-compat",
     "tmp": "0.2.1",
+    "use-image": "1.0.7",
     "use-immer": "0.4.2"
   },
   "devDependencies": {
