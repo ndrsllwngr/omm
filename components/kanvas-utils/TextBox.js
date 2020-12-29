@@ -1,5 +1,5 @@
-/* eslint-disable react/prop-types */
 import React, { useEffect } from 'react'
+import PropTypes from 'prop-types'
 import { Text, Transformer } from 'react-konva'
 
 export const TextBox = ({ textProps, isSelected, onSelect, onChange, layerRef, containerRef }) => {
@@ -13,9 +13,9 @@ export const TextBox = ({ textProps, isSelected, onSelect, onChange, layerRef, c
     }
   }, [isSelected])
 
-  useEffect(() => {
-    console.log({ src: 'TextBox.js - useEffect', textProps })
-  }, [textProps])
+  // useEffect(() => {
+  //   console.log({ src: 'TextBox.js - useEffect', textProps })
+  // }, [textProps])
 
   return (
     <>
@@ -31,12 +31,12 @@ export const TextBox = ({ textProps, isSelected, onSelect, onChange, layerRef, c
             x: e.target.x(),
             y: e.target.y(),
           }
-          console.log({ src: 'TextBox.js - onDragEnd', newAttrs, textProps, target: e.target })
+          // console.log({ src: 'TextBox.js - onDragEnd', newAttrs, textProps, target: e.target })
           onChange(newAttrs)
         }}
         onTransformEnd={(e) => {
           const node = shapeRef.current
-          console.log({ src: 'onTransformEnd', textProps, target: e.target, node })
+          // console.log({ src: 'onTransformEnd', textProps, target: e.target, node })
           const scaleX = node.scaleX()
           const scaleY = node.scaleY()
 
@@ -49,13 +49,13 @@ export const TextBox = ({ textProps, isSelected, onSelect, onChange, layerRef, c
             width: Math.max(5, node.width() * scaleX),
             height: Math.max(node.height() * scaleY),
           }
-          console.log({
-            src: 'TextBox.js - onTransformEnd',
-            newAttrs,
-            textProps,
-            target: e.target,
-            node,
-          })
+          // console.log({
+          //   src: 'TextBox.js - onTransformEnd',
+          //   newAttrs,
+          //   textProps,
+          //   target: e.target,
+          //   node,
+          // })
           onChange(newAttrs)
         }}
         onDblClick={(e) => {
@@ -189,10 +189,10 @@ export const TextBox = ({ textProps, isSelected, onSelect, onChange, layerRef, c
                 ...textProps,
                 text: textarea.value,
               }
-              console.log({
-                src: 'TextBox.js - handleOutsideClick',
-                newAttrs,
-              })
+              // console.log({
+              //   src: 'TextBox.js - handleOutsideClick',
+              //   newAttrs,
+              // })
               onChange(newAttrs)
               // textNode.text(textarea.value)
               removeTextarea()
@@ -217,4 +217,13 @@ export const TextBox = ({ textProps, isSelected, onSelect, onChange, layerRef, c
       )}
     </>
   )
+}
+
+TextBox.propTypes = {
+  textProps: PropTypes.object,
+  isSelected: PropTypes.bool,
+  onSelect: PropTypes.func,
+  onChange: PropTypes.func,
+  layerRef: PropTypes.func,
+  containerRef: PropTypes.func,
 }
