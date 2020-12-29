@@ -15,3 +15,16 @@ export const MemeTemplate = ({ templateUrl }) => {
 MemeTemplate.propTypes = {
   templateUrl: PropTypes.string,
 }
+
+export const MemeTemplateViewOnly = ({ templateUrl }) => {
+  const [templateImage] = useImage(templateUrl, 'Anonymous')
+  return (
+    <>
+      <Image image={templateImage}></Image>
+    </>
+  )
+}
+
+MemeTemplateViewOnly.propTypes = {
+  templateUrl: PropTypes.string,
+}

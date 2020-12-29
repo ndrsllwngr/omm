@@ -227,3 +227,15 @@ TextBox.propTypes = {
   layerRef: PropTypes.func,
   containerRef: PropTypes.func,
 }
+
+export const TextBoxViewOnly = ({ textProps }) => {
+  return (
+    <>
+      <Text {...textProps} />
+    </>
+  )
+}
+
+TextBoxViewOnly.propTypes = {
+  textProps: PropTypes.object,
+}

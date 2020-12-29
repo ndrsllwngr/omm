@@ -27,44 +27,44 @@ export const MemeKanvas = () => {
 
   function updateTextAttrs(textAttrs) {
     updateMeme((draft) => {
-      const index = draft[0].content.findIndex((el) => el.id === textAttrs.id)
+      const index = draft.content.findIndex((el) => el.id === textAttrs.id)
       if (index !== -1) {
-        draft[0].content[index] = textAttrs
+        draft.content[index] = textAttrs
       }
     })
   }
 
   function updateTextValue(id, newText) {
     updateMeme((draft) => {
-      const index = draft[0].content.findIndex((el) => el.id === id)
+      const index = draft.content.findIndex((el) => el.id === id)
       if (index !== -1) {
-        draft[0].content[index].text = newText
+        draft.content[index].text = newText
       }
     })
   }
 
   function updateTitle(newVal) {
     updateMeme((draft) => {
-      draft[0].title = newVal
+      draft.title = newVal
     })
   }
 
   function updateCoor(id, coor, newVal) {
     updateMeme((draft) => {
-      const index = draft[0].content.findIndex((el) => el.id === id)
+      const index = draft.content.findIndex((el) => el.id === id)
       if (index !== -1) {
-        draft[0].content[index][coor] = parseInt(newVal)
+        draft.content[index][coor] = parseInt(newVal)
       }
     })
   }
 
   function addText() {
     updateMeme((draft) => {
-      const currentMaxId = draft[0].content.reduce((prev, current) =>
+      const currentMaxId = draft.content.reduce((prev, current) =>
         prev.id > current.id ? prev : current
       )
       const newId = currentMaxId.id + 1
-      draft[0].content.push({ ...MEME_KANVAS_NEW_TEXT, id: newId })
+      draft.content.push({ ...MEME_KANVAS_NEW_TEXT, id: newId })
     })
   }
 
@@ -119,7 +119,6 @@ export const MemeKanvas = () => {
   const toggleMode = () => {}
   return (
     <>
-      {/* Top caption input */}
       <div className="flex flex-row pt-5">
         <div ref={containerRef} className="flex flex-row w-1/2">
           <Stage
@@ -134,10 +133,10 @@ export const MemeKanvas = () => {
             }}
           >
             <Layer>
-              <MemeTemplate templateUrl={meme[0].template}></MemeTemplate>
+              <MemeTemplate templateUrl={meme.template}></MemeTemplate>
             </Layer>
             <Layer ref={layerRef}>
-              {meme[0].content.map((text, i) => {
+              {meme.content.map((text, i) => {
                 console.log({ src: 'edit.js - map', text, i, selectedId })
                 return (
                   <TextBox
@@ -169,13 +168,13 @@ export const MemeKanvas = () => {
                 placeholder=""
                 type="text"
                 name={`title`}
-                value={meme[0].title}
+                value={meme.title}
                 onChange={(event) => updateTitle(event.target.value)}
                 className="w-full px-4 py-3 rounded-lg shadow-sm focus:outline-none focus:shadow-outline text-gray-600 font-medium"
               ></input>
             </div>
           </div>
-          {meme[0].content.map((text, i) => {
+          {meme.content.map((text, i) => {
             return (
               <div key={text.id} className="flex flex-row">
                 <div className="flex flex-col mb-5">
