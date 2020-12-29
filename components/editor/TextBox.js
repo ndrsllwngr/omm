@@ -2,7 +2,7 @@
 import React, { useEffect } from 'react'
 import { Text, Transformer } from 'react-konva'
 
-export const TextBox = ({ shapeProps, isSelected, onSelect, onChange, layerRef, containerRef }) => {
+export const TextBox = ({ textProps, isSelected, onSelect, onChange, layerRef, containerRef }) => {
   const shapeRef = React.useRef(null)
   const trRef = React.useRef(null)
 
@@ -13,33 +13,37 @@ export const TextBox = ({ shapeProps, isSelected, onSelect, onChange, layerRef, 
     }
   }, [isSelected])
 
+  useEffect(() => {
+    console.log({ src: 'TextBox.js - useEffect', textProps })
+  }, [textProps])
+
   return (
     <>
       <Text
         onClick={onSelect}
         ref={shapeRef}
-        {...shapeProps}
+        {...textProps}
         draggable
         onDragEnd={(e) => {
           // const node = shapeRef.current
           const newAttrs = {
-            ...shapeProps,
+            ...textProps,
             x: e.target.x(),
             y: e.target.y(),
           }
-          console.log({ src: 'TextBox.js - onDragEnd', newAttrs, shapeProps, target: e.target })
+          console.log({ src: 'TextBox.js - onDragEnd', newAttrs, textProps, target: e.target })
           onChange(newAttrs)
         }}
         onTransformEnd={(e) => {
           const node = shapeRef.current
-          console.log({ src: 'onTransformEnd', shapeProps, target: e.target, node })
+          console.log({ src: 'onTransformEnd', textProps, target: e.target, node })
           const scaleX = node.scaleX()
           const scaleY = node.scaleY()
 
           node.scaleX(1)
           node.scaleY(1)
           const newAttrs = {
-            ...shapeProps,
+            ...textProps,
             x: node.x(),
             y: node.y(),
             width: Math.max(5, node.width() * scaleX),
@@ -48,7 +52,7 @@ export const TextBox = ({ shapeProps, isSelected, onSelect, onChange, layerRef, 
           console.log({
             src: 'TextBox.js - onTransformEnd',
             newAttrs,
-            shapeProps,
+            textProps,
             target: e.target,
             node,
           })
@@ -182,7 +186,7 @@ export const TextBox = ({ shapeProps, isSelected, onSelect, onChange, layerRef, 
           function handleOutsideClick(e) {
             if (e.target !== textarea) {
               const newAttrs = {
-                ...shapeProps,
+                ...textProps,
                 text: textarea.value,
               }
               console.log({

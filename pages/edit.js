@@ -1,32 +1,42 @@
 import React, { useEffect, useState, useRef } from 'react'
 import PropTypes from 'prop-types'
 import { HtmlHead } from '@/components/HtmlHead'
-import { Stage, Layer, Text } from 'react-konva'
+import { Stage, Layer } from 'react-konva'
 import { useWindowSize } from '@/components/hooks/useWindowSize'
 import { TextBox } from '@/components/editor/TextBox'
+import { useImmer } from 'use-immer'
 
 const INITIAL_STATE = [
   {
-    id: 1,
-    x: 50,
-    y: 50,
-    width: 50,
-    height: 50,
-    text: 'oh no',
-    rotation: 0,
-    isDragging: false,
-    fontSize: 20,
-  },
-  {
-    id: 2,
-    x: 50,
-    y: 100,
-    width: 50,
-    height: 50,
-    text: 'hi',
-    rotation: 0,
-    isDragging: false,
-    fontSize: 30,
+    template: 'url',
+    created_at: '1609268374',
+    title: 'My Meme',
+    content: [
+      {
+        id: 1,
+        x: 50,
+        y: 50,
+        width: 50,
+        height: 50,
+        text: 'Oh no',
+        rotation: 0,
+        isDragging: false,
+        fontSize: 20,
+      },
+      {
+        id: 2,
+        title: 'Meme 2',
+        x: 50,
+        y: 100,
+        width: 50,
+        height: 50,
+        text: 'Fine',
+        rotation: 0,
+        isDragging: false,
+        fontSize: 30,
+      },
+    ],
+    images: [],
   },
 ]
 
@@ -46,24 +56,51 @@ const Edit = () => {
   const stageRef = useRef(null)
   const layerRef = useRef(null)
   const containerRef = useRef(null)
-  // const [items, setItems] = useState(INITIAL_STATE)
-  const [texts, setTexts] = useState(INITIAL_STATE)
-  const [caption1Text, setCaption1Text] = useState('1')
-  const [caption2Text, setCaption2Text] = useState('2')
-  const [selectedId, selectShape] = React.useState(null)
+  const [meme, updateMeme] = useImmer(INITIAL_STATE)
+  const [selectedId, selectShape] = useState(null)
+
+  function updateTextAttrs(textAttrs) {
+    updateMeme((draft) => {
+      console.log({ textAttrs: textAttrs })
+      const index = draft[0].content.findIndex((el) => el.id === textAttrs.id)
+      if (index !== -1) {
+        draft[0].content[index] = textAttrs
+      }
+    })
+  }
+
+  function updateTextValue(id, newText) {
+    updateMeme((draft) => {
+      const index = draft[0].content.findIndex((el) => el.id === id)
+      if (index !== -1) {
+        draft[0].content[index].text = newText
+      }
+    })
+  }
+
+  function updateTitle(newVal) {
+    updateMeme((draft) => {
+      draft[0].title = newVal
+    })
+  }
+
+  function updateCoor(id, coor, newVal) {
+    updateMeme((draft) => {
+      const index = draft[0].content.findIndex((el) => el.id === id)
+      if (index !== -1) {
+        console.log({ id, coor, newVal })
+        draft[0].content[index][coor] = parseInt(newVal)
+      }
+    })
+  }
 
   useEffect(() => {
-    console.log({ src: 'edit.js - useEffect', texts })
-  }, [texts])
+    console.log({ src: 'edit.js - useEffect', meme })
+  }, [meme])
 
   useEffect(() => {
     console.log({ src: 'edit.js - useEffect', selectedId })
   }, [selectedId])
-
-  // useEffect(() => {
-  //   // place items randomly on canvas
-  //   setItems(generateShapes(width, height))
-  // }, [height, width])
 
   // drag start function
   // const handleDragStart = (e) => {
@@ -94,14 +131,6 @@ const Edit = () => {
   //   )
   // }
 
-  const handleText = (target, value) => {
-    if (target === 'caption1Text') {
-      setCaption1Text(value)
-    } else {
-      setCaption2Text(value)
-    }
-  }
-
   // export function
   const handleExport = () => {
     const uri = stageRef.current.toDataURL()
@@ -118,33 +147,55 @@ const Edit = () => {
     <>
       <HtmlHead />
       {/* Top caption input */}
-      <div className="mb-5">
-        <label htmlFor="caption_1" className="font-bold mb-1 text-gray-700 block">
-          Top text
-        </label>
-        <input
-          placeholder=""
-          type="text"
-          name="caption_1"
-          value={caption1Text}
-          onChange={(event) => handleText('caption1Text', event.target.value)}
-          className="w-full px-4 py-3 rounded-lg shadow-sm focus:outline-none focus:shadow-outline text-gray-600 font-medium"
-        ></input>
+      <div className="flex flex-row">
+        {meme[0].content.map((text, i) => {
+          return (
+            <div key={i} className="mb-5">
+              <label htmlFor="caption_1" className="font-bold mb-1 text-gray-700 block">
+                Text {text.id}
+              </label>
+              <input
+                placeholder=""
+                type="text"
+                name={`text_${text.id}`}
+                value={text.text}
+                onChange={(event) => updateTextValue(text.id, event.target.value)}
+                className="w-full px-4 py-3 rounded-lg shadow-sm focus:outline-none focus:shadow-outline text-gray-600 font-medium"
+              ></input>
+              <input
+                placeholder=""
+                type="number"
+                name={`text_${text.id}_coor_x`}
+                value={text.x}
+                onChange={(event) => updateCoor(text.id, 'x', event.target.value)}
+                className="w-full px-4 py-3 rounded-lg shadow-sm focus:outline-none focus:shadow-outline text-gray-600 font-medium"
+              ></input>
+              <input
+                placeholder=""
+                type="number"
+                name={`text_${text.id}_coor_y`}
+                value={text.y}
+                onChange={(event) => updateCoor(text.id, 'y', event.target.value)}
+                className="w-full px-4 py-3 rounded-lg shadow-sm focus:outline-none focus:shadow-outline text-gray-600 font-medium"
+              ></input>
+            </div>
+          )
+        })}
+        <div className="mb-5">
+          <label htmlFor="caption_1" className="font-bold mb-1 text-gray-700 block">
+            Title
+          </label>
+          <input
+            placeholder=""
+            type="text"
+            name={`title`}
+            value={meme[0].title}
+            onChange={(event) => updateTitle(event.target.value)}
+            className="w-full px-4 py-3 rounded-lg shadow-sm focus:outline-none focus:shadow-outline text-gray-600 font-medium"
+          ></input>
+        </div>
       </div>
-      {/* Bottom caption input */}
-      <div className="mb-5">
-        <label htmlFor="caption_2" className="font-bold mb-1 text-gray-700 block">
-          Bottom text
-        </label>
-        <input
-          placeholder=""
-          type="text"
-          name="caption_2"
-          value={caption2Text}
-          onChange={(event) => handleText('caption2Text', event.target.value)}
-          className="w-full px-4 py-3 rounded-lg shadow-sm focus:outline-none focus:shadow-outline text-gray-600 font-medium"
-        ></input>
-      </div>
+
       <button onClick={handleExport}>Click here to log stage data URL</button>
       <button onClick={toggleMode}>Toggle Edit/View</button>
       <div ref={containerRef} className=".container flex flex-row">
@@ -160,57 +211,26 @@ const Edit = () => {
           }}
         >
           <Layer ref={layerRef}>
-            <Text text="Try to drag a star" />
-            {texts.map((text, i) => {
+            {meme[0].content.map((text, i) => {
               console.log({ src: 'edit.js - map', text, i, selectedId })
               return (
                 <TextBox
                   key={i}
                   layerRef={layerRef.current}
                   containerRef={containerRef.current}
-                  shapeProps={{ ...text }}
+                  textProps={{ ...text }}
                   isSelected={text.id === selectedId}
                   onSelect={() => {
                     console.log(text.id)
                     selectShape(text.id)
                   }}
                   onChange={(newAttrs) => {
-                    const textArr = texts.slice()
-                    console.log({ src: 'edit.js - onChange', newAttrs })
-                    textArr[i] = newAttrs
-                    setTexts(textArr)
+                    updateTextAttrs(newAttrs)
                   }}
                 />
               )
             })}
           </Layer>
-          {/* <Layer>
-          {items &&
-            items.map((item) => (
-              <Star
-                key={item.id}
-                id={item.id}
-                x={item.x}
-                y={item.y}
-                numPoints={5}
-                innerRadius={20}
-                outerRadius={40}
-                fill="#89b717"
-                opacity={0.8}
-                draggable
-                rotation={item.rotation}
-                shadowColor="black"
-                shadowBlur={10}
-                shadowOpacity={0.6}
-                shadowOffsetX={item.isDragging ? 10 : 5}
-                shadowOffsetY={item.isDragging ? 10 : 5}
-                scaleX={item.isDragging ? 1.2 : 1}
-                scaleY={item.isDragging ? 1.2 : 1}
-                onDragStart={handleDragStart}
-                onDragEnd={handleDragEnd}
-              />
-            ))}
-        </Layer> */}
         </Stage>
       </div>
     </>
