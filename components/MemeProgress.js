@@ -3,14 +3,18 @@ import useStorage from '@/lib/useStorage'
 import { motion } from 'framer-motion'
 import PropTypes from 'prop-types'
 
-export const MemeProgress = ({ file, setFile }) => {
-  const { progress, url } = useStorage(file)
+export const MemeProgress = ({ otherFile, setOtherFile }) => {
+  const { progress, url, setFile } = useStorage()
+
+  useEffect(() => {
+    setFile(otherFile)
+  }, [otherFile, setFile])
 
   useEffect(() => {
     if (url) {
-      setFile(null)
+      setOtherFile(null)
     }
-  }, [setFile, url])
+  }, [setOtherFile, url])
 
   return (
     <div className="h-5 w-48 bg-purple-400 ">
@@ -20,6 +24,6 @@ export const MemeProgress = ({ file, setFile }) => {
 }
 
 MemeProgress.propTypes = {
-  file: PropTypes.any,
-  setFile: PropTypes.func,
+  otherFile: PropTypes.any,
+  setOtherFile: PropTypes.func,
 }

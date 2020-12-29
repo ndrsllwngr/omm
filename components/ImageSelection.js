@@ -7,43 +7,26 @@ export const ImageSelection = () => {
   //const [url, setUrl] = useState(null)
   const [imageUrls, setImageUrls] = useState([])
 
-  const getImageUrls = (datadocs) => {
-    datadocs.map((datadoc) =>
-      firebase
-        .storage()
-        .ref(datadoc.img)
-        .getDownloadURL()
-        .then((url) => {
-          setImageUrls([...imageUrls, url])
-          console.log('imageUrlArray:', imageUrls)
-          console.log('data:', datadocs)
-        })
-        .catch((error) => {
-          switch (error.code) {
-            case 'storage/object-not-found':
-              // File doesn't exist
-              break
-
-            case 'storage/unauthorized':
-              // User doesn't have permission to access the object
-              break
-
-            case 'storage/canceled':
-              // User canceled the upload
-              break
-
-            case 'storage/unknown':
-              // Unknown error occurred, inspect the server response
-              break
-          }
-        })
-    )
-  }
-
   useEffect(() => {
-    getImageUrls(docs)
-  })
-
+    async function getImageUrls() {
+      let urls = []
+      const datadocs = docs
+      console.log(datadocs)
+      for (let i = 0; i < datadocs.length; i++) {
+        console.log(datadocs[i])
+        const url = await firebase.storage().ref(datadocs[i].img).getDownloadURL()
+        urls.push(url)
+      }
+      return urls
+    }
+    getImageUrls().then((res) => {
+      console.log(res)
+      setImageUrls(res)
+    })
+  }, [docs, setImageUrls])
+  useEffect(() => {
+    console.log({ src: 'useState', imageUrls })
+  }, [imageUrls])
   return (
     <div className="img-selection">
       {imageUrls &&

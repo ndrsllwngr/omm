@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import { MemeProgress } from '@/components/MemeProgress'
 
 export const UploadImage = () => {
-  const [file, setFile] = useState(null)
+  const [otherFile, setOtherFile] = useState(null)
   const [error, setError] = useState(null)
 
   const types = ['image/png', 'image/jpeg']
@@ -11,10 +11,10 @@ export const UploadImage = () => {
     let selected = e.target.files[0]
 
     if (selected && types.includes(selected.type)) {
-      setFile(selected)
+      setOtherFile(selected)
       setError('')
     } else {
-      setFile(null)
+      setOtherFile(null)
       setError('Please select an image.')
     }
   }
@@ -26,8 +26,8 @@ export const UploadImage = () => {
       </label>
       <div className="output">
         {error && <div className="error">{error}</div>}
-        {file && <div>{file.name}</div>}
-        {file && <MemeProgress file={file} setFile={setFile} />}
+        {otherFile && <div>{otherFile.name}</div>}
+        {otherFile && <MemeProgress otherFile={otherFile} setOtherFile={setOtherFile} />}
       </div>
     </form>
   )
