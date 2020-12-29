@@ -7,6 +7,18 @@ import { TextBox } from '@/components/editor/TextBox'
 import { useImmer } from 'use-immer'
 import useImage from 'use-image'
 
+const TEXT_STATE = {
+  id: 0,
+  x: 50,
+  y: 50,
+  width: 50,
+  height: 50,
+  text: 'Oh no',
+  rotation: 0,
+  isDragging: false,
+  fontSize: 20,
+}
+
 const INITIAL_STATE = [
   {
     template: 'https://i.imgflip.com/1if1k1.jpg?a447020',
@@ -63,7 +75,6 @@ const CreatePage = () => {
 
   function updateTextAttrs(textAttrs) {
     updateMeme((draft) => {
-      console.log({ textAttrs: textAttrs })
       const index = draft[0].content.findIndex((el) => el.id === textAttrs.id)
       if (index !== -1) {
         draft[0].content[index] = textAttrs
@@ -90,9 +101,18 @@ const CreatePage = () => {
     updateMeme((draft) => {
       const index = draft[0].content.findIndex((el) => el.id === id)
       if (index !== -1) {
-        console.log({ id, coor, newVal })
         draft[0].content[index][coor] = parseInt(newVal)
       }
+    })
+  }
+
+  function addText() {
+    updateMeme((draft) => {
+      const currentMaxId = draft[0].content.reduce((prev, current) =>
+        prev.id > current.id ? prev : current
+      )
+      const newId = currentMaxId.id + 1
+      draft[0].content.push({ ...TEXT_STATE, id: newId })
     })
   }
 
@@ -149,110 +169,138 @@ const CreatePage = () => {
     <>
       <HtmlHead />
       {/* Top caption input */}
-      <div className="flex flex-row">
-        {meme[0].content.map((text, i) => {
-          return (
-            <div key={i} className="mb-5">
+      <div className="flex flex-row pt-5">
+        <div ref={containerRef} className="flex flex-row w-1/2">
+          <Stage
+            ref={stageRef}
+            width={500}
+            height={500}
+            onMouseDown={(e) => {
+              const clickedOnEmpty = e.target === e.target.getStage()
+              if (clickedOnEmpty) {
+                selectShape(null)
+              }
+            }}
+          >
+            <Layer>
+              <Image image={templateImage}></Image>
+            </Layer>
+            <Layer ref={layerRef}>
+              {meme[0].content.map((text, i) => {
+                console.log({ src: 'edit.js - map', text, i, selectedId })
+                return (
+                  <TextBox
+                    key={text.id}
+                    layerRef={layerRef.current}
+                    containerRef={containerRef.current}
+                    textProps={{ ...text }}
+                    isSelected={text.id === selectedId}
+                    onSelect={() => {
+                      console.log(text.id)
+                      selectShape(text.id)
+                    }}
+                    onChange={(newAttrs) => {
+                      updateTextAttrs(newAttrs)
+                    }}
+                  />
+                )
+              })}
+            </Layer>
+          </Stage>
+        </div>
+        <div className="flex flex-col w-1/2">
+          <div className="flex flex-row mb-5">
+            <div className="flex flex-col">
               <label htmlFor="caption_1" className="font-bold mb-1 text-gray-700 block">
-                Text {text.id}
+                Title
               </label>
               <input
                 placeholder=""
                 type="text"
-                name={`text_${text.id}`}
-                value={text.text}
-                onChange={(event) => updateTextValue(text.id, event.target.value)}
-                className="w-full px-4 py-3 rounded-lg shadow-sm focus:outline-none focus:shadow-outline text-gray-600 font-medium"
-              ></input>
-              <input
-                placeholder=""
-                type="number"
-                name={`text_${text.id}_coor_x`}
-                value={text.x}
-                onChange={(event) => updateCoor(text.id, 'x', event.target.value)}
-                className="w-full px-4 py-3 rounded-lg shadow-sm focus:outline-none focus:shadow-outline text-gray-600 font-medium"
-              ></input>
-              <input
-                placeholder=""
-                type="number"
-                name={`text_${text.id}_coor_y`}
-                value={text.y}
-                onChange={(event) => updateCoor(text.id, 'y', event.target.value)}
+                name={`title`}
+                value={meme[0].title}
+                onChange={(event) => updateTitle(event.target.value)}
                 className="w-full px-4 py-3 rounded-lg shadow-sm focus:outline-none focus:shadow-outline text-gray-600 font-medium"
               ></input>
             </div>
-          )
-        })}
-        <div className="mb-5">
-          <label htmlFor="caption_1" className="font-bold mb-1 text-gray-700 block">
-            Title
-          </label>
-          <input
-            placeholder=""
-            type="text"
-            name={`title`}
-            value={meme[0].title}
-            onChange={(event) => updateTitle(event.target.value)}
-            className="w-full px-4 py-3 rounded-lg shadow-sm focus:outline-none focus:shadow-outline text-gray-600 font-medium"
-          ></input>
-        </div>
-      </div>
+          </div>
+          {meme[0].content.map((text, i) => {
+            return (
+              <div key={text.id} className="flex flex-row">
+                <div className="flex flex-col mb-5">
+                  <div className="flex flex-col mb-2">
+                    <label htmlFor="caption_1" className="font-bold mb-1 text-gray-700 block">
+                      Text {text.id}
+                    </label>
+                    <input
+                      placeholder=""
+                      type="text"
+                      name={`text_${text.id}`}
+                      value={text.text}
+                      onChange={(event) => updateTextValue(text.id, event.target.value)}
+                      className="w-full px-4 py-3 rounded-lg shadow-sm focus:outline-none focus:shadow-outline text-gray-600 font-medium"
+                    ></input>
+                  </div>
+                  <div className="flex flex-row space-x-2">
+                    <div className="flex relative">
+                      <span className="inline-flex items-center px-4 py-3 rounded-l-lg shadow-sm focus:outline-none focus:shadow-outline text-gray-600 font-source font-medium bg-gray-100">
+                        X
+                      </span>
+                      <input
+                        placeholder=""
+                        type="number"
+                        name={`text_${text.id}_coor_x`}
+                        value={text.x}
+                        onChange={(event) => updateCoor(text.id, 'x', event.target.value)}
+                        className="w-full px-4 py-3 rounded-r-lg shadow-sm focus:outline-none focus:shadow-outline text-gray-600 font-medium"
+                      ></input>
+                    </div>
+                    <div className="flex relative ">
+                      <span className="inline-flex items-center px-4 py-3 rounded-l-lg shadow-sm focus:outline-none focus:shadow-outline text-gray-600 font-source font-medium bg-gray-100">
+                        Y
+                      </span>
+                      <input
+                        placeholder=""
+                        type="number"
+                        name={`text_${text.id}_coor_y`}
+                        value={text.y}
+                        onChange={(event) => updateCoor(text.id, 'y', event.target.value)}
+                        className="w-full px-4 py-3 rounded-r-lg shadow-sm focus:outline-none focus:shadow-outline text-gray-600 font-medium"
+                      ></input>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            )
+          })}
 
-      <button
-        className="bg-indigo-600 hover:bg-indigo-700 focus:ring-indigo-500 focus:ring-offset-indigo-200 text-white transition ease-in duration-200 text-center text-base font-semibold py-2 px-4 rounded-lg shadow-md focus:outline-none focus:ring-2 focus:ring-offset-2"
-        onClick={handleExport}
-      >
-        Download
-      </button>
-      <button
-        className="bg-green-600 hover:bg-green-700 focus:ring-green-500 focus:ring-offset-green-200 text-white transition ease-in duration-200 text-center text-base font-semibold py-2 px-4 rounded-lg shadow-md focus:outline-none focus:ring-2 focus:ring-offset-2"
-        onClick={handleExport}
-      >
-        Generate
-      </button>
-      <button
-        className="bg-yellow-600 hover:bg-yellow-700 focus:ring-yellow-500 focus:ring-offset-yellow-200 text-white transition ease-in duration-200 text-center text-base font-semibold py-2 px-4 rounded-lg shadow-md focus:outline-none focus:ring-2 focus:ring-offset-2"
-        onClick={toggleMode}
-      >
-        Toggle Edit/View
-      </button>
-      <div ref={containerRef} className=".container flex flex-row">
-        <Stage
-          ref={stageRef}
-          width={width}
-          height={height}
-          onMouseDown={(e) => {
-            const clickedOnEmpty = e.target === e.target.getStage()
-            if (clickedOnEmpty) {
-              selectShape(null)
-            }
-          }}
-        >
-          <Layer>
-            <Image image={templateImage}></Image>
-          </Layer>
-          <Layer ref={layerRef}>
-            {meme[0].content.map((text, i) => {
-              console.log({ src: 'edit.js - map', text, i, selectedId })
-              return (
-                <TextBox
-                  key={i}
-                  layerRef={layerRef.current}
-                  containerRef={containerRef.current}
-                  textProps={{ ...text }}
-                  isSelected={text.id === selectedId}
-                  onSelect={() => {
-                    console.log(text.id)
-                    selectShape(text.id)
-                  }}
-                  onChange={(newAttrs) => {
-                    updateTextAttrs(newAttrs)
-                  }}
-                />
-              )
-            })}
-          </Layer>
-        </Stage>
+          <div className="flex flex-row">
+            <button
+              className="bg-indigo-600 hover:bg-indigo-700 focus:ring-indigo-500 focus:ring-offset-indigo-200 text-white transition ease-in duration-200 text-center text-base font-semibold py-2 px-4 rounded-lg shadow-md focus:outline-none focus:ring-2 focus:ring-offset-2"
+              onClick={addText}
+            >
+              Add text
+            </button>
+            <button
+              className="bg-indigo-600 hover:bg-indigo-700 focus:ring-indigo-500 focus:ring-offset-indigo-200 text-white transition ease-in duration-200 text-center text-base font-semibold py-2 px-4 rounded-lg shadow-md focus:outline-none focus:ring-2 focus:ring-offset-2"
+              onClick={handleExport}
+            >
+              Download
+            </button>
+            <button
+              className="bg-green-600 hover:bg-green-700 focus:ring-green-500 focus:ring-offset-green-200 text-white transition ease-in duration-200 text-center text-base font-semibold py-2 px-4 rounded-lg shadow-md focus:outline-none focus:ring-2 focus:ring-offset-2"
+              onClick={handleExport}
+            >
+              Generate
+            </button>
+            <button
+              className="bg-yellow-600 hover:bg-yellow-700 focus:ring-yellow-500 focus:ring-offset-yellow-200 text-white transition ease-in duration-200 text-center text-base font-semibold py-2 px-4 rounded-lg shadow-md focus:outline-none focus:ring-2 focus:ring-offset-2"
+              onClick={toggleMode}
+            >
+              Toggle Edit/View
+            </button>
+          </div>
+        </div>
       </div>
     </>
   )
