@@ -27,26 +27,26 @@ const INITIAL_STATE = [
     content: [
       {
         id: 1,
-        x: 50,
-        y: 50,
+        x: 150,
+        y: 64,
         width: 50,
-        height: 50,
+        height: 100,
         text: 'Oh no',
         rotation: 0,
         isDragging: false,
-        fontSize: 20,
+        fontSize: 30,
       },
       {
         id: 2,
         title: 'Meme 2',
-        x: 50,
-        y: 100,
-        width: 50,
+        x: 366,
+        y: 20,
+        width: 150,
         height: 50,
-        text: 'Fine',
+        text: 'This is fine!',
         rotation: 0,
         isDragging: false,
-        fontSize: 30,
+        fontSize: 25,
       },
     ],
     images: [],
@@ -274,7 +274,7 @@ const CreatePage = () => {
             )
           })}
 
-          <div className="flex flex-row">
+          <div className="flex flex-row space-x-5 mt-5">
             <button
               className="bg-indigo-600 hover:bg-indigo-700 focus:ring-indigo-500 focus:ring-offset-indigo-200 text-white transition ease-in duration-200 text-center text-base font-semibold py-2 px-4 rounded-lg shadow-md focus:outline-none focus:ring-2 focus:ring-offset-2"
               onClick={addText}
