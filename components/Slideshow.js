@@ -1,22 +1,22 @@
-import React, { useEffect, useReducer } from 'react'
+import React, { useEffect } from 'react'
 import PropTypes from 'prop-types'
-import { SlideshowButton } from '@/components/SlideshowButton'
+// import { SlideshowButton } from '@/components/SlideshowButton'
 import { Slide } from '@/components/Slide'
 import { useRouter } from 'next/router'
 
-const reducer = (slideIndex, arg) => {
-  switch (arg.type) {
-    case 'next':
-      return ++slideIndex
-    case 'prev':
-      return slideIndex === 0 ? 0 : --slideIndex
-    default:
-      console.error('Argument not supportet.', arg)
-  }
-}
+// const reducer = (slideIndex, arg) => {
+//   switch (arg.type) {
+//     case 'next':
+//       return ++slideIndex
+//     case 'prev':
+//       return slideIndex === 0 ? 0 : --slideIndex
+//     default:
+//       console.error('Argument not supportet.', arg)
+//   }
+// }
 
 export const Slideshow = ({ memes }) => {
-  const [slideIndex, setSlideIndex] = useReducer(reducer, 0)
+  // const [slideIndex, setSlideIndex] = useReducer(reducer, 0)
   const router = useRouter()
 
   useEffect(() => {
@@ -58,10 +58,27 @@ export const Slideshow = ({ memes }) => {
 Slideshow.propTypes = {
   memes: PropTypes.arrayOf(
     PropTypes.shape({
-      imgURL: PropTypes.string,
-      width: PropTypes.number,
-      height: PropTypes.number,
-      name: PropTypes.string,
+      id: PropTypes.any,
+      template: PropTypes.string,
+      created_at: PropTypes.any,
+      title: PropTypes.string,
+      imgPath: PropTypes.string,
+      content: PropTypes.arrayOf(
+        PropTypes.shape({
+          id: PropTypes.number,
+          x: PropTypes.number,
+          y: PropTypes.number,
+          width: PropTypes.number,
+          height: PropTypes.number,
+          text: PropTypes.string,
+          rotation: PropTypes.number,
+          isDragging: PropTypes.bool,
+          fontSize: PropTypes.number,
+          fontStyle: PropTypes.string,
+          fill: PropTypes.string,
+        })
+      ),
+      images: PropTypes.array,
     })
   ),
 }
