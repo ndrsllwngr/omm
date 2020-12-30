@@ -103,7 +103,6 @@ export const ColorPicker = ({ cb, selectedColor }) => {
 }
 
 ColorPicker.propTypes = {
-  currentStyle: PropTypes.string,
   cb: PropTypes.func,
-  options: PropTypes.arrayOf(PropTypes.string),
+  selectedColor: PropTypes.string,
 }
