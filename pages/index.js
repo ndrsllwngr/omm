@@ -7,9 +7,9 @@ import { MemeResult } from '@/components/MemeResult'
 import { NavTop } from '@/components/NavTop'
 import { NavBottom } from '@/components/NavBottom'
 import { HtmlHead } from '@/components/HtmlHead'
-import { useUser } from '@/components/context/userContext'
 import firebase from '@/lib/firebase'
 import { getImgFlipMemes } from '@/lib/external-meme-api'
+import { useRequireAuth } from '@/components/hooks/useRequireAuth'
 
 const LandingPage = ({ memes }) => {
   const [step, setStep] = useState(STEPS.one)
@@ -17,16 +17,16 @@ const LandingPage = ({ memes }) => {
     console.log({ memes })
   }, [memes])
   // Our custom hook to get context values
-  const { loadingUser, user } = useUser()
+  const auth = useRequireAuth()
 
   useEffect(() => {
-    if (!loadingUser) {
+    if (auth.user) {
       // You know that the user is loaded: either logged in or out!
-      console.log({ user })
+      console.log(auth.user)
     }
     // You also have your firebase app initialized
     console.log({ firebase })
-  }, [loadingUser, user])
+  }, [auth.user])
   const navigate = (direction) => {
     let page
     switch (direction) {
@@ -79,7 +79,7 @@ const LandingPage = ({ memes }) => {
               {step === STEPS.two && <MemeEditor />}
             </div>
           </div>
-          <NavBottom step={step} navigate={navigate} />
+          <NavBottom step={step} navigate={navigate} logout={auth.signOut} />
         </>
       )}
     </>
