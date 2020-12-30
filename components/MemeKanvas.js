@@ -116,6 +116,7 @@ export const MemeKanvas = () => {
             width={500}
             height={500}
             onMouseDown={(e) => {
+              // TODO @NDRS reset selectedShape properly
               const clickedOnEmpty = e.target === e.target.getStage()
               if (clickedOnEmpty) {
                 selectShape(null)

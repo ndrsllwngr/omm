@@ -206,7 +206,7 @@ export const TextBox = ({ textProps, isSelected, onSelect, onChange, layerRef, c
       {isSelected && (
         <Transformer
           ref={trRef}
-          enabledAnchors={['middle-left', 'middle-right']}
+          enabledAnchors={['middle-left', 'middle-right', 'top-center', 'bottom-center']}
           boundBoxFunc={(oldBox, newBox) => {
             if (newBox.width < 5 || newBox.height < 5) {
               return oldBox
