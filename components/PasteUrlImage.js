@@ -31,7 +31,6 @@ export const PasteUrlImage = () => {
           <input type="text" name="imageUrl" onChange={(e) => setTemp(e.target.value)}></input>
         </label>
         <input type="submit" value="Get image"></input>
-        <input type="submit" value="Get Screenshot"></input>
       </form>
       <div>
         <img src={userImageUrl}></img>

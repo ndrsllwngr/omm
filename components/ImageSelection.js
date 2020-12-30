@@ -32,7 +32,7 @@ export const ImageSelection = () => {
       {imageUrls &&
         imageUrls.map((imageUrl, i) => (
           <div key={i}>
-            <img src={imageUrl} alt="uploaded image"></img>
+            <img src={imageUrl} alt="uploaded image" width="150" height="150"></img>
           </div>
         ))}
     </div>
