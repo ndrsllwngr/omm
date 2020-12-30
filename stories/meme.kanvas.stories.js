@@ -6,7 +6,12 @@ import { MemeKanvas } from '@/components/MemeKanvas'
 export default { title: 'Meme Generator' }
 
 export const memeRenderer = () => {
-  return <MemeRenderer meme={MEME_KANVAS_INITIAL_STATE}></MemeRenderer>
+  return (
+    // TODO scale to fit into parent container https://css-tricks.com/scaled-proportional-blocks-with-css-and-javascript/
+    <div style={{ transform: 'scale(0.5)' }}>
+      <MemeRenderer meme={MEME_KANVAS_INITIAL_STATE}></MemeRenderer>
+    </div>
+  )
 }
 
 export const memeKanvas = () => {
