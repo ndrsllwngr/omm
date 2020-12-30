@@ -5,9 +5,9 @@ import { TextBox } from '@/components/kanvas-utils/TextBox'
 import { MemeTemplate } from '@/components/kanvas-utils/MemeTemplate'
 import { useImmer } from 'use-immer'
 import { MEME_KANVAS_NEW_TEXT, MEME_KANVAS_INITIAL_STATE } from '@/lib/constants'
-import { MemeRenderer } from './MemeRenderer'
-import { DropDown } from './DropDown'
-import { ColorPicker } from './ColorPicker'
+import { MemeRenderer } from '@/components/MemeRenderer'
+import { DropDown } from '@/components/DropDown'
+import { ColorPicker } from '@/components/ColorPicker'
 
 // Download URI
 // function from https://stackoverflow.com/a/15832662/512042
