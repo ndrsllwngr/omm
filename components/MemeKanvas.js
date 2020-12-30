@@ -116,10 +116,9 @@ export const MemeKanvas = () => {
     downloadURI(uri, 'stage.png')
   }
 
-  const toggleMode = () => {}
   return (
     <>
-      <div className="flex flex-row pt-5">
+      <div className="flex flex-row pt-5 bg-custom-gray">
         <div ref={containerRef} className="flex flex-row w-1/2">
           <Stage
             ref={stageRef}
@@ -161,7 +160,7 @@ export const MemeKanvas = () => {
         <div className="flex flex-col w-1/2">
           <div className="flex flex-row mb-5">
             <div className="flex flex-col">
-              <label htmlFor="caption_1" className="font-bold mb-1 text-gray-700 block">
+              <label htmlFor="caption_1" className="font-bold mb-1 text-gray-50 block">
                 Title
               </label>
               <input
@@ -179,7 +178,7 @@ export const MemeKanvas = () => {
               <div key={text.id} className="flex flex-row">
                 <div className="flex flex-col mb-5">
                   <div className="flex flex-col mb-2">
-                    <label htmlFor="caption_1" className="font-bold mb-1 text-gray-700 block">
+                    <label htmlFor="caption_1" className="font-bold mb-1 text-gray-50 block">
                       Text {text.id}
                     </label>
                     <input
@@ -226,13 +225,13 @@ export const MemeKanvas = () => {
 
           <div className="flex flex-row space-x-5 mt-5">
             <button
-              className="bg-indigo-600 hover:bg-indigo-700 focus:ring-indigo-500 focus:ring-offset-indigo-200 text-white transition ease-in duration-200 text-center text-base font-semibold py-2 px-4 rounded-lg shadow-md focus:outline-none focus:ring-2 focus:ring-offset-2"
+              className="bg-custom-green hover:bg-custom-green focus:ring-custom-green focus:ring-offset-custom-green text-custom-gray transition ease-in duration-200 text-center text-base font-semibold py-2 px-4 rounded-lg shadow-md focus:outline-none focus:ring-2 focus:ring-offset-2"
               onClick={addText}
             >
               Add text
             </button>
             <button
-              className="bg-indigo-600 hover:bg-indigo-700 focus:ring-indigo-500 focus:ring-offset-indigo-200 text-white transition ease-in duration-200 text-center text-base font-semibold py-2 px-4 rounded-lg shadow-md focus:outline-none focus:ring-2 focus:ring-offset-2"
+              className="bg-custom-green hover:bg-custom-green focus:ring-custom-green focus:ring-offset-custom-green text-custom-gray transition ease-in duration-200 text-center text-base font-semibold py-2 px-4 rounded-lg shadow-md focus:outline-none focus:ring-2 focus:ring-offset-2"
               onClick={handleExport}
             >
               Download
@@ -243,13 +242,6 @@ export const MemeKanvas = () => {
               onClick={handleExport}
             >
               Generate
-            </button>
-            <button
-              disabled={true}
-              className="bg-gray-600 hover:bg-gray-700 focus:ring-gray-500 focus:ring-offset-gray-200 text-white transition ease-in duration-200 text-center text-base font-semibold py-2 px-4 rounded-lg shadow-md focus:outline-none focus:ring-2 focus:ring-offset-2"
-              onClick={toggleMode}
-            >
-              Toggle Edit/View
             </button>
           </div>
         </div>

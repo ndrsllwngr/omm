@@ -31,7 +31,19 @@ MemeRenderer.propTypes = {
     template: PropTypes.string,
     created_at: PropTypes.any,
     title: PropTypes.string,
-    content: PropTypes.array,
+    content: PropTypes.arrayOf(
+      PropTypes.shape({
+        id: PropTypes.number,
+        x: PropTypes.number,
+        y: PropTypes.number,
+        width: PropTypes.number,
+        height: PropTypes.number,
+        text: PropTypes.string,
+        rotation: PropTypes.number,
+        isDragging: PropTypes.bool,
+        fontSize: PropTypes.number,
+      })
+    ),
     images: PropTypes.array,
   }),
 }
