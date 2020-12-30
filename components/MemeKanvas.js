@@ -34,26 +34,17 @@ export const MemeKanvas = () => {
     })
   }
 
-  function updateTextValue(id, newText) {
-    updateMeme((draft) => {
-      const index = draft.content.findIndex((el) => el.id === id)
-      if (index !== -1) {
-        draft.content[index].text = newText
-      }
-    })
-  }
-
   function updateTitle(newVal) {
     updateMeme((draft) => {
       draft.title = newVal
     })
   }
 
-  function updateCoor(id, coor, newVal) {
+  function updateValue(id, key, newVal) {
     updateMeme((draft) => {
       const index = draft.content.findIndex((el) => el.id === id)
       if (index !== -1) {
-        draft.content[index][coor] = parseInt(newVal)
+        draft.content[index][key] = newVal
       }
     })
   }
@@ -186,7 +177,7 @@ export const MemeKanvas = () => {
                       type="text"
                       name={`text_${text.id}`}
                       value={text.text}
-                      onChange={(event) => updateTextValue(text.id, event.target.value)}
+                      onChange={(event) => updateValue(text.id, 'text', event.target.value)}
                       className="w-full px-4 py-3 rounded-lg shadow-sm focus:outline-none focus:shadow-outline text-gray-600 font-medium"
                     ></input>
                   </div>
@@ -200,7 +191,9 @@ export const MemeKanvas = () => {
                         type="number"
                         name={`text_${text.id}_coor_x`}
                         value={text.x}
-                        onChange={(event) => updateCoor(text.id, 'x', event.target.value)}
+                        onChange={(event) =>
+                          updateValue(text.id, 'x', parseInt(event.target.value))
+                        }
                         className="w-full px-4 py-3 rounded-r-lg shadow-sm focus:outline-none focus:shadow-outline text-gray-600 font-medium"
                       ></input>
                     </div>
@@ -213,7 +206,24 @@ export const MemeKanvas = () => {
                         type="number"
                         name={`text_${text.id}_coor_y`}
                         value={text.y}
-                        onChange={(event) => updateCoor(text.id, 'y', event.target.value)}
+                        onChange={(event) =>
+                          updateValue(text.id, 'y', parseInt(event.target.value))
+                        }
+                        className="w-full px-4 py-3 rounded-r-lg shadow-sm focus:outline-none focus:shadow-outline text-gray-600 font-medium"
+                      ></input>
+                    </div>
+                    <div className="flex relative ">
+                      <span className="inline-flex items-center px-4 py-3 rounded-l-lg shadow-sm focus:outline-none focus:shadow-outline text-gray-600 font-source font-medium bg-gray-100">
+                        FONT
+                      </span>
+                      <input
+                        placeholder=""
+                        type="number"
+                        name={`text_${text.id}_font_size`}
+                        value={text.fontSize}
+                        onChange={(event) =>
+                          updateValue(text.id, 'fontSize', parseInt(event.target.value))
+                        }
                         className="w-full px-4 py-3 rounded-r-lg shadow-sm focus:outline-none focus:shadow-outline text-gray-600 font-medium"
                       ></input>
                     </div>
@@ -225,13 +235,13 @@ export const MemeKanvas = () => {
 
           <div className="flex flex-row space-x-5 mt-5">
             <button
-              className="bg-custom-green hover:bg-custom-green focus:ring-custom-green focus:ring-offset-custom-green text-custom-gray transition ease-in duration-200 text-center text-base font-semibold py-2 px-4 rounded-lg shadow-md focus:outline-none focus:ring-2 focus:ring-offset-2"
+              className="bg-custom-green hover:bg-green-400 focus:ring-custom-green focus:ring-offset-custom-green text-custom-gray transition ease-in duration-200 text-center text-base font-semibold py-2 px-4 rounded-lg shadow-md focus:outline-none focus:ring-2 focus:ring-offset-2"
               onClick={addText}
             >
               Add text
             </button>
             <button
-              className="bg-custom-green hover:bg-custom-green focus:ring-custom-green focus:ring-offset-custom-green text-custom-gray transition ease-in duration-200 text-center text-base font-semibold py-2 px-4 rounded-lg shadow-md focus:outline-none focus:ring-2 focus:ring-offset-2"
+              className="bg-custom-green hover:bg-green-400 focus:ring-custom-green focus:ring-offset-custom-green text-custom-gray transition ease-in duration-200 text-center text-base font-semibold py-2 px-4 rounded-lg shadow-md focus:outline-none focus:ring-2 focus:ring-offset-2"
               onClick={handleExport}
             >
               Download
