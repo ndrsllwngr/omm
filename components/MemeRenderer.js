@@ -38,6 +38,8 @@ MemeRenderer.propTypes = {
         rotation: PropTypes.number,
         isDragging: PropTypes.bool,
         fontSize: PropTypes.number,
+        fontStyle: PropTypes.string,
+        fill: PropTypes.string,
       })
     ),
     images: PropTypes.array,

@@ -6,6 +6,8 @@ import { MemeTemplate } from '@/components/kanvas-utils/MemeTemplate'
 import { useImmer } from 'use-immer'
 import { MEME_KANVAS_NEW_TEXT, MEME_KANVAS_INITIAL_STATE } from '@/lib/constants'
 import { MemeRenderer } from './MemeRenderer'
+import { DropDown } from './DropDown'
+import { ColorPicker } from './ColorPicker'
 
 // Download URI
 // function from https://stackoverflow.com/a/15832662/512042
@@ -235,6 +237,21 @@ export const MemeKanvas = () => {
                         }
                         className="w-full px-4 py-3 rounded-r-lg shadow-sm focus:outline-none focus:shadow-outline text-gray-600 font-medium"
                       ></input>
+                    </div>
+                  </div>
+                  <div className="flex flex-row space-x-2">
+                    <div className="flex relative ">
+                      <DropDown
+                        currentStyle={text.fontStyle}
+                        options={['normal', 'bold', 'italic']}
+                        cb={(style) => updateValue(text.id, 'fontStyle', style)}
+                      ></DropDown>
+                    </div>
+                    <div className="flex relative">
+                      <ColorPicker
+                        selectedColor={text.fill}
+                        cb={(color) => updateValue(text.id, 'fill', color)}
+                      ></ColorPicker>
                     </div>
                   </div>
                 </div>
