@@ -40,7 +40,7 @@ export const ColorPicker = ({ cb, selectedColor }) => {
               value={state.colorSelected}
               onChange={(event) => updateValue('colorSelected', event.target.value)}
               className="border border-transparent shadow px-4 py-2 leading-normal text-gray-700 bg-white rounded-md focus:outline-none focus:shadow-outline"
-            ></input>
+            />
           </div>
           <div className="relative ml-3">
             <button
@@ -72,7 +72,7 @@ export const ColorPicker = ({ cb, selectedColor }) => {
                             <div
                               className="w-8 h-8 inline-flex rounded-full cursor-pointer border-4 border-white"
                               // :style="`background: ${color}; box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.2);`"
-                            ></div>
+                            />
                           ) : (
                             <div
                               onClick={() => updateValue('colorSelected', color)}
@@ -86,7 +86,7 @@ export const ColorPicker = ({ cb, selectedColor }) => {
                               aria-checked="colorSelected"
                               className="w-8 h-8 inline-flex rounded-full cursor-pointer border-4 border-white focus:outline-none focus:shadow-outline"
                               style={{ background: `${color}` }}
-                            ></div>
+                            />
                           )}
                         </div>
                       )

@@ -37,7 +37,7 @@ export const NavTop = ({ step }) => {
               <div
                 className="rounded-full bg-green-500 text-xs leading-none h-2 text-center text-white"
                 style={{ width: `${parseInt((step / totalSteps) * 100)}%` }}
-              ></div>
+              />
             </div>
             <div className="text-xs w-10 text-gray-600">{`${parseInt(
               (step / totalSteps) * 100

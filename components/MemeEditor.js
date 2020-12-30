@@ -29,7 +29,7 @@ export const MemeEditor = () => {
           value={memeContext.caption_1_text}
           onChange={(event) => handleMemeContextChange('caption_1_text', event.target.value)}
           className="w-full px-4 py-3 rounded-lg shadow-sm focus:outline-none focus:shadow-outline text-gray-600 font-medium"
-        ></input>
+        />
       </div>
       {/* Bottom caption input */}
       <div className="mb-5">
@@ -43,7 +43,7 @@ export const MemeEditor = () => {
           value={memeContext.caption_2_text}
           onChange={(event) => handleMemeContextChange('caption_2_text', event.target.value)}
           className="w-full px-4 py-3 rounded-lg shadow-sm focus:outline-none focus:shadow-outline text-gray-600 font-medium"
-        ></input>
+        />
       </div>
       {/* Preview of annotated meme */}
       <div className="mb-5">
