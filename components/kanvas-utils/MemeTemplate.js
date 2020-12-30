@@ -7,7 +7,7 @@ export const MemeTemplate = ({ templateUrl }) => {
   const [templateImage] = useImage(templateUrl, 'Anonymous')
   return (
     <>
-      <Image image={templateImage}></Image>
+      <Image image={templateImage} />
     </>
   )
 }
@@ -20,7 +20,7 @@ export const MemeTemplateViewOnly = ({ templateUrl }) => {
   const [templateImage] = useImage(templateUrl, 'Anonymous')
   return (
     <>
-      <Image image={templateImage}></Image>
+      <Image image={templateImage} />
     </>
   )
 }

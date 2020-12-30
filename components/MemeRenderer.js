@@ -9,7 +9,7 @@ export const MemeRenderer = ({ meme }) => {
     <>
       <Stage width={500} height={500}>
         <Layer>
-          <MemeTemplateViewOnly templateUrl={meme.template}></MemeTemplateViewOnly>
+          <MemeTemplateViewOnly templateUrl={meme.template} />
         </Layer>
         <Layer>
           {meme.content.map((text, i) => {

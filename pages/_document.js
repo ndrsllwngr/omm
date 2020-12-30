@@ -5,7 +5,7 @@ class NextSite extends Document {
   render() {
     return (
       <Html lang="en">
-        <Head></Head>
+        <Head />
         <body className="antialiased font-sans bg-gray-200">
           <Main />
           <NextScript />
