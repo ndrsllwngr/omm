@@ -7,7 +7,7 @@ export const ScreenshotUrl = () => {
   const [temp, setTemp] = useState('')
   const { setFile } = useStorage()
 
-  const token = 'ALOLR1M2JDLOZAZL6DEKHSYM4MT15VVK'
+  const token = process.env.NEXT_PUBLIC_SCREENSHOT_API_KEY
   const output = 'image'
   const width = 1920
   const height = 1080

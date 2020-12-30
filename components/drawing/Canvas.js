@@ -73,7 +73,7 @@ export const Canvas = () => {
         Canvas
       </canvas>
       <button onClick={clearCanvas}>Clear Canvas</button>
-      <button onClick={saveImage}>Save saveImage</button>
+      <button onClick={saveImage}>Save</button>
     </div>
   )
 }

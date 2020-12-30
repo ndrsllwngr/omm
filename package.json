@@ -50,9 +50,11 @@
     "prop-types": "15.7.2",
     "react": "17.0.1",
     "react-dom": "17.0.1",
+    "react-webcam": "^5.2.2",
     "swr": "0.3.9",
     "tailwindcss": "npm:@tailwindcss/postcss7-compat",
-    "tmp": "0.2.1"
+    "tmp": "0.2.1",
+    "webcam-easy": "^1.0.5"
   },
   "devDependencies": {
     "@next/bundle-analyzer": "10.0.3",
