@@ -11,6 +11,10 @@ module.exports = {
   darkMode: 'class',
   theme: {
     extend: {
+      colors: {
+        'custom-gray': '#28292F',
+        'custom-green': '#1CE783',
+      },
       fontFamily: {
         sans: ['Inter var', ...defaultTheme.fontFamily.sans],
         mono: ['Roboto Mono', ...defaultTheme.fontFamily.mono],
