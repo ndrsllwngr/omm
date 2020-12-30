@@ -5,6 +5,7 @@ import { TextBox } from '@/components/kanvas-utils/TextBox'
 import { MemeTemplate } from '@/components/kanvas-utils/MemeTemplate'
 import { useImmer } from 'use-immer'
 import { MEME_KANVAS_NEW_TEXT, MEME_KANVAS_INITIAL_STATE } from '@/lib/constants'
+import { MemeRenderer } from './MemeRenderer'
 
 // Download URI
 // function from https://stackoverflow.com/a/15832662/512042
@@ -24,6 +25,7 @@ export const MemeKanvas = () => {
   const containerRef = useRef(null)
   const [meme, updateMeme] = useImmer(MEME_KANVAS_INITIAL_STATE)
   const [selectedId, selectShape] = useState(null)
+  const [previewMode, setPreviewMode] = useState(false)
 
   function updateTextAttrs(textAttrs) {
     updateMeme((draft) => {
@@ -110,45 +112,51 @@ export const MemeKanvas = () => {
   return (
     <>
       <div className="flex flex-row pt-5 bg-custom-gray">
-        <div ref={containerRef} className="flex flex-row w-1/2">
-          <Stage
-            ref={stageRef}
-            width={500}
-            height={500}
-            onMouseDown={(e) => {
-              // TODO @NDRS reset selectedShape properly
-              const clickedOnEmpty = e.target === e.target.getStage()
-              if (clickedOnEmpty) {
-                selectShape(null)
-              }
-            }}
-          >
-            <Layer>
-              <MemeTemplate templateUrl={meme.template}></MemeTemplate>
-            </Layer>
-            <Layer ref={layerRef}>
-              {meme.content.map((text, i) => {
-                console.log({ src: 'edit.js - map', text, i, selectedId })
-                return (
-                  <TextBox
-                    key={text.id}
-                    layerRef={layerRef.current}
-                    containerRef={containerRef.current}
-                    textProps={{ ...text }}
-                    isSelected={text.id === selectedId}
-                    onSelect={() => {
-                      console.log(text.id)
-                      selectShape(text.id)
-                    }}
-                    onChange={(newAttrs) => {
-                      updateTextAttrs(newAttrs)
-                    }}
-                  />
-                )
-              })}
-            </Layer>
-          </Stage>
-        </div>
+        {!previewMode ? (
+          <div ref={containerRef} className="flex flex-row w-1/2">
+            <Stage
+              ref={stageRef}
+              width={500}
+              height={500}
+              onMouseDown={(e) => {
+                // TODO @NDRS reset selectedShape properly
+                const clickedOnEmpty = e.target === e.target.getStage()
+                if (clickedOnEmpty) {
+                  selectShape(null)
+                }
+              }}
+            >
+              <Layer>
+                <MemeTemplate templateUrl={meme.template}></MemeTemplate>
+              </Layer>
+              <Layer ref={layerRef}>
+                {meme.content.map((text, i) => {
+                  console.log({ src: 'edit.js - map', text, i, selectedId })
+                  return (
+                    <TextBox
+                      key={text.id}
+                      layerRef={layerRef.current}
+                      containerRef={containerRef.current}
+                      textProps={{ ...text }}
+                      isSelected={text.id === selectedId}
+                      onSelect={() => {
+                        console.log(text.id)
+                        selectShape(text.id)
+                      }}
+                      onChange={(newAttrs) => {
+                        updateTextAttrs(newAttrs)
+                      }}
+                    />
+                  )
+                })}
+              </Layer>
+            </Stage>
+          </div>
+        ) : (
+          <div className="flex flex-row w-1/2">
+            <MemeRenderer meme={meme}></MemeRenderer>
+          </div>
+        )}
         <div className="flex flex-col w-1/2">
           <div className="flex flex-row mb-5">
             <div className="flex flex-col">
@@ -253,6 +261,12 @@ export const MemeKanvas = () => {
               onClick={handleExport}
             >
               Generate
+            </button>
+            <button
+              className="bg-gray-600 hover:bg-gray-700 focus:ring-gray-500 focus:ring-offset-gray-200 text-white transition ease-in duration-200 text-center text-base font-semibold py-2 px-4 rounded-lg shadow-md focus:outline-none focus:ring-2 focus:ring-offset-2"
+              onClick={() => setPreviewMode(!previewMode)}
+            >
+              {previewMode ? 'Edit' : 'Preview'}
             </button>
           </div>
         </div>

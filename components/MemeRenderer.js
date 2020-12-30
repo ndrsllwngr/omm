@@ -7,21 +7,17 @@ import { MemeTemplateViewOnly } from '@/components/kanvas-utils/MemeTemplate'
 export const MemeRenderer = ({ meme }) => {
   return (
     <>
-      <div className="flex flex-row pt-5">
-        <div className="flex flex-row w-1/2">
-          <Stage width={500} height={500}>
-            <Layer>
-              <MemeTemplateViewOnly templateUrl={meme.template}></MemeTemplateViewOnly>
-            </Layer>
-            <Layer>
-              {meme.content.map((text, i) => {
-                console.log({ src: 'MemeRenderer.js - map', text, i })
-                return <TextBoxViewOnly key={text.id} textProps={{ ...text }} />
-              })}
-            </Layer>
-          </Stage>
-        </div>
-      </div>
+      <Stage width={500} height={500}>
+        <Layer>
+          <MemeTemplateViewOnly templateUrl={meme.template}></MemeTemplateViewOnly>
+        </Layer>
+        <Layer>
+          {meme.content.map((text, i) => {
+            console.log({ src: 'MemeRenderer.js - map', text, i })
+            return <TextBoxViewOnly key={text.id} textProps={{ ...text }} />
+          })}
+        </Layer>
+      </Stage>
     </>
   )
 }
