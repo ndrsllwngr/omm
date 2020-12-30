@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useState, useEffect, createContext, useContext } from 'react'
 import PropTypes from 'prop-types'
 import firebase from '@/lib/firebase'

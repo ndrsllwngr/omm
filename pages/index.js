@@ -1,22 +1,12 @@
-import React, { useEffect, useState } from 'react'
-import PropTypes from 'prop-types'
-import { STEPS, DIRECTION } from '@/lib/constants'
-import { MemeEditor } from '@/components/MemeEditor'
-import { MemeSelection } from '@/components/MemeSelection'
-import { MemeResult } from '@/components/MemeResult'
-import { NavTop } from '@/components/NavTop'
-import { NavBottom } from '@/components/NavBottom'
+import React, { useEffect } from 'react'
 import { HtmlHead } from '@/components/HtmlHead'
 import firebase from '@/lib/firebase'
-import { getImgFlipMemes } from '@/lib/external-meme-api'
 import { useRequireAuth } from '@/components/hooks/useRequireAuth'
+import { Overview } from '@/components/Overview'
+import { useDatabaseMemes } from '@/components/hooks/useDatabaseMemes'
 
-const LandingPage = ({ memes }) => {
-  const [step, setStep] = useState(STEPS.one)
-  useEffect(() => {
-    console.log({ memes })
-  }, [memes])
-  // Our custom hook to get context values
+const LandingPage = () => {
+  const dbMemes = useDatabaseMemes()
   const auth = useRequireAuth()
 
   useEffect(() => {
@@ -27,82 +17,27 @@ const LandingPage = ({ memes }) => {
     // You also have your firebase app initialized
     console.log({ firebase })
   }, [auth.user])
-  const navigate = (direction) => {
-    let page
-    switch (direction) {
-      case DIRECTION.prev:
-        switch (step) {
-          case STEPS.complete:
-            page = STEPS.two
-            break
-          case STEPS.one:
-          case STEPS.two:
-            page = STEPS.one
-            break
-          default:
-            console.error('Step not supported.', { step })
-        }
-        break
-      case DIRECTION.next:
-        switch (step) {
-          case STEPS.complete:
-            page = STEPS.complete
-            break
-          case STEPS.one:
-            page = STEPS.two
-            break
-          case STEPS.two:
-            page = STEPS.complete
-            break
-          default:
-            console.error('Step not supported.', { step })
-        }
-        break
-      default:
-        console.error('Direction not supported.', { direction })
-    }
-    setStep(page)
-  }
+
   return (
     <>
       <HtmlHead />
-      {step === STEPS.complete ? (
-        <div className="max-w-3xl mx-auto px-4 py-10 flex flex-col justify-center min-h-full">
-          <MemeResult setStep={setStep} />
-        </div>
-      ) : (
-        <>
-          <div className="max-w-3xl mx-auto px-4 py-10">
-            <NavTop step={step} />
-            <div className="py-10">
-              {step === STEPS.one && <MemeSelection memes={memes} />}
-              {step === STEPS.two && <MemeEditor />}
-            </div>
-          </div>
-          <NavBottom step={step} navigate={navigate} logout={auth.signOut} />
-        </>
-      )}
+      <Overview memes={dbMemes} />
+      <button
+        className="w-32 focus:outline-none py-2 px-5 rounded-lg shadow-sm text-center text-gray-600 bg-white hover:bg-gray-100 font-medium border"
+        onClick={auth.signOut}
+      >
+        Logout
+      </button>
     </>
   )
 }
 
-LandingPage.propTypes = {
-  memes: PropTypes.arrayOf(
-    PropTypes.shape({
-      url: PropTypes.string,
-      width: PropTypes.number,
-      height: PropTypes.number,
-      name: PropTypes.string,
-    })
-  ),
-}
-
-// Fetch data at build time
-export async function getStaticProps() {
-  // Fetch data from external API
-  const memes = await getImgFlipMemes()
-  // Pass data to the page via props
-  return { props: { memes } }
-}
+// // Fetch data at build time
+// export async function getStaticProps() {
+//   // Fetch data from external API
+//   const memes = await getImgFlipMemes()
+//   // Pass data as parameter
+//   return { props: { memes } }
+// }
 
 export default LandingPage

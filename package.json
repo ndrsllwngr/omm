@@ -19,8 +19,8 @@
     "build:analyze": "ANALYZE=true yarn build",
     "export": "next export",
     "preview-export": "cd out && python3 -m http.server",
-    "lint": "eslint ./components/** ./pages/** ./lib/** --ext .js,.jsx",
-    "lint:fix": "eslint ./components/** ./pages/** ./lib/** --ext .js,.jsx --fix",
+    "lint": "eslint ./components/** ./pages/** ./lib/** ./helpers/** --ext .js,.jsx",
+    "lint:fix": "eslint ./components/** ./pages/** ./lib/** ./helpers/** --ext .js,.jsx --fix",
     "storybook": "start-storybook -s ./public -p 6006",
     "build-storybook": "build-storybook"
   },

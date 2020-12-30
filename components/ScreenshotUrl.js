@@ -1,11 +1,10 @@
-import useStorage from '@/lib/useStorage'
-import { data } from 'autoprefixer'
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
+// import useStorage from '@/lib/useStorage'
 
 export const ScreenshotUrl = () => {
-  const [screenshotUrl, setScreenshotUrl] = useState('')
+  const [screenshotUrl] = useState('')
   const [temp, setTemp] = useState('')
-  const { setFile } = useStorage()
+  // const { setFile } = useStorage()
 
   const token = process.env.NEXT_PUBLIC_SCREENSHOT_API_KEY
   const output = 'image'
