@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React from 'react'
 import { HtmlHead } from '@/components/HtmlHead'
 // import firebase from '@/lib/firebase'
 // import { useRequireAuth } from '@/components/hooks/useRequireAuth'
