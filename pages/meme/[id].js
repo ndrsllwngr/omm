@@ -51,7 +51,13 @@ export default function User() {
       })
   }, [setMemes, router.query.id])
 
-  if (!Memes || !(Memes.length > 0)) return <div>Loading...</div>
+  if (!Memes || !(Memes.length > 0))
+    return (
+      <div className="flex flex-col">
+        <Navbar />
+        <div>Loading...</div>
+      </div>
+    )
 
   return (
     <div className="flex flex-col">
