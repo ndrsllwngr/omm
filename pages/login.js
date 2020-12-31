@@ -1,10 +1,12 @@
 import Link from 'next/link'
 import React from 'react'
 import LoginForm from '@/components/forms/LoginForm'
+import { Navbar } from '@/components/Navbar'
 
 export default function Login() {
   return (
     <>
+      <Navbar />
       <main>
         <section className="absolute w-full h-full">
           <div className="min-h-screen flex flex-col justify-center bg-gray-200">
