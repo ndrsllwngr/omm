@@ -9,11 +9,11 @@ export const memeRenderer = () => {
   return (
     // TODO scale to fit into parent container https://css-tricks.com/scaled-proportional-blocks-with-css-and-javascript/
     <div style={{ transform: 'scale(0.5)' }}>
-      <MemeRenderer meme={MEME_KANVAS_INITIAL_STATE}></MemeRenderer>
+      <MemeRenderer meme={MEME_KANVAS_INITIAL_STATE} />
     </div>
   )
 }
 
 export const memeKanvas = () => {
-  return <MemeKanvas></MemeKanvas>
+  return <MemeKanvas />
 }

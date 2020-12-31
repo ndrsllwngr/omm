@@ -129,7 +129,7 @@ export const MemeKanvas = () => {
               }}
             >
               <Layer>
-                <MemeTemplate templateUrl={meme.template}></MemeTemplate>
+                <MemeTemplate templateUrl={meme.template} />
               </Layer>
               <Layer ref={layerRef}>
                 {meme.content.map((text, i) => {
@@ -156,7 +156,7 @@ export const MemeKanvas = () => {
           </div>
         ) : (
           <div className="flex flex-row w-1/2">
-            <MemeRenderer meme={meme}></MemeRenderer>
+            <MemeRenderer meme={meme} />
           </div>
         )}
         <div className="flex flex-col w-1/2">
@@ -172,7 +172,7 @@ export const MemeKanvas = () => {
                 value={meme.title}
                 onChange={(event) => updateTitle(event.target.value)}
                 className="w-full px-4 py-3 rounded-lg shadow-sm focus:outline-none focus:shadow-outline text-gray-600 font-medium"
-              ></input>
+              />
             </div>
           </div>
           {meme.content.map((text, i) => {
@@ -190,7 +190,7 @@ export const MemeKanvas = () => {
                       value={text.text}
                       onChange={(event) => updateValue(text.id, 'text', event.target.value)}
                       className="w-full px-4 py-3 rounded-lg shadow-sm focus:outline-none focus:shadow-outline text-gray-600 font-medium"
-                    ></input>
+                    />
                   </div>
                   <div className="flex flex-row space-x-2">
                     <div className="flex relative">
@@ -206,7 +206,7 @@ export const MemeKanvas = () => {
                           updateValue(text.id, 'x', parseInt(event.target.value))
                         }
                         className="w-full px-4 py-3 rounded-r-lg shadow-sm focus:outline-none focus:shadow-outline text-gray-600 font-medium"
-                      ></input>
+                      />
                     </div>
                     <div className="flex relative ">
                       <span className="inline-flex items-center px-4 py-3 rounded-l-lg shadow-sm focus:outline-none focus:shadow-outline text-gray-600 font-source font-medium bg-gray-100">
@@ -221,7 +221,7 @@ export const MemeKanvas = () => {
                           updateValue(text.id, 'y', parseInt(event.target.value))
                         }
                         className="w-full px-4 py-3 rounded-r-lg shadow-sm focus:outline-none focus:shadow-outline text-gray-600 font-medium"
-                      ></input>
+                      />
                     </div>
                     <div className="flex relative ">
                       <span className="inline-flex items-center px-4 py-3 rounded-l-lg shadow-sm focus:outline-none focus:shadow-outline text-gray-600 font-source font-medium bg-gray-100">
@@ -236,7 +236,7 @@ export const MemeKanvas = () => {
                           updateValue(text.id, 'fontSize', parseInt(event.target.value))
                         }
                         className="w-full px-4 py-3 rounded-r-lg shadow-sm focus:outline-none focus:shadow-outline text-gray-600 font-medium"
-                      ></input>
+                      />
                     </div>
                   </div>
                   <div className="flex flex-row space-x-2">
@@ -245,13 +245,13 @@ export const MemeKanvas = () => {
                         currentStyle={text.fontStyle}
                         options={['normal', 'bold', 'italic']}
                         cb={(style) => updateValue(text.id, 'fontStyle', style)}
-                      ></DropDown>
+                      />
                     </div>
                     <div className="flex relative">
                       <ColorPicker
                         selectedColor={text.fill}
                         cb={(color) => updateValue(text.id, 'fill', color)}
-                      ></ColorPicker>
+                      />
                     </div>
                   </div>
                 </div>
