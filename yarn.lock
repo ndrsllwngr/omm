@@ -10849,6 +10849,11 @@ react-hotkeys@2.0.0:
   dependencies:
     prop-types "^15.6.1"
 
+react-icons@4.1.0:
+  version "4.1.0"
+  resolved "https://registry.yarnpkg.com/react-icons/-/react-icons-4.1.0.tgz#9ca9bcbf2e3aee8e86e378bb9d465842947bbfc3"
+  integrity sha512-FCXBg1JbbR0vWALXIxmFAfozHdVIJmmwCD81Jk0EKOt7Ax4AdBNcaRkWhR0NaKy9ugJgoY3fFvo0PHpte55pXg==
+
 react-inspector@^5.0.1:
   version "5.1.0"
   resolved "https://registry.yarnpkg.com/react-inspector/-/react-inspector-5.1.0.tgz#45a325e15f33e595be5356ca2d3ceffb7d6b8c3a"
@@ -13106,6 +13111,11 @@ webcam-easy@1.0.5:
   version "1.0.5"
   resolved "https://registry.yarnpkg.com/webcam-easy/-/webcam-easy-1.0.5.tgz#67b4f20848317ab0e9b8513878b8fe31163cdc91"
   integrity sha512-YSXB21kfnwdrlPX/u1O5r8pbHxCaw3bsxhmvS1S9ixK/8n8LzxOduylqwVUSjYGSVJRhopJUN77SOh3Z0QgaIQ==
+
+webfontloader@1.6.28:
+  version "1.6.28"
+  resolved "https://registry.yarnpkg.com/webfontloader/-/webfontloader-1.6.28.tgz#db786129253cb6e8eae54c2fb05f870af6675bae"
+  integrity sha1-23hhKSU8tujq5UwvsF+HCvZnW64=
 
 webidl-conversions@^4.0.2:
   version "4.0.2"
