@@ -1,10 +1,12 @@
 import React from 'react'
 import Link from 'next/link'
 import SignupForm from '@/components/forms/SignupForm'
+import { Navbar } from '@/components/Navbar'
 
 export default function SignUp() {
   return (
     <>
+      <Navbar />
       <main>
         <section className="absolute w-full h-full">
           <div className="min-h-screen flex bg-gray-200">
