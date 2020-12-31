@@ -1,7 +1,9 @@
 import React, { useEffect } from 'react'
 import PropTypes from 'prop-types'
+import { useRouter } from 'next/router'
 
 export const Overview = ({ memes }) => {
+  const router = useRouter()
   useEffect(() => {
     console.log({ memes })
   }, [memes])
@@ -10,6 +12,7 @@ export const Overview = ({ memes }) => {
     <div className="grid grid-cols-3 sm:grid-cols-6 gap-2 items-center mx-auto justify-content-center">
       {memes.map((el, index) => (
         <button
+          onClick={() => router.push(`/meme/${el.id}`)}
           key={index}
           className={`relative w-24 h-24 bg-white overflow-hidden place-self-center justify-self-center`}
         >

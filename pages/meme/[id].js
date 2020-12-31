@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { useRouter } from 'next/router'
 import firebase from '@/lib/firebase'
 import { Slideshow } from '@/components/Slideshow'
+import { Navbar } from '@/components/Navbar'
 
 export default function User() {
   const router = useRouter()
@@ -50,10 +51,17 @@ export default function User() {
       })
   }, [setMemes, router.query.id])
 
-  if (!Memes || !(Memes.length > 0)) return <div>Loading...</div>
+  if (!Memes || !(Memes.length > 0))
+    return (
+      <div className="flex flex-col">
+        <Navbar />
+        <div>Loading...</div>
+      </div>
+    )
 
   return (
     <div className="flex flex-col">
+      <Navbar />
       <div> {router.query.id}</div>
       <div> {Memes[1].id}</div>
       <img className="w-10" src={Memes[1].imgPath} />

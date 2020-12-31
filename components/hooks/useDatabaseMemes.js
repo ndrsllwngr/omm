@@ -8,7 +8,7 @@ export const useDatabaseMemes = () => {
     //TODO subscribe adden
     //TODO Pagination
     async function getMemes() {
-      const docs = await firebase.firestore().collection('memes').get()
+      const docs = await firebase.firestore().collection('memes').orderBy('created_at').get()
       let dbMemes = []
       for (let i = 0; i < docs.size; i++) {
         const doc = docs.docs[i]
