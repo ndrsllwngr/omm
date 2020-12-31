@@ -20,11 +20,11 @@ export const Navbar = () => {
   return (
     <nav className="flex items-center justify-between flex-wrap bg-custom-green py-4 lg:px-12 shadow border-solid ">
       {/* Logo */}
-      <div
-        onClick={() => router.push('/')}
-        className="flex lg:w-auto cursor-pointer justify-between w-full lg:border-b-0 pl-6 pr-2 border-solid border-b-2 border-gray-300 pb-5 lg:pb-0"
-      >
-        <div className="flex items-center flex-shrink-0 text-gray-800 mr-16">
+      <div className="flex lg:w-auto justify-between w-full lg:border-b-0 pl-6 pr-2 border-solid border-b-2 border-gray-300 pb-5 lg:pb-0">
+        <div
+          onClick={() => router.push('/')}
+          className="flex cursor-pointer items-center flex-shrink-0 text-gray-800 mr-16"
+        >
           <span className="font-semibold text-xl tracking-tight">My Navbar</span>
         </div>
         <div className="block lg:hidden ">
