@@ -20,7 +20,7 @@ export const Slideshow = ({ memes }) => {
   const router = useRouter()
 
   useEffect(() => {
-    console.log(memes)
+    console.log({ src: 'Slideshow', memes })
   }, [memes])
   //console.log(memes[1])
   //const meme = memes[slideIndex > memes.length - 1 ? memes.length - 1 : slideIndex]
@@ -38,7 +38,7 @@ export const Slideshow = ({ memes }) => {
           e.preventDefault()
           router.push(memes[0].id)
         }}
-      ></button>
+      />
       <Slide meme={meme} />
       <button
         className="bg-red-900 hover:bg-blue-dark text-black font-bold py-2 px-4 rounded"
@@ -47,7 +47,7 @@ export const Slideshow = ({ memes }) => {
           e.preventDefault()
           router.push(memes[2].id)
         }}
-      ></button>
+      />
       {/* // {slideIndex !== memes.length - 1 && (
       //   <SlideshowButton name="next" changeSlide={() => setSlideIndex({ type: 'next' })} />
       // )} */}

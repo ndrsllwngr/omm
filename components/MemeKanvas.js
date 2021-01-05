@@ -8,11 +8,12 @@ import { MEME_KANVAS_NEW_TEXT, MEME_KANVAS_INITIAL_STATE } from '@/lib/constants
 import { MemeRenderer } from '@/components/MemeRenderer'
 import { DropDown } from '@/components/DropDown'
 import { ColorPicker } from '@/components/ColorPicker'
+import useMemeUpload from '@/components/hooks/useMemeUpload'
 
 // Download URI
 // function from https://stackoverflow.com/a/15832662/512042
 function downloadURI(uri, name) {
-  var link = document.createElement('a')
+  const link = document.createElement('a')
   link.download = name
   link.href = uri
   document.body.appendChild(link)
@@ -28,6 +29,7 @@ export const MemeKanvas = () => {
   const [meme, updateMeme] = useImmer(MEME_KANVAS_INITIAL_STATE)
   const [selectedId, selectShape] = useState(null)
   const [previewMode, setPreviewMode] = useState(false)
+  const [loading, success, error, setData] = useMemeUpload()
 
   function updateTextAttrs(textAttrs) {
     updateMeme((draft) => {
@@ -111,6 +113,11 @@ export const MemeKanvas = () => {
     downloadURI(uri, 'stage.png')
   }
 
+  const handleUpload = () => {
+    console.log('handleUpload')
+    setData(meme)
+  }
+
   return (
     <>
       <div className="flex flex-row pt-5 bg-custom-gray">
@@ -175,7 +182,7 @@ export const MemeKanvas = () => {
               />
             </div>
           </div>
-          {meme.content.map((text, i) => {
+          {meme.content.map((text) => {
             return (
               <div key={text.id} className="flex flex-row">
                 <div className="flex flex-col mb-5">
@@ -273,11 +280,11 @@ export const MemeKanvas = () => {
               Download
             </button>
             <button
-              disabled={true}
+              disabled={loading}
               className="bg-gray-600 hover:bg-gray-700 focus:ring-gray-500 focus:ring-offset-gray-200 text-white transition ease-in duration-200 text-center text-base font-semibold py-2 px-4 rounded-lg shadow-md focus:outline-none focus:ring-2 focus:ring-offset-2"
-              onClick={handleExport}
+              onClick={handleUpload}
             >
-              Generate
+              Generate {!loading && success && 'success'} {!loading && error && 'error'}
             </button>
             <button
               className="bg-gray-600 hover:bg-gray-700 focus:ring-gray-500 focus:ring-offset-gray-200 text-white transition ease-in duration-200 text-center text-base font-semibold py-2 px-4 rounded-lg shadow-md focus:outline-none focus:ring-2 focus:ring-offset-2"
