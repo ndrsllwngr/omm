@@ -31,23 +31,28 @@ export const Slideshow = ({ memes }) => {
       {/* {slideIndex !== 0 && (
         <SlideshowButton name="prev" changeSlide={() => setSlideIndex({ type: 'prev' })} />
       )} */}
-      <button
-        className="bg-red-900 hover:bg-blue-dark text-black font-bold py-2 px-4 rounded"
-        name="prev"
-        onClick={(e) => {
-          e.preventDefault()
-          router.push(memes[0].id)
-        }}
-      />
+      {memes[0].id !== '' && (
+        <button
+          className="bg-red-900 hover:bg-blue-dark text-black font-bold py-2 px-4 rounded"
+          name="prev"
+          onClick={(e) => {
+            e.preventDefault()
+            console.log({ MEME: memes[0].id })
+            if (!(memes[0].id === '')) router.push(memes[0].id)
+          }}
+        />
+      )}
       <Slide meme={meme} />
-      <button
-        className="bg-red-900 hover:bg-blue-dark text-black font-bold py-2 px-4 rounded"
-        name="prev"
-        onClick={(e) => {
-          e.preventDefault()
-          router.push(memes[2].id)
-        }}
-      />
+      {memes[2].id !== '' && (
+        <button
+          className="bg-red-900 hover:bg-blue-dark text-black font-bold py-2 px-4 rounded"
+          name="prev"
+          onClick={(e) => {
+            e.preventDefault()
+            router.push(memes[2].id)
+          }}
+        />
+      )}{' '}
       {/* // {slideIndex !== memes.length - 1 && (
       //   <SlideshowButton name="next" changeSlide={() => setSlideIndex({ type: 'next' })} />
       // )} */}
