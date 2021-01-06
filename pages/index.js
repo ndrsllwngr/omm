@@ -5,14 +5,16 @@ import { HtmlHead } from '@/components/HtmlHead'
 import { Overview } from '@/components/Overview'
 import { useDatabaseMemes } from '@/components/hooks/useDatabaseMemes'
 import { Navbar } from '@/components/Navbar'
+import { OverviewSort } from '@/components/OverviewSort'
 
 const LandingPage = () => {
-  const dbMemes = useDatabaseMemes()
-
+  const { dbMemes, dbFilter, setFilter } = useDatabaseMemes()
   return (
     <>
       <HtmlHead />
       <Navbar />
+      <OverviewSort filter={dbFilter} onFilterChange={setFilter} />
+
       <Overview memes={dbMemes} />
     </>
   )
