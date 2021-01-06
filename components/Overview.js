@@ -1,10 +1,9 @@
 import React, { useEffect } from 'react'
 import PropTypes from 'prop-types'
-import { useRouter } from 'next/router'
 import { MemeRenderer } from '@/components/MemeRenderer'
+import Link from 'next/link'
 
 export const Overview = ({ memes }) => {
-  const router = useRouter()
   useEffect(() => {
     console.log({ memes })
   }, [memes])
@@ -12,13 +11,15 @@ export const Overview = ({ memes }) => {
   return (
     <div className="grid grid-cols-3 sm:grid-cols-6 gap-2 items-center mx-auto justify-content-center">
       {memes.map((el, i) => (
-        <button
+        <Link
           key={i}
-          onClick={() => router.push(`/meme/${el.id}`)}
-          className={`relative w-24 h-24 bg-white overflow-hidden place-self-center justify-self-center`}
+          href={`/meme/${el.id}`}
+          className="relative w-24 h-24 bg-white overflow-hidden place-self-center justify-self-center"
         >
-          <MemeRenderer meme={el} />
-        </button>
+          <a>
+            <MemeRenderer meme={el} />
+          </a>
+        </Link>
       ))}
     </div>
   )
