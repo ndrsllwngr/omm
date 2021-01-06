@@ -47,7 +47,6 @@ export const useDatabaseMemes = () => {
             const doc = docs.docs[i]
             dbMemes.push({ id: doc.id, ...doc.data() })
           }
-          //setFilter(filter)
           return dbMemes
         }
 
