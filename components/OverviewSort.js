@@ -1,14 +1,23 @@
-import React, { useRef } from 'react'
-import { useDetectOutsideClick } from '@/components/hooks/useDetectOutsideClick.js'
-
+import React, { useRef, useState } from 'react'
+import PropTypes from 'prop-types'
+import { useDetectOutsideClick } from '@/components/hooks/useDetectOutsideClick'
+//https://tailwindui.com/components/application-ui/elements/dropdowns
 //https://letsbuildui.dev/articles/building-a-dropdown-menu-component-with-react-hooks
-export const OverviewSort = () => {
+export const OverviewSort = ({ filter, onFilterChange }) => {
   const dropdownRef = useRef(null)
   const [isActive, setIsActive] = useDetectOutsideClick(dropdownRef, false)
   const onClick = () => setIsActive(!isActive)
 
+  const [localFilter, setFilter] = useState(filter)
+
+  //handle statefunction für state und callback
+  const handleClick = (filter) => {
+    onFilterChange(filter)
+    setFilter(filter)
+  }
+
   return (
-    <div className="relative inline-block text-left">
+    <div className="relative block text-left">
       <div>
         <button
           type="button"
@@ -18,7 +27,7 @@ export const OverviewSort = () => {
           aria-expanded="true"
           onClick={onClick}
         >
-          Sortby
+          Sortby: {localFilter}
           {/* <!-- Heroicon name: chevron-down --> */}
           <svg
             className="-mr-1 ml-2 h-5 w-5"
@@ -49,7 +58,7 @@ export const OverviewSort = () => {
       {isActive && (
         <div
           ref={dropdownRef}
-          className="origin-top-right absolute left-0 mt-2 w-56 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5"
+          className="origin-top-right absolute left-0 mt-2 w-56 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 z-50"
         >
           <div
             className="py-1"
@@ -57,39 +66,35 @@ export const OverviewSort = () => {
             aria-orientation="vertical"
             aria-labelledby="options-menu"
           >
-            <a
-              href="#"
+            <div
+              onClick={() => handleClick('Latest')}
               className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900"
               role="menuitem"
             >
-              Account settings
-            </a>
-            <a
-              href="#"
+              Latest
+            </div>
+            {/* <div
+              onClick={() => handleClick('Views')}
               className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900"
               role="menuitem"
             >
-              Support
-            </a>
-            <a
-              href="#"
+              Views
+            </div> */}
+            <div
+              onClick={() => handleClick('Votes')}
               className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900"
               role="menuitem"
             >
-              License
-            </a>
-            <form method="POST" action="#">
-              <button
-                type="submit"
-                className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900 focus:outline-none focus:bg-gray-100 focus:text-gray-900"
-                role="menuitem"
-              >
-                Sign out
-              </button>
-            </form>
+              Votes
+            </div>
           </div>
         </div>
       )}
     </div>
   )
+}
+
+OverviewSort.propTypes = {
+  filter: PropTypes.string,
+  onFilterChange: PropTypes.func,
 }
