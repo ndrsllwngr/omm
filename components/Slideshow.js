@@ -1,8 +1,8 @@
 import React, { useEffect } from 'react'
 import PropTypes from 'prop-types'
-// import { SlideshowButton } from '@/components/SlideshowButton'
+import { SlideshowButton } from '@/components/SlideshowButton'
 import { Slide } from '@/components/Slide'
-import { useRouter } from 'next/router'
+import { SINGLEVIEWNAVIGATION } from '@/lib/constants'
 
 // const reducer = (slideIndex, arg) => {
 //   switch (arg.type) {
@@ -17,41 +17,22 @@ import { useRouter } from 'next/router'
 
 export const Slideshow = ({ memes }) => {
   // const [slideIndex, setSlideIndex] = useReducer(reducer, 0)
-  const router = useRouter()
 
   useEffect(() => {
     console.log({ src: 'Slideshow', memes })
   }, [memes])
   //console.log(memes[1])
   //const meme = memes[slideIndex > memes.length - 1 ? memes.length - 1 : slideIndex]
-  const meme = memes[1]
-  if (!memes || !meme) return <div>loading..</div>
+  const prevMeme = memes[SINGLEVIEWNAVIGATION.prev]
+  const currentMeme = memes[SINGLEVIEWNAVIGATION.current]
+  const nextMeme = memes[SINGLEVIEWNAVIGATION.next]
+
+  if (!memes || !currentMeme) return <div>loading..</div>
   return (
     <div className="flex flex-row justify-center">
-      {/* {slideIndex !== 0 && (
-        <SlideshowButton name="prev" changeSlide={() => setSlideIndex({ type: 'prev' })} />
-      )} */}
-      {memes[0].id !== '' && (
-        <button
-          className="bg-red-900 hover:bg-blue-dark text-black font-bold py-2 px-4 rounded"
-          name="prev"
-          onClick={(e) => {
-            e.preventDefault()
-            router.push(memes[0].id)
-          }}
-        />
-      )}
-      <Slide meme={meme} />
-      {memes[2].id !== '' && (
-        <button
-          className="bg-red-900 hover:bg-blue-dark text-black font-bold py-2 px-4 rounded"
-          name="prev"
-          onClick={(e) => {
-            e.preventDefault()
-            router.push(memes[2].id)
-          }}
-        />
-      )}{' '}
+      {prevMeme.id && <SlideshowButton name="prev" changeSlide={prevMeme.id} />}
+      <Slide meme={currentMeme} />
+      {nextMeme.id && <SlideshowButton name="prev" changeSlide={nextMeme.id} />}
       {/* // {slideIndex !== memes.length - 1 && (
       //   <SlideshowButton name="next" changeSlide={() => setSlideIndex({ type: 'next' })} />
       // )} */}
