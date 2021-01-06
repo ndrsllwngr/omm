@@ -68,6 +68,5 @@ export const useDatabaseMemes = () => {
         console.log('Unsupported case')
     }
   }, [setMemes, filter])
-  //return noch mehr als memes
   return { dbMemes: Memes, dbFilter: filter, setFilter: changeFilter }
 }
