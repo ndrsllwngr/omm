@@ -248,7 +248,7 @@ export const MemeKanvas = () => {
                   </div>
                   <div className="flex relative">
                     <ColorPicker
-                      selectedColor={text.fill}
+                      color={text.fill}
                       cb={(color) => updateValue(text.id, 'fill', color)}
                     />
                   </div>
