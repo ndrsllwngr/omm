@@ -26,7 +26,6 @@ export const useDatabaseMemes = () => {
 
         getLatestMemes()
           .then((res) => {
-            //console.log({ res })
             setMemes(res)
           })
           .catch(function (error) {
