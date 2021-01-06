@@ -37,8 +37,7 @@ export const Slideshow = ({ memes }) => {
           name="prev"
           onClick={(e) => {
             e.preventDefault()
-            console.log({ MEME: memes[0].id })
-            if (!(memes[0].id === '')) router.push(memes[0].id)
+            router.push(memes[0].id)
           }}
         />
       )}
