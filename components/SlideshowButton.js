@@ -33,5 +33,5 @@ export const SlideshowButton = ({ name, changeSlide }) => {
 }
 SlideshowButton.propTypes = {
   name: PropTypes.string,
-  changeSlide: PropTypes.String,
+  changeSlide: PropTypes.string,
 }

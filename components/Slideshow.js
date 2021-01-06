@@ -30,6 +30,7 @@ export const Slideshow = ({ memes }) => {
   if (!memes || !currentMeme) return <div>loading..</div>
   return (
     <div className="flex flex-row justify-center">
+      {/*alternative would be to use css disbable*/}
       {prevMeme.id && <SlideshowButton name="prev" changeSlide={prevMeme.id} />}
       <Slide meme={currentMeme} />
       {nextMeme.id && <SlideshowButton name="prev" changeSlide={nextMeme.id} />}

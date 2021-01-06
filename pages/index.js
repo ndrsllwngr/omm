@@ -5,6 +5,7 @@ import { HtmlHead } from '@/components/HtmlHead'
 import { Overview } from '@/components/Overview'
 import { useDatabaseMemes } from '@/components/hooks/useDatabaseMemes'
 import { Navbar } from '@/components/Navbar'
+import { OverviewSort } from '@/components/OverviewSort'
 
 const LandingPage = () => {
   const dbMemes = useDatabaseMemes()
@@ -13,6 +14,7 @@ const LandingPage = () => {
     <>
       <HtmlHead />
       <Navbar />
+      <OverviewSort />
       <Overview memes={dbMemes} />
     </>
   )
