@@ -13,7 +13,6 @@ const LandingPage = () => {
     <>
       <HtmlHead />
       <Navbar />
-      {/* //callback: value & setter setFilter*/}
       <OverviewSort filter={dbFilter} onFilterChange={setFilter} />
 
       <Overview memes={dbMemes} />
