@@ -50,7 +50,6 @@ export const useDatabaseMemes = () => {
 
         getOldestMemes()
           .then((res) => {
-            //console.log({ res })
             setMemes(res)
           })
           .catch(function (error) {
