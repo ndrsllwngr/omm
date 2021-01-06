@@ -139,25 +139,22 @@ export const MemeKanvas = () => {
                 <MemeTemplate templateUrl={meme.template} />
               </Layer>
               <Layer ref={layerRef}>
-                {meme.content.map((text, i) => {
-                  console.log({ src: 'edit.js - map', text, i, selectedId })
-                  return (
-                    <TextBox
-                      key={text.id}
-                      layerRef={layerRef.current}
-                      containerRef={containerRef.current}
-                      textProps={{ ...text }}
-                      isSelected={text.id === selectedId}
-                      onSelect={() => {
-                        console.log(text.id)
-                        selectShape(text.id)
-                      }}
-                      onChange={(newAttrs) => {
-                        updateTextAttrs(newAttrs)
-                      }}
-                    />
-                  )
-                })}
+                {meme.content.map((text, _i) => (
+                  <TextBox
+                    key={text.id}
+                    layerRef={layerRef.current}
+                    containerRef={containerRef.current}
+                    textProps={{ ...text }}
+                    isSelected={text.id === selectedId}
+                    onSelect={() => {
+                      console.log(text.id)
+                      selectShape(text.id)
+                    }}
+                    onChange={(newAttrs) => {
+                      updateTextAttrs(newAttrs)
+                    }}
+                  />
+                ))}
               </Layer>
             </Stage>
           </div>
@@ -182,89 +179,83 @@ export const MemeKanvas = () => {
               />
             </div>
           </div>
-          {meme.content.map((text) => {
-            return (
-              <div key={text.id} className="flex flex-row">
-                <div className="flex flex-col mb-5">
-                  <div className="flex flex-col mb-2">
-                    <label htmlFor="caption_1" className="font-bold mb-1 text-gray-50 block">
-                      Text {text.id}
-                    </label>
+          {meme.content.map((text) => (
+            <div key={text.id} className="flex flex-row">
+              <div className="flex flex-col mb-5">
+                <div className="flex flex-col mb-2">
+                  <label htmlFor="caption_1" className="font-bold mb-1 text-gray-50 block">
+                    Text {text.id}
+                  </label>
+                  <input
+                    placeholder=""
+                    type="text"
+                    name={`text_${text.id}`}
+                    value={text.text}
+                    onChange={(event) => updateValue(text.id, 'text', event.target.value)}
+                    className="w-full px-4 py-3 rounded-lg shadow-sm focus:outline-none focus:shadow-outline text-gray-600 font-medium"
+                  />
+                </div>
+                <div className="flex flex-row space-x-2">
+                  <div className="flex relative">
+                    <span className="inline-flex items-center px-4 py-3 rounded-l-lg shadow-sm focus:outline-none focus:shadow-outline text-gray-600 font-source font-medium bg-gray-100">
+                      X
+                    </span>
                     <input
                       placeholder=""
-                      type="text"
-                      name={`text_${text.id}`}
-                      value={text.text}
-                      onChange={(event) => updateValue(text.id, 'text', event.target.value)}
-                      className="w-full px-4 py-3 rounded-lg shadow-sm focus:outline-none focus:shadow-outline text-gray-600 font-medium"
+                      type="number"
+                      name={`text_${text.id}_coor_x`}
+                      value={text.x}
+                      onChange={(event) => updateValue(text.id, 'x', parseInt(event.target.value))}
+                      className="w-full px-4 py-3 rounded-r-lg shadow-sm focus:outline-none focus:shadow-outline text-gray-600 font-medium"
                     />
                   </div>
-                  <div className="flex flex-row space-x-2">
-                    <div className="flex relative">
-                      <span className="inline-flex items-center px-4 py-3 rounded-l-lg shadow-sm focus:outline-none focus:shadow-outline text-gray-600 font-source font-medium bg-gray-100">
-                        X
-                      </span>
-                      <input
-                        placeholder=""
-                        type="number"
-                        name={`text_${text.id}_coor_x`}
-                        value={text.x}
-                        onChange={(event) =>
-                          updateValue(text.id, 'x', parseInt(event.target.value))
-                        }
-                        className="w-full px-4 py-3 rounded-r-lg shadow-sm focus:outline-none focus:shadow-outline text-gray-600 font-medium"
-                      />
-                    </div>
-                    <div className="flex relative ">
-                      <span className="inline-flex items-center px-4 py-3 rounded-l-lg shadow-sm focus:outline-none focus:shadow-outline text-gray-600 font-source font-medium bg-gray-100">
-                        Y
-                      </span>
-                      <input
-                        placeholder=""
-                        type="number"
-                        name={`text_${text.id}_coor_y`}
-                        value={text.y}
-                        onChange={(event) =>
-                          updateValue(text.id, 'y', parseInt(event.target.value))
-                        }
-                        className="w-full px-4 py-3 rounded-r-lg shadow-sm focus:outline-none focus:shadow-outline text-gray-600 font-medium"
-                      />
-                    </div>
-                    <div className="flex relative ">
-                      <span className="inline-flex items-center px-4 py-3 rounded-l-lg shadow-sm focus:outline-none focus:shadow-outline text-gray-600 font-source font-medium bg-gray-100">
-                        FONT
-                      </span>
-                      <input
-                        placeholder=""
-                        type="number"
-                        name={`text_${text.id}_font_size`}
-                        value={text.fontSize}
-                        onChange={(event) =>
-                          updateValue(text.id, 'fontSize', parseInt(event.target.value))
-                        }
-                        className="w-full px-4 py-3 rounded-r-lg shadow-sm focus:outline-none focus:shadow-outline text-gray-600 font-medium"
-                      />
-                    </div>
+                  <div className="flex relative ">
+                    <span className="inline-flex items-center px-4 py-3 rounded-l-lg shadow-sm focus:outline-none focus:shadow-outline text-gray-600 font-source font-medium bg-gray-100">
+                      Y
+                    </span>
+                    <input
+                      placeholder=""
+                      type="number"
+                      name={`text_${text.id}_coor_y`}
+                      value={text.y}
+                      onChange={(event) => updateValue(text.id, 'y', parseInt(event.target.value))}
+                      className="w-full px-4 py-3 rounded-r-lg shadow-sm focus:outline-none focus:shadow-outline text-gray-600 font-medium"
+                    />
                   </div>
-                  <div className="flex flex-row space-x-2">
-                    <div className="flex relative ">
-                      <DropDown
-                        currentStyle={text.fontStyle}
-                        options={['normal', 'bold', 'italic']}
-                        cb={(style) => updateValue(text.id, 'fontStyle', style)}
-                      />
-                    </div>
-                    <div className="flex relative">
-                      <ColorPicker
-                        selectedColor={text.fill}
-                        cb={(color) => updateValue(text.id, 'fill', color)}
-                      />
-                    </div>
+                  <div className="flex relative ">
+                    <span className="inline-flex items-center px-4 py-3 rounded-l-lg shadow-sm focus:outline-none focus:shadow-outline text-gray-600 font-source font-medium bg-gray-100">
+                      FONT
+                    </span>
+                    <input
+                      placeholder=""
+                      type="number"
+                      name={`text_${text.id}_font_size`}
+                      value={text.fontSize}
+                      onChange={(event) =>
+                        updateValue(text.id, 'fontSize', parseInt(event.target.value))
+                      }
+                      className="w-full px-4 py-3 rounded-r-lg shadow-sm focus:outline-none focus:shadow-outline text-gray-600 font-medium"
+                    />
+                  </div>
+                </div>
+                <div className="flex flex-row space-x-2">
+                  <div className="flex relative ">
+                    <DropDown
+                      currentStyle={text.fontStyle}
+                      options={['normal', 'bold', 'italic']}
+                      cb={(style) => updateValue(text.id, 'fontStyle', style)}
+                    />
+                  </div>
+                  <div className="flex relative">
+                    <ColorPicker
+                      selectedColor={text.fill}
+                      cb={(color) => updateValue(text.id, 'fill', color)}
+                    />
                   </div>
                 </div>
               </div>
-            )
-          })}
+            </div>
+          ))}
 
           <div className="flex flex-row space-x-5 mt-5">
             <button
