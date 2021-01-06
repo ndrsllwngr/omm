@@ -12,10 +12,9 @@ export const MemeRenderer = ({ meme }) => {
           <MemeTemplateViewOnly templateUrl={meme.template} />
         </Layer>
         <Layer>
-          {meme.content.map((text, i) => {
-            console.log({ src: 'MemeRenderer.js - map', text, i })
-            return <TextBoxViewOnly key={text.id} textProps={{ ...text }} />
-          })}
+          {meme.content.map((text, i) => (
+            <TextBoxViewOnly key={i} textProps={{ ...text }} />
+          ))}
         </Layer>
       </Stage>
     </>

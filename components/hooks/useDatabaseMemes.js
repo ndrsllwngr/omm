@@ -5,19 +5,15 @@ export const useDatabaseMemes = () => {
   const [Memes, setMemes] = useState([])
 
   useEffect(() => {
-    //TODO subscribe adden
-    //TODO Pagination
+    // TODO subscribe to get updates
+    // TODO add pagination
     async function getMemes() {
       const docs = await firebase.firestore().collection('memes').orderBy('created_at').get()
       let dbMemes = []
       for (let i = 0; i < docs.size; i++) {
         const doc = docs.docs[i]
-        const templateData = (await doc.data().template.get()).data()
-        const imgPath = await firebase.storage().ref(templateData.img).getDownloadURL()
-
-        dbMemes.push({ id: doc.id, ...doc.data(), imgPath })
+        dbMemes.push({ id: doc.id, ...doc.data() })
       }
-
       return dbMemes
     }
 

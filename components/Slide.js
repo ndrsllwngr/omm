@@ -1,24 +1,39 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+import { MemeRenderer } from '@/components/MemeRenderer'
 
 export const Slide = ({ meme }) => {
   return (
     <div className="flex-col max-w-md">
-      {/* Meme Title*/}
-      <div className="title">{meme.name}</div>
-      {/* Meme itself*/}
-      <img src={meme.imgPath} width={meme.width} height={meme.height} className="min-w-full" />
-      {/* Meme additional Info*/}
-      <div className="slide-info">{meme.name}</div>
+      <div className="title">{meme.title}</div>
+      {/*<img src={meme.imgPath} width={meme.width} height={meme.height} className="min-w-full" />*/}
+      <MemeRenderer meme={meme} />
+      {/*TODO add additional information*/}
+      <div className="slide-info">{meme.title}</div>
     </div>
   )
 }
 
 Slide.propTypes = {
   meme: PropTypes.shape({
-    imgPath: PropTypes.string,
-    width: PropTypes.number,
-    height: PropTypes.number,
-    name: PropTypes.string,
+    template: PropTypes.string,
+    created_at: PropTypes.any,
+    title: PropTypes.string,
+    content: PropTypes.arrayOf(
+      PropTypes.shape({
+        id: PropTypes.number,
+        x: PropTypes.number,
+        y: PropTypes.number,
+        width: PropTypes.number,
+        height: PropTypes.number,
+        text: PropTypes.string,
+        rotation: PropTypes.number,
+        isDragging: PropTypes.bool,
+        fontSize: PropTypes.number,
+        fontStyle: PropTypes.string,
+        fill: PropTypes.string,
+      })
+    ),
+    images: PropTypes.array,
   }),
 }
