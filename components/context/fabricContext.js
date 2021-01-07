@@ -15,11 +15,10 @@ export const FabricContextProvider = ({ children }) => {
       preserveObjectStacking: false,
       selection: true,
       defaultCursor: 'default',
-      backgroundColor: '#f3f3f3',
+      backgroundColor: 'white',
       ...options,
     }
     let c = new fabric.Canvas(el, canvasOptions)
-    // initAligningGuidelines(c)
     c.renderAll()
     setCanvas(c)
   }, [])
