@@ -6,7 +6,6 @@ export const Slide = ({ meme }) => {
   return (
     <div className="flex-col max-w-md">
       <div className="title">{meme.title}</div>
-      {/*<img src={meme.imgPath} width={meme.width} height={meme.height} className="min-w-full" />*/}
       <MemeRenderer meme={meme} />
       {/*TODO add additional information*/}
       <div className="slide-info">{meme.title}</div>
