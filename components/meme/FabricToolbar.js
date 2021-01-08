@@ -1,10 +1,10 @@
-import React, { useContext } from 'react'
-import { FabricContext } from '@/components/context/fabricContext'
+import React from 'react'
+import { useFabricCanvas } from '@/components/context/fabricContext'
 import { FabricImage } from '@/components/meme/FabricImage'
 import { FabricTextBox } from '@/components/meme/FabricTextBox'
 
 export const FabricToolbar = (_props) => {
-  const { canvas } = useContext(FabricContext)
+  const { canvas } = useFabricCanvas()
 
   const removeObjects = () => {
     canvas.getActiveObjects().forEach((obj) => {

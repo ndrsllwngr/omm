@@ -1,6 +1,6 @@
-import React, { useContext } from 'react'
+import React from 'react'
 import { fabric } from 'fabric'
-import { FabricContext } from '@/components/context/fabricContext'
+import { useFabricCanvas } from '@/components/context/fabricContext'
 
 const supportedImageTypes = [
   'image/png',
@@ -12,7 +12,7 @@ const supportedImageTypes = [
 ]
 
 export const FabricImage = () => {
-  const { canvas } = useContext(FabricContext)
+  const { canvas } = useFabricCanvas()
 
   const addTextBox = (_e) => {
     document.getElementById('fabric-image-upload').click()
