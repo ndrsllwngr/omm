@@ -3,7 +3,6 @@ import App from 'next/app'
 import { ThemeProvider } from 'next-themes'
 import '@/styles/tailwind.css'
 import AuthProvider from '@/components/context/authContext'
-import { MemeProvider } from '@/components/context/memeContext'
 import { FabricProvider } from '@/components/context/fabricContext'
 
 class MyApp extends App {
@@ -13,9 +12,7 @@ class MyApp extends App {
       <AuthProvider>
         <ThemeProvider attribute="class" defaultTheme="system">
           <FabricProvider>
-            <MemeProvider>
-              <Component {...pageProps} />
-            </MemeProvider>
+            <Component {...pageProps} />
           </FabricProvider>
         </ThemeProvider>
       </AuthProvider>
