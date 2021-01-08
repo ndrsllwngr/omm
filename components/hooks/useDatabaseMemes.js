@@ -21,7 +21,7 @@ export const useDatabaseMemes = () => {
   }
   const latestMemes = () => {
     loadCreds()
-      .orderBy('created_at')
+      .orderBy('created_at', 'desc')
       .onSnapshot((docs) => {
         setDocs(docs)
       })
