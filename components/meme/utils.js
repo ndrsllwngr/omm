@@ -10,6 +10,13 @@ export const getActiveStyle = (styleName, activeObject) => {
 }
 
 export const setActiveStyle = (styleName, value, activeObject) => {
+  console.log({
+    styleName,
+    value,
+    activeObject,
+    isEditing: activeObject.isEditing,
+    hasSetter: activeObject.setSelectionStyles,
+  })
   if (!activeObject) {
     return
   }
@@ -19,12 +26,12 @@ export const setActiveStyle = (styleName, value, activeObject) => {
     style[styleName] = value
     activeObject.setSelectionStyles(style)
     activeObject.setCoords()
+    activeObject.canvas.renderAll()
   } else {
     activeObject.set(styleName, value)
+    activeObject.setCoords()
+    activeObject.canvas.renderAll()
   }
-
-  activeObject.setCoords()
-  activeObject.canvas.renderAll()
 }
 
 export const getActiveProp = (name, activeObject) => {

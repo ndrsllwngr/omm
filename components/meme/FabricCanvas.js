@@ -1,10 +1,11 @@
-import React, { useContext, useEffect, useLayoutEffect, useRef, useCallback } from 'react'
-import { FabricContext } from '@/components/context/fabricContext'
+import React, { useEffect, useLayoutEffect, useRef, useCallback } from 'react'
+import { useFabricCanvas, useFabricActiveObject } from '@/components/context/fabricContext'
 
 // eslint-disable-next-line react/prop-types
 export const FabricCanvas = ({ jsonData = null, width = 816, height = 144 }) => {
   const canvasEl = useRef(null)
-  const { canvas, initCanvas, setActiveObject, loadFromJSON } = useContext(FabricContext)
+  const { canvas, initCanvas, loadFromJSON } = useFabricCanvas()
+  const { setActiveObject } = useFabricActiveObject()
 
   useLayoutEffect(() => {
     if (jsonData) {
@@ -28,20 +29,33 @@ export const FabricCanvas = ({ jsonData = null, width = 816, height = 144 }) => 
     [canvas, setActiveObject]
   )
 
+  const onObjectModified = useCallback(
+    (e) => {
+      if (!e) {
+        return
+      }
+      console.log('onObjectModified', e.target)
+      canvas.renderAll()
+    },
+    [canvas]
+  )
+
   useEffect(() => {
     if (!canvas) {
       return
     }
+    canvas.on('object:modified', onObjectModified)
     canvas.on('selection:created', updateActiveObject)
     canvas.on('selection:updated', updateActiveObject)
     canvas.on('selection:cleared', updateActiveObject)
 
     return () => {
+      canvas.off('object:modified')
       canvas.off('selection:created')
       canvas.off('selection:cleared')
       canvas.off('selection:updated')
     }
-  }, [canvas, updateActiveObject])
+  }, [canvas, updateActiveObject, onObjectModified])
 
   return (
     <div>

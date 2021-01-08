@@ -1,12 +1,13 @@
-import React, { useCallback, createContext, useState } from 'react'
+import React, { useCallback, createContext, useState, useContext } from 'react'
 import { fabric } from 'fabric'
+import PropTypes from 'prop-types'
 // import { initAligningGuidelines } from '@/components/meme/Guidelines'
 
-export const FabricContext = createContext([])
+const FabricCanvasContext = createContext({})
+const FabricActiveObjectContext = createContext({})
 
 // https://github.com/saninmersion/react-context-fabricjs
-// eslint-disable-next-line react/prop-types
-export const FabricContextProvider = ({ children }) => {
+export const FabricProvider = ({ children }) => {
   const [canvas, setCanvas] = useState(null)
   const [activeObject, setActiveObject] = useState(null)
 
@@ -19,6 +20,7 @@ export const FabricContextProvider = ({ children }) => {
       ...options,
     }
     let c = new fabric.Canvas(el, canvasOptions)
+    c.enableRetinaScaling = true
     c.renderAll()
     setCanvas(c)
   }, [])
@@ -36,15 +38,42 @@ export const FabricContextProvider = ({ children }) => {
         fabric.log(o, object)
       }
     )
+    c.enableRetinaScaling = true
     c.renderAll()
     setCanvas(c)
   }, [])
 
   return (
-    <FabricContext.Provider
-      value={{ canvas, initCanvas, loadFromJSON, activeObject, setActiveObject }}
-    >
-      {children}
-    </FabricContext.Provider>
+    <FabricCanvasContext.Provider value={{ canvas, initCanvas, loadFromJSON }}>
+      <FabricActiveObjectContext.Provider value={{ activeObject, setActiveObject }}>
+        {children}
+      </FabricActiveObjectContext.Provider>
+    </FabricCanvasContext.Provider>
   )
 }
+
+FabricProvider.propTypes = {
+  children: PropTypes.node.isRequired,
+}
+
+export function useFabricCanvas() {
+  const context = useContext(FabricCanvasContext)
+  if (!context) {
+    throw new Error(`useFabricCanvas must be used within a FabricProvider`)
+  }
+  return context
+}
+
+export function useFabricActiveObject() {
+  const context = useContext(FabricActiveObjectContext)
+  if (!context) {
+    throw new Error(`useFabricActiveObject must be used within a FabricProvider`)
+  }
+  return context
+}
+
+// export function MemeProvider({ children }) {
+//   const [memeContext, setMemeContext] = useState(emptyState)
+//   const value = useMemo(() => [memeContext, setMemeContext], [memeContext])
+//   return <MemeContext.Provider value={value}>{children}</MemeContext.Provider>
+// }
