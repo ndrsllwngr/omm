@@ -9,7 +9,7 @@ export const Overview = ({ memes }) => {
   }, [memes])
   if (!memes || !(memes.length > 0)) return <div>loading...</div>
   return (
-    <div className="grid grid-cols-3 sm:grid-cols-3 gap-2 items-center mx-auto justify-content-center">
+    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2 items-center mx-auto justify-content-center">
       {memes.map((el, i) => (
         <Link
           key={i}
