@@ -29,7 +29,9 @@ const Button = ({ children, type = 'button', disabled = false, onClick }) => {
 export const MemeEditor = () => {
   const { canvas } = useFabricCanvas()
   const [imgURL, setImgURL] = useState('')
-  const [templateURL, setTemplateURL] = useState('')
+  const [templateURL, setTemplateURL] = useState(
+    'https://socialistmodernism.com/wp-content/uploads/2017/07/placeholder-image.png'
+  )
   const [title, setTitle] = useState('')
   const [svgExport, setSvgExport] = useState('')
   const [jsonExport, setJsonExport] = useState({})
