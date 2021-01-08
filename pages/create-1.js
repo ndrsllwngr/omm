@@ -3,7 +3,7 @@ import { HtmlHead } from '@/components/HtmlHead'
 import { MemeKanvas } from '@/components/MemeKanvas'
 import { Navbar } from '@/components/Navbar'
 
-const CreatePage = () => {
+const Create1Page = () => {
   return (
     <>
       <HtmlHead />
@@ -13,4 +13,4 @@ const CreatePage = () => {
   )
 }
 
-export default CreatePage
+export default Create1Page

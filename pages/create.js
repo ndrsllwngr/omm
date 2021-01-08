@@ -3,7 +3,7 @@ import { HtmlHead } from '@/components/HtmlHead'
 import { Navbar } from '@/components/Navbar'
 import { MemeEditor } from '@/components/meme/MemeEditor'
 
-const CreateNewPage = () => {
+const CreatePage = () => {
   return (
     <>
       <HtmlHead />
@@ -13,4 +13,4 @@ const CreateNewPage = () => {
   )
 }
 
-export default CreateNewPage
+export default CreatePage

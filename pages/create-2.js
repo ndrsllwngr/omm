@@ -4,7 +4,7 @@ import { Navbar } from '@/components/Navbar'
 import { FabricToolbar } from '@/components/meme/FabricToolbar'
 import { FabricCanvas } from '@/components/meme/FabricCanvas'
 
-const CreateNew2Page = () => {
+const Create2Page = () => {
   return (
     <>
       <HtmlHead />
@@ -21,4 +21,4 @@ const CreateNew2Page = () => {
   )
 }
 
-export default CreateNew2Page
+export default Create2Page
