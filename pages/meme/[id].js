@@ -14,7 +14,7 @@ export default function User() {
     async function getMemes() {
       let Meme = []
       const db = firebase.firestore()
-      const memeRef = db.collection('memes')
+      const memeRef = db.collection('memes-tmp')
 
       const doc = await memeRef.doc(router.query.id).get()
 

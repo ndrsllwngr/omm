@@ -27,6 +27,7 @@ export const FabricProvider = ({ children }) => {
 
   const loadFromJSON = useCallback((el, json) => {
     let c = new fabric.Canvas(el)
+    console.log({ json })
     c.loadFromJSON(
       json,
       () => {

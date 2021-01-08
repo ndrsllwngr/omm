@@ -15,7 +15,11 @@ export const useDatabaseMemes = () => {
     switch (filter) {
       case 'Latest':
         async function getLatestMemes() {
-          const docs = await firebase.firestore().collection('memes').orderBy('created_at').get()
+          const docs = await firebase
+            .firestore()
+            .collection('memes-tmp')
+            .orderBy('created_at')
+            .get()
           let dbMemes = []
           for (let i = 0; i < docs.size; i++) {
             const doc = docs.docs[i]
@@ -36,7 +40,7 @@ export const useDatabaseMemes = () => {
         async function getOldestMemes() {
           const docs = await firebase
             .firestore()
-            .collection('memes')
+            .collection('memes-tmp')
             .orderBy('created_at')
             .limit(2)
             .get()

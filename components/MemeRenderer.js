@@ -1,23 +1,16 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import PropTypes from 'prop-types'
-import { Stage, Layer } from 'react-konva'
-import { TextBoxViewOnly } from '@/components/kanvas-utils/TextBox'
-import { MemeTemplateViewOnly } from '@/components/kanvas-utils/MemeTemplate'
+import SVG from 'react-inlinesvg'
 
 export const MemeRenderer = ({ meme }) => {
+  useEffect(() => {
+    console.log({ meme })
+  }, [meme])
   return (
-    <>
-      <Stage width={500} height={500}>
-        <Layer>
-          <MemeTemplateViewOnly templateUrl={meme.template} />
-        </Layer>
-        <Layer>
-          {meme.content.map((text, i) => (
-            <TextBoxViewOnly key={i} textProps={{ ...text }} />
-          ))}
-        </Layer>
-      </Stage>
-    </>
+    <div>
+      {/*<FabricCanvas jsonData={meme} />*/}
+      <SVG className={'object-scale-down w-full h-full'} src={meme.svg} />
+    </div>
   )
 }
 
@@ -26,6 +19,7 @@ MemeRenderer.propTypes = {
     template: PropTypes.string,
     created_at: PropTypes.any,
     title: PropTypes.string,
+    svg: PropTypes.string,
     content: PropTypes.arrayOf(
       PropTypes.shape({
         id: PropTypes.number,

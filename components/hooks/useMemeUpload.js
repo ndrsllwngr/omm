@@ -11,7 +11,7 @@ const useMemeUpload = () => {
     // references
     if (data !== null) {
       const firestore = firebase.firestore()
-      const memesRef = firestore.collection('memes')
+      const memesRef = firestore.collection('memes-tmp')
       setLoading(true)
       // https://firebase.google.com/docs/firestore/manage-data/add-data#add_a_document
       memesRef

@@ -88,12 +88,15 @@ export const MemeEditor = () => {
 
   const generateMeme = () => {
     const json = canvas.toJSON()
+    const svg = canvas.toSVG()
     const newObj = {
       ...json,
       title,
       template: templateURL,
+      svg,
     }
     console.log({ newObj })
+    setData(newObj)
   }
 
   const clearAll = () => canvas.getObjects().forEach((obj) => canvas.remove(obj))
