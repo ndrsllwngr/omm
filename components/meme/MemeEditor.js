@@ -4,6 +4,7 @@ import SVG from 'react-inlinesvg'
 import { FabricCanvas } from '@/components/meme/FabricCanvas'
 import { MemeEditorText } from '@/components/meme/MemeEditorText'
 import { useFabricCanvas } from '@/components/context/fabricContext'
+import useMemeUpload from '@/components/hooks/useMemeUpload'
 
 // eslint-disable-next-line react/prop-types
 const Button = ({ children, type = 'button', disabled = false, onClick }) => {
@@ -28,10 +29,12 @@ const Button = ({ children, type = 'button', disabled = false, onClick }) => {
 export const MemeEditor = () => {
   const { canvas } = useFabricCanvas()
   const [imgURL, setImgURL] = useState('')
+  const [templateURL, setTemplateURL] = useState('')
   const [title, setTitle] = useState('')
   const [svgExport, setSvgExport] = useState('')
   const [jsonExport, setJsonExport] = useState({})
   const [previewMode, setPreviewMode] = useState(false)
+  const [loading, success, error, setData] = useMemeUpload()
 
   const addImg = (e, url) => {
     e.preventDefault()
@@ -41,6 +44,17 @@ export const MemeEditor = () => {
       canvas.add(img)
       canvas.renderAll()
       setImgURL('')
+    })
+  }
+
+  const addTemplate = (e, url = 'https://imgflip.com/s/meme/Futurama-Fry.jpg') => {
+    e.preventDefault()
+    new fabric.Image.fromURL(url, (img) => {
+      img.scale(0.75)
+      customSelect(img)
+      canvas.add(img)
+      canvas.renderAll()
+      setTemplateURL(url)
     })
   }
 
@@ -72,6 +86,16 @@ export const MemeEditor = () => {
     }
   }
 
+  const generateMeme = () => {
+    const json = canvas.toJSON()
+    const newObj = {
+      ...json,
+      title,
+      template: templateURL,
+    }
+    console.log({ newObj })
+  }
+
   const clearAll = () => canvas.getObjects().forEach((obj) => canvas.remove(obj))
 
   const canvasEvents = () => {
@@ -100,10 +124,13 @@ export const MemeEditor = () => {
       <div className="col-span-1 h-full rounded-lg bg-gray-100 flex flex-col justify-start space-y-2">
         <Button onClick={handlePreview}>{previewMode ? 'Hide Preview' : 'Show Preview'}</Button>
         <Button onClick={addText}>Add Textbox</Button>
-        <Button disabled={true}>Change template</Button>
+        <Button onClick={addTemplate}>Add Template</Button>
         <Button onClick={clearAll}>Clear All</Button>
         <Button onClick={canvasEvents}>Test</Button>
         <Button onClick={exportSVG}>Export to SVG</Button>
+        <Button onClick={generateMeme} disabled={loading}>
+          Generate {!loading && success && 'success'} {!loading && error && 'error'}
+        </Button>
         <form className={'flex justify-center space-x-2'} onSubmit={(e) => addImg(e, imgURL)}>
           <input
             className={
