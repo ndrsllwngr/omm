@@ -1,16 +1,16 @@
 import React from 'react'
 import { HtmlHead } from '@/components/HtmlHead'
+import { MemeKanvas } from '@/components/MemeKanvas'
 import { Navbar } from '@/components/Navbar'
-import { MemeEditor } from '@/components/meme/MemeEditor'
 
-const CreatePage = () => {
+const Create1Page = () => {
   return (
     <>
       <HtmlHead />
       <Navbar />
-      <MemeEditor />
+      <MemeKanvas />
     </>
   )
 }
 
-export default CreatePage
+export default Create1Page

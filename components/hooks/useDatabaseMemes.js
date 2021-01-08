@@ -15,7 +15,7 @@ export const useDatabaseMemes = (limit) => {
   }
 
   const loadCreds = () => {
-    return firebase.firestore().collection('memes')
+    return firebase.firestore().collection('memes-tmp')
   }
   const setDocs = (docs) => {
     let dbMemes = []
