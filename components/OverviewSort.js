@@ -73,6 +73,13 @@ export const OverviewSort = ({ filter, onFilterChange }) => {
             >
               Latest
             </div>
+            <div
+              onClick={() => handleClick('Oldest')}
+              className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900"
+              role="menuitem"
+            >
+              Oldest
+            </div>
             {/* <div
               onClick={() => handleClick('Views')}
               className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900"

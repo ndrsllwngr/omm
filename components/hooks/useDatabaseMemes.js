@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
 import firebase from '@/lib/firebase'
 
-export const useDatabaseMemes = () => {
+export const useDatabaseMemes = (limit) => {
   const [Memes, setMemes] = useState([])
   const [filter, setFilter] = useState('Latest')
 
@@ -70,16 +70,29 @@ export const useDatabaseMemes = () => {
     //   .onSnapshot((docs) => {
     //     setDocs(docs)
     //   })
+
     //https://dev.to/bmcmahen/using-firebase-with-react-hooks-21ap
+    //https://blog.logrocket.com/react-hooks-with-firebase-firestore/
     switch (filter) {
       case 'Latest':
         //resolveMemes(getLatestMemes())
         const latestMemesUnsubscribe = loadCreds()
           .orderBy('created_at', 'desc')
+          .limit(limit)
+          .onSnapshot((docs) => {
+            //https://medium.com/javascript-in-plain-english/firebase-firestore-database-realtime-updates-with-react-hooks-useeffect-346c1e154219
+            setDocs(docs)
+          })
+
+        return latestMemesUnsubscribe
+      case 'Oldest':
+        //resolveMemes(getLatestMemes())
+        const oldestMemesUnsubscribe = loadCreds()
+          .orderBy('created_at')
           .onSnapshot((docs) => {
             setDocs(docs)
           })
-        return latestMemesUnsubscribe
+        return oldestMemesUnsubscribe
       case 'Votes':
         const twoMemesUnsubscribe = loadCreds()
           .orderBy('created_at')
@@ -92,6 +105,6 @@ export const useDatabaseMemes = () => {
       default:
         console.log('Unsupported case')
     }
-  }, [setMemes, filter])
+  }, [setMemes, filter, limit])
   return { dbMemes: Memes, dbFilter: filter, setFilter: changeFilter }
 }

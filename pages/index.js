@@ -8,7 +8,8 @@ import { Navbar } from '@/components/Navbar'
 import { OverviewSort } from '@/components/OverviewSort'
 
 const LandingPage = () => {
-  const { dbMemes, dbFilter, setFilter } = useDatabaseMemes()
+  const limit = 5
+  const { dbMemes, dbFilter, setFilter } = useDatabaseMemes(limit)
   return (
     <>
       <HtmlHead />
