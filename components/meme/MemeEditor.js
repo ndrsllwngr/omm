@@ -28,6 +28,7 @@ const Button = ({ children, type = 'button', disabled = false, onClick }) => {
 export const MemeEditor = () => {
   const { canvas } = useFabricCanvas()
   const [imgURL, setImgURL] = useState('')
+  const [title, setTitle] = useState('')
   const [svgExport, setSvgExport] = useState('')
   const [jsonExport, setJsonExport] = useState({})
   const [previewMode, setPreviewMode] = useState(false)
@@ -56,20 +57,17 @@ export const MemeEditor = () => {
 
   const exportSVG = () => {
     const svg = canvas.toSVG()
-    console.log(canvas.toSVG())
-    console.log(canvas.toJSON())
+    const json = canvas.toJSON()
+    console.log({ svg, json })
     setSvgExport(svg)
+    setJsonExport(json)
   }
 
   const handlePreview = () => {
     if (previewMode) {
       setPreviewMode(false)
     } else {
-      const svg = canvas.toSVG()
-      const json = canvas.toJSON()
-      console.log({ svg, json })
-      setSvgExport(svg)
-      setJsonExport(json)
+      exportSVG()
       setPreviewMode(true)
     }
   }
@@ -93,19 +91,19 @@ export const MemeEditor = () => {
 
   return (
     <div className="p-8 grid grid-cols-3 gap-6">
-      <div className="col-span-3 h-16 rounded-lg bg-gray-100 flex items-center justify-center space-x-2">
-        <Button onClick={handlePreview}>{previewMode ? 'Edit' : 'Preview'}</Button>
-        <Button onClick={addText}>Add Textbox</Button>
-        <Button disabled={true}>Change template</Button>
-        <Button onClick={clearAll}>Clear All</Button>
-        <Button onClick={canvasEvents}>Test</Button>
-        <Button onClick={exportSVG}>Export to SVG</Button>
+      <div className="col-span-3 h-16 rounded-lg bg-gray-100 flex items-center justify-start space-x-2 pl-2">
         <MemeEditorText />
       </div>
       <div className="col-span-2 h-full rounded-lg bg-transparent flex justify-center">
         <FabricCanvas />
       </div>
-      <div className="col-span-1 h-full rounded-lg bg-gray-100">
+      <div className="col-span-1 h-full rounded-lg bg-gray-100 flex flex-col justify-start space-y-2">
+        <Button onClick={handlePreview}>{previewMode ? 'Hide Preview' : 'Show Preview'}</Button>
+        <Button onClick={addText}>Add Textbox</Button>
+        <Button disabled={true}>Change template</Button>
+        <Button onClick={clearAll}>Clear All</Button>
+        <Button onClick={canvasEvents}>Test</Button>
+        <Button onClick={exportSVG}>Export to SVG</Button>
         <form className={'flex justify-center space-x-2'} onSubmit={(e) => addImg(e, imgURL)}>
           <input
             className={
@@ -117,6 +115,15 @@ export const MemeEditor = () => {
           />
           <Button type="submit">Add Image</Button>
         </form>
+        <input
+          className={
+            'flex-1 appearance-none border border-transparent w-full py-2 px-4 bg-white text-gray-700 placeholder-gray-400 shadow-md rounded-lg text-base focus:outline-none focus:ring-2 focus:ring-purple-600 focus:border-transparent'
+          }
+          type="text"
+          value={title}
+          placeholder={'Title'}
+          onChange={(e) => setTitle(e.target.value)}
+        />
       </div>
       {previewMode && (
         <>
