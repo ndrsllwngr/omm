@@ -49,35 +49,45 @@ export const useDatabaseMemes = () => {
   // }
 
   useEffect(() => {
-    // TODO cleanup in useEffect
     // TODO add paginationa
-    let unsub = ''
 
-    const latestMemes = () => {
-      loadCreds()
-        .orderBy('created_at', 'desc')
-        .onSnapshot((docs) => {
-          setDocs(docs)
-        })
-    }
-    const twoMemes = () => {
-      loadCreds()
-        .orderBy('created_at')
-        .limit(2)
-        .onSnapshot((docs) => {
-          setDocs(docs)
-        })
-    }
-
+    // const twoMemes = () => {
+    //   loadCreds()
+    //     .orderBy('created_at')
+    //     .limit(2)
+    //     .onSnapshot((docs) => {
+    //       setDocs(docs)
+    //     })
+    // }
+    // const latestMemesUnsubscribe = loadCreds()
+    //   .orderBy('created_at', 'desc')
+    //   .onSnapshot((docs) => {
+    //     setDocs(docs)
+    //   })
+    // const twoMemesUnsubscribe = loadCreds()
+    //   .orderBy('created_at')
+    //   .limit(2)
+    //   .onSnapshot((docs) => {
+    //     setDocs(docs)
+    //   })
+    //https://dev.to/bmcmahen/using-firebase-with-react-hooks-21ap
     switch (filter) {
       case 'Latest':
         //resolveMemes(getLatestMemes())
-        unsub = latestMemes()
-        return () => unsub
+        const latestMemesUnsubscribe = loadCreds()
+          .orderBy('created_at', 'desc')
+          .onSnapshot((docs) => {
+            setDocs(docs)
+          })
+        return latestMemesUnsubscribe
       case 'Votes':
-        //resolveMemes(getOldestMemes())
-        unsub = twoMemes()
-        return () => unsub
+        const twoMemesUnsubscribe = loadCreds()
+          .orderBy('created_at')
+          .limit(2)
+          .onSnapshot((docs) => {
+            setDocs(docs)
+          })
+        return twoMemesUnsubscribe
 
       default:
         console.log('Unsupported case')
