@@ -19,21 +19,6 @@ export const useDatabaseMemes = () => {
     })
     setMemes(dbMemes)
   }
-  const latestMemes = () => {
-    loadCreds()
-      .orderBy('created_at', 'desc')
-      .onSnapshot((docs) => {
-        setDocs(docs)
-      })
-  }
-  const twoMemes = () => {
-    loadCreds()
-      .orderBy('created_at')
-      .limit(2)
-      .onSnapshot((docs) => {
-        setDocs(docs)
-      })
-  }
 
   // async function getLatestMemes() {
   //   const docs = await loadCreds().orderBy('created_at').get()
@@ -64,8 +49,24 @@ export const useDatabaseMemes = () => {
   // }
 
   useEffect(() => {
-    // TODO subscribe to get updates
+    //TODO cleanup in useEffect
     // TODO add paginationa
+    const latestMemes = () => {
+      loadCreds()
+        .orderBy('created_at', 'desc')
+        .onSnapshot((docs) => {
+          setDocs(docs)
+        })
+    }
+    const twoMemes = () => {
+      loadCreds()
+        .orderBy('created_at')
+        .limit(2)
+        .onSnapshot((docs) => {
+          setDocs(docs)
+        })
+    }
+
     switch (filter) {
       case 'Latest':
         //resolveMemes(getLatestMemes())
