@@ -49,8 +49,10 @@ export const useDatabaseMemes = () => {
   // }
 
   useEffect(() => {
-    //TODO cleanup in useEffect
+    // TODO cleanup in useEffect
     // TODO add paginationa
+    let unsub = ''
+
     const latestMemes = () => {
       loadCreds()
         .orderBy('created_at', 'desc')
@@ -70,12 +72,13 @@ export const useDatabaseMemes = () => {
     switch (filter) {
       case 'Latest':
         //resolveMemes(getLatestMemes())
-        latestMemes()
-        break
+        unsub = latestMemes()
+        return () => unsub
       case 'Votes':
         //resolveMemes(getOldestMemes())
-        twoMemes()
-        break
+        unsub = twoMemes()
+        return () => unsub
+
       default:
         console.log('Unsupported case')
     }
