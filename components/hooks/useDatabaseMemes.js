@@ -5,60 +5,89 @@ export const useDatabaseMemes = () => {
   const [Memes, setMemes] = useState([])
   const [filter, setFilter] = useState('Latest')
 
-  function changeFilter(filter) {
+  const changeFilter = (filter) => {
     setFilter(filter)
   }
 
+  const loadCreds = () => {
+    return firebase.firestore().collection('memes')
+  }
+  const setDocs = (docs) => {
+    let dbMemes = []
+    docs.forEach((doc) => {
+      dbMemes.push({ id: doc.id, ...doc.data() })
+    })
+    setMemes(dbMemes)
+  }
+
+  // async function getLatestMemes() {
+  //   const docs = await loadCreds().orderBy('created_at').get()
+  //   let dbMemes = []
+  //   for (let i = 0; i < docs.size; i++) {
+  //     const doc = docs.docs[i]
+  //     dbMemes.push({ id: doc.id, ...doc.data() })
+  //   }
+  //   return dbMemes
+  // }
+
+  // async function getOldestMemes() {
+  //   const docs = await loadCreds().orderBy('created_at').limit(2).get()
+  //   let dbMemes = []
+  //   for (let i = 0; i < docs.size; i++) {
+  //     const doc = docs.docs[i]
+  //     dbMemes.push({ id: doc.id, ...doc.data() })
+  //   }
+  //   return dbMemes
+  // }
+
+  // function resolveMemes(cb) {
+  //   cb.then((res) => {
+  //     setMemes(res)
+  //   }).catch(function (error) {
+  //     console.log({ error })
+  //   })
+  // }
+
   useEffect(() => {
-    // TODO subscribe to get updates
     // TODO add paginationa
+
+    // const twoMemes = () => {
+    //   loadCreds()
+    //     .orderBy('created_at')
+    //     .limit(2)
+    //     .onSnapshot((docs) => {
+    //       setDocs(docs)
+    //     })
+    // }
+    // const latestMemesUnsubscribe = loadCreds()
+    //   .orderBy('created_at', 'desc')
+    //   .onSnapshot((docs) => {
+    //     setDocs(docs)
+    //   })
+    // const twoMemesUnsubscribe = loadCreds()
+    //   .orderBy('created_at')
+    //   .limit(2)
+    //   .onSnapshot((docs) => {
+    //     setDocs(docs)
+    //   })
+    //https://dev.to/bmcmahen/using-firebase-with-react-hooks-21ap
     switch (filter) {
       case 'Latest':
-        async function getLatestMemes() {
-          const docs = await firebase.firestore().collection('memes').orderBy('created_at').get()
-          let dbMemes = []
-          for (let i = 0; i < docs.size; i++) {
-            const doc = docs.docs[i]
-            dbMemes.push({ id: doc.id, ...doc.data() })
-          }
-          return dbMemes
-        }
-
-        getLatestMemes()
-          .then((res) => {
-            setMemes(res)
+        //resolveMemes(getLatestMemes())
+        const latestMemesUnsubscribe = loadCreds()
+          .orderBy('created_at', 'desc')
+          .onSnapshot((docs) => {
+            setDocs(docs)
           })
-          .catch(function (error) {
-            console.log({ error })
-          })
-        break
+        return latestMemesUnsubscribe
       case 'Votes':
-        async function getOldestMemes() {
-          const docs = await firebase
-            .firestore()
-            .collection('memes')
-            .orderBy('created_at')
-            .limit(2)
-            .get()
-          let dbMemes = []
-          for (let i = 0; i < docs.size; i++) {
-            const doc = docs.docs[i]
-            dbMemes.push({ id: doc.id, ...doc.data() })
-          }
-          return dbMemes
-        }
-
-        getOldestMemes()
-          .then((res) => {
-            setMemes(res)
+        const twoMemesUnsubscribe = loadCreds()
+          .orderBy('created_at')
+          .limit(2)
+          .onSnapshot((docs) => {
+            setDocs(docs)
           })
-          .catch(function (error) {
-            console.log({ error })
-          })
-        break
-      // case 'Views':
-      //   setFilter(filter)
-      // //
+        return twoMemesUnsubscribe
 
       default:
         console.log('Unsupported case')
