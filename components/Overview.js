@@ -4,9 +4,9 @@ import { MemeRenderer } from '@/components/MemeRenderer'
 import Link from 'next/link'
 
 export const Overview = ({ memes }) => {
-  useEffect(() => {
-    console.log({ memes })
-  }, [memes])
+  // useEffect(() => {
+  //   console.log({ memes })
+  // }, [memes])
   if (!memes || !(memes.length > 0)) return <div>loading...</div>
   return (
     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2 items-center mx-auto justify-content-center">

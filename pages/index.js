@@ -8,7 +8,7 @@ import { Navbar } from '@/components/Navbar'
 import { OverviewSort } from '@/components/OverviewSort'
 
 const LandingPage = () => {
-  const limit = 5
+  const limit = 1
   //let counter = limit
   const { dbMemes, dbFilter, setFilter, setTrigger } = useDatabaseMemes(limit)
   useEffect(() => {
@@ -20,7 +20,9 @@ const LandingPage = () => {
       <HtmlHead />
       <Navbar />
       <OverviewSort filter={dbFilter} onFilterChange={setFilter} />
-      <button className="w-full h-8" onClick={setTrigger}></button>
+      <button className="w-full h-8" onClick={setTrigger}>
+        Load more Memes
+      </button>
       <Overview memes={dbMemes} />
     </>
   )
