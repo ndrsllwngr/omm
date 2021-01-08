@@ -1,28 +1,10 @@
-import React, { useEffect } from 'react'
+import React from 'react'
 import PropTypes from 'prop-types'
 import { SlideshowButton } from '@/components/SlideshowButton'
 import { Slide } from '@/components/Slide'
 import { SINGLEVIEWNAVIGATION } from '@/lib/constants'
 
-// const reducer = (slideIndex, arg) => {
-//   switch (arg.type) {
-//     case 'next':
-//       return ++slideIndex
-//     case 'prev':
-//       return slideIndex === 0 ? 0 : --slideIndex
-//     default:
-//       console.error('Argument not supportet.', arg)
-//   }
-// }
-
 export const Slideshow = ({ memes }) => {
-  // const [slideIndex, setSlideIndex] = useReducer(reducer, 0)
-
-  useEffect(() => {
-    console.log({ src: 'Slideshow', memes })
-  }, [memes])
-  //console.log(memes[1])
-  //const meme = memes[slideIndex > memes.length - 1 ? memes.length - 1 : slideIndex]
   const prevMeme = memes[SINGLEVIEWNAVIGATION.prev]
   const currentMeme = memes[SINGLEVIEWNAVIGATION.current]
   const nextMeme = memes[SINGLEVIEWNAVIGATION.next]
@@ -33,7 +15,7 @@ export const Slideshow = ({ memes }) => {
       {/*alternative would be to use css disbable*/}
       {prevMeme.id && <SlideshowButton name="prev" changeSlide={prevMeme.id} />}
       <Slide meme={currentMeme} />
-      {nextMeme.id && <SlideshowButton name="prev" changeSlide={nextMeme.id} />}
+      {nextMeme.id && <SlideshowButton name="next" changeSlide={nextMeme.id} />}
       {/* // {slideIndex !== memes.length - 1 && (
       //   <SlideshowButton name="next" changeSlide={() => setSlideIndex({ type: 'next' })} />
       // )} */}
