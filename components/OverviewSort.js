@@ -15,7 +15,6 @@ export const OverviewSort = ({ filter, onFilterChange }) => {
     onFilterChange(filter)
     setFilter(filter)
   }
-
   return (
     <div className="relative block text-left">
       <div>

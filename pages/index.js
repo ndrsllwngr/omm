@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { HtmlHead } from '@/components/HtmlHead'
 // import firebase from '@/lib/firebase'
 // import { useRequireAuth } from '@/components/hooks/useRequireAuth'
@@ -9,13 +9,18 @@ import { OverviewSort } from '@/components/OverviewSort'
 
 const LandingPage = () => {
   const limit = 5
-  const { dbMemes, dbFilter, setFilter } = useDatabaseMemes(limit)
+  //let counter = limit
+  const { dbMemes, dbFilter, setFilter, setTrigger } = useDatabaseMemes(limit)
+  useEffect(() => {
+    //console.log(counter)
+    //console.log(setTrigger)
+  })
   return (
     <>
       <HtmlHead />
       <Navbar />
       <OverviewSort filter={dbFilter} onFilterChange={setFilter} />
-
+      <button className="w-full h-8" onClick={setTrigger}></button>
       <Overview memes={dbMemes} />
     </>
   )

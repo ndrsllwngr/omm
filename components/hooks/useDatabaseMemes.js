@@ -4,9 +4,14 @@ import firebase from '@/lib/firebase'
 export const useDatabaseMemes = (limit) => {
   const [Memes, setMemes] = useState([])
   const [filter, setFilter] = useState('Latest')
+  const [latestDoc, setLatestDoc] = useState(null)
 
   const changeFilter = (filter) => {
     setFilter(filter)
+  }
+  const handleClick = () => {
+    resolveMemes(getNextMemes())
+    console.log(Memes)
   }
 
   const loadCreds = () => {
@@ -39,52 +44,46 @@ export const useDatabaseMemes = (limit) => {
   //   }
   //   return dbMemes
   // }
+  const getNextMemes = async () => {
+    let query = loadCreds().orderBy('created_at', 'desc')
+    if (latestDoc) {
+      query = query.startAfter(latestDoc)
+    }
+    const docs = await query.limit(1).get()
+    let snapShotMemes = []
+    docs.forEach((doc) => {
+      snapShotMemes.push({ id: doc.id, ...doc.data() })
+    })
+    setLatestDoc(docs.docs[docs.docs.length - 1])
+    return snapShotMemes
+  }
 
-  // function resolveMemes(cb) {
-  //   cb.then((res) => {
-  //     setMemes(res)
-  //   }).catch(function (error) {
-  //     console.log({ error })
-  //   })
-  // }
+  function resolveMemes(cb) {
+    cb.then((res) => {
+      !Memes || !(Memes.length > 0) ? setMemes(res) : setMemes([...Memes, ...res])
+    }).catch(function (error) {
+      console.log({ error })
+    })
+  }
 
   useEffect(() => {
     // TODO add paginationa
-
-    // const twoMemes = () => {
-    //   loadCreds()
-    //     .orderBy('created_at')
-    //     .limit(2)
-    //     .onSnapshot((docs) => {
-    //       setDocs(docs)
-    //     })
-    // }
-    // const latestMemesUnsubscribe = loadCreds()
-    //   .orderBy('created_at', 'desc')
-    //   .onSnapshot((docs) => {
-    //     setDocs(docs)
-    //   })
-    // const twoMemesUnsubscribe = loadCreds()
-    //   .orderBy('created_at')
-    //   .limit(2)
-    //   .onSnapshot((docs) => {
-    //     setDocs(docs)
-    //   })
 
     //https://dev.to/bmcmahen/using-firebase-with-react-hooks-21ap
     //https://blog.logrocket.com/react-hooks-with-firebase-firestore/
     switch (filter) {
       case 'Latest':
-        //resolveMemes(getLatestMemes())
-        const latestMemesUnsubscribe = loadCreds()
-          .orderBy('created_at', 'desc')
-          .limit(limit)
-          .onSnapshot((docs) => {
-            //https://medium.com/javascript-in-plain-english/firebase-firestore-database-realtime-updates-with-react-hooks-useeffect-346c1e154219
-            setDocs(docs)
-          })
+        resolveMemes(getNextMemes())
+        // const latestMemesUnsubscribe = loadCreds()
+        //   .orderBy('created_at', 'desc')
+        //   .limit(limit)
+        //   .onSnapshot((docs) => {
+        //     //https://medium.com/javascript-in-plain-english/firebase-firestore-database-realtime-updates-with-react-hooks-useeffect-346c1e154219
+        //     setDocs(docs)
+        //   })
 
-        return latestMemesUnsubscribe
+        // return latestMemesUnsubscribe
+        break
       case 'Oldest':
         //resolveMemes(getLatestMemes())
         const oldestMemesUnsubscribe = loadCreds()
@@ -106,5 +105,5 @@ export const useDatabaseMemes = (limit) => {
         console.log('Unsupported case')
     }
   }, [setMemes, filter, limit])
-  return { dbMemes: Memes, dbFilter: filter, setFilter: changeFilter }
+  return { dbMemes: Memes, dbFilter: filter, setFilter: changeFilter, setTrigger: handleClick }
 }
