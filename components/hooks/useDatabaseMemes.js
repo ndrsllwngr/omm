@@ -1,26 +1,28 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import firebase from '@/lib/firebase'
 
 export const useDatabaseMemes = (limit) => {
   const [Memes, setMemes] = useState([])
-  const [filter, setFilter] = useState('Oldest')
+  const [filter, setFilter] = useState('Latest')
   const [latestDoc, setLatestDoc] = useState(null)
 
-  const changeFilter = (filter) => {
-    setFilter(filter)
+  const changeFilter = (f) => {
+    setMemes([])
+    setLatestDoc(null)
+    setFilter(f)
   }
   const handleClick = () => {
     //switch case to handle resolved memes
+    console.warn('handleClick')
     switch (filter) {
       case 'Latest':
         resolveMemes(loadLatestMemes('created_at', 'desc'))
         break
       case 'Oldest':
-        resolveMemes(loadOldestMemes('created_at'))
+        resolveMemes(loadOldestMemes('created_at', 'asc'))
         break
       default:
         console.log('Unsupported case')
-        break
     }
   }
 
@@ -37,13 +39,6 @@ export const useDatabaseMemes = (limit) => {
 
   const loadLatestMemes = async () => {
     let query = loadCreds().orderBy('created_at', 'desc')
-    //let query = ''
-    // if (d) {
-    //   query = loadCreds().orderBy('' + c + '', '' + d + '')
-    // } else {
-    //   query = loadCreds().orderBy('' + c + '')
-    // }
-
     if (latestDoc) {
       query = query.startAfter(latestDoc)
     }
@@ -56,7 +51,7 @@ export const useDatabaseMemes = (limit) => {
     return snapShotMemes
   }
   const loadOldestMemes = async () => {
-    let query = loadCreds().orderBy('created_at')
+    let query = loadCreds().orderBy('created_at', 'asc')
     if (latestDoc) {
       query = query.startAfter(latestDoc)
     }
@@ -72,7 +67,7 @@ export const useDatabaseMemes = (limit) => {
   function resolveMemes(cb) {
     cb.then((res) => {
       !Memes || !(Memes.length > 0) ? setMemes(res) : setMemes([...Memes, ...res])
-      console.log({ RESOLVEDMEME: Memes })
+      console.log({ resolveMemes: res, Memes })
     }).catch(function (error) {
       console.log({ error })
     })
@@ -100,56 +95,16 @@ export const useDatabaseMemes = (limit) => {
 
   //onfilter switch erase meme array
   useEffect(() => {
-    // TODO add paginationa
-
     //https://dev.to/bmcmahen/using-firebase-with-react-hooks-21ap
     //https://blog.logrocket.com/react-hooks-with-firebase-firestore/
     switch (filter) {
       case 'Latest':
-        //erase Memes and latestdoc
-        setMemes([])
-        console.log({ LatestMEMES: Memes })
-        setLatestDoc(null)
         resolveMemes(loadLatestMemes('created_at', 'desc'))
-        console.log({ LatestMEMESafter: Memes })
-
-        // const latestMemesUnsubscribe = loadCreds()
-        //   .orderBy('created_at', 'desc')
-        //   .limit(limit)
-        //   .onSnapshot((docs) => {
-        //     //https://medium.com/javascript-in-plain-english/firebase-firestore-database-realtime-updates-with-react-hooks-useeffect-346c1e154219
-        //     setDocs(docs)
-        //   })
-
-        // return latestMemesUnsubscribe
         break
       case 'Oldest':
-        //erase Memes and latestdoc
-        setMemes([])
-        console.log({ OLDMEMES: Memes })
-        setLatestDoc(null)
-        resolveMemes(loadOldestMemes('created_at'))
-        console.log({ OLDMEMESAFTER: Memes })
+        resolveMemes(loadOldestMemes('created_at', 'asc'))
         break
-      //resolveMemes(getLatestMemes())
-      // const oldestMemesUnsubscribe = loadCreds()
-      //   .orderBy('created_at')
-      //   .onSnapshot((docs) => {
-      //     setDocs(docs)
-      //   })
-      // return oldestMemesUnsubscribe
-      // case 'Votes':
-      //   const twoMemesUnsubscribe = loadCreds()
-      //     .orderBy('created_at')
-      //     .limit(2)
-      //     .onSnapshot((docs) => {
-      //       setDocs(docs)
-      //     })
-      //   return twoMemesUnsubscribe
-
       default:
-        setMemes([])
-        setLatestDoc(null)
         console.log('Unsupported case')
     }
   }, [setMemes, filter, limit])
