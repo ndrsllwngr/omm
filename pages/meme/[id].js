@@ -9,25 +9,31 @@ export default function User() {
   const router = useRouter()
 
   const [Memes, setMemes] = useState([])
+  const [id, setId] = useState([])
+  const [random, setRandom] = useState([])
 
-  const getRandomInt = (min, max) => {
-    min = Math.ceil(min)
-    max = Math.floor(max)
-    return Math.floor(Math.random() * (max - min + 1)) + min
-  }
-  const randomMeme = async () => {
-    let memeId = await firebase.firestore().collection('memes-tmp').get()
-    let doc = memeId.docs[getRandomInt(0, memeId.size - 1)]
-    return doc.id
-  }
-  const handleClick = (e) => {
-    e.preventDefault()
-    randomMeme().then((id) => router.push('/meme/' + id))
-  }
+  useEffect(() => {
+    const getRandomInt = (min, max) => {
+      min = Math.ceil(min)
+      max = Math.floor(max)
+      return Math.floor(Math.random() * (max - min + 1)) + min
+    }
+    async function getRandomMeme() {
+      let memeId = await firebase.firestore().collection('memes-tmp').get()
+      let newRandom = getRandomInt(0, memeId.size - 1)
+      if (random === newRandom) {
+        newRandom = getRandomInt(0, memeId.size - 1)
+      }
+      setRandom(newRandom)
+      let doc = memeId.docs[newRandom]
+      return doc.id
+    }
+
+    getRandomMeme().then((res) => setId(res))
+  }, [router.query.id])
 
   useEffect(() => {
     // TODO subscribe to get updates
-
     async function getMemes() {
       let Meme = []
       const db = firebase.firestore()
@@ -80,14 +86,14 @@ export default function User() {
       <div> {Memes[1].id}</div>
       <img alt="" className="w-10" src={Memes[1].template} />
       <Slideshow memes={Memes} />
-      {/* <Link href={'/memes/' + handleClick}>
-        <a className="flex cursor-pointer items-center  flex-shrink-0 text-gray-800 mr-16">
-          <span className="font-semibold text-xl bg-black tracking-tight">My Navbar</span>
+      <Link href={`/meme/${id}`}>
+        <a className="flex cursor-pointer items-center w-full h-8  text-gray-800 mr-16">
+          <span className="font-semibold text-xl tracking-tight">Random Meme</span>
         </a>
-      </Link> */}
-      <button onClick={handleClick} className="w-full h-8">
+      </Link>
+      {/* <button onClick={handleClick} className="w-full h-8">
         Random
-      </button>
+      </button> */}
     </div>
   )
 }

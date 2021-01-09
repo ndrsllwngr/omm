@@ -35,7 +35,6 @@ export const useDatabaseMemes = (limit) => {
   //   })
   //   setMemes(dbMemes)
   // }
-
   const loadNextMemes = async (c, d) => {
     let query = ''
     if (d) {
@@ -58,7 +57,6 @@ export const useDatabaseMemes = (limit) => {
   function resolveMemes(cb) {
     cb.then((res) => {
       !Memes || !(Memes.length > 0) ? setMemes(res) : setMemes([...Memes, ...res])
-      console.log({ resolveMemes: res, Memes })
     }).catch(function (error) {
       console.log({ error })
     })
