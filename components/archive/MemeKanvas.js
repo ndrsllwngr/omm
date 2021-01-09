@@ -1,13 +1,13 @@
 import React, { useEffect, useState, useRef } from 'react'
 import { Stage, Layer } from 'react-konva'
 // import { useWindowSize } from '@/components/hooks/useWindowSize'
-import { TextBox } from '@/components/kanvas-utils/TextBox'
-import { MemeTemplate } from '@/components/kanvas-utils/MemeTemplate'
+import { TextBox } from '@/components/archive/kanvas-utils/TextBox'
+import { MemeTemplate } from '@/components/archive/kanvas-utils/MemeTemplate'
 import { useImmer } from 'use-immer'
 import { MEME_KANVAS_NEW_TEXT, MEME_KANVAS_INITIAL_STATE } from '@/lib/constants'
 import { MemeRenderer } from '@/components/MemeRenderer'
-import { DropDown } from '@/components/DropDown'
-import { ColorPicker } from '@/components/ColorPicker'
+import { DropDown } from '@/components/archive/DropDown'
+import { ColorPicker } from '@/components/archive/ColorPicker'
 import useMemeUpload from '@/components/hooks/useMemeUpload'
 
 // Download URI

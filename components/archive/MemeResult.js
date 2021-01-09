@@ -3,8 +3,8 @@ import PropTypes from 'prop-types'
 import domtoimage from 'dom-to-image'
 import { saveAs } from 'file-saver'
 import { STEPS } from '@/lib/constants'
-import { Meme } from '@/components/Meme'
-import { useMeme } from '@/components/context/memeContext'
+import { Meme } from '@/components/archive/Meme'
+import { useMeme } from '@/components/archive/memeContext'
 
 /**
  * Show final meme, offer download option

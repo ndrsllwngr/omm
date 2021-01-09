@@ -1,7 +1,7 @@
 import React from 'react'
 import { MemeRenderer } from '@/components/MemeRenderer'
 import { MEME_KANVAS_INITIAL_STATE } from '@/lib/constants'
-import { MemeKanvas } from '@/components/MemeKanvas'
+import { MemeKanvas } from '@/components/archive/MemeKanvas'
 
 export default { title: 'Meme Generator' }
 
