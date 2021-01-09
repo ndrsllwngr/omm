@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { fabric } from 'fabric'
 import { useFabricActiveObject, useFabricCanvas } from '@/components/context/fabricContext'
-import { getActiveStyle, setActiveProp, setActiveStyle } from '@/components/meme/utils'
+import { getActiveStyle, setActiveProp, setActiveStyle } from '@/components/meme/FabricUtils'
 
 export const FabricTextBox = (_props) => {
   const { canvas } = useFabricCanvas()

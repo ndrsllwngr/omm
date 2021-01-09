@@ -7,7 +7,7 @@ import {
   removeSelected,
   sendBackwards,
   sendToBack,
-} from '@/components/meme/utils'
+} from '@/components/meme/FabricUtils'
 //import { getActiveStyle, setActiveProp, setActiveStyle } from '@/components/meme/utils'
 
 export const MemeEditorImage = (_props) => {

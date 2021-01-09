@@ -9,7 +9,9 @@ import {
   setActiveProp,
   getActiveProp,
   setActiveStyle,
-} from '@/components/meme/utils'
+  getObjectCaching,
+  setObjectCaching,
+} from '@/components/meme/FabricUtils'
 //import { getActiveStyle, setActiveProp, setActiveStyle } from '@/components/meme/utils'
 
 export const MemeEditorText = (_props) => {
@@ -31,6 +33,7 @@ export const MemeEditorText = (_props) => {
   }, [enabledTools, activeObject, setEnabledTools])
 
   const handleChange = (changedKey, changedValue) => {
+    setObjectCaching(false, canvas)
     switch (changedKey) {
       case 'fontStyle':
         setActiveStyle(changedKey, changedValue, activeObject, canvas)
@@ -47,6 +50,7 @@ export const MemeEditorText = (_props) => {
       default:
         console.log('Unsupported property', changedKey)
     }
+    setObjectCaching(true, canvas)
     console.log({
       src: 'MemeEditorText.handleChange',
       changedKey,

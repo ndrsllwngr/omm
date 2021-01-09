@@ -74,6 +74,10 @@ export const bringToFront = (canvas) => {
   }
 }
 
+export const getSelected = (canvas) => {
+  return canvas.getActiveObject()
+}
+
 export const removeSelected = (canvas) => {
   const activeObjects = canvas.getActiveObjects()
   // TODO permit removal of TEMPLATE obj
@@ -81,6 +85,22 @@ export const removeSelected = (canvas) => {
   if (activeObjects.length) {
     canvas.remove.apply(canvas, activeObjects)
   }
+}
+
+export const getObjectCaching = (canvas) => {
+  return getActiveProp('objectCaching', canvas)
+}
+
+export const setObjectCaching = (value, canvas) => {
+  return setActiveProp('objectCaching', value, canvas)
+}
+
+export const getNoScaleCache = (canvas) => {
+  return getActiveProp('noScaleCache', canvas)
+}
+
+export const setNoScaleCache = (value, canvas) => {
+  return setActiveProp('noScaleCache', value, canvas)
 }
 
 // CANVAS
@@ -92,4 +112,23 @@ export const getCanvasBgColor = (canvas) => {
 export const setCanvasBgColor = (canvas) => {
   canvas.backgroundColor = value
   canvas.renderAll()
+}
+
+// EXPORT
+
+export const saveJSON = (withDefaults, canvas) => {
+  canvas.includeDefaultValues = withDefaults
+  return JSON.stringify(canvas.toJSON())
+}
+
+export const rasterizeSVG = (canvas) => {
+  return canvas.toSVG()
+}
+
+// IMPORT
+
+export const loadJSON = (json, canvas) => {
+  canvas.loadFromJSON(json, function () {
+    canvas.renderAll()
+  })
 }
