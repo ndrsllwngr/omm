@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from 'react'
+import { useState, useEffect } from 'react'
 import firebase from '@/lib/firebase'
 
 export const useDatabaseMemes = (limit) => {
@@ -16,10 +16,10 @@ export const useDatabaseMemes = (limit) => {
     console.warn('handleClick')
     switch (filter) {
       case 'Latest':
-        resolveMemes(loadLatestMemes('created_at', 'desc'))
+        resolveMemes(loadNextMemes('created_at', 'desc'))
         break
       case 'Oldest':
-        resolveMemes(loadOldestMemes('created_at', 'asc'))
+        resolveMemes(loadNextMemes('created_at', 'asc'))
         break
       default:
         console.log('Unsupported case')
@@ -37,21 +37,14 @@ export const useDatabaseMemes = (limit) => {
   //   setMemes(dbMemes)
   // }
 
-  const loadLatestMemes = async () => {
-    let query = loadCreds().orderBy('created_at', 'desc')
-    if (latestDoc) {
-      query = query.startAfter(latestDoc)
+  const loadNextMemes = async (c, d) => {
+    let query = ''
+    if (d) {
+      query = loadCreds().orderBy('' + c + '', '' + d + '')
+    } else {
+      query = loadCreds().orderBy('' + c + '')
     }
-    const docs = await query.limit(limit).get()
-    let snapShotMemes = []
-    docs.forEach((doc) => {
-      snapShotMemes.push({ id: doc.id, ...doc.data() })
-    })
-    setLatestDoc(docs.docs[docs.docs.length - 1])
-    return snapShotMemes
-  }
-  const loadOldestMemes = async () => {
-    let query = loadCreds().orderBy('created_at', 'asc')
+    //let query = loadCreds().orderBy('created_at', 'desc')
     if (latestDoc) {
       query = query.startAfter(latestDoc)
     }
@@ -99,10 +92,10 @@ export const useDatabaseMemes = (limit) => {
     //https://blog.logrocket.com/react-hooks-with-firebase-firestore/
     switch (filter) {
       case 'Latest':
-        resolveMemes(loadLatestMemes('created_at', 'desc'))
+        resolveMemes(loadNextMemes('created_at', 'desc'))
         break
       case 'Oldest':
-        resolveMemes(loadOldestMemes('created_at', 'asc'))
+        resolveMemes(loadNextMemes('created_at', 'asc'))
         break
       default:
         console.log('Unsupported case')
