@@ -4,22 +4,23 @@ import React, { useState } from 'react'
 // const memeFirestore = firebase.firestore()
 
 export const ScreenshotUrl = () => {
-  const API_KEY = process.env.NEXT_PUBLIC_APIFLASH_SCREENSHOT_API_KEY
   const [search, setSearch] = useState('')
-  const URL = `https://api.apiflash.com/v1/urltoimage?access_key=${API_KEY}&url=${search}&response_type=json&fresh=true&width=1920&height=1080`
-  console.log('key:', API_KEY)
-
-  const getScreenshot = fetch(URL, {
-    method: 'GET',
-  })
-    .then((res) => res.json())
-    .then((url) => {
-      return url
+  const URL = `https://api.apiflash.com/v1/urltoimage?access_key=${process.env.NEXT_PUBLIC_APIFLASH_SCREENSHOT_API_KEY}&url=${search}&response_type=json&fresh=true&width=1920&height=1080`
+  const getScreenshot = () =>
+    fetch(URL, {
+      method: 'GET',
     })
+      .then((res) => {
+        console.log(res)
+      })
+      .then((url) => {
+        return url
+      })
+      .catch((e) => console.error(e))
 
   const handleSubmit = (e) => {
     e.preventDefault()
-    let test = getScreenshot
+    const test = getScreenshot()
     console.log(test)
     /*{ async () => {
         console.log('entering async')

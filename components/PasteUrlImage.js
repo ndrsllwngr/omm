@@ -28,12 +28,12 @@ export const PasteUrlImage = () => {
       <form onSubmit={handleSubmit}>
         <label>
           URL
-          <input type="text" name="imageUrl" onChange={(e) => setTemp(e.target.value)}></input>
+          <input type="text" name="imageUrl" onChange={(e) => setTemp(e.target.value)} />
         </label>
-        <input type="submit" value="Get image"></input>
+        <input type="submit" value="Get image" />
       </form>
       <div>
-        <img src={userImageUrl}></img>
+        <img src={userImageUrl} alt="" />
       </div>
     </div>
   )
