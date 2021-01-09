@@ -16,6 +16,7 @@ export const Slideshow = ({ memes }) => {
       {prevMeme.id && <SlideshowButton name="prev" changeSlide={prevMeme.id} />}
       <Slide meme={currentMeme} />
       {nextMeme.id && <SlideshowButton name="next" changeSlide={nextMeme.id} />}
+
       {/* // {slideIndex !== memes.length - 1 && (
       //   <SlideshowButton name="next" changeSlide={() => setSlideIndex({ type: 'next' })} />
       // )} */}
