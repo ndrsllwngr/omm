@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
-import firebase from '@/lib/firebase'
+// import firebase from '@/lib/firebase'
 
-const memeFirestore = firebase.firestore()
+// const memeFirestore = firebase.firestore()
 
 export const ScreenshotUrl = () => {
   const API_KEY = process.env.NEXT_PUBLIC_APIFLASH_SCREENSHOT_API_KEY
@@ -35,13 +35,9 @@ export const ScreenshotUrl = () => {
       <form onSubmit={handleSubmit}>
         <label>
           URL
-          <input
-            type="text"
-            name="screenShotUrl"
-            onChange={(e) => setSearch(e.target.value)}
-          ></input>
+          <input type="text" name="screenShotUrl" onChange={(e) => setSearch(e.target.value)} />
         </label>
-        <input type="submit" value="Get Screenshot"></input>
+        <input type="submit" value="Get Screenshot" />
       </form>
     </div>
   )
