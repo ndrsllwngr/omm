@@ -3,9 +3,9 @@ import PropTypes from 'prop-types'
 import SVG from 'react-inlinesvg'
 
 export const MemeRenderer = ({ meme }) => {
-  // useEffect(() => {
-  //   console.log({ meme })
-  // }, [meme])
+  useEffect(() => {
+    console.log({ meme })
+  }, [meme])
   return (
     <div>
       {/*<FabricCanvas jsonData={meme} />*/}
