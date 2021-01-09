@@ -18,7 +18,7 @@ export const MemeProgress = ({ otherFile, setOtherFile }) => {
 
   return (
     <div className="h-5 w-48 bg-purple-400 ">
-      <motion.div initial={{ width: 0 }} animate={{ width: progress }}></motion.div>
+      <motion.div initial={{ width: 0 }} animate={{ width: progress }} />
     </div>
   )
 }

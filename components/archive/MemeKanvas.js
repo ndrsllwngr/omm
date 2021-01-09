@@ -1,18 +1,19 @@
 import React, { useEffect, useState, useRef } from 'react'
 import { Stage, Layer } from 'react-konva'
 // import { useWindowSize } from '@/components/hooks/useWindowSize'
-import { TextBox } from '@/components/kanvas-utils/TextBox'
-import { MemeTemplate } from '@/components/kanvas-utils/MemeTemplate'
+import { TextBox } from '@/components/archive/kanvas-utils/TextBox'
+import { MemeTemplate } from '@/components/archive/kanvas-utils/MemeTemplate'
 import { useImmer } from 'use-immer'
 import { MEME_KANVAS_NEW_TEXT, MEME_KANVAS_INITIAL_STATE } from '@/lib/constants'
 import { MemeRenderer } from '@/components/MemeRenderer'
-import { DropDown } from '@/components/DropDown'
-import { ColorPicker } from '@/components/ColorPicker'
+import { DropDown } from '@/components/archive/DropDown'
+import { ColorPicker } from '@/components/archive/ColorPicker'
+import useMemeUpload from '@/components/hooks/useMemeUpload'
 
 // Download URI
 // function from https://stackoverflow.com/a/15832662/512042
 function downloadURI(uri, name) {
-  var link = document.createElement('a')
+  const link = document.createElement('a')
   link.download = name
   link.href = uri
   document.body.appendChild(link)
@@ -28,6 +29,7 @@ export const MemeKanvas = () => {
   const [meme, updateMeme] = useImmer(MEME_KANVAS_INITIAL_STATE)
   const [selectedId, selectShape] = useState(null)
   const [previewMode, setPreviewMode] = useState(false)
+  const [loading, success, error, setData] = useMemeUpload()
 
   function updateTextAttrs(textAttrs) {
     updateMeme((draft) => {
@@ -111,6 +113,11 @@ export const MemeKanvas = () => {
     downloadURI(uri, 'stage.png')
   }
 
+  const handleUpload = () => {
+    console.log('handleUpload')
+    setData(meme)
+  }
+
   return (
     <>
       <div className="flex flex-row pt-5 bg-custom-gray">
@@ -132,25 +139,22 @@ export const MemeKanvas = () => {
                 <MemeTemplate templateUrl={meme.template} />
               </Layer>
               <Layer ref={layerRef}>
-                {meme.content.map((text, i) => {
-                  console.log({ src: 'edit.js - map', text, i, selectedId })
-                  return (
-                    <TextBox
-                      key={text.id}
-                      layerRef={layerRef.current}
-                      containerRef={containerRef.current}
-                      textProps={{ ...text }}
-                      isSelected={text.id === selectedId}
-                      onSelect={() => {
-                        console.log(text.id)
-                        selectShape(text.id)
-                      }}
-                      onChange={(newAttrs) => {
-                        updateTextAttrs(newAttrs)
-                      }}
-                    />
-                  )
-                })}
+                {meme.content.map((text, _i) => (
+                  <TextBox
+                    key={text.id}
+                    layerRef={layerRef.current}
+                    containerRef={containerRef.current}
+                    textProps={{ ...text }}
+                    isSelected={text.id === selectedId}
+                    onSelect={() => {
+                      console.log(text.id)
+                      selectShape(text.id)
+                    }}
+                    onChange={(newAttrs) => {
+                      updateTextAttrs(newAttrs)
+                    }}
+                  />
+                ))}
               </Layer>
             </Stage>
           </div>
@@ -175,89 +179,83 @@ export const MemeKanvas = () => {
               />
             </div>
           </div>
-          {meme.content.map((text, i) => {
-            return (
-              <div key={text.id} className="flex flex-row">
-                <div className="flex flex-col mb-5">
-                  <div className="flex flex-col mb-2">
-                    <label htmlFor="caption_1" className="font-bold mb-1 text-gray-50 block">
-                      Text {text.id}
-                    </label>
+          {meme.content.map((text) => (
+            <div key={text.id} className="flex flex-row">
+              <div className="flex flex-col mb-5">
+                <div className="flex flex-col mb-2">
+                  <label htmlFor="caption_1" className="font-bold mb-1 text-gray-50 block">
+                    Text {text.id}
+                  </label>
+                  <input
+                    placeholder=""
+                    type="text"
+                    name={`text_${text.id}`}
+                    value={text.text}
+                    onChange={(event) => updateValue(text.id, 'text', event.target.value)}
+                    className="w-full px-4 py-3 rounded-lg shadow-sm focus:outline-none focus:shadow-outline text-gray-600 font-medium"
+                  />
+                </div>
+                <div className="flex flex-row space-x-2">
+                  <div className="flex relative">
+                    <span className="inline-flex items-center px-4 py-3 rounded-l-lg shadow-sm focus:outline-none focus:shadow-outline text-gray-600 font-source font-medium bg-gray-100">
+                      X
+                    </span>
                     <input
                       placeholder=""
-                      type="text"
-                      name={`text_${text.id}`}
-                      value={text.text}
-                      onChange={(event) => updateValue(text.id, 'text', event.target.value)}
-                      className="w-full px-4 py-3 rounded-lg shadow-sm focus:outline-none focus:shadow-outline text-gray-600 font-medium"
+                      type="number"
+                      name={`text_${text.id}_coor_x`}
+                      value={text.x}
+                      onChange={(event) => updateValue(text.id, 'x', parseInt(event.target.value))}
+                      className="w-full px-4 py-3 rounded-r-lg shadow-sm focus:outline-none focus:shadow-outline text-gray-600 font-medium"
                     />
                   </div>
-                  <div className="flex flex-row space-x-2">
-                    <div className="flex relative">
-                      <span className="inline-flex items-center px-4 py-3 rounded-l-lg shadow-sm focus:outline-none focus:shadow-outline text-gray-600 font-source font-medium bg-gray-100">
-                        X
-                      </span>
-                      <input
-                        placeholder=""
-                        type="number"
-                        name={`text_${text.id}_coor_x`}
-                        value={text.x}
-                        onChange={(event) =>
-                          updateValue(text.id, 'x', parseInt(event.target.value))
-                        }
-                        className="w-full px-4 py-3 rounded-r-lg shadow-sm focus:outline-none focus:shadow-outline text-gray-600 font-medium"
-                      />
-                    </div>
-                    <div className="flex relative ">
-                      <span className="inline-flex items-center px-4 py-3 rounded-l-lg shadow-sm focus:outline-none focus:shadow-outline text-gray-600 font-source font-medium bg-gray-100">
-                        Y
-                      </span>
-                      <input
-                        placeholder=""
-                        type="number"
-                        name={`text_${text.id}_coor_y`}
-                        value={text.y}
-                        onChange={(event) =>
-                          updateValue(text.id, 'y', parseInt(event.target.value))
-                        }
-                        className="w-full px-4 py-3 rounded-r-lg shadow-sm focus:outline-none focus:shadow-outline text-gray-600 font-medium"
-                      />
-                    </div>
-                    <div className="flex relative ">
-                      <span className="inline-flex items-center px-4 py-3 rounded-l-lg shadow-sm focus:outline-none focus:shadow-outline text-gray-600 font-source font-medium bg-gray-100">
-                        FONT
-                      </span>
-                      <input
-                        placeholder=""
-                        type="number"
-                        name={`text_${text.id}_font_size`}
-                        value={text.fontSize}
-                        onChange={(event) =>
-                          updateValue(text.id, 'fontSize', parseInt(event.target.value))
-                        }
-                        className="w-full px-4 py-3 rounded-r-lg shadow-sm focus:outline-none focus:shadow-outline text-gray-600 font-medium"
-                      />
-                    </div>
+                  <div className="flex relative ">
+                    <span className="inline-flex items-center px-4 py-3 rounded-l-lg shadow-sm focus:outline-none focus:shadow-outline text-gray-600 font-source font-medium bg-gray-100">
+                      Y
+                    </span>
+                    <input
+                      placeholder=""
+                      type="number"
+                      name={`text_${text.id}_coor_y`}
+                      value={text.y}
+                      onChange={(event) => updateValue(text.id, 'y', parseInt(event.target.value))}
+                      className="w-full px-4 py-3 rounded-r-lg shadow-sm focus:outline-none focus:shadow-outline text-gray-600 font-medium"
+                    />
                   </div>
-                  <div className="flex flex-row space-x-2">
-                    <div className="flex relative ">
-                      <DropDown
-                        currentStyle={text.fontStyle}
-                        options={['normal', 'bold', 'italic']}
-                        cb={(style) => updateValue(text.id, 'fontStyle', style)}
-                      />
-                    </div>
-                    <div className="flex relative">
-                      <ColorPicker
-                        selectedColor={text.fill}
-                        cb={(color) => updateValue(text.id, 'fill', color)}
-                      />
-                    </div>
+                  <div className="flex relative ">
+                    <span className="inline-flex items-center px-4 py-3 rounded-l-lg shadow-sm focus:outline-none focus:shadow-outline text-gray-600 font-source font-medium bg-gray-100">
+                      FONT
+                    </span>
+                    <input
+                      placeholder=""
+                      type="number"
+                      name={`text_${text.id}_font_size`}
+                      value={text.fontSize}
+                      onChange={(event) =>
+                        updateValue(text.id, 'fontSize', parseInt(event.target.value))
+                      }
+                      className="w-full px-4 py-3 rounded-r-lg shadow-sm focus:outline-none focus:shadow-outline text-gray-600 font-medium"
+                    />
+                  </div>
+                </div>
+                <div className="flex flex-row space-x-2">
+                  <div className="flex relative ">
+                    <DropDown
+                      currentStyle={text.fontStyle}
+                      options={['normal', 'bold', 'italic']}
+                      cb={(style) => updateValue(text.id, 'fontStyle', style)}
+                    />
+                  </div>
+                  <div className="flex relative">
+                    <ColorPicker
+                      color={text.fill}
+                      cb={(color) => updateValue(text.id, 'fill', color)}
+                    />
                   </div>
                 </div>
               </div>
-            )
-          })}
+            </div>
+          ))}
 
           <div className="flex flex-row space-x-5 mt-5">
             <button
@@ -273,11 +271,11 @@ export const MemeKanvas = () => {
               Download
             </button>
             <button
-              disabled={true}
+              disabled={loading}
               className="bg-gray-600 hover:bg-gray-700 focus:ring-gray-500 focus:ring-offset-gray-200 text-white transition ease-in duration-200 text-center text-base font-semibold py-2 px-4 rounded-lg shadow-md focus:outline-none focus:ring-2 focus:ring-offset-2"
-              onClick={handleExport}
+              onClick={handleUpload}
             >
-              Generate
+              Generate {!loading && success && 'success'} {!loading && error && 'error'}
             </button>
             <button
               className="bg-gray-600 hover:bg-gray-700 focus:ring-gray-500 focus:ring-offset-gray-200 text-white transition ease-in duration-200 text-center text-base font-semibold py-2 px-4 rounded-lg shadow-md focus:outline-none focus:ring-2 focus:ring-offset-2"

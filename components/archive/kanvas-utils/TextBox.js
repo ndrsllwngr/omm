@@ -28,13 +28,13 @@ export const TextBox = ({ textProps, isSelected, onSelect, onChange, layerRef, c
           // const node = shapeRef.current
           const newAttrs = {
             ...textProps,
-            x: e.target.x(),
-            y: e.target.y(),
+            x: parseInt(e.target.x()),
+            y: parseInt(e.target.y()),
           }
           // console.log({ src: 'TextBox.js - onDragEnd', newAttrs, textProps, target: e.target })
           onChange(newAttrs)
         }}
-        onTransformEnd={(e) => {
+        onTransformEnd={(_e) => {
           const node = shapeRef.current
           // console.log({ src: 'onTransformEnd', textProps, target: e.target, node })
           const scaleX = node.scaleX()
@@ -44,10 +44,11 @@ export const TextBox = ({ textProps, isSelected, onSelect, onChange, layerRef, c
           node.scaleY(1)
           const newAttrs = {
             ...textProps,
-            x: node.x(),
-            y: node.y(),
-            width: Math.max(5, node.width() * scaleX),
-            height: Math.max(node.height() * scaleY),
+            x: parseInt(node.x()),
+            y: parseInt(node.y()),
+            width: parseInt(Math.max(5, node.width() * scaleX)),
+            height: parseInt(Math.max(node.height() * scaleY)),
+            rotation: parseInt(shapeRef.current.rotation()),
           }
           // console.log({
           //   src: 'TextBox.js - onTransformEnd',
@@ -58,7 +59,7 @@ export const TextBox = ({ textProps, isSelected, onSelect, onChange, layerRef, c
           // })
           onChange(newAttrs)
         }}
-        onDblClick={(e) => {
+        onDblClick={(_e) => {
           const textNode = shapeRef.current
           const tr = trRef.current
           const layer = layerRef
@@ -176,7 +177,7 @@ export const TextBox = ({ textProps, isSelected, onSelect, onChange, layerRef, c
             }
           })
 
-          textarea.addEventListener('keydown', function (e) {
+          textarea.addEventListener('keydown', function (_e) {
             const scale = textNode.getAbsoluteScale().x
             setTextareaWidth(textNode.width() * scale)
             textarea.style.height = 'auto'

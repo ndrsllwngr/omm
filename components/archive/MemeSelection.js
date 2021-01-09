@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import Image from 'next/image'
-import { useMeme } from '@/components/context/memeContext'
+import { useMeme } from '@/components/archive/memeContext'
 
 /**
  * Offer various options to select a meme
@@ -32,7 +32,8 @@ export const MemeSelection = ({ memes }) => {
             src={memeContext.image_url}
             width={640}
             height={427}
-          ></img>
+            alt=""
+          />
         </div>
       </div>
       {/* Image URL input */}
@@ -47,7 +48,7 @@ export const MemeSelection = ({ memes }) => {
           value={memeContext.image_url}
           onChange={(event) => handleMemeContextChange('image_url', event.target.value)}
           className="w-full px-4 py-3 rounded-lg shadow-sm focus:outline-none focus:shadow-outline text-gray-600 font-medium"
-        ></input>
+        />
       </div>
       {/* Meme gallery */}
       <div className="mb-5">

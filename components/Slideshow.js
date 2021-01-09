@@ -1,53 +1,21 @@
-import React, { useEffect } from 'react'
+import React from 'react'
 import PropTypes from 'prop-types'
-// import { SlideshowButton } from '@/components/SlideshowButton'
+import { SlideshowButton } from '@/components/SlideshowButton'
 import { Slide } from '@/components/Slide'
-import { useRouter } from 'next/router'
-
-// const reducer = (slideIndex, arg) => {
-//   switch (arg.type) {
-//     case 'next':
-//       return ++slideIndex
-//     case 'prev':
-//       return slideIndex === 0 ? 0 : --slideIndex
-//     default:
-//       console.error('Argument not supportet.', arg)
-//   }
-// }
+import { SINGLEVIEWNAVIGATION } from '@/lib/constants'
 
 export const Slideshow = ({ memes }) => {
-  // const [slideIndex, setSlideIndex] = useReducer(reducer, 0)
-  const router = useRouter()
+  const prevMeme = memes[SINGLEVIEWNAVIGATION.prev]
+  const currentMeme = memes[SINGLEVIEWNAVIGATION.current]
+  const nextMeme = memes[SINGLEVIEWNAVIGATION.next]
 
-  useEffect(() => {
-    console.log(memes)
-  }, [memes])
-  //console.log(memes[1])
-  //const meme = memes[slideIndex > memes.length - 1 ? memes.length - 1 : slideIndex]
-  const meme = memes[1]
-  if (!memes || !meme) return <div>loading..</div>
+  if (!memes || !currentMeme) return <div>loading..</div>
   return (
     <div className="flex flex-row justify-center">
-      {/* {slideIndex !== 0 && (
-        <SlideshowButton name="prev" changeSlide={() => setSlideIndex({ type: 'prev' })} />
-      )} */}
-      <button
-        className="bg-red-900 hover:bg-blue-dark text-black font-bold py-2 px-4 rounded"
-        name="prev"
-        onClick={(e) => {
-          e.preventDefault()
-          router.push(memes[0].id)
-        }}
-      ></button>
-      <Slide meme={meme} />
-      <button
-        className="bg-red-900 hover:bg-blue-dark text-black font-bold py-2 px-4 rounded"
-        name="prev"
-        onClick={(e) => {
-          e.preventDefault()
-          router.push(memes[2].id)
-        }}
-      ></button>
+      {/*alternative would be to use css disbable*/}
+      {prevMeme.id && <SlideshowButton name="prev" changeSlide={prevMeme.id} />}
+      <Slide meme={currentMeme} />
+      {nextMeme.id && <SlideshowButton name="next" changeSlide={nextMeme.id} />}
       {/* // {slideIndex !== memes.length - 1 && (
       //   <SlideshowButton name="next" changeSlide={() => setSlideIndex({ type: 'next' })} />
       // )} */}

@@ -10,15 +10,13 @@ export default function User() {
   const [Memes, setMemes] = useState([])
 
   useEffect(() => {
-    //TODO subscribe adden
+    // TODO subscribe to get updates
     async function getMemes() {
       let Meme = []
       const db = firebase.firestore()
-      const memeRef = db.collection('memes')
+      const memeRef = db.collection('memes-tmp')
 
       const doc = await memeRef.doc(router.query.id).get()
-      const templateData = (await doc.data().template.get()).data()
-      const imgPath = await firebase.storage().ref(templateData.img).getDownloadURL()
 
       const docprev = await memeRef
         .where('created_at', '<', doc.data().created_at)
@@ -33,7 +31,7 @@ export default function User() {
       Meme.push({
         id: !(docprev.docs.length > 0) ? '' : docprev.docs[0].id,
       })
-      Meme.push({ id: doc.id, ...doc.data(), imgPath })
+      Meme.push({ id: doc.id, ...doc.data() })
       Meme.push({
         id: !(docnext.docs.length > 0) ? '' : docnext.docs[0].id,
       })
@@ -43,7 +41,6 @@ export default function User() {
 
     getMemes()
       .then((res) => {
-        //console.log({ res })
         setMemes(res)
       })
       .catch(function (error) {
@@ -64,16 +61,8 @@ export default function User() {
       <Navbar />
       <div> {router.query.id}</div>
       <div> {Memes[1].id}</div>
-      <img className="w-10" src={Memes[1].imgPath} />
-      {/* <button
-        className="w-20 h-20 absolute"
-        name="prev"
-        onClick={(e) => {
-          e.preventDefault()
-          router.push(Memes[Memes.length - 1].id)
-        }}
-      ></button> */}
-      <Slideshow memes={Memes}></Slideshow>
+      <img alt="" className="w-10" src={Memes[1].template} />
+      <Slideshow memes={Memes} />
     </div>
   )
 }

@@ -1,11 +1,11 @@
 import React, { useEffect } from 'react'
-import { useRouter } from 'next/router'
+//import { useRouter } from 'next/router'
 import { useRequireAuth } from '@/components/hooks/useRequireAuth'
+import Link from 'next/link'
 import firebase from '@/lib/firebase'
 
 //https://tailwindcomponents.com/component/responsive-navbar-2
 export const Navbar = () => {
-  const router = useRouter()
   const auth = useRequireAuth()
 
   useEffect(() => {
@@ -21,12 +21,14 @@ export const Navbar = () => {
     <nav className="flex items-center justify-between flex-wrap bg-custom-green py-4 lg:px-12 shadow border-solid ">
       {/* Logo */}
       <div className="flex lg:w-auto justify-between w-full lg:border-b-0 pl-6 pr-2 border-solid border-b-2 border-gray-300 pb-5 lg:pb-0">
-        <div
-          onClick={() => router.push('/')}
+        <Link
+          href={'/'}
           className="flex cursor-pointer items-center flex-shrink-0 text-gray-800 mr-16"
         >
-          <span className="font-semibold text-xl tracking-tight">My Navbar</span>
-        </div>
+          <a>
+            <span className="font-semibold text-xl tracking-tight">My Navbar</span>
+          </a>
+        </Link>
         <div className="block lg:hidden ">
           <button
             id="nav"
@@ -50,7 +52,7 @@ export const Navbar = () => {
           type="search"
           name="search"
           placeholder="Search"
-        ></input>
+        />
         <button type="submit" className="absolute right-0 top-0 mt-3 mr-2">
           {/* <svg
               className="text-gray-600 h-4 w-4 fill-current"
@@ -76,12 +78,11 @@ export const Navbar = () => {
           >
             Login
           </button>
-          <button
-            onClick={() => router.push('/create')}
-            className=" block text-md px-4  ml-2 py-2 rounded text-blue-700 font-bold hover:text-white mt-4 hover:bg-blue-700 lg:mt-0"
-          >
-            Create
-          </button>
+          <Link href={'/create'}>
+            <a className=" block text-md px-4  ml-2 py-2 rounded text-blue-700 font-bold hover:text-white mt-4 hover:bg-blue-700 lg:mt-0">
+              Create
+            </a>
+          </Link>
         </div>
       </div>
     </nav>

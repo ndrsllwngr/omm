@@ -1,15 +1,16 @@
-import React, { useState } from 'react'
+import React from 'react'
 import { HtmlHead } from '@/components/HtmlHead'
-import { MemeKanvas } from '@/components/MemeKanvas'
 import { Navbar } from '@/components/Navbar'
+import { MemeEditor } from '@/components/meme/MemeEditor'
+import { ImageSelection } from '@/components/ImageSelection'
 
 const CreatePage = () => {
-  const [test, setTest] = useState()
   return (
     <>
       <HtmlHead />
       <Navbar />
-      <MemeKanvas />
+      <ImageSelection />
+      <MemeEditor />
     </>
   )
 }
