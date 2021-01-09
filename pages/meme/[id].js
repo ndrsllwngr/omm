@@ -20,8 +20,9 @@ export default function User() {
     }
     async function getRandomMeme() {
       let memeId = await firebase.firestore().collection('memes-tmp').get()
+      console.log(memeId)
       let newRandom = getRandomInt(0, memeId.size - 1)
-      if (random === newRandom) {
+      while (random === newRandom) {
         newRandom = getRandomInt(0, memeId.size - 1)
       }
       setRandom(newRandom)
