@@ -1,10 +1,11 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { fabric } from 'fabric'
 import SVG from 'react-inlinesvg'
 import { FabricCanvas } from '@/components/meme/FabricCanvas'
 import { MemeEditorText } from '@/components/meme/MemeEditorText'
 import { useFabricCanvas } from '@/components/context/fabricContext'
 import useMemeUpload from '@/components/hooks/useMemeUpload'
+import { useTemplate } from '@/components/context/templateContext'
 
 // eslint-disable-next-line react/prop-types
 const Button = ({ children, type = 'button', disabled = false, onClick }) => {
@@ -29,9 +30,7 @@ const Button = ({ children, type = 'button', disabled = false, onClick }) => {
 export const MemeEditor = () => {
   const { canvas } = useFabricCanvas()
   const [imgURL, setImgURL] = useState('')
-  const [templateURL, setTemplateURL] = useState(
-    'https://socialistmodernism.com/wp-content/uploads/2017/07/placeholder-image.png'
-  )
+  const [template] = useTemplate()
   const [title, setTitle] = useState('')
   const [svgExport, setSvgExport] = useState('')
   const [jsonExport, setJsonExport] = useState({})
@@ -49,16 +48,19 @@ export const MemeEditor = () => {
     })
   }
 
-  const addTemplate = (e, url = 'https://imgflip.com/s/meme/Futurama-Fry.jpg') => {
-    e.preventDefault()
-    new fabric.Image.fromURL(url, (img) => {
-      img.scale(0.75)
-      customSelect(img)
-      canvas.add(img)
-      canvas.renderAll()
-      setTemplateURL(url)
-    })
-  }
+  useEffect(() => {
+    const addTemplate = (url = 'https://imgflip.com/s/meme/Futurama-Fry.jpg') => {
+      if (canvas.getObjects)
+        new fabric.Image.fromURL(url, (img) => {
+          img.scale(0.75)
+          customSelect(img)
+          img.set({ id: 'TEMPLATE' })
+          canvas.add(img)
+          canvas.renderAll()
+        })
+    }
+    if (canvas) addTemplate(template.url)
+  }, [template])
 
   const addText = () => {
     const txt = new fabric.Textbox('Add Text', {
@@ -94,7 +96,7 @@ export const MemeEditor = () => {
     const newObj = {
       ...json,
       title,
-      template: templateURL,
+      template: template.url,
       svg,
     }
     console.log({ newObj })
@@ -129,7 +131,7 @@ export const MemeEditor = () => {
       <div className="col-span-1 h-full rounded-lg bg-gray-100 flex flex-col justify-start space-y-2">
         <Button onClick={handlePreview}>{previewMode ? 'Hide Preview' : 'Show Preview'}</Button>
         <Button onClick={addText}>Add Textbox</Button>
-        <Button onClick={addTemplate}>Add Template</Button>
+        {/*<Button onClick={addTemplate}>Add Template</Button>*/}
         <Button onClick={clearAll}>Clear All</Button>
         <Button onClick={canvasEvents}>Test</Button>
         <Button onClick={exportSVG}>Export to SVG</Button>
