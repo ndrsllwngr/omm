@@ -49,17 +49,30 @@ export const MemeEditor = () => {
   }
 
   useEffect(() => {
-    const addTemplate = (url = 'https://imgflip.com/s/meme/Futurama-Fry.jpg') => {
-      if (canvas.getObjects)
-        new fabric.Image.fromURL(url, (img) => {
-          img.scale(0.75)
-          customSelect(img)
-          img.set({ id: 'TEMPLATE' })
-          canvas.add(img)
-          canvas.renderAll()
-        })
+    if (canvas) {
+      const canvasObjects = canvas.getObjects('image')
+      const templateIndex = canvasObjects.find((el) => el.id === 'TEMPLATE')
+      console.log({ src: 'useEffect', canvasObjects, templateIndex, template })
+      if (!templateIndex) {
+        const addTemplate = (url = 'https://imgflip.com/s/meme/Futurama-Fry.jpg') => {
+          if (canvas.getObjects)
+            new fabric.Image.fromURL(url, (img) => {
+              img.scale(0.75)
+              customSelect(img)
+              img.set({ id: 'TEMPLATE' })
+              canvas.add(img)
+              canvas.renderAll()
+            })
+        }
+        if (canvas) addTemplate(template.url)
+      } else {
+        templateIndex.setSrc(template.url)
+        templateIndex.canvas.requestRenderAll()
+        templateIndex.canvas.renderAll()
+        canvas.requestRenderAll()
+        canvas.renderAll()
+      }
     }
-    if (canvas) addTemplate(template.url)
   }, [canvas, template])
 
   const addText = () => {

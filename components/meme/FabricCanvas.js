@@ -2,7 +2,7 @@ import React, { useEffect, useLayoutEffect, useRef, useCallback } from 'react'
 import { useFabricCanvas, useFabricActiveObject } from '@/components/context/fabricContext'
 
 // eslint-disable-next-line react/prop-types
-export const FabricCanvas = ({ jsonData = null, width = 816, height = 400 }) => {
+export const FabricCanvas = ({ jsonData = null, width = 500, height = 400 }) => {
   const canvasEl = useRef(null)
   const { canvas, initCanvas, loadFromJSON } = useFabricCanvas()
   const { setActiveObject } = useFabricActiveObject()
