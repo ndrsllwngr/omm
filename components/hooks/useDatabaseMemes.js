@@ -64,6 +64,7 @@ export const useDatabaseMemes = (limit) => {
   useEffect(() => {
     //https://dev.to/bmcmahen/using-firebase-with-react-hooks-21ap
     //https://blog.logrocket.com/react-hooks-with-firebase-firestore/
+    //TODOuse callbackl to prevent dependency issues
     switch (filter) {
       case 'Latest':
         resolveMemes(loadNextMemes('created_at', 'desc'))

@@ -10,7 +10,6 @@ export default function User() {
 
   const [Memes, setMemes] = useState([])
   const [id, setId] = useState([])
-  const [random, setRandom] = useState([])
 
   useEffect(() => {
     const getRandomInt = (min, max) => {
@@ -19,19 +18,19 @@ export default function User() {
       return Math.floor(Math.random() * (max - min + 1)) + min
     }
     async function getRandomMeme() {
-      let memeId = await firebase.firestore().collection('memes-tmp').get()
-      console.log(memeId)
-      let newRandom = getRandomInt(0, memeId.size - 1)
-      while (random === newRandom) {
-        newRandom = getRandomInt(0, memeId.size - 1)
-      }
-      setRandom(newRandom)
-      let doc = memeId.docs[newRandom]
-      return doc.id
-    }
+      let memeCollection = await firebase.firestore().collection('memes-tmp').get()
+      const ids = []
+      memeCollection.forEach((meme) => ids.push(meme.id))
 
-    getRandomMeme().then((res) => setId(res))
-  }, [router.query.id])
+      let random = getRandomInt(0, ids.length - 1)
+
+      while (ids[random] === router.query.id) {
+        random = getRandomInt(0, ids.length - 1)
+      }
+      setId(ids[random])
+    }
+    getRandomMeme()
+  }, [router.query.id, setId])
 
   useEffect(() => {
     // TODO subscribe to get updates
@@ -92,9 +91,6 @@ export default function User() {
           <span className="font-semibold text-xl tracking-tight">Random Meme</span>
         </a>
       </Link>
-      {/* <button onClick={handleClick} className="w-full h-8">
-        Random
-      </button> */}
     </div>
   )
 }
