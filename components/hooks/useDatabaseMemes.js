@@ -12,7 +12,6 @@ export const useDatabaseMemes = (limit) => {
     setFilter(f)
   }
   const handleClick = () => {
-    //switch case to handle resolved memes
     console.warn('handleClick')
     switch (filter) {
       case 'Latest':
@@ -44,7 +43,6 @@ export const useDatabaseMemes = (limit) => {
     } else {
       query = loadCreds().orderBy('' + c + '')
     }
-    //let query = loadCreds().orderBy('created_at', 'desc')
     if (latestDoc) {
       query = query.startAfter(latestDoc)
     }
@@ -65,28 +63,6 @@ export const useDatabaseMemes = (limit) => {
       console.log({ error })
     })
   }
-
-  // async function getLatestMemes() {
-  //   const docs = await loadCreds().orderBy('created_at').get()
-  //   let dbMemes = []
-  //   for (let i = 0; i < docs.size; i++) {
-  //     const doc = docs.docs[i]
-  //     dbMemes.push({ id: doc.id, ...doc.data() })
-  //   }
-  //   return dbMemes
-  // }
-
-  // async function getOldestMemes() {
-  //   const docs = await loadCreds().orderBy('created_at').limit(2).get()
-  //   let dbMemes = []
-  //   for (let i = 0; i < docs.size; i++) {
-  //     const doc = docs.docs[i]
-  //     dbMemes.push({ id: doc.id, ...doc.data() })
-  //   }
-  //   return dbMemes
-  // }
-
-  //onfilter switch erase meme array
   useEffect(() => {
     //https://dev.to/bmcmahen/using-firebase-with-react-hooks-21ap
     //https://blog.logrocket.com/react-hooks-with-firebase-firestore/
