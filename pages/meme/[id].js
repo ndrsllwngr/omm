@@ -3,14 +3,31 @@ import { useRouter } from 'next/router'
 import firebase from '@/lib/firebase'
 import { Slideshow } from '@/components/Slideshow'
 import { Navbar } from '@/components/Navbar'
+import Link from 'next/link'
 
 export default function User() {
   const router = useRouter()
 
   const [Memes, setMemes] = useState([])
 
+  const getRandomInt = (min, max) => {
+    min = Math.ceil(min)
+    max = Math.floor(max)
+    return Math.floor(Math.random() * (max - min + 1)) + min
+  }
+  const randomMeme = async () => {
+    let memeId = await firebase.firestore().collection('memes-tmp').get()
+    let doc = memeId.docs[getRandomInt(0, memeId.size - 1)]
+    return doc.id
+  }
+  const handleClick = (e) => {
+    e.preventDefault()
+    randomMeme().then((id) => router.push('/meme/' + id))
+  }
+
   useEffect(() => {
     // TODO subscribe to get updates
+
     async function getMemes() {
       let Meme = []
       const db = firebase.firestore()
@@ -63,6 +80,14 @@ export default function User() {
       <div> {Memes[1].id}</div>
       <img alt="" className="w-10" src={Memes[1].template} />
       <Slideshow memes={Memes} />
+      {/* <Link href={'/memes/' + handleClick}>
+        <a className="flex cursor-pointer items-center  flex-shrink-0 text-gray-800 mr-16">
+          <span className="font-semibold text-xl bg-black tracking-tight">My Navbar</span>
+        </a>
+      </Link> */}
+      <button onClick={handleClick} className="w-full h-8">
+        Random
+      </button>
     </div>
   )
 }
