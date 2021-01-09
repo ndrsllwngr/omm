@@ -11,10 +11,10 @@ export const Navbar = () => {
   useEffect(() => {
     if (auth.user) {
       // You know that the user is loaded: either logged in or out!
-      console.log(auth.user)
+      //console.log(auth.user)
     }
     // You also have your firebase app initialized
-    console.log({ firebase })
+    //console.log({ firebase })
   }, [auth.user])
 
   return (

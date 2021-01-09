@@ -1,22 +1,30 @@
-import React, { useEffect, useLayoutEffect, useRef, useCallback } from 'react'
-import { useFabricCanvas, useFabricActiveObject } from '@/components/context/fabricContext'
+import React, { useEffect, useLayoutEffect, useCallback } from 'react'
+import {
+  useFabricJson,
+  useFabricCanvas,
+  useFabricActiveObject,
+} from '@/components/context/fabricContext'
 
 // eslint-disable-next-line react/prop-types
-export const FabricCanvas = ({ jsonData = null, width = 816, height = 400 }) => {
-  const canvasEl = useRef(null)
-  const { canvas, initCanvas, loadFromJSON } = useFabricCanvas()
+export const FabricCanvas = ({ jsonData = null, width = 500, height = 400 }) => {
+  const { json, setJson } = useFabricJson()
+  const { canvas, initCanvas, loadFromJSON, canvasRef } = useFabricCanvas()
   const { setActiveObject } = useFabricActiveObject()
 
   useLayoutEffect(() => {
+    console.log({ src: 'FabricCanvas.useLayoutEffect', jsonData, json, canvas, canvasRef })
     if (jsonData) {
-      loadFromJSON(canvasEl.current, jsonData)
+      loadFromJSON(jsonData)
+    } else if (json) {
+      loadFromJSON(json)
+      setJson(null)
     } else {
-      initCanvas(canvasEl.current, {
+      initCanvas({
         width: width,
         height: height,
       })
     }
-  }, [canvasEl, initCanvas, loadFromJSON, jsonData, height, width])
+  }, [])
 
   const updateActiveObject = useCallback(
     (e) => {
@@ -34,7 +42,7 @@ export const FabricCanvas = ({ jsonData = null, width = 816, height = 400 }) => 
       if (!e) {
         return
       }
-      console.log('onObjectModified', e.target)
+      console.log({ src: 'onObjectModified', 'e.target': e.target })
       canvas.renderAll()
     },
     [canvas]
@@ -60,7 +68,7 @@ export const FabricCanvas = ({ jsonData = null, width = 816, height = 400 }) => 
   return (
     <div>
       <canvas
-        ref={canvasEl}
+        ref={canvasRef}
         id="fabric-canvas"
         width={800}
         height={400}
