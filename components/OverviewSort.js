@@ -11,11 +11,10 @@ export const OverviewSort = ({ filter, onFilterChange }) => {
   const [localFilter, setFilter] = useState(filter)
 
   //handle statefunction für state und callback
-  const handleClick = (filter) => {
-    onFilterChange(filter)
-    setFilter(filter)
+  const handleClick = (f) => {
+    onFilterChange(f)
+    setFilter(f)
   }
-
   return (
     <div className="relative block text-left">
       <div>
@@ -47,7 +46,7 @@ export const OverviewSort = ({ filter, onFilterChange }) => {
 
       {/* <!--
 	  Dropdown panel, show/hide based on dropdown state.
-  
+
 	  Entering: "transition ease-out duration-100"
 		From: "transform opacity-0 scale-95"
 		To: "transform opacity-100 scale-100"
@@ -72,6 +71,13 @@ export const OverviewSort = ({ filter, onFilterChange }) => {
               role="menuitem"
             >
               Latest
+            </div>
+            <div
+              onClick={() => handleClick('Oldest')}
+              className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900"
+              role="menuitem"
+            >
+              Oldest
             </div>
             {/* <div
               onClick={() => handleClick('Views')}
