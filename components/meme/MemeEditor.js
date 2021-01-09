@@ -60,7 +60,7 @@ export const MemeEditor = () => {
         })
     }
     if (canvas) addTemplate(template.url)
-  }, [template])
+  }, [canvas, template])
 
   const addText = () => {
     const txt = new fabric.Textbox('Add Text', {

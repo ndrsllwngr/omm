@@ -1,16 +1,22 @@
 import { ThemeProvider } from 'next-themes'
 import { addDecorator } from '@storybook/react'
-import UserProvider from '@/components/context/authContext'
-import { MemeProvider } from '@/components/archive/memeContext'
 
 import '../styles/tailwind.css'
+import { TemplateProvider } from "@/components/context/templateContext";
+import { FabricProvider } from "@/components/context/fabricContext";
+import AuthProvider from "@/components/context/authContext";
+import React from "react";
 
 addDecorator((story) => (
-  <UserProvider>
+  <AuthProvider>
     <ThemeProvider attribute="class" defaultTheme="system">
-      <MemeProvider>{story()}</MemeProvider>
+      <TemplateProvider>
+        <FabricProvider>
+          {story()}
+        </FabricProvider>
+      </TemplateProvider>
     </ThemeProvider>
-  </UserProvider>
+  </AuthProvider>
 ))
 
 export const parameters = {

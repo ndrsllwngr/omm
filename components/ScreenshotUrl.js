@@ -1,25 +1,33 @@
 import React, { useState } from 'react'
-// import useStorage from '@/lib/useStorage'
+// import firebase from '@/lib/firebase'
+
+// const memeFirestore = firebase.firestore()
 
 export const ScreenshotUrl = () => {
-  const [screenshotUrl] = useState('')
-  const [temp, setTemp] = useState('')
-  // const { setFile } = useStorage()
+  const API_KEY = process.env.NEXT_PUBLIC_APIFLASH_SCREENSHOT_API_KEY
+  const [search, setSearch] = useState('')
+  const URL = `https://api.apiflash.com/v1/urltoimage?access_key=${API_KEY}&url=${search}&response_type=json&fresh=true&width=1920&height=1080`
+  console.log('key:', API_KEY)
 
-  const token = process.env.NEXT_PUBLIC_SCREENSHOT_API_KEY
-  const output = 'image'
-  const width = 1920
-  const height = 1080
+  const getScreenshot = fetch(URL, {
+    method: 'GET',
+  })
+    .then((res) => res.json())
+    .then((url) => {
+      return url
+    })
 
-  const handleSubmit = (evt) => {
-    console.log('enter')
-    fetch(
-      `https://screenshotapi.net/api/v1/screenshot?token=${token}&url=${temp}&width=${width}&height=${height}&output=${output}`,
-      { method: 'GET' }
-    )
-      .then((res) => res.binary())
-      .then((data) => console.log(data))
-    evt.preventDefaul()
+  const handleSubmit = (e) => {
+    e.preventDefault()
+    let test = getScreenshot
+    console.log(test)
+    /*{ async () => {
+        console.log('entering async')
+        await memeFirestore.collection('templates').add({
+          created_at: firebase.firestore.Timestamp.now(),
+          url: test,
+        })
+      }}}*/
   }
 
   return (
@@ -27,13 +35,10 @@ export const ScreenshotUrl = () => {
       <form onSubmit={handleSubmit}>
         <label>
           URL
-          <input type="text" name="screenShotUrl" onChange={(e) => setTemp(e.target.value)}></input>
+          <input type="text" name="screenShotUrl" onChange={(e) => setSearch(e.target.value)} />
         </label>
-        <input type="submit" value="Get Screenshot"></input>
+        <input type="submit" value="Get Screenshot" />
       </form>
-      <div>
-        <img src={screenshotUrl}></img>
-      </div>
     </div>
   )
 }
