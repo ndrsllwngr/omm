@@ -3,11 +3,34 @@ import { useRouter } from 'next/router'
 import firebase from '@/lib/firebase'
 import { Slideshow } from '@/components/Slideshow'
 import { Navbar } from '@/components/Navbar'
+import Link from 'next/link'
 
 export default function User() {
   const router = useRouter()
 
   const [Memes, setMemes] = useState([])
+  const [id, setId] = useState([])
+
+  useEffect(() => {
+    const getRandomInt = (min, max) => {
+      min = Math.ceil(min)
+      max = Math.floor(max)
+      return Math.floor(Math.random() * (max - min + 1)) + min
+    }
+    async function getRandomMeme() {
+      let memeCollection = await firebase.firestore().collection('memes-tmp').get()
+      const ids = []
+      memeCollection.forEach((meme) => ids.push(meme.id))
+
+      let random = getRandomInt(0, ids.length - 1)
+
+      while (ids[random] === router.query.id) {
+        random = getRandomInt(0, ids.length - 1)
+      }
+      setId(ids[random])
+    }
+    getRandomMeme()
+  }, [router.query.id, setId])
 
   useEffect(() => {
     // TODO subscribe to get updates
@@ -63,6 +86,11 @@ export default function User() {
       <div> {Memes[1].id}</div>
       <img alt="" className="w-10" src={Memes[1].template} />
       <Slideshow memes={Memes} />
+      <Link href={`/meme/${id}`}>
+        <a className="flex cursor-pointer items-center w-full h-8  text-gray-800 mr-16">
+          <span className="font-semibold text-xl tracking-tight">Random Meme</span>
+        </a>
+      </Link>
     </div>
   )
 }
