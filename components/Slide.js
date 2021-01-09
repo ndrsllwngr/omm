@@ -1,11 +1,23 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { MemeRenderer } from '@/components/MemeRenderer'
+import { useFabricJson } from '@/components/context/fabricContext'
+import { useRouter } from 'next/router'
 
 export const Slide = ({ meme }) => {
+  const { setJson } = useFabricJson()
+  const router = useRouter()
   return (
     <div className="flex-col max-w-md">
       <div className="title">{meme.title}</div>
+      <button
+        onClick={() => {
+          setJson(meme)
+          router.push('/create')
+        }}
+      >
+        Copy Meme
+      </button>
       <MemeRenderer meme={meme} />
       {/*TODO add additional information*/}
       <div className="slide-info">{meme.title}</div>

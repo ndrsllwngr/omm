@@ -6,6 +6,7 @@ import { MemeEditorText } from '@/components/meme/MemeEditorText'
 import { useFabricCanvas } from '@/components/context/fabricContext'
 import useMemeUpload from '@/components/hooks/useMemeUpload'
 import { useTemplate } from '@/components/context/templateContext'
+import { MemeEditorImage } from '@/components/meme/MemeEditorImage'
 
 // eslint-disable-next-line react/prop-types
 const Button = ({ children, type = 'button', disabled = false, onClick }) => {
@@ -46,13 +47,25 @@ export const MemeEditor = () => {
       canvas.renderAll()
       setImgURL('')
     })
+    console.log({ src: 'MemeEditor.addImg', url, canvas })
+  }
+
+  const addText = () => {
+    const txt = new fabric.Textbox('Add Text', {
+      shadow: 'rgba(0,0,0,0.3) 5px 5px 5px',
+      height: 200,
+      width: 300,
+    })
+    customSelect(txt)
+    canvas.add(txt)
+    canvas.renderAll()
+    console.log({ src: 'MemeEditor.addText', txt, canvas })
   }
 
   useEffect(() => {
     if (canvas) {
       const canvasObjects = canvas.getObjects('image')
       const templateIndex = canvasObjects.find((el) => el.id === 'TEMPLATE')
-      console.log({ src: 'useEffect', canvasObjects, templateIndex, template })
       if (!templateIndex) {
         const addTemplate = (url = 'https://imgflip.com/s/meme/Futurama-Fry.jpg') => {
           if (canvas.getObjects)
@@ -64,34 +77,26 @@ export const MemeEditor = () => {
               canvas.renderAll()
             })
         }
-        if (canvas) addTemplate(template.url)
+        addTemplate(template.url)
+        console.log('MemeEditor.useEffect: CREATE template')
       } else {
         templateIndex.setSrc(template.url)
         templateIndex.canvas.requestRenderAll()
         templateIndex.canvas.renderAll()
         canvas.requestRenderAll()
         canvas.renderAll()
+        console.log('MemeEditor.useEffect: REPLACE template')
       }
+      console.log({ src: 'MemeEditor.useEffect', canvas, canvasObjects, templateIndex, template })
     }
   }, [canvas, template])
-
-  const addText = () => {
-    const txt = new fabric.Textbox('Add Text', {
-      shadow: 'rgba(0,0,0,0.3) 5px 5px 5px',
-      height: 200,
-      width: 300,
-    })
-    customSelect(txt)
-    canvas.add(txt)
-    canvas.renderAll()
-  }
 
   const exportSVG = () => {
     const svg = canvas.toSVG()
     const json = canvas.toJSON()
-    console.log({ svg, json })
     setSvgExport(svg)
     setJsonExport(json)
+    console.log({ src: 'MemeEditor.exportSVG', svg, json })
   }
 
   const handlePreview = () => {
@@ -112,7 +117,7 @@ export const MemeEditor = () => {
       template: template.url,
       svg,
     }
-    console.log({ newObj })
+    console.log({ src: 'MemeEditor.generateMeme', newObj, svg, json })
     setData(newObj)
   }
 
@@ -137,6 +142,7 @@ export const MemeEditor = () => {
     <div className="p-8 grid grid-cols-3 gap-6">
       <div className="col-span-3 h-16 rounded-lg bg-gray-100 flex items-center justify-start space-x-2 pl-2">
         <MemeEditorText />
+        <MemeEditorImage />
       </div>
       <div className="col-span-2 h-full rounded-lg bg-transparent flex justify-center">
         <FabricCanvas />
