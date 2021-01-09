@@ -11,6 +11,10 @@ import {
   setActiveStyle,
   getObjectCaching,
   setObjectCaching,
+  isBold,
+  toggleBold,
+  setTextAlign,
+  setFontFamily,
 } from '@/components/meme/FabricUtils'
 //import { getActiveStyle, setActiveProp, setActiveStyle } from '@/components/meme/utils'
 
@@ -19,6 +23,8 @@ export const MemeEditorText = (_props) => {
   const { activeObject } = useFabricActiveObject()
   const [enabledTools, setEnabledTools] = useState(false)
   const [fontStyle, setFontStyle] = useState('normal')
+  const [textAlignState, setTextAlignState] = useState('Left')
+  const [fontFamilyState, setFontFamilyState] = useState('Times New Roman')
   const [fontSize, setFontSize] = useState(16)
   const [fill, setFill] = useState('#000000')
 
@@ -47,6 +53,17 @@ export const MemeEditorText = (_props) => {
         setActiveStyle(changedKey, changedValue, activeObject, canvas)
         setFill(changedValue)
         break
+      case 'textAlign':
+        setTextAlign(changedValue, activeObject, canvas)
+        setTextAlignState(changedValue)
+        break
+      case 'fontFamily':
+        setFontFamily(changedValue, activeObject, canvas)
+        setFontFamilyState(changedValue)
+        break
+      case 'fontWeight':
+        toggleBold(activeObject, canvas)
+        break
       default:
         console.log('Unsupported property', changedKey)
     }
@@ -66,9 +83,9 @@ export const MemeEditorText = (_props) => {
         <>
           <select value={fontStyle} onChange={(e) => handleChange('fontStyle', e.target.value)}>
             <option value="normal">Normal</option>
-            <option value="bold">Bold</option>
             <option value="italic">Italic</option>
           </select>
+          <button onClick={() => handleChange('fontWeight', canvas)}>Bold</button>
           <input
             type="range"
             id="fontSize"
@@ -84,6 +101,22 @@ export const MemeEditorText = (_props) => {
             value={fill}
             onChange={(e) => handleChange('fill', e.target.value)}
           />
+          <select
+            value={textAlignState}
+            onChange={(e) => handleChange('textAlign', e.target.value)}
+          >
+            <option value="Left">Left</option>
+            <option value="Center">Center</option>
+            <option value="Right">Right</option>
+          </select>
+          <select
+            value={fontFamilyState}
+            onChange={(e) => handleChange('fontFamily', e.target.value)}
+          >
+            <option value="Times New Roman">Times New Roman</option>
+            <option value="Impact">Impact</option>
+            <option value="Courier">Courier</option>
+          </select>
           <button onClick={() => sendBackwards(canvas)}>Send backwards</button>
           <button onClick={() => sendToBack(canvas)}>Send to back</button>
           <button onClick={() => bringForward(canvas)}>Bring forwards</button>
