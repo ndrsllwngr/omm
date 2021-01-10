@@ -30,10 +30,11 @@ export default function User() {
       setId(ids[random])
     }
     getRandomMeme()
-  }, [router.query.id, setId])
+  }, [router.query.id])
 
   useEffect(() => {
     // TODO subscribe to get updates
+    // TODO pass order by
     async function getMemes() {
       let Meme = []
       const db = firebase.firestore()
