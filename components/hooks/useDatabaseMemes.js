@@ -5,17 +5,22 @@ export const useDatabaseMemes = (limit) => {
   const [Memes, setMemes] = useState([])
   const [filter, setFilter] = useState('Latest')
   const [latestDoc, setLatestDoc] = useState(null)
+  const [hasMoreFiles, setHasMoreFiles] = useState(true)
 
   const changeFilter = (f) => {
     setMemes([])
     setLatestDoc(null)
     setFilter(f)
   }
-  const handleClick = () => {
+  const triggerNextMemes = () => {
     //console.warn('handleClick')
+    // if (docSize === 0) {
+    //   return
+    // }
     switch (filter) {
       case 'Latest':
         loadNextMemes('created_at', 'desc')
+
         break
       case 'Oldest':
         loadNextMemes('created_at', 'asc')
@@ -85,10 +90,10 @@ export const useDatabaseMemes = (limit) => {
     // }
 
     const docs = await query.limit(limit).get()
-    if (docs.size == 0) {
-      return
+    if (docs.size === 0) {
+      setHasMoreFiles(false)
     }
-    console.log({ DOCS: docs.size })
+
     let snapShotMemes = []
     docs.forEach((doc) => {
       snapShotMemes.push({ id: doc.id, ...doc.data() })
@@ -112,5 +117,11 @@ export const useDatabaseMemes = (limit) => {
         console.log('Unsupported case')
     }
   }, [setMemes, filter, limit])
-  return { dbMemes: Memes, dbFilter: filter, setFilter: changeFilter, setTrigger: handleClick }
+  return {
+    dbMemes: Memes,
+    dbFilter: filter,
+    setFilter: changeFilter,
+    triggerNextMemes: triggerNextMemes,
+    endOfFiles: hasMoreFiles,
+  }
 }

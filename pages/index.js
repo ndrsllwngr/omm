@@ -7,10 +7,10 @@ import { useDatabaseMemes } from '@/components/hooks/useDatabaseMemes'
 import { Navbar } from '@/components/Navbar'
 import { OverviewSort } from '@/components/OverviewSort'
 
-const limit = 2
+const limit = 1
 const LandingPage = () => {
   //let counter = limit
-  const { dbMemes, dbFilter, setFilter, setTrigger } = useDatabaseMemes(limit)
+  const { dbMemes, dbFilter, setFilter, triggerNextMemes, endOfFiles } = useDatabaseMemes(limit)
   useEffect(() => {
     //console.log(counter)
     //console.log(setTrigger)
@@ -21,10 +21,10 @@ const LandingPage = () => {
       <HtmlHead />
       <Navbar />
       <OverviewSort filter={dbFilter} onFilterChange={setFilter} />
-      <Overview memes={dbMemes} onClick={setTrigger} />
-      <button className="w-full h-8" onClick={setTrigger}>
+      <Overview memes={dbMemes} triggerNextMemes={triggerNextMemes} endOfFiles={endOfFiles} />
+      {/* <button className="w-full h-8" onClick={triggerNextMemes}>
         Load more Memes
-      </button>
+      </button> */}
     </>
   )
 }
