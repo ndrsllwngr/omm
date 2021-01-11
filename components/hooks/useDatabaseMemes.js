@@ -3,13 +3,17 @@ import firebase from '@/lib/firebase'
 
 export const useDatabaseMemes = (limit) => {
   const [Memes, setMemes] = useState([])
-  const [filter, setFilter] = useState('Latest')
+  const [filter, setFilter] = useState('Oldest')
   const [latestDoc, setLatestDoc] = useState(null)
   const [hasMoreFiles, setHasMoreFiles] = useState(true)
 
-  const changeFilter = (f) => {
+  const loadCreds = () => {
+    return firebase.firestore().collection('memes-tmp')
+  }
+  const onFilterChange = (f) => {
     setMemes([])
     setLatestDoc(null)
+    setHasMoreFiles(true)
     setFilter(f)
   }
   const triggerNextMemes = () => {
@@ -30,9 +34,6 @@ export const useDatabaseMemes = (limit) => {
     }
   }
 
-  const loadCreds = () => {
-    return firebase.firestore().collection('memes-tmp')
-  }
   // const setDocs = (docs) => {
   //   let dbMemes = []
   //   docs.forEach((doc) => {
@@ -83,21 +84,19 @@ export const useDatabaseMemes = (limit) => {
     }
     if (latestDoc) {
       query = query.startAfter(latestDoc)
-      console.log({ LATESTDOC: latestDoc })
     }
-    // else {
-    //   query = query.startAfter(0)
-    // }
-
     const docs = await query.limit(limit).get()
+
     if (docs.size === 0) {
       setHasMoreFiles(false)
     }
 
     let snapShotMemes = []
+
     docs.forEach((doc) => {
       snapShotMemes.push({ id: doc.id, ...doc.data() })
     })
+
     setLatestDoc(docs.docs[docs.docs.length - 1])
     !Memes || !(Memes.length > 0) ? setMemes(snapShotMemes) : setMemes([...Memes, ...snapShotMemes])
   }
@@ -120,7 +119,7 @@ export const useDatabaseMemes = (limit) => {
   return {
     dbMemes: Memes,
     dbFilter: filter,
-    setFilter: changeFilter,
+    setFilter: onFilterChange,
     triggerNextMemes: triggerNextMemes,
     endOfFiles: hasMoreFiles,
   }

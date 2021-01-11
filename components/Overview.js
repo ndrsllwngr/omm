@@ -2,70 +2,25 @@ import React, { useEffect } from 'react'
 import PropTypes from 'prop-types'
 import { MemeRenderer } from '@/components/MemeRenderer'
 import Link from 'next/link'
-//import InfiniteScroll from 'react-infinite-scroll-component'
 import InfiniteScroll from 'react-infinite-scroller'
 
 export const Overview = ({ memes, triggerNextMemes, endOfFiles }) => {
   useEffect(() => {
     console.log({ memes })
-  }, [memes])
+    console.log({ ENDOFFILES: endOfFiles })
+  }, [endOfFiles, memes])
   if (!memes || !(memes.length > 0)) return <div>loading...</div>
   return (
     <>
-      {/* <InfiniteScroll 
-        // dataLength={memes.map((meme) => (
-        //   <div key={meme.id}>{meme.name}</div>
-        // ))} //This is important field to render the next data
-        dataLength={memes.length}
-        next={onClick}
-        hasMore={true}
-        loader={<h4>Loading...</h4>}
-        scrollThreshold="0.2"
-        endMessage={
-          <p style={{ textAlign: 'center' }}>
-            <b>Yay! You have seen it all</b>
-          </p>
-        }
-        // below props only if you need pull down functionality
-        // //refreshFunction={this.refresh}
-        // pullDownToRefresh
-        // pullDownToRefreshThreshold={50}
-        // pullDownToRefreshContent={
-        //   <h3 style={{ textAlign: 'center' }}>&#8595; Pull down to refresh</h3>
-        // }
-        // releaseToRefreshContent={
-        //   <h3 style={{ textAlign: 'center' }}>&#8593; Release to refresh</h3>
-        // }
-      >
-        <div
-          id="infinite"
-          className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2 items-center mx-auto justify-content-center"
-        >
-          {memes.map((el, i) => (
-            <Link
-              key={i}
-              href={`/meme/${el.id}`}
-              className="relative w-24 h-24 bg-white overflow-hidden place-self-center justify-self-center"
-            >
-              <a>
-                <MemeRenderer meme={el} />
-              </a>
-            </Link>
-          ))}
-        </div>
-      </InfiniteScroll>*/}
       {/* // https://github.com/danbovey/react-infinite-scroller */}
       <InfiniteScroll
         pageStart={0}
         loadMore={triggerNextMemes}
         hasMore={endOfFiles}
-        threshold="100"
-        loader={<h4>Loading...</h4>}
+        threshold={100}
+        loader={<h4 key="1">Loading...</h4>}
       >
-        <div
-          id="infinite"
-          className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2 items-center mx-auto justify-content-center"
-        >
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2 items-center mx-auto justify-content-center">
           {memes.map((el, i) => (
             <Link
               key={i}
