@@ -156,9 +156,10 @@ export const MemeEditorText = (_props) => {
               value={textBox.fontFamily}
               onChange={(e) => handleChange('fontFamily', e.target.value)}
             >
-              <option value="Times New Roman">Times New Roman</option>
-              <option value="Impact">Impact</option>
-              <option value="Courier">Courier</option>
+              <option value="arial">Arial</option>
+              <option value="times new roman">Times New Roman</option>
+              <option value="impact">Impact</option>
+              <option value="courier">Courier</option>
             </select>
             <button onClick={() => sendBackwards(canvas)}>Send backwards</button>
             <button onClick={() => sendToBack(canvas)}>Send to back</button>
