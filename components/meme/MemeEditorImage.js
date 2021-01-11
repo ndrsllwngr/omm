@@ -15,9 +15,11 @@ export const MemeEditorImage = (_props) => {
   const [enabledTools, setEnabledTools] = useState(false)
 
   useEffect(() => {
-    setEnabledTools(activeObject ? getActiveProp('type', canvas) === 'image' : false)
-    if (enabledTools) {
-      console.log({ src: 'MemeEditorImage.useEffect', activeObject })
+    if (canvas) {
+      setEnabledTools(activeObject ? getActiveProp('type', canvas) === 'image' : false)
+      if (enabledTools) {
+        console.log({ src: 'MemeEditorImage.useEffect', activeObject })
+      }
     }
   }, [canvas, enabledTools, activeObject, setEnabledTools])
 

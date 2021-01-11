@@ -31,13 +31,13 @@ export const FabricCanvas = ({ jsonData = null }) => {
 
   const updateActiveObject = useCallback(
     (e) => {
-      if (!e) {
+      if (!e || (!canvas && !canvasRef.current)) {
         return
       }
       setActiveObject(canvas.getActiveObject())
       canvas.renderAll()
     },
-    [canvas, setActiveObject]
+    [canvas, setActiveObject, canvasRef]
   )
 
   const onObjectModified = useCallback(

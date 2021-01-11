@@ -63,8 +63,9 @@ export const MemeEditor = () => {
   }
 
   useEffect(() => {
-    // TODO 1: id: TEMPLATE is not exported, yet.
-    // TODO 2: rerender issue, if you select a new template the change won't get reflected until another object gets selected
+    // TODO WRITE AS CALLBACK TO FIX TODO-1
+    // ISSUE-1: fix logic setting template image (CREATE is getting triggered to early
+    // ISSUE-2: rerender issue, if you select a new template the change won't get reflected until another object gets selected
     if (canvas && canvasRef.current) {
       const canvasObjects = canvas.getObjects('image')
       const templateIndex = canvasObjects.find((el) => el.id === 'TEMPLATE')
@@ -81,22 +82,22 @@ export const MemeEditor = () => {
             })
         }
         addTemplate(template.url)
-        console.log('MemeEditor.useEffect: CREATE template')
+        console.log('MemeEditor.useEffect: CREATE template', template.url)
       } else {
         templateIndex.setSrc(template.url)
         templateIndex.canvas.requestRenderAll()
         templateIndex.canvas.renderAll()
         canvas.requestRenderAll()
         canvas.renderAll()
-        console.log('MemeEditor.useEffect: REPLACE template')
+        console.log('MemeEditor.useEffect: REPLACE template', template.url)
       }
       console.log({ src: 'MemeEditor.useEffect', canvas, canvasObjects, templateIndex, template })
     }
-  }, [canvas, template])
+  }, [canvas, template, canvasRef])
 
   const exportSVG = () => {
     const svg = canvas.toSVG()
-    const json = canvas.toJSON(['width', 'height'])
+    const json = canvas.toJSON(['width', 'height', 'id', 'preserveObjectStacking'])
     setSvgExport(svg)
     setJsonExport(json)
     console.log({ src: 'MemeEditor.exportSVG', svg, json })
@@ -112,7 +113,7 @@ export const MemeEditor = () => {
   }
 
   const generateMeme = () => {
-    const json = canvas.toJSON(['width', 'height'])
+    const json = canvas.toJSON(['width', 'height', 'id', 'preserveObjectStacking'])
     const svg = canvas.toSVG()
     const newObj = {
       ...json,
