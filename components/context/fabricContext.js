@@ -1,4 +1,4 @@
-import React, { useCallback, createContext, useState, useContext, useEffect, useRef } from 'react'
+import React, { useCallback, createContext, useState, useContext, useRef } from 'react'
 import { fabric } from 'fabric'
 import PropTypes from 'prop-types'
 // import { initAligningGuidelines } from '@/components/meme/Guidelines'
@@ -6,6 +6,19 @@ import PropTypes from 'prop-types'
 const FabricJsonContext = createContext({})
 const FabricCanvasContext = createContext({})
 const FabricActiveObjectContext = createContext({})
+
+const textOptions = {
+  width: 200,
+  top: 10,
+  left: 10,
+  fontSize: 24,
+  fontWeight: 'normal',
+  fontStyle: 'normal',
+  textAlign: 'center',
+  fontFamily: 'arial',
+  textDecoration: 'normal',
+  fill: '#000000',
+}
 
 // https://github.com/saninmersion/react-context-fabricjs
 export const FabricProvider = ({ children }) => {
@@ -24,6 +37,20 @@ export const FabricProvider = ({ children }) => {
     }
     let c = new fabric.Canvas(canvasRef.current, canvasOptions)
     c.enableRetinaScaling = true
+    c.renderAll()
+    const textBoxTop = new fabric.Textbox('Add your text here', {
+      ...textOptions,
+      top: options.height - 30 - 10,
+      width: options.width,
+      left: 0,
+    })
+    const textBoxBottom = new fabric.Textbox('Add your text here', {
+      ...textOptions,
+      width: options.width,
+      left: 0,
+    })
+    c.add(textBoxTop)
+    c.add(textBoxBottom)
     c.renderAll()
     setCanvas(c)
     console.log({ src: 'FabricProvider.initCanvas', options, canvas, canvasRef })

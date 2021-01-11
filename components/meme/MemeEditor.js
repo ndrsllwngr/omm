@@ -74,6 +74,7 @@ export const MemeEditor = () => {
               customSelect(img)
               img.set({ id: 'TEMPLATE' })
               canvas.add(img)
+              canvas.sendToBack(img)
               canvas.renderAll()
             })
         }
@@ -185,7 +186,7 @@ export const MemeEditor = () => {
               <SVG src={svgExport} />
             </div>
           </div>
-          <div className={'col-span-3 h-full rounded-lg bg-gray-100 flex justify-center'}>
+          <div className={'col-span-3 h-full rounded-lg bg-gray-100 flex justify-start'}>
             <pre>
               <code>{JSON.stringify(jsonExport, null, 4)}</code>
             </pre>
