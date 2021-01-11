@@ -8,7 +8,6 @@ import {
   sendBackwards,
   sendToBack,
 } from '@/components/meme/FabricUtils'
-//import { getActiveStyle, setActiveProp, setActiveStyle } from '@/components/meme/utils'
 
 export const MemeEditorImage = (_props) => {
   const { canvas } = useFabricCanvas()
@@ -20,21 +19,7 @@ export const MemeEditorImage = (_props) => {
     if (enabledTools) {
       console.log({ src: 'MemeEditorImage.useEffect', activeObject })
     }
-  }, [enabledTools, activeObject, setEnabledTools])
-
-  const handleChange = (changedKey, changedValue) => {
-    switch (changedKey) {
-      default:
-        console.log('Unsupported property', changedKey)
-    }
-    console.log({
-      src: 'MemeEditorImage.handleChange',
-      changedKey,
-      changedValue,
-      activeObject,
-      canvas,
-    })
-  }
+  }, [canvas, enabledTools, activeObject, setEnabledTools])
 
   return (
     <>

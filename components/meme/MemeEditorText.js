@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useCallback } from 'react'
 import { useFabricActiveObject, useFabricCanvas } from '@/components/context/fabricContext'
 import {
   bringForward,
@@ -6,44 +6,71 @@ import {
   removeSelected,
   sendBackwards,
   sendToBack,
-  setActiveProp,
+  // setActiveProp,
   getActiveProp,
   setActiveStyle,
-  getObjectCaching,
+  // getObjectCaching,
   setObjectCaching,
-  isBold,
+  // isBold,
   toggleBold,
   setTextAlign,
   setFontFamily,
+  setText,
 } from '@/components/meme/FabricUtils'
 import { useImmer } from 'use-immer'
+
+const textBoxInitialState = {
+  text: 'Add your text here',
+  fontStyle: 'normal',
+  fontSize: 16,
+  fill: '#000000',
+  textAlign: 'left',
+  fontFamily: 'arial',
+  fontWeight: 'normal',
+}
 
 export const MemeEditorText = (_props) => {
   const { canvas } = useFabricCanvas()
   const { activeObject } = useFabricActiveObject()
-  const [textBox, updateTextBox] = useImmer({})
+  const [textBox, updateTextBox] = useImmer(textBoxInitialState)
   const [enabledTools, setEnabledTools] = useState(false)
 
   useEffect(() => {
-    setEnabledTools(activeObject ? getActiveProp('type', canvas) === 'textbox' : false)
-    if (enabledTools) {
-      updateTextBox((draft) => {
-        draft['fontStyle'] = activeObject ? activeObject.get('fontStyle') : 'normal'
-        draft['fontSize'] = activeObject ? activeObject.get('fontSize') : 16
-        draft['fill'] = activeObject ? activeObject.get('fill') : '#000000'
-        draft['textAlign'] = activeObject ? activeObject.get('textAlign') : 'left'
-        draft['fontFamily'] = activeObject ? activeObject.get('fontFamily') : 'arial'
-        draft['fontWeight'] = activeObject ? activeObject.get('fontWeight') : 'normal'
-      })
-      console.log({ src: 'MemeEditorText.useEffect', activeObject, textBox })
+    if (canvas) {
+      setEnabledTools(activeObject ? getActiveProp('type', canvas) === 'textbox' : false)
+      if (enabledTools) {
+        updateTextBox((draft) => {
+          draft['text'] = activeObject ? activeObject.get('text') : textBoxInitialState['text']
+          draft['fontStyle'] = activeObject
+            ? activeObject.get('fontStyle')
+            : textBoxInitialState['fontStyle']
+          draft['fontSize'] = activeObject
+            ? activeObject.get('fontSize')
+            : textBoxInitialState['fontSize']
+          draft['fill'] = activeObject ? activeObject.get('fill') : textBoxInitialState['fill']
+          draft['textAlign'] = activeObject
+            ? activeObject.get('textAlign')
+            : textBoxInitialState['textAlign']
+          draft['fontFamily'] = activeObject
+            ? activeObject.get('fontFamily')
+            : textBoxInitialState['fontFamily']
+          draft['fontWeight'] = activeObject
+            ? activeObject.get('fontWeight')
+            : textBoxInitialState['fontWeight']
+        })
+        console.log({ src: 'MemeEditorText.useEffect', activeObject, textBox })
+      }
     }
-  }, [enabledTools, activeObject, setEnabledTools])
+  }, [canvas, enabledTools, activeObject, setEnabledTools, textBox, updateTextBox])
 
-  function updateProperty(key, value) {
-    updateTextBox((draft) => {
-      draft[key] = value
-    })
-  }
+  const updateProperty = useCallback(
+    (key, value) => {
+      updateTextBox((draft) => {
+        draft[key] = value
+      })
+    },
+    [updateTextBox]
+  )
 
   const handleChange = (changedKey, changedValue) => {
     setObjectCaching(false, canvas)
@@ -71,6 +98,10 @@ export const MemeEditorText = (_props) => {
       case 'fontWeight':
         toggleBold(activeObject, canvas)
         updateProperty('fontWeight', changedValue)
+        break
+      case 'text':
+        setText(changedValue, activeObject, canvas)
+        updateProperty('text', changedValue)
         break
       default:
         console.log('Unsupported property', changedKey)
@@ -138,16 +169,13 @@ export const MemeEditorText = (_props) => {
           <div className={'flex flex-row'}>
             <div className={'flex flex-row'}>
               <textarea
-                id="texbox"
+                id="textbox"
                 name="textbox"
                 rows="2"
                 cols="50"
                 value={textBox.text}
                 onChange={(e) => handleChange('text', e.target.value)}
-              >
-                At w3schools.com you will learn how to make a website. They offer free tutorials in
-                all web development technologies.
-              </textarea>
+              />
             </div>
           </div>
         </div>
