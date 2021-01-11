@@ -16,7 +16,7 @@ import {
   setTextAlign,
   setFontFamily,
   setText,
-  getActiveStyle,
+  // getActiveStyle,
 } from '@/components/meme/FabricUtils'
 import { useImmer } from 'use-immer'
 

@@ -1,4 +1,4 @@
-import React, { useCallback, createContext, useState, useContext, useRef, useEffect } from 'react'
+import React, { useCallback, createContext, useState, useContext, useRef } from 'react'
 import { fabric } from 'fabric'
 import PropTypes from 'prop-types'
 // import { initAligningGuidelines } from '@/components/meme/Guidelines'

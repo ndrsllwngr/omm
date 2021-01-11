@@ -2,7 +2,7 @@ import React, { useEffect } from 'react'
 //import { useRouter } from 'next/router'
 import { useRequireAuth } from '@/components/hooks/useRequireAuth'
 import Link from 'next/link'
-import firebase from '@/lib/firebase'
+// import firebase from '@/lib/firebase'
 
 //https://tailwindcomponents.com/component/responsive-navbar-2
 export const Navbar = () => {
