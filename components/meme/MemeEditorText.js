@@ -16,53 +16,61 @@ import {
   setTextAlign,
   setFontFamily,
 } from '@/components/meme/FabricUtils'
-//import { getActiveStyle, setActiveProp, setActiveStyle } from '@/components/meme/utils'
+import { useImmer } from 'use-immer'
 
 export const MemeEditorText = (_props) => {
   const { canvas } = useFabricCanvas()
   const { activeObject } = useFabricActiveObject()
+  const [textBox, updateTextBox] = useImmer({})
   const [enabledTools, setEnabledTools] = useState(false)
-  const [fontStyle, setFontStyle] = useState('normal')
-  const [textAlignState, setTextAlignState] = useState('Left')
-  const [fontFamilyState, setFontFamilyState] = useState('Times New Roman')
-  const [fontSize, setFontSize] = useState(16)
-  const [fill, setFill] = useState('#000000')
 
   useEffect(() => {
     setEnabledTools(activeObject ? getActiveProp('type', canvas) === 'textbox' : false)
     if (enabledTools) {
-      setFontStyle(activeObject ? activeObject.get('fontStyle') : 'normal')
-      setFontSize(activeObject ? activeObject.get('fontSize') : 16)
-      setFill(activeObject ? activeObject.get('fill') : '#000000')
-      console.log({ src: 'MemeEditorText.useEffect', activeObject })
+      updateTextBox((draft) => {
+        draft['fontStyle'] = activeObject ? activeObject.get('fontStyle') : 'normal'
+        draft['fontSize'] = activeObject ? activeObject.get('fontSize') : 16
+        draft['fill'] = activeObject ? activeObject.get('fill') : '#000000'
+        draft['textAlign'] = activeObject ? activeObject.get('textAlign') : 'left'
+        draft['fontFamily'] = activeObject ? activeObject.get('fontFamily') : 'arial'
+        draft['fontWeight'] = activeObject ? activeObject.get('fontWeight') : 'normal'
+      })
+      console.log({ src: 'MemeEditorText.useEffect', activeObject, textBox })
     }
   }, [enabledTools, activeObject, setEnabledTools])
+
+  function updateProperty(key, value) {
+    updateTextBox((draft) => {
+      draft[key] = value
+    })
+  }
 
   const handleChange = (changedKey, changedValue) => {
     setObjectCaching(false, canvas)
     switch (changedKey) {
       case 'fontStyle':
         setActiveStyle(changedKey, changedValue, activeObject, canvas)
-        setFontStyle(changedValue)
+        updateProperty(changedKey, changedValue)
         break
       case 'fontSize':
         setActiveStyle(changedKey, changedValue, activeObject, canvas)
-        setFontSize(changedValue)
+        updateProperty(changedKey, changedValue)
         break
       case 'fill':
         setActiveStyle(changedKey, changedValue, activeObject, canvas)
-        setFill(changedValue)
+        updateProperty(changedKey, changedValue)
         break
       case 'textAlign':
         setTextAlign(changedValue, activeObject, canvas)
-        setTextAlignState(changedValue)
+        updateProperty(changedKey, changedValue)
         break
       case 'fontFamily':
         setFontFamily(changedValue, activeObject, canvas)
-        setFontFamilyState(changedValue)
+        updateProperty(changedKey, changedValue)
         break
       case 'fontWeight':
         toggleBold(activeObject, canvas)
+        updateProperty('fontWeight', changedValue)
         break
       default:
         console.log('Unsupported property', changedKey)
@@ -80,49 +88,69 @@ export const MemeEditorText = (_props) => {
   return (
     <>
       {enabledTools && (
-        <>
-          <select value={fontStyle} onChange={(e) => handleChange('fontStyle', e.target.value)}>
-            <option value="normal">Normal</option>
-            <option value="italic">Italic</option>
-          </select>
-          <button onClick={() => handleChange('fontWeight', canvas)}>Bold</button>
-          <input
-            type="range"
-            id="fontSize"
-            name="fontSize"
-            min="1"
-            max="120"
-            step="1"
-            value={fontSize}
-            onChange={(e) => handleChange('fontSize', parseInt(e.target.value))}
-          />
-          <input
-            type={'color'}
-            value={fill}
-            onChange={(e) => handleChange('fill', e.target.value)}
-          />
-          <select
-            value={textAlignState}
-            onChange={(e) => handleChange('textAlign', e.target.value)}
-          >
-            <option value="Left">Left</option>
-            <option value="Center">Center</option>
-            <option value="Right">Right</option>
-          </select>
-          <select
-            value={fontFamilyState}
-            onChange={(e) => handleChange('fontFamily', e.target.value)}
-          >
-            <option value="Times New Roman">Times New Roman</option>
-            <option value="Impact">Impact</option>
-            <option value="Courier">Courier</option>
-          </select>
-          <button onClick={() => sendBackwards(canvas)}>Send backwards</button>
-          <button onClick={() => sendToBack(canvas)}>Send to back</button>
-          <button onClick={() => bringForward(canvas)}>Bring forwards</button>
-          <button onClick={() => bringToFront(canvas)}>Bring to front</button>
-          <button onClick={() => removeSelected(canvas)}>Remove selected object</button>
-        </>
+        <div className={'flex flex-col'}>
+          <div>
+            <select
+              value={textBox.fontStyle}
+              onChange={(e) => handleChange('fontStyle', e.target.value)}
+            >
+              <option value="normal">Normal</option>
+              <option value="italic">Italic</option>
+            </select>
+            <button onClick={() => handleChange('fontWeight', canvas)}>Bold</button>
+            <input
+              type="range"
+              id="fontSize"
+              name="fontSize"
+              min="1"
+              max="120"
+              step="1"
+              value={textBox.fontSize}
+              onChange={(e) => handleChange('fontSize', parseInt(e.target.value))}
+            />
+            <input
+              type={'color'}
+              value={textBox.fill}
+              onChange={(e) => handleChange('fill', e.target.value)}
+            />
+            <select
+              value={textBox.textAlign}
+              onChange={(e) => handleChange('textAlign', e.target.value)}
+            >
+              <option value="left">Left</option>
+              <option value="center">Center</option>
+              <option value="right">Right</option>
+            </select>
+            <select
+              value={textBox.fontFamily}
+              onChange={(e) => handleChange('fontFamily', e.target.value)}
+            >
+              <option value="Times New Roman">Times New Roman</option>
+              <option value="Impact">Impact</option>
+              <option value="Courier">Courier</option>
+            </select>
+            <button onClick={() => sendBackwards(canvas)}>Send backwards</button>
+            <button onClick={() => sendToBack(canvas)}>Send to back</button>
+            <button onClick={() => bringForward(canvas)}>Bring forwards</button>
+            <button onClick={() => bringToFront(canvas)}>Bring to front</button>
+            <button onClick={() => removeSelected(canvas)}>Remove selected object</button>
+          </div>
+          <div className={'flex flex-row'}>
+            <div className={'flex flex-row'}>
+              <textarea
+                id="texbox"
+                name="textbox"
+                rows="2"
+                cols="50"
+                value={textBox.text}
+                onChange={(e) => handleChange('text', e.target.value)}
+              >
+                At w3schools.com you will learn how to make a website. They offer free tutorials in
+                all web development technologies.
+              </textarea>
+            </div>
+          </div>
+        </div>
       )}
     </>
   )

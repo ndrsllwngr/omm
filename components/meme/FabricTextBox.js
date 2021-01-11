@@ -98,69 +98,71 @@ export const FabricTextBox = (_props) => {
     <>
       <button onClick={addTextBox}>Add Text Box</button>
       {showTools && (
-        <div>
-          <label htmlFor="fontSize">Font Size:</label>
-          <input
-            type="number"
-            style={{ width: '40px' }}
-            className="btn-object-action"
-            name="fontSize"
-            min="10"
-            value={options.fontSize}
-            onChange={updateFontSize}
-          />
-          <br />
-          <label htmlFor="color">Fill:</label>
-          <input
-            type="color"
-            name="fill"
-            style={{ width: '50px' }}
-            value={options.fill}
-            onChange={updateFill}
-            className="btn-object-action"
-          />
-          <br />
-          <label htmlFor="text-align" style={{ display: 'inline-block' }}>
-            Text align:
-          </label>
-          <select
-            name="textAlign"
-            className="btn-object-action"
-            onChange={updateTextAlign}
-            value={options.textAlign}
-          >
-            <option value="left">Left</option>
-            <option value="center">Center</option>
-            <option value="right">Right</option>
-          </select>
-          <br />
-          <div id="text-controls-additional">
-            <button
-              type="button"
-              style={{ background: options.fontWeight === 'bold' ? 'white' : 'gray' }}
-              onMouseUp={updateBold}
-              className="btn btn-object-action"
+        <div className={'flex flex-col'}>
+          <div className={'flex justify-start'}>
+            <label htmlFor="fontSize">Font Size:</label>
+            <input
+              type="number"
+              style={{ width: '40px' }}
+              className="btn-object-action"
+              name="fontSize"
+              min="10"
+              value={options.fontSize}
+              onChange={updateFontSize}
+            />
+            <br />
+            <label htmlFor="color">Fill:</label>
+            <input
+              type="color"
+              name="fill"
+              style={{ width: '50px' }}
+              value={options.fill}
+              onChange={updateFill}
+              className="btn-object-action"
+            />
+            <br />
+            <label htmlFor="text-align" style={{ display: 'inline-block' }}>
+              Text align:
+            </label>
+            <select
+              name="textAlign"
+              className="btn-object-action"
+              onChange={updateTextAlign}
+              value={options.textAlign}
             >
-              <strong>B</strong>
-            </button>
-            <button
-              type="button"
-              style={{ background: options.fontStyle === 'italic' ? 'white' : 'gray' }}
-              onMouseUp={updateItalic}
-              className="btn btn-object-action"
-              id="text-cmd-italic"
-            >
-              <em>I</em>
-            </button>
-            <button
-              type="button"
-              style={{ background: options.textDecoration === 'underline' ? 'white' : 'gray' }}
-              onMouseUp={updateUnderline}
-              className="btn btn-object-action"
-              id="text-cmd-underline"
-            >
-              <u>U</u>
-            </button>
+              <option value="left">Left</option>
+              <option value="center">Center</option>
+              <option value="right">Right</option>
+            </select>
+            <br />
+            <div id="text-controls-additional">
+              <button
+                type="button"
+                style={{ background: options.fontWeight === 'bold' ? 'white' : 'gray' }}
+                onMouseUp={updateBold}
+                className="btn btn-object-action"
+              >
+                <strong>B</strong>
+              </button>
+              <button
+                type="button"
+                style={{ background: options.fontStyle === 'italic' ? 'white' : 'gray' }}
+                onMouseUp={updateItalic}
+                className="btn btn-object-action"
+                id="text-cmd-italic"
+              >
+                <em>I</em>
+              </button>
+              <button
+                type="button"
+                style={{ background: options.textDecoration === 'underline' ? 'white' : 'gray' }}
+                onMouseUp={updateUnderline}
+                className="btn btn-object-action"
+                id="text-cmd-underline"
+              >
+                <u>U</u>
+              </button>
+            </div>
           </div>
         </div>
       )}
