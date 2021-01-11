@@ -29,7 +29,7 @@ const Button = ({ children, type = 'button', disabled = false, onClick }) => {
 // uses http://fabricjs.com/
 // eslint-disable-next-line react/prop-types
 export const MemeEditor = () => {
-  const { canvas } = useFabricCanvas()
+  const { canvas, canvasRef } = useFabricCanvas()
   const [imgURL, setImgURL] = useState('')
   const [template] = useTemplate()
   const [title, setTitle] = useState('')
@@ -63,7 +63,9 @@ export const MemeEditor = () => {
   }
 
   useEffect(() => {
-    if (canvas) {
+    // TODO 1: id: TEMPLATE is not exported, yet.
+    // TODO 2: rerender issue, if you select a new template the change won't get reflected until another object gets selected
+    if (canvas && canvasRef.current) {
       const canvasObjects = canvas.getObjects('image')
       const templateIndex = canvasObjects.find((el) => el.id === 'TEMPLATE')
       if (!templateIndex) {
@@ -94,7 +96,7 @@ export const MemeEditor = () => {
 
   const exportSVG = () => {
     const svg = canvas.toSVG()
-    const json = canvas.toJSON()
+    const json = canvas.toJSON(['width', 'height'])
     setSvgExport(svg)
     setJsonExport(json)
     console.log({ src: 'MemeEditor.exportSVG', svg, json })
@@ -110,7 +112,7 @@ export const MemeEditor = () => {
   }
 
   const generateMeme = () => {
-    const json = canvas.toJSON()
+    const json = canvas.toJSON(['width', 'height'])
     const svg = canvas.toSVG()
     const newObj = {
       ...json,

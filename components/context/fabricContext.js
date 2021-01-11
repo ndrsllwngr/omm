@@ -1,4 +1,4 @@
-import React, { useCallback, createContext, useState, useContext, useRef } from 'react'
+import React, { useCallback, createContext, useState, useContext, useRef, useEffect } from 'react'
 import { fabric } from 'fabric'
 import PropTypes from 'prop-types'
 // import { initAligningGuidelines } from '@/components/meme/Guidelines'
@@ -27,62 +27,75 @@ export const FabricProvider = ({ children }) => {
   const canvasRef = useRef(null)
   const [activeObject, setActiveObject] = useState(null)
 
-  const initCanvas = useCallback((options = {}) => {
-    const canvasOptions = {
-      preserveObjectStacking: true,
-      selection: true,
-      defaultCursor: 'default',
-      backgroundColor: 'white',
-      ...options,
-    }
-    let c = new fabric.Canvas(canvasRef.current, canvasOptions)
-    c.enableRetinaScaling = true
-    c.renderAll()
-    const textBoxTop = new fabric.Textbox('Add your text here', {
-      ...textOptions,
-      top: options.height - 30 - 10,
-      width: options.width,
-      left: 0,
-    })
-    const textBoxBottom = new fabric.Textbox('Add your text here', {
-      ...textOptions,
-      width: options.width,
-      left: 0,
-    })
-    c.add(textBoxTop)
-    c.add(textBoxBottom)
-    c.renderAll()
-    setCanvas(c)
-    console.log({ src: 'FabricProvider.initCanvas', options, canvas, canvasRef })
-  }, [])
-
-  const loadFromJSON = useCallback((json) => {
-    let c = new fabric.Canvas(canvasRef.current)
-    const customJson = json
-    delete customJson.svg
-    delete customJson.img
-    delete customJson.created_at
-    const jsonStr = JSON.stringify(json)
-    c.loadFromJSON(
-      jsonStr,
-      () => {
-        c.renderAll.bind(c)
-        c.setWidth(json.width)
-        c.setHeight(json.height)
-      },
-      function (o, object) {
-        fabric.log('fabric.log', o, object)
+  const initCanvas = useCallback(
+    (options = {}) => {
+      const canvasOptions = {
+        preserveObjectStacking: true,
+        selection: true,
+        defaultCursor: 'default',
+        backgroundColor: 'white',
+        ...options,
       }
-    )
-    c.renderAll()
-    c.calcOffset()
-    setCanvas(c)
-    console.log({ src: 'FabricProvider.loadFromJSON', json, canvas })
-  }, [])
+      let c = new fabric.Canvas(canvasRef.current, canvasOptions)
+      c.enableRetinaScaling = true
+      c.renderAll()
+      const textBoxTop = new fabric.Textbox('Add your text here', {
+        ...textOptions,
+        top: options.height - 30 - 10,
+        width: options.width,
+        left: 0,
+      })
+      const textBoxBottom = new fabric.Textbox('Add your text here', {
+        ...textOptions,
+        width: options.width,
+        left: 0,
+      })
+      c.add(textBoxTop)
+      c.add(textBoxBottom)
+      c.renderAll()
+      setCanvas(c)
+      console.log({ src: 'FabricProvider.initCanvas', options, canvas, canvasRef })
+    },
+    [canvasRef, canvas]
+  )
+
+  const loadFromJSON = useCallback(
+    (json) => {
+      let c = new fabric.Canvas(canvasRef.current)
+      const customJson = json
+      delete customJson.svg
+      delete customJson.img
+      delete customJson.created_at
+      const jsonStr = JSON.stringify(json)
+      c.loadFromJSON(
+        jsonStr,
+        () => {
+          c.renderAll.bind(c)
+          c.setWidth(json.width)
+          c.setHeight(json.height)
+        },
+        function (o, object) {
+          fabric.log('fabric.log', o, object)
+        }
+      )
+      c.renderAll()
+      c.calcOffset()
+      setCanvas(c)
+      console.log({ src: 'FabricProvider.loadFromJSON', json, canvas })
+    },
+    [canvasRef, canvas]
+  )
+
+  const resetCanvas = useCallback(() => {
+    setCanvas(null)
+    console.log({ src: 'FabricProvider.resetCanvas', canvas, canvasRef: canvasRef.current })
+  }, [canvas, canvasRef])
 
   return (
     <FabricJsonContext.Provider value={{ json, setJson }}>
-      <FabricCanvasContext.Provider value={{ canvas, initCanvas, loadFromJSON, canvasRef }}>
+      <FabricCanvasContext.Provider
+        value={{ canvas, initCanvas, loadFromJSON, canvasRef, resetCanvas }}
+      >
         <FabricActiveObjectContext.Provider value={{ activeObject, setActiveObject }}>
           {children}
         </FabricActiveObjectContext.Provider>

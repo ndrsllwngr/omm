@@ -16,6 +16,7 @@ import {
   setTextAlign,
   setFontFamily,
   setText,
+  getActiveStyle,
 } from '@/components/meme/FabricUtils'
 import { useImmer } from 'use-immer'
 
@@ -35,6 +36,7 @@ export const MemeEditorText = (_props) => {
   const [textBox, updateTextBox] = useImmer(textBoxInitialState)
   const [enabledTools, setEnabledTools] = useState(false)
 
+  // TODO check if text box is selected or some chars inside
   useEffect(() => {
     if (canvas) {
       setEnabledTools(activeObject ? getActiveProp('type', canvas) === 'textbox' : false)
@@ -59,6 +61,10 @@ export const MemeEditorText = (_props) => {
             : textBoxInitialState['fontWeight']
         })
         console.log({ src: 'MemeEditorText.useEffect', activeObject, textBox })
+        // console.log({
+        //   getActiveStyle: getActiveStyle('fontWeight', activeObject, canvas),
+        //   getActiveProp: getActiveProp('fontWeight', canvas),
+        // })
       }
     }
   }, [canvas, enabledTools, activeObject, setEnabledTools, textBox, updateTextBox])
@@ -72,6 +78,7 @@ export const MemeEditorText = (_props) => {
     [updateTextBox]
   )
 
+  // TODO throttle input
   const handleChange = (changedKey, changedValue) => {
     setObjectCaching(false, canvas)
     switch (changedKey) {
@@ -170,8 +177,7 @@ export const MemeEditorText = (_props) => {
           <div className={'flex flex-row'}>
             <div className={'flex flex-row'}>
               <textarea
-                id="textbox"
-                name="textbox"
+                name="text"
                 rows="2"
                 cols="50"
                 value={textBox.text}
