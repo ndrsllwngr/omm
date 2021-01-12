@@ -90,7 +90,6 @@ export default function AuthContextComp({ children }) {
     const unsub = firebase.auth().onAuthStateChanged(handleAuthStateChanged)
 
     return () => unsub()
-    // TODO Q@Andy: Is the dependency 'user' missing on purpose?
   }, [])
 
   // Handle updates of the user document
