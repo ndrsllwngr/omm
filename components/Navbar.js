@@ -60,32 +60,34 @@ export const Navbar = () => {
       </div>
       {/* Links */}
       <div className="w-full lg:flex lg:items-center lg:w-auto lg:px-3 px-8">
-        <div className="flex ">
+        <div className="flex">
           {auth.user ? (
-            <button
-              onClick={auth.signOut}
-              className=" block text-md px-4  ml-2 py-2 rounded text-blue-700 font-bold hover:text-white mt-4 hover:bg-blue-700 lg:mt-0"
-            >
-              Sign Out
-            </button>
+            <div className="flex">
+              <button
+                onClick={auth.signOut}
+                className=" block text-md px-4  ml-2 py-2 rounded text-blue-700 font-bold hover:text-white mt-4 hover:bg-blue-700 lg:mt-0"
+              >
+                Sign Out
+              </button>
+              <Link href={'/template'}>
+                <a className=" block text-md px-4  ml-2 py-2 rounded text-blue-700 font-bold hover:text-white mt-4 hover:bg-blue-700 lg:mt-0">
+                  Template
+                </a>
+              </Link>
+              <Link href={'/create'}>
+                <a className=" block text-md px-4  ml-2 py-2 rounded text-blue-700 font-bold hover:text-white mt-4 hover:bg-blue-700 lg:mt-0">
+                  Create
+                </a>
+              </Link>
+            </div>
           ) : (
-            <Link href={'/login'}>
-              <a className=" block text-md px-4  ml-2 py-2 rounded text-blue-700 font-bold hover:text-white mt-4 hover:bg-blue-700 lg:mt-0">
-                Login
-              </a>
-            </Link>
-          )}
-          {auth.user && (
-            <Link href={'/template'}>
-              <a className=" block text-md px-4  ml-2 py-2 rounded text-blue-700 font-bold hover:text-white mt-4 hover:bg-blue-700 lg:mt-0">
-                Template
-              </a>
-            </Link>
-            <Link href={'/create'}>
-              <a className=" block text-md px-4  ml-2 py-2 rounded text-blue-700 font-bold hover:text-white mt-4 hover:bg-blue-700 lg:mt-0">
-                Create
-              </a>
-            </Link>
+            <div>
+              <Link href={'/login'}>
+                <a className=" block text-md px-4  ml-2 py-2 rounded text-blue-700 font-bold hover:text-white mt-4 hover:bg-blue-700 lg:mt-0">
+                  Login
+                </a>
+              </Link>
+            </div>
           )}
         </div>
       </div>
