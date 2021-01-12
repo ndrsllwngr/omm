@@ -31,7 +31,7 @@ export const WebcamPhoto = () => {
   return (
     <div className="app">
       <div className="app__container">
-        <video height={HEIGHT} width={WIDTH} muted autoPlay className="app__videoFeed"></video>
+        <video height={HEIGHT} width={WIDTH} muted autoPlay className="app__videoFeed" />
       </div>
       <div className="app__input">
         {playing ? (
