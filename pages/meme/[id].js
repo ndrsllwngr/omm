@@ -14,10 +14,12 @@ export default function User() {
 
   const [Memes, setMemes] = useState([])
   const [id, setId] = useState([])
-  const [state, dispatch] = useAutoPlay()
-
+  const [state, setState] = useAutoPlay()
   useEffect(() => {
     console.log(state.count)
+  }, [state.count])
+
+  useEffect(() => {
     const getRandomInt = (min, max) => {
       min = Math.ceil(min)
       max = Math.floor(max)
@@ -104,7 +106,7 @@ export default function User() {
           <span className="font-semibold text-xl tracking-tight">Random Meme</span>
         </a>
       </Link>
-      <button onClick={() => dispatch({ type: 'increment' })}>Autoplay {state.count}</button>
+      <button onClick={() => setState({ type: 'increment' })}>Autoplay {state.count}</button>
     </div>
   )
 }
