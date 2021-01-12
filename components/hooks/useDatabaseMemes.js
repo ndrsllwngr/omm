@@ -15,10 +15,10 @@ export const useDatabaseMemes = (limit) => {
     console.warn('handleClick')
     switch (filter) {
       case 'Latest':
-        resolveMemes(loadNextMemes('created_at', 'desc'))
+        resolveMemes(loadNextMemes('createdAt', 'desc'))
         break
       case 'Oldest':
-        resolveMemes(loadNextMemes('created_at', 'asc'))
+        resolveMemes(loadNextMemes('createdAt', 'asc'))
         break
       default:
         console.log('Unsupported case')
@@ -26,7 +26,7 @@ export const useDatabaseMemes = (limit) => {
   }
 
   const loadCreds = () => {
-    return firebase.firestore().collection('memes-tmp')
+    return firebase.firestore().collection('memes-new')
   }
   // const setDocs = (docs) => {
   //   let dbMemes = []
@@ -67,10 +67,10 @@ export const useDatabaseMemes = (limit) => {
     //TODOuse callbackl to prevent dependency issues
     switch (filter) {
       case 'Latest':
-        resolveMemes(loadNextMemes('created_at', 'desc'))
+        resolveMemes(loadNextMemes('createdAt', 'desc'))
         break
       case 'Oldest':
-        resolveMemes(loadNextMemes('created_at', 'asc'))
+        resolveMemes(loadNextMemes('createdAt', 'asc'))
         break
       default:
         console.log('Unsupported case')

@@ -34,10 +34,10 @@ export const FabricProvider = ({ children }) => {
         selection: true,
         defaultCursor: 'default',
         backgroundColor: 'white',
+        enableRetinaScaling: true,
         ...options,
       }
       let c = new fabric.Canvas(canvasRef.current, canvasOptions)
-      c.enableRetinaScaling = true
       c.renderAll()
       const textBoxTop = new fabric.Textbox('Add your text here', {
         ...textOptions,
@@ -60,12 +60,10 @@ export const FabricProvider = ({ children }) => {
   )
 
   const loadFromJSON = useCallback(
-    (json) => {
+    (meme) => {
+      // TODO @ANDI load template id etc..., too
+      const json = meme.json
       let c = new fabric.Canvas(canvasRef.current)
-      const customJson = json
-      delete customJson.svg
-      delete customJson.img
-      delete customJson.created_at
       const jsonStr = JSON.stringify(json)
       c.loadFromJSON(
         jsonStr,

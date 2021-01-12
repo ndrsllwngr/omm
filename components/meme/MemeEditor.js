@@ -97,7 +97,13 @@ export const MemeEditor = () => {
 
   const exportSVG = () => {
     const svg = canvas.toSVG()
-    const json = canvas.toJSON(['width', 'height', 'id', 'preserveObjectStacking'])
+    const json = canvas.toJSON([
+      'width',
+      'height',
+      'id',
+      'preserveObjectStacking',
+      'enableRetinaScaling',
+    ])
     setSvgExport(svg)
     setJsonExport(json)
     console.log({ src: 'MemeEditor.exportSVG', svg, json })
@@ -113,13 +119,30 @@ export const MemeEditor = () => {
   }
 
   const generateMeme = () => {
-    const json = canvas.toJSON(['width', 'height', 'id', 'preserveObjectStacking'])
+    const json = canvas.toJSON([
+      'width',
+      'height',
+      'id',
+      'preserveObjectStacking',
+      'enableRetinaScaling',
+    ])
     const svg = canvas.toSVG()
     const newObj = {
-      ...json,
       title,
-      template: template.url,
+      // createdAt is added during insert
+      createdBy: '',
+      upVotes: [],
+      downVotes: [],
+      forkedBy: [],
+      forkedFrom: '',
+      views: 0,
+      template: {
+        //id: template.id, TODO add template id
+        url: template.url,
+      },
+      url: '', // TODO if a real png was created (requirement)
       svg,
+      json,
     }
     console.log({ src: 'MemeEditor.generateMeme', newObj, svg, json })
     setData(newObj)

@@ -44,7 +44,7 @@ export default async function memeHandler(req, res) {
       const documentData = {
         name: name,
         img: memeDestination,
-        created_at: firebase.firestore.Timestamp.now(),
+        createdAt: firebase.firestore.Timestamp.now(),
       }
       await meme.set(documentData)
       // Add id to response

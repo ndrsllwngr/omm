@@ -12,10 +12,10 @@ export const ScreenshotUrl = () => {
   const getScreenshot = fetch(URL, {
     method: 'GET',
   })
-    .then((res) => res.json())
     .then((url) => {
       return url
     })
+    .catch((e) => console.error(e))
 
   const handleSubmit = (e) => {
     e.preventDefault()
@@ -24,7 +24,7 @@ export const ScreenshotUrl = () => {
     /*{ async () => {
         console.log('entering async')
         await memeFirestore.collection('templates').add({
-          created_at: firebase.firestore.Timestamp.now(),
+          createdAt: firebase.firestore.Timestamp.now(),
           url: test,
         })
       }}}*/

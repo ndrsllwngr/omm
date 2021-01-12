@@ -22,7 +22,7 @@ export default async function memeHandler(req, res) {
       const memeData = {
         content: content,
         template: templatesCollection.doc(template_id),
-        created_at: firebase.firestore.Timestamp.now(),
+        createdAt: firebase.firestore.Timestamp.now(),
         // TODO CREATED_BY, UP and DOWN votes etc.
       }
       // Upload meme data to Firestore
