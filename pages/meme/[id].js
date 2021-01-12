@@ -15,9 +15,6 @@ export default function User() {
   const [Memes, setMemes] = useState([])
   const [id, setId] = useState([])
   const [state, setState] = useAutoPlay()
-  useEffect(() => {
-    console.log(state.count)
-  }, [state.count])
 
   useEffect(() => {
     const getRandomInt = (min, max) => {
@@ -93,7 +90,7 @@ export default function User() {
         <div>Loading...</div>
       </div>
     )
-
+  //https://stackoverflow.com/questions/53857063/changing-state-on-route-change-next-js
   return (
     <div className="flex flex-col">
       <Navbar />
@@ -106,7 +103,10 @@ export default function User() {
           <span className="font-semibold text-xl tracking-tight">Random Meme</span>
         </a>
       </Link>
-      <button onClick={() => setState({ type: 'increment' })}>Autoplay {state.count}</button>
+
+      <button onClick={() => setState({ type: 'increment' })}>
+        {state.count ? `Autoplay On` : `Autoplay Off`}
+      </button>
     </div>
   )
 }

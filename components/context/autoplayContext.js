@@ -1,5 +1,6 @@
-import React, { createContext, useContext, useState } from 'react'
+import React, { createContext, useContext, useEffect } from 'react'
 import Proptypes from 'prop-types'
+import { useRouter } from 'next/router'
 
 //CreateContext
 export const AutoplayStateContext = createContext()
@@ -14,6 +15,9 @@ function countReducer(state, action) {
     // case 'decrement': {
     //   return { count: state.count - 1 }
     // }
+    case 'makefalse': {
+      return { count: false }
+    }
     default: {
       throw new Error(`Unhandled action type: ${action.type}`)
     }
@@ -22,6 +26,13 @@ function countReducer(state, action) {
 //Exports the Provider himself
 export const AutoplayProvider = ({ children }) => {
   const [state, setState] = React.useReducer(countReducer, { count: false })
+  const router = useRouter()
+  useEffect(() => {
+    console.log({ PATHNAME: router.pathname })
+    if (router.pathname !== '/meme/[id]') {
+      setState({ type: 'makefalse' })
+    }
+  }, [router.pathname])
   //const [state, setState] = useState(false)
 
   return (
