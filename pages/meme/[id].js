@@ -4,14 +4,20 @@ import firebase from '@/lib/firebase'
 import { Slideshow } from '@/components/Slideshow'
 import { Navbar } from '@/components/Navbar'
 import Link from 'next/link'
+import { useAutoPlayState, useAutoPlayDispatch } from '@/components/context/autoplayContext'
 
 export default function User() {
   const router = useRouter()
+  function useAutoPlay() {
+    return [useAutoPlayState(), useAutoPlayDispatch()]
+  }
 
   const [Memes, setMemes] = useState([])
   const [id, setId] = useState([])
+  const [state, dispatch] = useAutoPlay()
 
   useEffect(() => {
+    console.log(state.count)
     const getRandomInt = (min, max) => {
       min = Math.ceil(min)
       max = Math.floor(max)
@@ -72,6 +78,12 @@ export default function User() {
       })
   }, [setMemes, router.query.id])
 
+  // const autoplay = () => {
+  //   setTimeout(function () {
+  //     router.push(`/meme/${Memes[2].id}`)
+  //   }, 3000)
+  // }
+
   if (!Memes || !(Memes.length > 0))
     return (
       <div className="flex flex-col">
@@ -92,6 +104,7 @@ export default function User() {
           <span className="font-semibold text-xl tracking-tight">Random Meme</span>
         </a>
       </Link>
+      <button onClick={() => dispatch({ type: 'increment' })}>Autoplay {state.count}</button>
     </div>
   )
 }
