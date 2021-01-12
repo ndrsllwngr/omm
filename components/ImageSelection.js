@@ -14,26 +14,27 @@ export const ImageSelection = () => {
       const datadocs = docs
       //console.log(datadocs)
       for (let i = 0; i < datadocs.length; i++) {
-        //console.log(datadocs[i])
-        const url = await firebase.storage().ref(datadocs[i].img).getDownloadURL()
+        //const url = await firebase.storage().ref(datadocs[i].img).getDownloadURL()
+        const url = datadocs[i].url
+        console.log(url)
         urls.push(url)
+        console.log(datadocs[i].url)
       }
       return urls
     }
     getImageUrls().then((res) => {
-      //console.log(res)
+      console.log(res)
       setImageUrls(res)
     })
   }, [docs, setImageUrls])
-  useEffect(() => {
-    //console.log({ src: 'useState', imageUrls })
-  }, [imageUrls])
+
   return (
     <div className="img-selection">
       {imageUrls &&
         imageUrls.map((imageUrl, i) => (
           <button key={i} onClick={() => setTemplate({ url: imageUrl })}>
             <img src={imageUrl} alt="uploaded image" width="150" height="150" />
+            <p>text:{imageUrl}</p>
           </button>
         ))}
     </div>
