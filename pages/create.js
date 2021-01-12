@@ -3,12 +3,12 @@ import { HtmlHead } from '@/components/HtmlHead'
 import { Navbar } from '@/components/Navbar'
 import { MemeEditor } from '@/components/meme/MemeEditor'
 import { ImageSelection } from '@/components/ImageSelection'
-import { ProtectRoute } from '@/components/context/authContext'
+import { ProtectedRoute } from '@/components/context/authContext'
 
 const CreatePage = () => {
   return (
     <>
-      <ProtectRoute>
+      <ProtectedRoute>
         <HtmlHead />
         <Navbar />
         <div className="p-8 grid grid-cols-12 gap-6">
@@ -19,7 +19,7 @@ const CreatePage = () => {
             <ImageSelection />
           </div>
         </div>
-      </ProtectRoute>
+      </ProtectedRoute>
     </>
   )
 }

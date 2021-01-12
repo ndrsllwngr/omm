@@ -118,7 +118,7 @@ AuthContextComp.propTypes = {
 
 export const useAuth = () => useContext(AuthContext)
 
-export const ProtectRoute = ({ children }) => {
+export const ProtectedRoute = ({ children }) => {
   const auth = useAuth()
   if (!auth.user) {
     return <div>Unauthorized</div>
