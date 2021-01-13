@@ -99,6 +99,19 @@ export default function User() {
     console.log({ ENDTIMER: timeOut.current })
   }
   useEffect(() => {
+    const handleRouteChange = (url) => {
+      if (url !== '/meme/[id]') {
+        endAutoplay()
+      }
+    }
+    router.events.on('routeChangeStart', handleRouteChange)
+    // If the component is unmounted, unsubscribe
+    // from the event with the `off` method:
+    return () => {
+      router.events.off('routeChangeStart', handleRouteChange)
+    }
+  }, [])
+  useEffect(() => {
     state.bool ? startAutoplay() : endAutoplay()
   }, [Memes, state.bool])
 
@@ -121,12 +134,14 @@ export default function User() {
           </a>
         </Link>
 
-        <button
-          className="my-2 p-2 rounded bg-green-600"
-          onClick={() => dispatch({ type: 'toggleBool' })}
-        >
-          {state.bool ? `Autoplay On` : `Autoplay Off`}
-        </button>
+        {!(Memes[2].id === '') && (
+          <button
+            className="my-2 p-2 rounded bg-green-600"
+            onClick={() => dispatch({ type: 'toggleBool' })}
+          >
+            {state.bool ? `Autoplay On` : `Autoplay Off`}
+          </button>
+        )}
       </div>
     </div>
   )
