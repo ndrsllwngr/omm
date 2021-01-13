@@ -118,7 +118,7 @@ export default function User() {
       <Slideshow memes={Memes} />
       <div className="flex flex-col items-center font-semibold text-xl my-2">
         <Link href={`/meme/${id}`}>
-          <a className=" text-gray-800">
+          <a onClick={() => dispatch({ type: 'falseBool' })} className=" text-gray-800">
             <span className="my-2 rounded bg-green-600">Random Meme</span>
           </a>
         </Link>
