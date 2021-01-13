@@ -9,7 +9,7 @@ import {
   sendToBack,
 } from '@/components/meme/FabricUtils'
 
-export const MemeEditorImage = (_props) => {
+export const ImageToolbar = (_props) => {
   const { canvas } = useFabricCanvas()
   const { activeObject } = useFabricActiveObject()
   const [enabledTools, setEnabledTools] = useState(false)
@@ -18,7 +18,7 @@ export const MemeEditorImage = (_props) => {
     if (canvas) {
       setEnabledTools(activeObject ? getActiveProp('type', canvas) === 'image' : false)
       if (enabledTools) {
-        console.log({ src: 'MemeEditorImage.useEffect', activeObject })
+        console.log({ src: 'ImageToolbar.useEffect', activeObject })
       }
     }
   }, [canvas, enabledTools, activeObject, setEnabledTools])

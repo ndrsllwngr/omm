@@ -2,10 +2,10 @@ import React, { useEffect, useState } from 'react'
 import { fabric } from 'fabric'
 import SVG from 'react-inlinesvg'
 import { FabricCanvas } from '@/components/meme/FabricCanvas'
-import { MemeEditorText } from '@/components/meme/MemeEditorText'
+import { TextToolbar } from '@/components/meme/TextToolbar'
 import { useFabricCanvas, useTemplate } from '@/components/context/fabricContext'
 import useMemeUpload from '@/components/hooks/useMemeUpload'
-import { MemeEditorImage } from '@/components/meme/MemeEditorImage'
+import { ImageToolbar } from '@/components/meme/ImageToolbar'
 import { useRouter } from 'next/router'
 
 // eslint-disable-next-line react/prop-types
@@ -142,8 +142,8 @@ export const MemeEditor = () => {
   return (
     <div className="p-8 grid grid-cols-3 gap-6">
       <div className="col-span-3 h-16 rounded-lg bg-gray-100 flex items-center justify-start space-x-2 pl-2">
-        <MemeEditorText />
-        <MemeEditorImage />
+        <TextToolbar />
+        <ImageToolbar />
       </div>
       <div className="col-span-2 h-full rounded-lg bg-transparent flex justify-center">
         <FabricCanvas />

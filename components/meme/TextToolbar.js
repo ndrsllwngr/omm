@@ -20,6 +20,17 @@ import {
 } from '@/components/meme/FabricUtils'
 import { useImmer } from 'use-immer'
 
+const shadows = {
+  none: null,
+  'shadow-1': {
+    id: 'shadow-1',
+    color: 'rgba(0,0,0,0.3)',
+    blur: 5,
+    offsetX: 5,
+    offsetY: 5,
+  },
+}
+
 const textBoxInitialState = {
   text: 'Add your text here',
   fontStyle: 'normal',
@@ -28,9 +39,10 @@ const textBoxInitialState = {
   textAlign: 'left',
   fontFamily: 'arial',
   fontWeight: 'normal',
+  shadow: null,
 }
 
-export const MemeEditorText = (_props) => {
+export const TextToolbar = (_props) => {
   const { canvas } = useFabricCanvas()
   const { activeObject } = useFabricActiveObject()
   const [textBox, updateTextBox] = useImmer(textBoxInitialState)
@@ -59,8 +71,11 @@ export const MemeEditorText = (_props) => {
           draft['fontWeight'] = activeObject
             ? activeObject.get('fontWeight')
             : textBoxInitialState['fontWeight']
+          draft['shadow'] = activeObject
+            ? activeObject.get('shadow')
+            : textBoxInitialState['shadow']
         })
-        console.log({ src: 'MemeEditorText.useEffect', activeObject, textBox })
+        console.log({ src: 'TextToolbar.useEffect', activeObject, textBox })
         // console.log({
         //   getActiveStyle: getActiveStyle('fontWeight', activeObject, canvas),
         //   getActiveProp: getActiveProp('fontWeight', canvas),
@@ -104,18 +119,22 @@ export const MemeEditorText = (_props) => {
         break
       case 'fontWeight':
         toggleBold(activeObject, canvas)
-        updateProperty('fontWeight', changedValue)
+        updateProperty(changedKey, changedValue)
         break
       case 'text':
         setText(changedValue, activeObject, canvas)
-        updateProperty('text', changedValue)
+        updateProperty(changedKey, changedValue)
+        break
+      case 'shadow':
+        setActiveStyle(changedKey, shadows[changedValue], activeObject, canvas)
+        updateProperty(changedKey, changedValue)
         break
       default:
         console.log('Unsupported property', changedKey)
     }
     setObjectCaching(true, canvas)
     console.log({
-      src: 'MemeEditorText.handleChange',
+      src: 'TextToolbar.handleChange',
       changedKey,
       changedValue,
       activeObject,
@@ -167,6 +186,13 @@ export const MemeEditorText = (_props) => {
               <option value="times new roman">Times New Roman</option>
               <option value="impact">Impact</option>
               <option value="courier">Courier</option>
+            </select>
+            <select
+              value={textBox.shadow && textBox.shadow.id ? textBox.shadow.id : 'none'}
+              onChange={(e) => handleChange('shadow', e.target.value)}
+            >
+              <option value="none">No shadow</option>
+              <option value="shadow-1">Shadow 1</option>
             </select>
             <button onClick={() => sendBackwards(canvas)}>Send backwards</button>
             <button onClick={() => sendToBack(canvas)}>Send to back</button>
