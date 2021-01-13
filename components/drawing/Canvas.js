@@ -31,6 +31,7 @@ export const Canvas = () => {
     canvasContextRef.current.lineTo(clientX, clientY)
     canvasContextRef.current.stroke()
     setIsDrawing(true)
+    console.log(clientX, clientY)
   }
 
   const handleMouseUp = (e) => {
@@ -64,8 +65,8 @@ export const Canvas = () => {
       <canvas
         id="canvas"
         style={{ backgroundColor: 'blue' }}
-        width={Window.innerWidth}
-        height={Window.innerheight}
+        width="500"
+        height="500"
         onMouseDown={handleMouseDown}
         onMouseMove={handleMouseMove}
         onMouseUp={handleMouseUp}
