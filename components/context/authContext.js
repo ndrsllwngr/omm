@@ -41,10 +41,18 @@ export default function AuthContextComp({ children }) {
   const signIn = ({ email, password }) => {
     return firebase
       .auth()
-      .signInWithEmailAndPassword(email, password)
-      .then((response) => {
-        getUserAdditionalData(response.user)
-        return response.user
+      .setPersistence(firebase.auth.Auth.Persistence.LOCAL)
+      .then(() => {
+        firebase
+          .auth()
+          .signInWithEmailAndPassword(email, password)
+          .then((response) => {
+            getUserAdditionalData(response.user)
+            return response.user
+          })
+          .catch((error) => {
+            return { error }
+          })
       })
       .catch((error) => {
         return { error }
