@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from 'react'
+import { useState, useEffect } from 'react'
 import firebase from '@/lib/firebase'
 
 export const useDatabaseMemes = (limit) => {
@@ -24,7 +24,6 @@ export const useDatabaseMemes = (limit) => {
     switch (filter) {
       case 'Latest':
         loadNextMemes('created_at', 'desc')
-
         break
       case 'Oldest':
         loadNextMemes('created_at', 'asc')

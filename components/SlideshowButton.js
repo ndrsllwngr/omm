@@ -1,9 +1,11 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { useRouter } from 'next/router'
+import { useAutoPlayDispatch } from '@/components/context/autoplayContext'
 
 export const SlideshowButton = ({ name, changeSlide }) => {
   const router = useRouter()
+  const dispatch = useAutoPlayDispatch()
   return (
     <button
       className={`bg-blue hover:bg-blue-dark text-black font-bold py-2 px-4 rounded ${
@@ -12,6 +14,7 @@ export const SlideshowButton = ({ name, changeSlide }) => {
       onClick={(e) => {
         e.preventDefault()
         router.push(changeSlide)
+        dispatch({ type: 'falseBool' })
       }}
     >
       {name}
