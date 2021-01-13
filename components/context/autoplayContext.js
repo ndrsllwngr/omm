@@ -2,21 +2,21 @@ import React, { createContext, useContext, useEffect } from 'react'
 import Proptypes from 'prop-types'
 import { useRouter } from 'next/router'
 
-//CreateContext
+//Create Context
 export const AutoplayStateContext = createContext()
 export const AutoplayDispatchContext = createContext()
 
-//Reducer
-function countReducer(state, action) {
+//Reducer to controll Autoplay Button State
+function boolReducer(state, action) {
   switch (action.type) {
-    case 'increment': {
-      return { count: !state.count }
+    case 'toggleBool': {
+      return { bool: !state.bool }
     }
     // case 'decrement': {
     //   return { count: state.count - 1 }
     // }
-    case 'makefalse': {
-      return { count: false }
+    case 'falseBool': {
+      return { bool: false }
     }
     default: {
       throw new Error(`Unhandled action type: ${action.type}`)
@@ -25,19 +25,19 @@ function countReducer(state, action) {
 }
 //Exports the Provider himself
 export const AutoplayProvider = ({ children }) => {
-  const [state, setState] = React.useReducer(countReducer, { count: false })
+  const [state, dispatch] = React.useReducer(boolReducer, { bool: false })
   const router = useRouter()
   useEffect(() => {
     console.log({ PATHNAME: router.pathname })
     if (router.pathname !== '/meme/[id]') {
-      setState({ type: 'makefalse' })
+      dispatch({ type: 'falseBool' })
     }
   }, [router.pathname])
   //const [state, setState] = useState(false)
 
   return (
     <AutoplayStateContext.Provider value={state}>
-      <AutoplayDispatchContext.Provider value={setState}>
+      <AutoplayDispatchContext.Provider value={dispatch}>
         {children}
       </AutoplayDispatchContext.Provider>
     </AutoplayStateContext.Provider>

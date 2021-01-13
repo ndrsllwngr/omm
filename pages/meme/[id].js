@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, useRef } from 'react'
 import { useRouter } from 'next/router'
 import firebase from '@/lib/firebase'
 import { Slideshow } from '@/components/Slideshow'
@@ -14,7 +14,29 @@ export default function User() {
 
   const [Memes, setMemes] = useState([])
   const [id, setId] = useState([])
-  const [state, setState] = useAutoPlay()
+  const [state, dispatch] = useAutoPlay()
+  let timeOut = useRef(undefined)
+
+  //let timeOut = undefined
+
+  useEffect(() => {
+    const startTimeout = () => {
+      timeOut.current = setTimeout(function () {
+        router.push(`/meme/${Memes[2].id}`)
+      }, 3000)
+      console.log({ STARTTIMER: timeOut })
+    }
+    const endTimeout = () => {
+      console.log({ ENDTIMER: timeOut })
+      clearTimeout(timeOut.current)
+    }
+
+    if (state.bool) {
+      startTimeout()
+    } else {
+      endTimeout()
+    }
+  }, [state.bool])
 
   useEffect(() => {
     const getRandomInt = (min, max) => {
@@ -77,12 +99,6 @@ export default function User() {
       })
   }, [setMemes, router.query.id])
 
-  // const autoplay = () => {
-  //   setTimeout(function () {
-  //     router.push(`/meme/${Memes[2].id}`)
-  //   }, 3000)
-  // }
-
   if (!Memes || !(Memes.length > 0))
     return (
       <div className="flex flex-col">
@@ -104,8 +120,8 @@ export default function User() {
         </a>
       </Link>
 
-      <button onClick={() => setState({ type: 'increment' })}>
-        {state.count ? `Autoplay On` : `Autoplay Off`}
+      <button onClick={() => dispatch({ type: 'toggleBool' })}>
+        {state.bool ? `Autoplay On` : `Autoplay Off`}
       </button>
     </div>
   )
