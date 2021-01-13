@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { fabric } from 'fabric'
 import SVG from 'react-inlinesvg'
 import { FabricCanvas } from '@/components/meme/FabricCanvas'
@@ -6,6 +6,7 @@ import { MemeEditorText } from '@/components/meme/MemeEditorText'
 import { useFabricCanvas, useTemplate } from '@/components/context/fabricContext'
 import useMemeUpload from '@/components/hooks/useMemeUpload'
 import { MemeEditorImage } from '@/components/meme/MemeEditorImage'
+import { useRouter } from 'next/router'
 
 // eslint-disable-next-line react/prop-types
 const Button = ({ children, type = 'button', disabled = false, onClick }) => {
@@ -28,6 +29,7 @@ const Button = ({ children, type = 'button', disabled = false, onClick }) => {
 // uses http://fabricjs.com/
 // eslint-disable-next-line react/prop-types
 export const MemeEditor = () => {
+  const router = useRouter()
   const { canvas } = useFabricCanvas()
   const [imgURL, setImgURL] = useState('')
   const { template } = useTemplate()
@@ -130,6 +132,12 @@ export const MemeEditor = () => {
       transparentCorners: false,
     })
   }
+
+  useEffect(() => {
+    if (success) {
+      router.push(`/meme/${success}`)
+    }
+  }, [success])
 
   return (
     <div className="p-8 grid grid-cols-3 gap-6">
