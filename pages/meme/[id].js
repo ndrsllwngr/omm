@@ -15,32 +15,8 @@ export default function User() {
   }
   const { id } = useRandomMeme(router)
   const [Memes, setMemes] = useState([])
-  //const [id, setId] = useState([])
   const [state, dispatch] = useAutoPlay()
   const timeOut = useRef(null)
-
-  //let timeOut = undefined
-  // const getRandomInt = (min, max) => {
-  //   min = Math.ceil(min)
-  //   max = Math.floor(max)
-  //   return Math.floor(Math.random() * (max - min + 1)) + min
-  // }
-
-  // useEffect(() => {
-  //   async function getRandomMeme() {
-  //     let memeCollection = await firebase.firestore().collection(FIRESTORE_COLLECTION.MEMES).get()
-  //     const ids = []
-  //     memeCollection.forEach((meme) => ids.push(meme.id))
-
-  //     let random = getRandomInt(0, ids.length - 1)
-
-  //     while (ids[random] === router.query.id) {
-  //       random = getRandomInt(0, ids.length - 1)
-  //     }
-  //     setId(ids[random])
-  //   }
-  //   getRandomMeme()
-  // }, [router.query.id])
 
   useEffect(() => {
     // TODO subscribe to get updates
@@ -99,6 +75,7 @@ export default function User() {
     clearTimeout(timeOut.current)
     //console.log({ ENDTIMER: timeOut.current })
   }
+  //Errorhandling leave page while autoplay enabled
   useEffect(() => {
     const handleRouteChange = (url) => {
       if (url !== '/meme/[id]') {
@@ -112,6 +89,7 @@ export default function User() {
       router.events.off('routeChangeStart', handleRouteChange)
     }
   }, [router.events])
+  //Toogle Autoplay
   useEffect(() => {
     state.bool ? startAutoplay() : endAutoplay()
   }, [Memes, state.bool])
