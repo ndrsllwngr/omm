@@ -58,14 +58,14 @@ export const Canvas = () => {
         setFile(blob)
       })
   }
-
+  if (typeof window === 'undefined') return <div>loading...</div>
   return (
     <div>
       <canvas
         id="canvas"
         style={{ backgroundColor: 'blue' }}
-        width={Window.innerWidth}
-        height={Window.innerheight}
+        width={window.innerWidth}
+        height={window.innerHeight}
         onMouseDown={handleMouseDown}
         onMouseMove={handleMouseMove}
         onMouseUp={handleMouseUp}
