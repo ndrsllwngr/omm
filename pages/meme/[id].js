@@ -1,15 +1,23 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, useRef } from 'react'
 import { useRouter } from 'next/router'
 import firebase from '@/lib/firebase'
 import { Slideshow } from '@/components/Slideshow'
 import { Navbar } from '@/components/Navbar'
 import Link from 'next/link'
+import { useAutoPlayState, useAutoPlayDispatch } from '@/components/context/autoplayContext'
 
 export default function User() {
   const router = useRouter()
+  function useAutoPlay() {
+    return [useAutoPlayState(), useAutoPlayDispatch()]
+  }
 
   const [Memes, setMemes] = useState([])
   const [id, setId] = useState([])
+  const [state, dispatch] = useAutoPlay()
+  const timeOut = useRef(null)
+
+  //let timeOut = undefined
 
   useEffect(() => {
     const getRandomInt = (min, max) => {
@@ -30,10 +38,11 @@ export default function User() {
       setId(ids[random])
     }
     getRandomMeme()
-  }, [router.query.id, setId])
+  }, [router.query.id])
 
   useEffect(() => {
     // TODO subscribe to get updates
+    // TODO pass order by
     async function getMemes() {
       let Meme = []
       const db = firebase.firestore()
@@ -71,6 +80,27 @@ export default function User() {
       })
   }, [setMemes, router.query.id])
 
+  const startAutoplay = () => {
+    timeOut.current = setTimeout(function () {
+      console.log(Memes)
+      console.log({ STARTTIMER: timeOut.current })
+      //Prevent Autoplay at EOF
+      if (Memes[2].id) router.push(`/meme/${Memes[2].id}`)
+      else {
+        endAutoplay
+        dispatch({ type: 'falseBool' })
+      }
+    }, 3000)
+  }
+
+  const endAutoplay = () => {
+    clearTimeout(timeOut.current)
+    console.log({ ENDTIMER: timeOut.current })
+  }
+  useEffect(() => {
+    state.bool ? startAutoplay() : endAutoplay()
+  }, [Memes, state.bool])
+
   if (!Memes || !(Memes.length > 0))
     return (
       <div className="flex flex-col">
@@ -78,7 +108,7 @@ export default function User() {
         <div>Loading...</div>
       </div>
     )
-
+  //https://stackoverflow.com/questions/53857063/changing-state-on-route-change-next-js
   return (
     <div className="flex flex-col">
       <Navbar />
@@ -86,11 +116,20 @@ export default function User() {
       <div> {Memes[1].id}</div>
       <img alt="" className="w-10" src={Memes[1].template} />
       <Slideshow memes={Memes} />
-      <Link href={`/meme/${id}`}>
-        <a className="flex cursor-pointer items-center w-full h-8  text-gray-800 mr-16">
-          <span className="font-semibold text-xl tracking-tight">Random Meme</span>
-        </a>
-      </Link>
+      <div className="flex flex-col items-center font-semibold text-xl my-2 text-white">
+        <Link href={`/meme/${id}`}>
+          <a onClick={() => dispatch({ type: 'falseBool' })}>
+            <span className="my-2 p-2 rounded bg-green-600">Random Meme</span>
+          </a>
+        </Link>
+
+        <button
+          className="my-2 p-2 rounded bg-green-600"
+          onClick={() => dispatch({ type: 'toggleBool' })}
+        >
+          {state.bool ? `Autoplay On` : `Autoplay Off`}
+        </button>
+      </div>
     </div>
   )
 }

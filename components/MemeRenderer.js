@@ -4,7 +4,7 @@ import SVG from 'react-inlinesvg'
 
 export const MemeRenderer = ({ meme }) => {
   useEffect(() => {
-    console.log({ meme })
+    // console.log({ meme })
   }, [meme])
   return (
     <div>
