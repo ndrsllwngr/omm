@@ -116,15 +116,15 @@ export default function User() {
       <div> {Memes[1].id}</div>
       <img alt="" className="w-10" src={Memes[1].template} />
       <Slideshow memes={Memes} />
-      <div className="flex flex-col items-center font-semibold text-xl my-2">
+      <div className="flex flex-col items-center font-semibold text-xl my-2 text-white">
         <Link href={`/meme/${id}`}>
-          <a onClick={() => dispatch({ type: 'falseBool' })} className=" text-gray-800">
-            <span className="my-2 rounded bg-green-600">Random Meme</span>
+          <a onClick={() => dispatch({ type: 'falseBool' })}>
+            <span className="my-2 p-2 rounded bg-green-600">Random Meme</span>
           </a>
         </Link>
 
         <button
-          className="my-2 rounded bg-green-600"
+          className="my-2 p-2 rounded bg-green-600"
           onClick={() => dispatch({ type: 'toggleBool' })}
         >
           {state.bool ? `Autoplay On` : `Autoplay Off`}
