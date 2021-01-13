@@ -34,7 +34,6 @@ export const ImageSelection = () => {
         imageUrls.map((imageUrl, i) => (
           <button key={i} onClick={() => setTemplate({ url: imageUrl })}>
             <img src={imageUrl} alt="uploaded image" width="150" height="150" />
-            <p>text:{imageUrl}</p>
           </button>
         ))}
     </div>
