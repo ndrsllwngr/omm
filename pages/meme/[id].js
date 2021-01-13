@@ -15,28 +15,22 @@ export default function User() {
   const [Memes, setMemes] = useState([])
   const [id, setId] = useState([])
   const [state, dispatch] = useAutoPlay()
-  let timeOut = useRef(undefined)
+  const timeOut = useRef(null)
+
+  const startTimeout = () => {
+    timeOut.current = setTimeout(function () {
+      console.log(Memes)
+      console.log({ STARTTIMER: timeOut.current })
+      router.push(`/meme/${Memes[2].id}`)
+    }, 3000)
+  }
+
+  const endTimeout = () => {
+    clearTimeout(timeOut.current)
+    console.log({ ENDTIMER: timeOut.current })
+  }
 
   //let timeOut = undefined
-
-  useEffect(() => {
-    const startTimeout = () => {
-      timeOut.current = setTimeout(function () {
-        router.push(`/meme/${Memes[2].id}`)
-      }, 3000)
-      console.log({ STARTTIMER: timeOut })
-    }
-    const endTimeout = () => {
-      console.log({ ENDTIMER: timeOut })
-      clearTimeout(timeOut.current)
-    }
-
-    if (state.bool) {
-      startTimeout()
-    } else {
-      endTimeout()
-    }
-  }, [state.bool])
 
   useEffect(() => {
     const getRandomInt = (min, max) => {
@@ -98,6 +92,10 @@ export default function User() {
         console.log({ error })
       })
   }, [setMemes, router.query.id])
+
+  useEffect(() => {
+    state.bool ? startTimeout() : endTimeout()
+  }, [Memes, state.bool])
 
   if (!Memes || !(Memes.length > 0))
     return (
