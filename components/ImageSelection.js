@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from 'react'
 import firebase from '@/lib/firebase'
 import useFirestore from '@/lib/useFirestore'
-import { useTemplate } from '@/components/context/templateContext'
+import { useTemplate } from '@/components/context/fabricContext'
 
 export const ImageSelection = () => {
   const { docs } = useFirestore('templates')
   const [imageUrls, setImageUrls] = useState([])
-  const [, setTemplate] = useTemplate()
+  const { updateTemplate } = useTemplate()
 
   useEffect(() => {
     async function getImageUrls() {
@@ -32,7 +32,7 @@ export const ImageSelection = () => {
     <div className="img-selection">
       {imageUrls &&
         imageUrls.map((imageUrl, i) => (
-          <button key={i} onClick={() => setTemplate({ url: imageUrl })}>
+          <button key={i} onClick={() => updateTemplate({ url: imageUrl })}>
             <img src={imageUrl} alt="uploaded image" width="150" height="150" />
           </button>
         ))}

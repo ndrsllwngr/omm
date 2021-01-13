@@ -1,11 +1,10 @@
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import { fabric } from 'fabric'
 import SVG from 'react-inlinesvg'
 import { FabricCanvas } from '@/components/meme/FabricCanvas'
 import { MemeEditorText } from '@/components/meme/MemeEditorText'
-import { useFabricCanvas } from '@/components/context/fabricContext'
+import { useFabricCanvas, useTemplate } from '@/components/context/fabricContext'
 import useMemeUpload from '@/components/hooks/useMemeUpload'
-import { useTemplate } from '@/components/context/templateContext'
 import { MemeEditorImage } from '@/components/meme/MemeEditorImage'
 
 // eslint-disable-next-line react/prop-types
@@ -29,9 +28,9 @@ const Button = ({ children, type = 'button', disabled = false, onClick }) => {
 // uses http://fabricjs.com/
 // eslint-disable-next-line react/prop-types
 export const MemeEditor = () => {
-  const { canvas, canvasRef } = useFabricCanvas()
+  const { canvas } = useFabricCanvas()
   const [imgURL, setImgURL] = useState('')
-  const [template] = useTemplate()
+  const { template } = useTemplate()
   const [title, setTitle] = useState('')
   const [svgExport, setSvgExport] = useState('')
   const [jsonExport, setJsonExport] = useState({})
@@ -61,45 +60,6 @@ export const MemeEditor = () => {
     canvas.renderAll()
     console.log({ src: 'MemeEditor.addText', txt, canvas })
   }
-
-  useEffect(() => {
-    // TODO WRITE AS CALLBACK TO FIX TODO-1
-    // ISSUE-1: fix logic setting template image (CREATE is getting triggered to early
-    // ISSUE-2: rerender issue, if you select a new template the change won't get reflected until another object gets selected
-    if (canvas && canvasRef.current) {
-      const canvasObjects = canvas.getObjects('image')
-      const templateIndex = canvasObjects.find((el) => el.id === 'TEMPLATE')
-      if (!templateIndex) {
-        const addTemplate = (url = 'https://imgflip.com/s/meme/Futurama-Fry.jpg') => {
-          if (canvas.getObjects)
-            new fabric.Image.fromURL(url, (img) => {
-              img.scale(0.75)
-              customSelect(img)
-              img.set({ id: 'TEMPLATE' })
-              canvas.add(img)
-              canvas.sendToBack(img)
-              canvas.renderAll()
-            })
-        }
-        addTemplate(template.url)
-        console.log('MemeEditor.useEffect: CREATE template', template.url)
-      } else {
-        templateIndex.set('objectCaching', false).setCoords()
-        templateIndex.set('noScaleCache', false).setCoords()
-        canvas.requestRenderAll()
-        canvas.renderAll()
-        templateIndex.setSrc(template.url).setCoords()
-        canvas.requestRenderAll()
-        canvas.renderAll()
-        templateIndex.set('objectCaching', true).setCoords()
-        templateIndex.set('noScaleCache', true).setCoords()
-        canvas.requestRenderAll()
-        canvas.renderAll()
-        console.log('MemeEditor.useEffect: REPLACE template', template.url)
-      }
-      console.log({ src: 'MemeEditor.useEffect', canvas, canvasObjects, templateIndex, template })
-    }
-  }, [canvas, template, canvasRef])
 
   const exportSVG = () => {
     const svg = canvas.toSVG()
