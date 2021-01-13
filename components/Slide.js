@@ -3,10 +3,13 @@ import PropTypes from 'prop-types'
 import { MemeRenderer } from '@/components/MemeRenderer'
 import { useFabricJson } from '@/components/context/fabricContext'
 import { useRouter } from 'next/router'
+import { useVoting } from '@/components/hooks/useVoting'
+import { VOTE } from '@/lib/constants'
 
 export const Slide = ({ meme }) => {
   const { setJson } = useFabricJson()
   const router = useRouter()
+  const { upVote, downVote, voteState } = useVoting(meme)
   return (
     <div className="flex-col max-w-md">
       <div className="title">{meme.title}</div>
@@ -17,6 +20,12 @@ export const Slide = ({ meme }) => {
         }}
       >
         Copy Meme
+      </button>
+      <button className={'bg-green-50'} disabled={voteState === VOTE.up} onClick={upVote}>
+        Upvote
+      </button>
+      <button className={'bg-red-50'} disabled={voteState === VOTE.down} onClick={downVote}>
+        Downvote
       </button>
       <MemeRenderer meme={meme} />
     </div>

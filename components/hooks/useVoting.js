@@ -2,16 +2,15 @@
 import { useState, useEffect } from 'react'
 import firebase from '@/lib/firebase'
 import { useAuth } from '@/components/context/authContext'
-import { VOTE } from '@/lib/constants'
+import { FIRESTORE_COLLECTION, VOTE } from '@/lib/constants'
 
 export const useVoting = (initMeme) => {
   const [meme, setMeme] = useState(initMeme)
-  // TODO is this maybe better than using getVote?
-  // const [voteState, setVoteState] = useState(VOTE.none)
+  const [voteState, setVoteState] = useState(VOTE.none)
 
   const auth = useAuth()
 
-  const getVote = () => {
+  const getVote = (meme) => {
     if (auth.user && meme && meme.upVotes.includes(auth.user.uid)) {
       return VOTE.up
     } else if (auth.user && meme && meme.downVotes.includes(auth.user.uid)) {
@@ -21,53 +20,78 @@ export const useVoting = (initMeme) => {
     }
   }
 
-  const upVote = async () => {
+  const upVote = () => {
+    const db = firebase.firestore()
     const memeRef = db.collection(FIRESTORE_COLLECTION.MEMES).doc(meme.id)
 
-    if (getVote() !== VOTE.up) {
-      await memeRef
-        // Remove any possible downVotes first
-        .update({
-          downVotes: firebase.admin.firestore.FieldValue.arrayRemove(auth.user.uid),
-        })
-        // Add upvote
-        .then(
-          memeRef.update({
-            upVotes: firebase.admin.firestore.FieldValue.arrayUnion(auth.user.uid),
+    if (voteState !== VOTE.up) {
+      db.runTransaction((transaction) => {
+        return transaction.get(memeRef).then((doc) => {
+          if (!doc.exists) {
+            console.error('DOC NOT FOUND')
+          }
+          transaction.update(memeRef, {
+            downVotes: firebase.firestore.FieldValue.arrayRemove(auth.user.uid),
           })
-        )
+          transaction.update(memeRef, {
+            upVotes: firebase.firestore.FieldValue.arrayUnion(auth.user.uid),
+          })
+        })
+      })
+        .then(function () {
+          console.log('(UP) Transaction successfully committed!')
+        })
+        .catch(function (error) {
+          console.log('(UP) Transaction failed: ', error)
+        })
     }
   }
 
-  const downVote = async () => {
+  const downVote = () => {
+    const db = firebase.firestore()
     const memeRef = db.collection(FIRESTORE_COLLECTION.MEMES).doc(meme.id)
 
-    if (getVote() !== VOTE.down) {
+    if (voteState !== VOTE.down) {
       // Remove any possible upVotes first
-      await memeRef
-        .update({
-          upVotes: firebase.admin.firestore.FieldValue.arrayRemove(auth.user.uid),
-        })
-        // Add upvote
-        .then(
-          memeRef.update({
-            downVotes: firebase.admin.firestore.FieldValue.arrayUnion(auth.user.uid),
+      db.runTransaction((transaction) => {
+        return transaction.get(memeRef).then((doc) => {
+          if (!doc.exists) {
+            console.error('DOC NOT FOUND')
+          }
+          transaction.update(memeRef, {
+            upVotes: firebase.firestore.FieldValue.arrayRemove(auth.user.uid),
           })
-        )
+          transaction.update(memeRef, {
+            downVotes: firebase.firestore.FieldValue.arrayUnion(auth.user.uid),
+          })
+        })
+      })
+        .then(function () {
+          console.log('(DOWN) Transaction successfully committed!')
+        })
+        .catch(function (error) {
+          console.log('(DOWN) Transaction failed: ', error)
+        })
     }
   }
 
   // Handle updates of the user document
   useEffect(() => {
     if (meme) {
+      console.log({ src: 'useVoting', meme })
+      setVoteState(getVote(meme))
       // Subscribe to user document on mount
+      const db = firebase.firestore()
       const unsubscribe = db
         .collection(FIRESTORE_COLLECTION.MEMES)
         .doc(meme.id)
-        .onSnapshot((doc) => setMeme(doc.data()))
+        .onSnapshot((doc) => {
+          setMeme({ id: doc.id, ...doc.data() })
+          setVoteState(getVote(doc.data()))
+        })
       return () => unsubscribe()
     }
   }, [])
 
-  return { upVote: upVote, downVote: downVote }
+  return { upVote, downVote, voteState }
 }
