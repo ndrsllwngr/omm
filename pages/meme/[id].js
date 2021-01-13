@@ -6,40 +6,41 @@ import { Navbar } from '@/components/Navbar'
 import Link from 'next/link'
 import { FIRESTORE_COLLECTION } from '@/lib/constants'
 import { useAutoPlayState, useAutoPlayDispatch } from '@/components/context/autoplayContext'
+import { useRandomMeme } from '@/components/hooks/useRandomMeme'
 
 export default function User() {
   const router = useRouter()
   function useAutoPlay() {
     return [useAutoPlayState(), useAutoPlayDispatch()]
   }
-
+  const { id } = useRandomMeme(router)
   const [Memes, setMemes] = useState([])
-  const [id, setId] = useState([])
+  //const [id, setId] = useState([])
   const [state, dispatch] = useAutoPlay()
   const timeOut = useRef(null)
 
   //let timeOut = undefined
+  // const getRandomInt = (min, max) => {
+  //   min = Math.ceil(min)
+  //   max = Math.floor(max)
+  //   return Math.floor(Math.random() * (max - min + 1)) + min
+  // }
 
-  useEffect(() => {
-    const getRandomInt = (min, max) => {
-      min = Math.ceil(min)
-      max = Math.floor(max)
-      return Math.floor(Math.random() * (max - min + 1)) + min
-    }
-    async function getRandomMeme() {
-      let memeCollection = await firebase.firestore().collection(FIRESTORE_COLLECTION.MEMES).get()
-      const ids = []
-      memeCollection.forEach((meme) => ids.push(meme.id))
+  // useEffect(() => {
+  //   async function getRandomMeme() {
+  //     let memeCollection = await firebase.firestore().collection(FIRESTORE_COLLECTION.MEMES).get()
+  //     const ids = []
+  //     memeCollection.forEach((meme) => ids.push(meme.id))
 
-      let random = getRandomInt(0, ids.length - 1)
+  //     let random = getRandomInt(0, ids.length - 1)
 
-      while (ids[random] === router.query.id) {
-        random = getRandomInt(0, ids.length - 1)
-      }
-      setId(ids[random])
-    }
-    getRandomMeme()
-  }, [router.query.id])
+  //     while (ids[random] === router.query.id) {
+  //       random = getRandomInt(0, ids.length - 1)
+  //     }
+  //     setId(ids[random])
+  //   }
+  //   getRandomMeme()
+  // }, [router.query.id])
 
   useEffect(() => {
     // TODO subscribe to get updates
@@ -83,8 +84,8 @@ export default function User() {
 
   const startAutoplay = () => {
     timeOut.current = setTimeout(function () {
-      console.log(Memes)
-      console.log({ STARTTIMER: timeOut.current })
+      //console.log(Memes)
+      //console.log({ STARTTIMER: timeOut.current })
       //Prevent Autoplay at EOF
       if (Memes[2].id) router.push(`/meme/${Memes[2].id}`)
       else {
@@ -96,7 +97,7 @@ export default function User() {
 
   const endAutoplay = () => {
     clearTimeout(timeOut.current)
-    console.log({ ENDTIMER: timeOut.current })
+    //console.log({ ENDTIMER: timeOut.current })
   }
   useEffect(() => {
     const handleRouteChange = (url) => {
@@ -110,7 +111,7 @@ export default function User() {
     return () => {
       router.events.off('routeChangeStart', handleRouteChange)
     }
-  }, [])
+  }, [router.events])
   useEffect(() => {
     state.bool ? startAutoplay() : endAutoplay()
   }, [Memes, state.bool])
