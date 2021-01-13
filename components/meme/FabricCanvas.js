@@ -8,7 +8,7 @@ import {
 // eslint-disable-next-line react/prop-types
 export const FabricCanvas = ({ jsonData = null }) => {
   const { json, setJson } = useFabricJson()
-  const { canvas, initCanvas, loadFromJSON, canvasRef, resetCanvas } = useFabricCanvas()
+  const { canvas, initCanvas, loadFromJSON, canvasRef, resetCanvas, setIsCopy } = useFabricCanvas()
   const { setActiveObject } = useFabricActiveObject()
 
   useLayoutEffect(() => {
@@ -16,15 +16,18 @@ export const FabricCanvas = ({ jsonData = null }) => {
     if (!canvas && canvasRef.current) {
       if (json) {
         loadFromJSON(json)
+        setIsCopy(json.id)
         setJson(null)
       } else if (jsonData) {
         loadFromJSON(jsonData)
+        setIsCopy(json.id)
         setJson(null)
       } else {
         initCanvas({
           width: 500,
           height: 400,
         })
+        setIsCopy(null)
       }
     }
   }, [canvasRef, json, canvas, initCanvas, loadFromJSON, setJson, jsonData])

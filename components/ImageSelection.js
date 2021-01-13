@@ -15,9 +15,9 @@ export const ImageSelection = () => {
       const datadocs = docs
       console.log(datadocs)
       for (let i = 0; i < datadocs.length; i++) {
-        console.log(datadocs[i])
+        console.log({ src: 'template datadocs', doc: datadocs[i] })
         const url = await firebase.storage().ref(datadocs[i].img).getDownloadURL()
-        urls.push(url)
+        urls.push({ id: datadocs[i].id, url })
       }
       return urls
     }
@@ -33,8 +33,8 @@ export const ImageSelection = () => {
     <div className="img-selection">
       {imageUrls &&
         imageUrls.map((imageUrl, i) => (
-          <button key={i} onClick={() => updateTemplate({ url: imageUrl })}>
-            <img src={imageUrl} alt="uploaded image" width="150" height="150" />
+          <button key={i} onClick={() => updateTemplate(imageUrl)}>
+            <img src={imageUrl.url} alt="uploaded image" width="150" height="150" />
           </button>
         ))}
     </div>
