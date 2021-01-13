@@ -3,4 +3,4 @@ import { Navbar } from '@/components/Navbar'
 
 export default { title: 'UI' }
 
-export const NavbarMain = () => <Navbar />
+export const navbarMain = () => <Navbar />

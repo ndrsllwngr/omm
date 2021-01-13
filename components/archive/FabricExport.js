@@ -1,5 +1,5 @@
 import React, { useContext } from 'react'
-import { FabricContext } from '@/components/context/FabricContext'
+import { FabricContext } from '@/components/context/fabricContext'
 
 export const FabricExport = (_props) => {
   const { canvas } = useContext(FabricContext)

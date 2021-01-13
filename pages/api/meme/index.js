@@ -1,4 +1,5 @@
 import firebase from '@/lib/firebaseNode'
+import { FIRESTORE_COLLECTION } from '@/lib/constants'
 
 export default async function memeHandler(req, res) {
   const {
@@ -7,8 +8,8 @@ export default async function memeHandler(req, res) {
   } = req
 
   const db = firebase.firestore()
-  const memeCollection = db.collection('memes')
-  const templatesCollection = db.collection('templates')
+  const memeCollection = db.collection(FIRESTORE_COLLECTION.MEMES)
+  const templatesCollection = db.collection(FIRESTORE_COLLECTION.TEMPLATES)
 
   switch (method) {
     case 'PUT':
@@ -22,7 +23,7 @@ export default async function memeHandler(req, res) {
       const memeData = {
         content: content,
         template: templatesCollection.doc(template_id),
-        created_at: firebase.firestore.Timestamp.now(),
+        createdAt: firebase.firestore.Timestamp.now(),
         // TODO CREATED_BY, UP and DOWN votes etc.
       }
       // Upload meme data to Firestore

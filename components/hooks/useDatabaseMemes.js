@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
 import firebase from '@/lib/firebase'
+import { FIRESTORE_COLLECTION } from '@/lib/constants'
 
 export const useDatabaseMemes = (limit) => {
   const [Memes, setMemes] = useState([])
@@ -8,7 +9,7 @@ export const useDatabaseMemes = (limit) => {
   const [hasMoreFiles, setHasMoreFiles] = useState(true)
 
   const loadCreds = () => {
-    return firebase.firestore().collection('memes-tmp')
+    return firebase.firestore().collection(FIRESTORE_COLLECTION.MEMES)
   }
   const onFilterChange = (f) => {
     setMemes([])
@@ -23,10 +24,10 @@ export const useDatabaseMemes = (limit) => {
     // }
     switch (filter) {
       case 'Latest':
-        loadNextMemes('created_at', 'desc')
+        loadNextMemes('createdAt', 'desc')
         break
       case 'Oldest':
-        loadNextMemes('created_at', 'asc')
+        loadNextMemes('createdAt', 'asc')
         break
       default:
         console.log('Unsupported case')
@@ -106,10 +107,10 @@ export const useDatabaseMemes = (limit) => {
 
     switch (filter) {
       case 'Latest':
-        loadNextMemes('created_at', 'desc')
+        loadNextMemes('createdAt', 'desc')
         break
       case 'Oldest':
-        loadNextMemes('created_at', 'asc')
+        loadNextMemes('createdAt', 'asc')
         break
       default:
         console.log('Unsupported case')

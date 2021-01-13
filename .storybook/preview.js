@@ -2,19 +2,19 @@ import { ThemeProvider } from 'next-themes'
 import { addDecorator } from '@storybook/react'
 
 import '../styles/tailwind.css'
-import { TemplateProvider } from "@/components/context/templateContext";
 import { FabricProvider } from "@/components/context/fabricContext";
 import AuthProvider from "@/components/context/authContext";
 import React from "react";
+import { AutoplayProvider } from "@/components/context/autoplayContext";
 
 addDecorator((story) => (
   <AuthProvider>
     <ThemeProvider attribute="class" defaultTheme="system">
-      <TemplateProvider>
+      <AutoplayProvider>
         <FabricProvider>
           {story()}
         </FabricProvider>
-      </TemplateProvider>
+      </AutoplayProvider>
     </ThemeProvider>
   </AuthProvider>
 ))

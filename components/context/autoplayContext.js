@@ -28,11 +28,13 @@ export const AutoplayProvider = ({ children }) => {
   const [state, dispatch] = React.useReducer(boolReducer, { bool: false })
   const router = useRouter()
   useEffect(() => {
-    console.log({ PATHNAME: router.pathname })
-    if (router.pathname !== '/meme/[id]') {
-      dispatch({ type: 'falseBool' })
+    if (router) {
+      console.log({ PATHNAME: router.pathname })
+      if (router.pathname !== '/meme/[id]') {
+        dispatch({ type: 'falseBool' })
+      }
     }
-  }, [router.pathname])
+  }, [router])
   //const [state, setState] = useState(false)
 
   return (

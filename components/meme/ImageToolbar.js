@@ -8,33 +8,20 @@ import {
   sendBackwards,
   sendToBack,
 } from '@/components/meme/FabricUtils'
-//import { getActiveStyle, setActiveProp, setActiveStyle } from '@/components/meme/utils'
 
-export const MemeEditorImage = (_props) => {
+export const ImageToolbar = (_props) => {
   const { canvas } = useFabricCanvas()
   const { activeObject } = useFabricActiveObject()
   const [enabledTools, setEnabledTools] = useState(false)
 
   useEffect(() => {
-    setEnabledTools(activeObject ? getActiveProp('type', canvas) === 'image' : false)
-    if (enabledTools) {
-      console.log({ src: 'MemeEditorImage.useEffect', activeObject })
+    if (canvas) {
+      setEnabledTools(activeObject ? getActiveProp('type', canvas) === 'image' : false)
+      if (enabledTools) {
+        console.log({ src: 'ImageToolbar.useEffect', activeObject })
+      }
     }
-  }, [enabledTools, activeObject, setEnabledTools])
-
-  const handleChange = (changedKey, changedValue) => {
-    switch (changedKey) {
-      default:
-        console.log('Unsupported property', changedKey)
-    }
-    console.log({
-      src: 'MemeEditorImage.handleChange',
-      changedKey,
-      changedValue,
-      activeObject,
-      canvas,
-    })
-  }
+  }, [canvas, enabledTools, activeObject, setEnabledTools])
 
   return (
     <>

@@ -1,6 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import React, { useState, useEffect, createContext, useContext } from 'react'
-import PropTypes from 'prop-types'
+import { useState, useEffect } from 'react'
 import firebase from '@/lib/firebase'
 import { useAuth } from '@/components/context/authContext'
 import { VOTE } from '@/lib/constants'
@@ -23,7 +22,7 @@ export const useVoting = (initMeme) => {
   }
 
   const upVote = async () => {
-    const memeRef = db.collection('meme').doc(meme.id)
+    const memeRef = db.collection(FIRESTORE_COLLECTION.MEMES).doc(meme.id)
 
     if (getVote() !== VOTE.up) {
       await memeRef
@@ -41,7 +40,7 @@ export const useVoting = (initMeme) => {
   }
 
   const downVote = async () => {
-    const memeRef = db.collection('meme').doc(meme.id)
+    const memeRef = db.collection(FIRESTORE_COLLECTION.MEMES).doc(meme.id)
 
     if (getVote() !== VOTE.down) {
       // Remove any possible upVotes first
@@ -63,7 +62,7 @@ export const useVoting = (initMeme) => {
     if (meme) {
       // Subscribe to user document on mount
       const unsubscribe = db
-        .collection('memes')
+        .collection(FIRESTORE_COLLECTION.MEMES)
         .doc(meme.id)
         .onSnapshot((doc) => setMeme(doc.data()))
       return () => unsubscribe()

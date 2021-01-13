@@ -2,11 +2,11 @@ import React, { useEffect, useState } from 'react'
 import { fabric } from 'fabric'
 import SVG from 'react-inlinesvg'
 import { FabricCanvas } from '@/components/meme/FabricCanvas'
-import { MemeEditorText } from '@/components/meme/MemeEditorText'
-import { useFabricCanvas } from '@/components/context/fabricContext'
+import { TextToolbar } from '@/components/meme/TextToolbar'
+import { useFabricCanvas, useTemplate } from '@/components/context/fabricContext'
 import useMemeUpload from '@/components/hooks/useMemeUpload'
-import { useTemplate } from '@/components/context/templateContext'
-import { MemeEditorImage } from '@/components/meme/MemeEditorImage'
+import { ImageToolbar } from '@/components/meme/ImageToolbar'
+import { useRouter } from 'next/router'
 
 // eslint-disable-next-line react/prop-types
 const Button = ({ children, type = 'button', disabled = false, onClick }) => {
@@ -29,9 +29,10 @@ const Button = ({ children, type = 'button', disabled = false, onClick }) => {
 // uses http://fabricjs.com/
 // eslint-disable-next-line react/prop-types
 export const MemeEditor = () => {
+  const router = useRouter()
   const { canvas } = useFabricCanvas()
   const [imgURL, setImgURL] = useState('')
-  const [template] = useTemplate()
+  const { template } = useTemplate()
   const [title, setTitle] = useState('')
   const [svgExport, setSvgExport] = useState('')
   const [jsonExport, setJsonExport] = useState({})
@@ -62,44 +63,15 @@ export const MemeEditor = () => {
     console.log({ src: 'MemeEditor.addText', txt, canvas })
   }
 
-  useEffect(() => {
-    if (canvas) {
-      const canvasObjects = canvas.getObjects('image')
-      const templateIndex = canvasObjects.find((el) => el.id === 'TEMPLATE')
-      if (!templateIndex) {
-        const addTemplate = (url = 'https://imgflip.com/s/meme/Futurama-Fry.jpg') => {
-          if (canvas.getObjects)
-            new fabric.Image.fromURL(url, (img) => {
-              img.scale(0.75)
-              customSelect(img)
-              img.set({ id: 'TEMPLATE' })
-              canvas.add(img)
-              canvas.renderAll()
-            })
-        }
-        addTemplate(template.url)
-        console.log('MemeEditor.useEffect: CREATE template')
-      } else {
-        templateIndex.set('objectCaching', false).setCoords()
-        templateIndex.set('noScaleCache', false).setCoords()
-        canvas.requestRenderAll()
-        canvas.renderAll()
-        templateIndex.setSrc(template.url).setCoords()
-        canvas.requestRenderAll()
-        canvas.renderAll()
-        templateIndex.set('objectCaching', true).setCoords()
-        templateIndex.set('noScaleCache', true).setCoords()
-        canvas.requestRenderAll()
-        canvas.renderAll()
-        console.log('MemeEditor.useEffect: REPLACE template')
-      }
-      console.log({ src: 'MemeEditor.useEffect', canvas, canvasObjects, templateIndex, template })
-    }
-  }, [canvas, template])
-
   const exportSVG = () => {
     const svg = canvas.toSVG()
-    const json = canvas.toJSON()
+    const json = canvas.toJSON([
+      'width',
+      'height',
+      'id',
+      'preserveObjectStacking',
+      'enableRetinaScaling',
+    ])
     setSvgExport(svg)
     setJsonExport(json)
     console.log({ src: 'MemeEditor.exportSVG', svg, json })
@@ -115,13 +87,30 @@ export const MemeEditor = () => {
   }
 
   const generateMeme = () => {
-    const json = canvas.toJSON()
+    const json = canvas.toJSON([
+      'width',
+      'height',
+      'id',
+      'preserveObjectStacking',
+      'enableRetinaScaling',
+    ])
     const svg = canvas.toSVG()
     const newObj = {
-      ...json,
       title,
-      template: template.url,
+      // createdAt is added during insert
+      createdBy: '',
+      upVotes: [],
+      downVotes: [],
+      forkedBy: [],
+      forkedFrom: '',
+      views: 0,
+      template: {
+        //id: template.id, TODO add template id
+        url: template.url,
+      },
+      url: '', // TODO if a real png was created (requirement)
       svg,
+      json,
     }
     console.log({ src: 'MemeEditor.generateMeme', newObj, svg, json })
     setData(newObj)
@@ -144,11 +133,17 @@ export const MemeEditor = () => {
     })
   }
 
+  useEffect(() => {
+    if (success) {
+      router.push(`/meme/${success}`)
+    }
+  }, [success, router])
+
   return (
     <div className="p-8 grid grid-cols-3 gap-6">
       <div className="col-span-3 h-16 rounded-lg bg-gray-100 flex items-center justify-start space-x-2 pl-2">
-        <MemeEditorText />
-        <MemeEditorImage />
+        <TextToolbar />
+        <ImageToolbar />
       </div>
       <div className="col-span-2 h-full rounded-lg bg-transparent flex justify-center">
         <FabricCanvas />
@@ -191,7 +186,7 @@ export const MemeEditor = () => {
               <SVG src={svgExport} />
             </div>
           </div>
-          <div className={'col-span-3 h-full rounded-lg bg-gray-100 flex justify-center'}>
+          <div className={'col-span-3 h-full rounded-lg bg-gray-100 flex justify-start'}>
             <pre>
               <code>{JSON.stringify(jsonExport, null, 4)}</code>
             </pre>
