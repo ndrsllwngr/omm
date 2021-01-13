@@ -4,7 +4,7 @@ import { FIRESTORE_COLLECTION } from '@/lib/constants'
 
 export const useDatabaseMemes = (limit) => {
   const [Memes, setMemes] = useState([])
-  const [filter, setFilter] = useState('Oldest')
+  const [filter, setFilter] = useState('Latest')
   const [latestDoc, setLatestDoc] = useState(null)
   const [hasMoreFiles, setHasMoreFiles] = useState(true)
 
