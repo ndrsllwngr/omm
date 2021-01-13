@@ -24,7 +24,7 @@ export const ScreenshotUrl = () => {
     console.log(test)
     /*{ async () => {
         console.log('entering async')
-        await memeFirestore.collection('templates').add({
+        await memeFirestore.collection(FIRESTORE_COLLECTION.TEMPLATES.add({
           createdAt: firebase.firestore.Timestamp.now(),
           url: test,
         })

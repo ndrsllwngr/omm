@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
 import firebase from '@/lib/firebase'
+import { FIRESTORE_COLLECTION } from '@/lib/constants'
 
 const useMemeUpload = () => {
   const [data, setData] = useState(null)
@@ -11,7 +12,7 @@ const useMemeUpload = () => {
     // references
     if (data !== null) {
       const firestore = firebase.firestore()
-      const memesRef = firestore.collection('memes-new')
+      const memesRef = firestore.collection(FIRESTORE_COLLECTION.MEMES)
       setLoading(true)
       // https://firebase.google.com/docs/firestore/manage-data/add-data#add_a_document
       memesRef

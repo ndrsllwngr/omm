@@ -4,6 +4,7 @@ import firebase from '@/lib/firebase'
 import { Slideshow } from '@/components/Slideshow'
 import { Navbar } from '@/components/Navbar'
 import Link from 'next/link'
+import { FIRESTORE_COLLECTION } from '@/lib/constants'
 
 export default function User() {
   const router = useRouter()
@@ -18,7 +19,7 @@ export default function User() {
       return Math.floor(Math.random() * (max - min + 1)) + min
     }
     async function getRandomMeme() {
-      let memeCollection = await firebase.firestore().collection('memes-new').get()
+      let memeCollection = await firebase.firestore().collection(FIRESTORE_COLLECTION.MEMES).get()
       const ids = []
       memeCollection.forEach((meme) => ids.push(meme.id))
 
@@ -37,7 +38,7 @@ export default function User() {
     async function getMemes() {
       let Meme = []
       const db = firebase.firestore()
-      const memeRef = db.collection('memes-new')
+      const memeRef = db.collection(FIRESTORE_COLLECTION.MEMES)
 
       const doc = await memeRef.doc(router.query.id).get()
 

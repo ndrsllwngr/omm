@@ -1,7 +1,8 @@
 import firebase from '@/lib/firebaseNode'
+import { FIRESTORE_COLLECTION } from '@/lib/constants'
 
 const db = firebase.firestore()
-const memeCollection = db.collection('memes')
+const memeCollection = db.collection(FIRESTORE_COLLECTION.MEMES)
 
 export default async function handler(req, res) {
   const memes = await memeCollection.get()

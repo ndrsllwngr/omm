@@ -137,7 +137,7 @@ export const MemeEditor = () => {
     if (success) {
       router.push(`/meme/${success}`)
     }
-  }, [success])
+  }, [success, router])
 
   return (
     <div className="p-8 grid grid-cols-3 gap-6">

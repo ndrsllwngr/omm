@@ -1,7 +1,7 @@
 import firebase from '@/lib/firebaseNode'
 import fs from 'fs'
-
 import tmp from 'tmp'
+import { FIRESTORE_COLLECTION } from '@/lib/constants'
 
 export default async function memeHandler(req, res) {
   const {
@@ -11,7 +11,7 @@ export default async function memeHandler(req, res) {
 
   const db = firebase.firestore()
   const storage = firebase.storage().bucket()
-  const templateCollection = db.collection('templates')
+  const templateCollection = db.collection(FIRESTORE_COLLECTION.TEMPLATES)
 
   switch (method) {
     case 'PUT':
@@ -28,7 +28,7 @@ export default async function memeHandler(req, res) {
       const meme = templateCollection.doc()
 
       // URI of the image file on the storage
-      const memeDestination = 'templates/' + meme.id + '.jpg'
+      const memeDestination = 'templates/' + meme.id + '.jpg' // TODO @NDRS
 
       // Upload temporary file to Firebase storage
       await storage.upload(tmpObj.name, {

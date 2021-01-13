@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
 import firebase from '@/lib/firebase'
+import { FIRESTORE_COLLECTION } from '@/lib/constants'
 
 export const useDatabaseMemes = (limit) => {
   const [Memes, setMemes] = useState([])
@@ -26,7 +27,7 @@ export const useDatabaseMemes = (limit) => {
   }
 
   const loadCreds = () => {
-    return firebase.firestore().collection('memes-new')
+    return firebase.firestore().collection(FIRESTORE_COLLECTION.MEMES)
   }
   // const setDocs = (docs) => {
   //   let dbMemes = []

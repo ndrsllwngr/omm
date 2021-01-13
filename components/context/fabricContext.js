@@ -149,7 +149,7 @@ export const FabricProvider = ({ children }) => {
         console.log({ src: 'MemeEditor.useEffect', canvas, canvasObjects, templateIndex, template })
       }
     },
-    [canvas, template, canvasRef]
+    [canvas, canvasRef, setTemplate]
   )
 
   const customSelect = (obj) => {

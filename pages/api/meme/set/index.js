@@ -2,6 +2,7 @@ import firebase from '@/lib/firebaseNode'
 import tmp from 'tmp'
 import { writeMemeContentToImage } from '@/helpers/imageProcessing'
 import Archiver from 'archiver'
+import { FIRESTORE_COLLECTION } from '@/lib/constants'
 
 export default async function memeHandler(req, res) {
   const {
@@ -12,7 +13,7 @@ export default async function memeHandler(req, res) {
 
   // Initialize firebase variables
   const db = firebase.firestore()
-  const memeCollection = db.collection('memes')
+  const memeCollection = db.collection(FIRESTORE_COLLECTION.MEMES)
   const storage = firebase.storage().bucket()
 
   switch (method) {

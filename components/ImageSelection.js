@@ -2,9 +2,10 @@ import React, { useState, useEffect } from 'react'
 import firebase from '@/lib/firebase'
 import useFirestore from '@/lib/useFirestore'
 import { useTemplate } from '@/components/context/fabricContext'
+import { FIRESTORE_COLLECTION } from '@/lib/constants'
 
 export const ImageSelection = () => {
-  const { docs } = useFirestore('templates')
+  const { docs } = useFirestore(FIRESTORE_COLLECTION.TEMPLATES)
   const [imageUrls, setImageUrls] = useState([])
   const { updateTemplate } = useTemplate()
 

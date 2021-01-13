@@ -2,6 +2,7 @@
 import React, { useState, useEffect, createContext, useContext } from 'react'
 import PropTypes from 'prop-types'
 import firebase from '@/lib/firebase'
+import { FIRESTORE_COLLECTION } from '@/lib/constants'
 
 export const AuthContext = createContext({ user: {} })
 
@@ -11,7 +12,7 @@ export default function AuthContextComp({ children }) {
   const createUser = (user) => {
     return firebase
       .firestore()
-      .collection('users')
+      .collection(FIRESTORE_COLLECTION.USERS)
       .doc(user.uid)
       .set(user)
       .then(() => {
@@ -59,7 +60,7 @@ export default function AuthContextComp({ children }) {
   const getUserAdditionalData = (user) => {
     return firebase
       .firestore()
-      .collection('users')
+      .collection(FIRESTORE_COLLECTION.USERS)
       .doc(user.uid)
       .get()
       .then((userData) => {
@@ -89,7 +90,7 @@ export default function AuthContextComp({ children }) {
     if (user && user.uid) {
       // Subscribe to user document on mount
       const unsubscribe = db
-        .collection('users')
+        .collection(FIRESTORE_COLLECTION.USERS)
         .doc(user.uid)
         .onSnapshot((doc) => setUser(doc.data()))
       return () => unsubscribe()
