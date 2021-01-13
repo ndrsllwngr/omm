@@ -25,6 +25,13 @@ const useMemeUpload = () => {
           setLoading(false)
           setSuccess(docRef.id)
           console.log('Document written with ID: ', docRef.id)
+          memesRef
+            .doc(data.forkedFrom)
+            .update({ forkedBy: firebase.firestore.FieldValue.arrayUnion(docRef.id) })
+            .then(() => {
+              console.log('SUCCESS')
+            })
+            .catch(() => console.error('ERROR'))
           setData(null)
         })
         .catch((error) => {

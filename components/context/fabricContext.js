@@ -32,6 +32,7 @@ const textOptions = {
 export const FabricProvider = ({ children }) => {
   const [canvas, setCanvas] = useState(null)
   const [json, setJson] = useState(null)
+  const [isCopy, setIsCopy] = useState(null)
   const canvasRef = useRef(null)
   const [activeObject, setActiveObject] = useState(null)
   const [templateContext, setTemplateContext] = useState(emptyState)
@@ -73,7 +74,8 @@ export const FabricProvider = ({ children }) => {
 
   const loadFromJSON = useCallback(
     (meme) => {
-      // TODO @ANDI load template id etc..., too
+      console.log({ src: 'loadFromJSON.updateTemplate', template: meme.template })
+      setTemplate(meme.template)
       const json = meme.json
       let c = new fabric.Canvas(canvasRef.current)
       const jsonStr = JSON.stringify(json)
@@ -103,6 +105,7 @@ export const FabricProvider = ({ children }) => {
 
   const updateTemplate = useCallback(
     (template) => {
+      console.log({ src: 'updateTemplate', template })
       setTemplate(template)
 
       const insertImage = (img, canvas) => {
@@ -166,7 +169,7 @@ export const FabricProvider = ({ children }) => {
   return (
     <FabricJsonContext.Provider value={{ json, setJson }}>
       <FabricCanvasContext.Provider
-        value={{ canvas, initCanvas, loadFromJSON, canvasRef, resetCanvas }}
+        value={{ canvas, initCanvas, loadFromJSON, canvasRef, resetCanvas, isCopy, setIsCopy }}
       >
         <FabricActiveObjectContext.Provider value={{ activeObject, setActiveObject }}>
           <TemplateContext.Provider value={{ template, updateTemplate }}>

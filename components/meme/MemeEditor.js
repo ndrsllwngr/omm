@@ -7,6 +7,7 @@ import { useFabricCanvas, useTemplate } from '@/components/context/fabricContext
 import useMemeUpload from '@/components/hooks/useMemeUpload'
 import { ImageToolbar } from '@/components/meme/ImageToolbar'
 import { useRouter } from 'next/router'
+import { useAuth } from '@/components/context/authContext'
 
 // eslint-disable-next-line react/prop-types
 const Button = ({ children, type = 'button', disabled = false, onClick }) => {
@@ -30,7 +31,7 @@ const Button = ({ children, type = 'button', disabled = false, onClick }) => {
 // eslint-disable-next-line react/prop-types
 export const MemeEditor = () => {
   const router = useRouter()
-  const { canvas } = useFabricCanvas()
+  const { canvas, isCopy } = useFabricCanvas()
   const [imgURL, setImgURL] = useState('')
   const { template } = useTemplate()
   const [title, setTitle] = useState('')
@@ -38,6 +39,7 @@ export const MemeEditor = () => {
   const [jsonExport, setJsonExport] = useState({})
   const [previewMode, setPreviewMode] = useState(false)
   const [loading, success, error, setData] = useMemeUpload()
+  const auth = useAuth()
 
   const addImg = (e, url) => {
     e.preventDefault()
@@ -87,7 +89,7 @@ export const MemeEditor = () => {
   }
 
   const generateMeme = () => {
-    const json = canvas.toJSON([
+    const canvasAsJson = canvas.toJSON([
       'width',
       'height',
       'id',
@@ -98,21 +100,21 @@ export const MemeEditor = () => {
     const newObj = {
       title,
       // createdAt is added during insert
-      createdBy: '',
+      createdBy: auth.user.uid,
       upVotes: [],
       downVotes: [],
       forkedBy: [],
-      forkedFrom: '',
+      forkedFrom: isCopy,
       views: 0,
       template: {
-        //id: template.id, TODO add template id
+        id: template.id,
         url: template.url,
       },
       url: '', // TODO if a real png was created (requirement)
       svg,
-      json,
+      json: canvasAsJson,
     }
-    console.log({ src: 'MemeEditor.generateMeme', newObj, svg, json })
+    console.log({ src: 'MemeEditor.generateMeme', newObj, svg })
     setData(newObj)
   }
 
