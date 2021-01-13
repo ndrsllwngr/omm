@@ -30,7 +30,7 @@ export const FabricCanvas = ({ jsonData = null }) => {
         setIsCopy(null)
       }
     }
-  }, [canvasRef, json, canvas, initCanvas, loadFromJSON, setJson, jsonData])
+  }, [canvasRef, json, canvas, initCanvas, loadFromJSON, setJson, jsonData, setIsCopy])
 
   const updateActiveObject = useCallback(
     (e) => {
