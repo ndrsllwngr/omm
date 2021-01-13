@@ -17,19 +17,6 @@ export default function User() {
   const [state, dispatch] = useAutoPlay()
   const timeOut = useRef(null)
 
-  const startTimeout = () => {
-    timeOut.current = setTimeout(function () {
-      console.log(Memes)
-      console.log({ STARTTIMER: timeOut.current })
-      router.push(`/meme/${Memes[2].id}`)
-    }, 3000)
-  }
-
-  const endTimeout = () => {
-    clearTimeout(timeOut.current)
-    console.log({ ENDTIMER: timeOut.current })
-  }
-
   //let timeOut = undefined
 
   useEffect(() => {
@@ -93,8 +80,25 @@ export default function User() {
       })
   }, [setMemes, router.query.id])
 
+  const startAutoplay = () => {
+    timeOut.current = setTimeout(function () {
+      console.log(Memes)
+      console.log({ STARTTIMER: timeOut.current })
+      //Prevent Autoplay at EOF
+      if (Memes[2].id) router.push(`/meme/${Memes[2].id}`)
+      else {
+        endAutoplay
+        dispatch({ type: 'falseBool' })
+      }
+    }, 3000)
+  }
+
+  const endAutoplay = () => {
+    clearTimeout(timeOut.current)
+    console.log({ ENDTIMER: timeOut.current })
+  }
   useEffect(() => {
-    state.bool ? startTimeout() : endTimeout()
+    state.bool ? startAutoplay() : endAutoplay()
   }, [Memes, state.bool])
 
   if (!Memes || !(Memes.length > 0))
@@ -112,15 +116,20 @@ export default function User() {
       <div> {Memes[1].id}</div>
       <img alt="" className="w-10" src={Memes[1].template} />
       <Slideshow memes={Memes} />
-      <Link href={`/meme/${id}`}>
-        <a className="flex cursor-pointer items-center w-full h-8  text-gray-800 mr-16">
-          <span className="font-semibold text-xl tracking-tight">Random Meme</span>
-        </a>
-      </Link>
+      <div className="flex flex-col items-center font-semibold text-xl my-2">
+        <Link href={`/meme/${id}`}>
+          <a className=" text-gray-800">
+            <span className="my-2 rounded bg-green-600">Random Meme</span>
+          </a>
+        </Link>
 
-      <button onClick={() => dispatch({ type: 'toggleBool' })}>
-        {state.bool ? `Autoplay On` : `Autoplay Off`}
-      </button>
+        <button
+          className="my-2 rounded bg-green-600"
+          onClick={() => dispatch({ type: 'toggleBool' })}
+        >
+          {state.bool ? `Autoplay On` : `Autoplay Off`}
+        </button>
+      </div>
     </div>
   )
 }
