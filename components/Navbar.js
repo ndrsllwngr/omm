@@ -1,21 +1,10 @@
-import React, { useEffect } from 'react'
-//import { useRouter } from 'next/router'
-import { useRequireAuth } from '@/components/hooks/useRequireAuth'
+import React from 'react'
 import Link from 'next/link'
-// import firebase from '@/lib/firebase'
+import { useAuth } from '@/components/context/authContext'
 
 //https://tailwindcomponents.com/component/responsive-navbar-2
 export const Navbar = () => {
-  const auth = useRequireAuth()
-
-  useEffect(() => {
-    if (auth.user) {
-      // You know that the user is loaded: either logged in or out!
-      //console.log(auth.user)
-    }
-    // You also have your firebase app initialized
-    //console.log({ firebase })
-  }, [auth.user])
+  const auth = useAuth()
 
   return (
     <nav className="flex items-center justify-between flex-wrap bg-custom-green py-4 lg:px-12 shadow border-solid ">
@@ -72,22 +61,34 @@ export const Navbar = () => {
       {/* Links */}
       <div className="w-full lg:flex lg:items-center lg:w-auto lg:px-3 px-8">
         <div className="flex">
-          <button
-            onClick={auth.signOut}
-            className=" block text-md px-4  ml-2 py-2 rounded text-blue-700 font-bold hover:text-white mt-4 hover:bg-blue-700 lg:mt-0"
-          >
-            Login
-          </button>
-          <Link href={'/template'}>
-            <a className=" block text-md px-4  ml-2 py-2 rounded text-blue-700 font-bold hover:text-white mt-4 hover:bg-blue-700 lg:mt-0">
-              Template
-            </a>
-          </Link>
-          <Link href={'/create'}>
-            <a className=" block text-md px-4  ml-2 py-2 rounded text-blue-700 font-bold hover:text-white mt-4 hover:bg-blue-700 lg:mt-0">
-              Create
-            </a>
-          </Link>
+          {auth.user ? (
+            <div className="flex">
+              <button
+                onClick={auth.signOut}
+                className=" block text-md px-4  ml-2 py-2 rounded text-blue-700 font-bold hover:text-white mt-4 hover:bg-blue-700 lg:mt-0"
+              >
+                Sign Out
+              </button>
+              <Link href={'/template'}>
+                <a className=" block text-md px-4  ml-2 py-2 rounded text-blue-700 font-bold hover:text-white mt-4 hover:bg-blue-700 lg:mt-0">
+                  Template
+                </a>
+              </Link>
+              <Link href={'/create'}>
+                <a className=" block text-md px-4  ml-2 py-2 rounded text-blue-700 font-bold hover:text-white mt-4 hover:bg-blue-700 lg:mt-0">
+                  Create
+                </a>
+              </Link>
+            </div>
+          ) : (
+            <div>
+              <Link href={'/login'}>
+                <a className=" block text-md px-4  ml-2 py-2 rounded text-blue-700 font-bold hover:text-white mt-4 hover:bg-blue-700 lg:mt-0">
+                  Login
+                </a>
+              </Link>
+            </div>
+          )}
         </div>
       </div>
     </nav>
