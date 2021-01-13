@@ -2,11 +2,14 @@
 import React, { useState, useEffect, createContext, useContext } from 'react'
 import PropTypes from 'prop-types'
 import firebase from '@/lib/firebase'
+import { useRouter } from 'next/router'
 
-export const AuthContext = createContext({ user: {} })
+export const AuthContext = createContext({ user: null })
 
 export default function AuthContextComp({ children }) {
   const [user, setUser] = useState(null)
+
+  const router = useRouter()
 
   const createUser = (user) => {
     return firebase
@@ -38,11 +41,18 @@ export default function AuthContextComp({ children }) {
   const signIn = ({ email, password }) => {
     return firebase
       .auth()
-      .signInWithEmailAndPassword(email, password)
-      .then((response) => {
-        setUser(response.user)
-        getUserAdditionalData(user)
-        return response.user
+      .setPersistence(firebase.auth.Auth.Persistence.LOCAL)
+      .then(() => {
+        firebase
+          .auth()
+          .signInWithEmailAndPassword(email, password)
+          .then((response) => {
+            getUserAdditionalData(response.user)
+            return response.user
+          })
+          .catch((error) => {
+            return { error }
+          })
       })
       .catch((error) => {
         return { error }
@@ -53,7 +63,11 @@ export default function AuthContextComp({ children }) {
     return firebase
       .auth()
       .signOut()
-      .then(() => setUser(false))
+      .then(() => {
+        setUser(null)
+        console.log('Signed out!')
+        router.push('/')
+      })
   }
 
   const getUserAdditionalData = (user) => {
@@ -72,16 +86,18 @@ export default function AuthContextComp({ children }) {
   //Handle auth state changes
   useEffect(() => {
     const handleAuthStateChanged = (user) => {
+      console.log('handleAuthStateChanged: ' + user)
       //setUser(user)
       if (user) {
         getUserAdditionalData(user)
+      } else {
+        setUser(null)
       }
     }
 
     const unsub = firebase.auth().onAuthStateChanged(handleAuthStateChanged)
 
     return () => unsub()
-    // TODO Q@Andy: Is the dependency 'user' missing on purpose?
   }, [])
 
   // Handle updates of the user document
@@ -108,3 +124,11 @@ AuthContextComp.propTypes = {
 }
 
 export const useAuth = () => useContext(AuthContext)
+
+export const ProtectedRoute = ({ children }) => {
+  const auth = useAuth()
+  if (!auth.user) {
+    return <div>Unauthorized</div>
+  }
+  return children
+}
