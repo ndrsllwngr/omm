@@ -4,6 +4,7 @@ import { ThemeProvider } from 'next-themes'
 import '@/styles/tailwind.css'
 import AuthProvider from '@/components/context/authContext'
 import { FabricProvider } from '@/components/context/fabricContext'
+import { AutoplayProvider } from '@/components/context/autoplayContext'
 
 class MyApp extends App {
   render() {
@@ -11,9 +12,11 @@ class MyApp extends App {
     return (
       <AuthProvider>
         <ThemeProvider attribute="class" defaultTheme="system">
-          <FabricProvider>
-            <Component {...pageProps} />
-          </FabricProvider>
+          <AutoplayProvider>
+            <FabricProvider>
+              <Component {...pageProps} />
+            </FabricProvider>
+          </AutoplayProvider>
         </ThemeProvider>
       </AuthProvider>
     )
