@@ -3,6 +3,7 @@ import { HtmlHead } from '@/components/HtmlHead'
 import { Navbar } from '@/components/Navbar'
 import { MemeEditor } from '@/components/meme/MemeEditor'
 import { ImageSelection } from '@/components/ImageSelection'
+import { FlipImage } from '@/components/FlipImage'
 
 const CreatePage = () => {
   return (
@@ -15,6 +16,9 @@ const CreatePage = () => {
         </div>
         <div className="col-span-3 h-full rounded-lg bg-gray-100 flex items-start justify-center flex space-x-2 pl-2">
           <ImageSelection />
+        </div>
+        <div className="col-span-3 h-full rounded-lg bg-gray-100 flex items-start justify-center flex space-x-2 pl-2">
+          <FlipImage />
         </div>
       </div>
     </>

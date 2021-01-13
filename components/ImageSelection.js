@@ -14,7 +14,6 @@ export const ImageSelection = () => {
       const datadocs = docs
       //console.log(datadocs)
       for (let i = 0; i < datadocs.length; i++) {
-        //const url = await firebase.storage().ref(datadocs[i].img).getDownloadURL()
         const url = datadocs[i].url
         console.log(url)
         urls.push(url)
