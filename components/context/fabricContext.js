@@ -74,7 +74,8 @@ export const FabricProvider = ({ children }) => {
 
   const loadFromJSON = useCallback(
     (meme) => {
-      // TODO @ANDI load template id etc..., too
+      console.log({ src: 'loadFromJSON.updateTemplate', template: meme.template })
+      setTemplate(meme.template)
       const json = meme.json
       let c = new fabric.Canvas(canvasRef.current)
       const jsonStr = JSON.stringify(json)
@@ -104,6 +105,7 @@ export const FabricProvider = ({ children }) => {
 
   const updateTemplate = useCallback(
     (template) => {
+      console.log({ src: 'updateTemplate', template })
       setTemplate(template)
 
       const insertImage = (img, canvas) => {
