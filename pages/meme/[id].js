@@ -8,7 +8,7 @@ import { FIRESTORE_COLLECTION } from '@/lib/constants'
 import { useAutoPlayState, useAutoPlayDispatch } from '@/components/context/autoplayContext'
 import { useRandomMeme } from '@/components/hooks/useRandomMeme'
 
-export default function User() {
+export default function SingleView() {
   const router = useRouter()
   function useAutoPlay() {
     return [useAutoPlayState(), useAutoPlayDispatch()]
