@@ -6,15 +6,12 @@ import { useRouter } from 'next/router'
 export const AutoplayStateContext = createContext()
 export const AutoplayDispatchContext = createContext()
 
-//Reducer to controll Autoplay Button State
+//Reducer to control Autoplay Button State
 function boolReducer(state, action) {
   switch (action.type) {
     case 'toggleBool': {
       return { bool: !state.bool }
     }
-    // case 'decrement': {
-    //   return { count: state.count - 1 }
-    // }
     case 'falseBool': {
       return { bool: false }
     }
@@ -35,7 +32,6 @@ export const AutoplayProvider = ({ children }) => {
       }
     }
   }, [router])
-  //const [state, setState] = useState(false)
 
   return (
     <AutoplayStateContext.Provider value={state}>

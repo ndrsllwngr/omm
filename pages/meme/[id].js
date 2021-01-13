@@ -6,40 +6,17 @@ import { Navbar } from '@/components/Navbar'
 import Link from 'next/link'
 import { FIRESTORE_COLLECTION } from '@/lib/constants'
 import { useAutoPlayState, useAutoPlayDispatch } from '@/components/context/autoplayContext'
+import { useRandomMeme } from '@/components/hooks/useRandomMeme'
 
-export default function User() {
+export default function SingleView() {
   const router = useRouter()
   function useAutoPlay() {
     return [useAutoPlayState(), useAutoPlayDispatch()]
   }
-
+  const { id } = useRandomMeme(router)
   const [Memes, setMemes] = useState([])
-  const [id, setId] = useState([])
   const [state, dispatch] = useAutoPlay()
   const timeOut = useRef(null)
-
-  //let timeOut = undefined
-
-  useEffect(() => {
-    const getRandomInt = (min, max) => {
-      min = Math.ceil(min)
-      max = Math.floor(max)
-      return Math.floor(Math.random() * (max - min + 1)) + min
-    }
-    async function getRandomMeme() {
-      let memeCollection = await firebase.firestore().collection(FIRESTORE_COLLECTION.MEMES).get()
-      const ids = []
-      memeCollection.forEach((meme) => ids.push(meme.id))
-
-      let random = getRandomInt(0, ids.length - 1)
-
-      while (ids[random] === router.query.id) {
-        random = getRandomInt(0, ids.length - 1)
-      }
-      setId(ids[random])
-    }
-    getRandomMeme()
-  }, [router.query.id])
 
   useEffect(() => {
     // TODO subscribe to get updates
@@ -83,8 +60,8 @@ export default function User() {
 
   const startAutoplay = () => {
     timeOut.current = setTimeout(function () {
-      console.log(Memes)
-      console.log({ STARTTIMER: timeOut.current })
+      //console.log(Memes)
+      //console.log({ STARTTIMER: timeOut.current })
       //Prevent Autoplay at EOF
       if (Memes[2].id) router.push(`/meme/${Memes[2].id}`)
       else {
@@ -96,8 +73,23 @@ export default function User() {
 
   const endAutoplay = () => {
     clearTimeout(timeOut.current)
-    console.log({ ENDTIMER: timeOut.current })
+    //console.log({ ENDTIMER: timeOut.current })
   }
+  //Errorhandling leave page while autoplay enabled
+  useEffect(() => {
+    const handleRouteChange = (url) => {
+      if (url !== '/meme/[id]') {
+        endAutoplay()
+      }
+    }
+    router.events.on('routeChangeStart', handleRouteChange)
+    // If the component is unmounted, unsubscribe
+    // from the event with the `off` method:
+    return () => {
+      router.events.off('routeChangeStart', handleRouteChange)
+    }
+  }, [router.events])
+  //Toogle Autoplay
   useEffect(() => {
     state.bool ? startAutoplay() : endAutoplay()
   }, [Memes, state.bool])
@@ -121,12 +113,14 @@ export default function User() {
           </a>
         </Link>
 
-        <button
-          className="my-2 p-2 rounded bg-green-600"
-          onClick={() => dispatch({ type: 'toggleBool' })}
-        >
-          {state.bool ? `Autoplay On` : `Autoplay Off`}
-        </button>
+        {!(Memes[2].id === '') && (
+          <button
+            className="my-2 p-2 rounded bg-green-600"
+            onClick={() => dispatch({ type: 'toggleBool' })}
+          >
+            {state.bool ? `Autoplay On` : `Autoplay Off`}
+          </button>
+        )}
       </div>
     </div>
   )
