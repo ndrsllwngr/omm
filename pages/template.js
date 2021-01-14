@@ -28,13 +28,13 @@ const TemplatePage = () => {
       <Section title={'WebcamPhoto'}>
         <WebcamPhoto />
       </Section>
-      <Section title={'ScreenshotUrl'}>
+      <Section title={'Screenshot'}>
         <ScreenshotUrl />
       </Section>
       <Section title={'PasteUrlImage'}>
         <PasteUrlImage />
       </Section>
-      <Section title={'Canvas'}>
+      <Section title={'DrawonCanvas'}>
         <Canvas />
       </Section>
     </>
