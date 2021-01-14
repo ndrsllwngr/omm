@@ -36,7 +36,7 @@ const TemplatePage = () => {
         <Section title={'PasteUrlImage'}>
           <PasteUrlImage />
         </Section>
-        <Section title={'Canvas'}>
+        <Section title={'DrawonCanvas'}>
           <Canvas />
         </Section>
       </ProtectedRoute>

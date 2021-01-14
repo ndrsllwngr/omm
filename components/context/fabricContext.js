@@ -95,7 +95,7 @@ export const FabricProvider = ({ children }) => {
       setCanvas(c)
       console.log({ src: 'FabricProvider.loadFromJSON', json, canvas })
     },
-    [canvasRef, canvas]
+    [canvasRef, canvas, setTemplate]
   )
 
   const resetCanvas = useCallback(() => {

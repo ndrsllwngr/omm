@@ -4,23 +4,12 @@ import React, { useState } from 'react'
 export const PasteUrlImage = () => {
   const [userImageUrl, setUserImageUrl] = useState('')
   const [temp, setTemp] = useState('')
-  const { setFile } = useStorage()
+  const { setExternalUrl } = useStorage()
 
   const handleSubmit = (evt) => {
     setUserImageUrl(temp)
-    fetchImage(temp)
+    setExternalUrl(temp)
     evt.preventDefault()
-  }
-
-  const fetchImage = (imageUrl) => {
-    fetch(imageUrl)
-      .then((res) => {
-        return res.blob()
-      })
-      .then((blob) => {
-        setFile(blob)
-        console.log('blob:', blob)
-      })
   }
 
   return (
@@ -38,3 +27,21 @@ export const PasteUrlImage = () => {
     </div>
   )
 }
+
+/*
+const fetchImage = (imageUrl) => {
+    fetch(imageUrl)
+      .then((res) => {
+        return res.blob()
+      })
+      .then((blob) => {
+        console.log(blob)
+      })
+  }
+  
+  .then((blob) => {
+        setFile(blob)
+        console.log('blob:', blob)
+      })
+
+*/

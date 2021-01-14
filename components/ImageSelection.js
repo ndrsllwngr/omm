@@ -16,15 +16,21 @@ export const ImageSelection = () => {
       console.log(datadocs)
       for (let i = 0; i < datadocs.length; i++) {
         console.log({ src: 'template datadocs', doc: datadocs[i] })
-        const url = await firebase.storage().ref(datadocs[i].img).getDownloadURL()
-        urls.push({ id: datadocs[i].id, url })
+        if (datadocs[i].url) {
+          urls.push({ id: datadocs[i].id, url: datadocs[i].url })
+        } else {
+          const url = await firebase.storage().ref(datadocs[i].img).getDownloadURL()
+          urls.push({ id: datadocs[i].id, url })
+        }
       }
       return urls
     }
-    getImageUrls().then((res) => {
-      console.log(res)
-      setImageUrls(res)
-    })
+    getImageUrls()
+      .then((res) => {
+        console.log(res)
+        setImageUrls(res)
+      })
+      .catch((e) => console.log({ src: 'getImageUrls', e }))
   }, [docs, setImageUrls])
   useEffect(() => {
     console.log({ src: 'useState', imageUrls })

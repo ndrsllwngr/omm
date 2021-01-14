@@ -21,10 +21,18 @@ export const Slide = ({ meme }) => {
       >
         Copy Meme
       </button>
-      <button className={'bg-green-50'} disabled={voteState === VOTE.up} onClick={upVote}>
+      <button
+        className={voteState === VOTE.up ? 'bg-green-100' : 'bg-green-500'}
+        disabled={voteState === VOTE.up}
+        onClick={upVote}
+      >
         Upvote
       </button>
-      <button className={'bg-red-50'} disabled={voteState === VOTE.down} onClick={downVote}>
+      <button
+        className={voteState === VOTE.down ? 'bg-red-100' : 'bg-red-500'}
+        disabled={voteState === VOTE.down}
+        onClick={downVote}
+      >
         Downvote
       </button>
       <MemeRenderer meme={meme} />
