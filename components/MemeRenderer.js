@@ -4,7 +4,7 @@ import SVG from 'react-inlinesvg'
 
 export const MemeRenderer = ({ meme }) => {
   useEffect(() => {
-    console.log({ meme })
+    // console.log({ meme })
   }, [meme])
   return (
     <div>
@@ -16,25 +16,27 @@ export const MemeRenderer = ({ meme }) => {
 
 MemeRenderer.propTypes = {
   meme: PropTypes.shape({
-    template: PropTypes.string,
-    created_at: PropTypes.any,
-    title: PropTypes.string,
-    svg: PropTypes.string,
-    content: PropTypes.arrayOf(
-      PropTypes.shape({
-        id: PropTypes.number,
-        x: PropTypes.number,
-        y: PropTypes.number,
-        width: PropTypes.number,
-        height: PropTypes.number,
-        text: PropTypes.string,
-        rotation: PropTypes.number,
-        isDragging: PropTypes.bool,
-        fontSize: PropTypes.number,
-        fontStyle: PropTypes.string,
-        fill: PropTypes.string,
-      })
-    ),
-    images: PropTypes.array,
+    title: PropTypes.string.isRequired,
+    createdAt: PropTypes.any.isRequired,
+    createdBy: PropTypes.string.isRequired,
+    upVotes: PropTypes.arrayOf(PropTypes.string).isRequired,
+    downVotes: PropTypes.arrayOf(PropTypes.string).isRequired,
+    forkedBy: PropTypes.arrayOf(PropTypes.string),
+    forkedFrom: PropTypes.any,
+    views: PropTypes.number.isRequired,
+    template: PropTypes.shape({
+      id: PropTypes.any,
+      url: PropTypes.string,
+    }).isRequired,
+    url: PropTypes.string, // if a real png was created (requirement)
+    svg: PropTypes.string.isRequired,
+    json: PropTypes.shape({
+      background: PropTypes.string,
+      height: PropTypes.number,
+      width: PropTypes.number,
+      preserveObjectStacking: PropTypes.bool,
+      version: PropTypes.string,
+      objects: PropTypes.arrayOf(PropTypes.any),
+    }).isRequired,
   }),
 }

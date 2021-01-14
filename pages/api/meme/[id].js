@@ -1,4 +1,5 @@
 import firebase from '@/lib/firebaseNode'
+import { FIRESTORE_COLLECTION } from '@/lib/constants'
 
 export default async function memeHandler(req, res) {
   const {
@@ -8,7 +9,7 @@ export default async function memeHandler(req, res) {
 
   // Initialize firebase variables
   const db = firebase.firestore()
-  const memeCollection = db.collection('memes')
+  const memeCollection = db.collection(FIRESTORE_COLLECTION.MEMES)
 
   switch (method) {
     case 'GET':

@@ -18,7 +18,7 @@ export const ScreenshotUrl = () => {
         //console.log('res: ', res.json())
         return res.json()
       })
-      .then((json) => setExternalUrl(json))
+      .then((json) => setExternalUrl(json.url))
       .catch((e) => console.error('error:', e))
 
   const handleSubmit = (e) => {
@@ -27,8 +27,8 @@ export const ScreenshotUrl = () => {
     console.log(test)
     /*{ async () => {
         console.log('entering async')
-        await memeFirestore.collection('templates').add({
-          created_at: firebase.firestore.Timestamp.now(),
+        await memeFirestore.collection(FIRESTORE_COLLECTION.TEMPLATES.add({
+          createdAt: firebase.firestore.Timestamp.now(),
           url: test,
         })
       }}}*/

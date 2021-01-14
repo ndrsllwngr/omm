@@ -6,35 +6,41 @@ import {
 } from '@/components/context/fabricContext'
 
 // eslint-disable-next-line react/prop-types
-export const FabricCanvas = ({ jsonData = null, width = 500, height = 400 }) => {
+export const FabricCanvas = ({ jsonData = null }) => {
   const { json, setJson } = useFabricJson()
-  const { canvas, initCanvas, loadFromJSON, canvasRef } = useFabricCanvas()
+  const { canvas, initCanvas, loadFromJSON, canvasRef, resetCanvas, setIsCopy } = useFabricCanvas()
   const { setActiveObject } = useFabricActiveObject()
 
   useLayoutEffect(() => {
     console.log({ src: 'FabricCanvas.useLayoutEffect', jsonData, json, canvas, canvasRef })
-    if (jsonData) {
-      loadFromJSON(jsonData)
-    } else if (json) {
-      loadFromJSON(json)
-      setJson(null)
-    } else {
-      initCanvas({
-        width: width,
-        height: height,
-      })
+    if (!canvas && canvasRef.current) {
+      if (json) {
+        loadFromJSON(json)
+        setIsCopy(json.id)
+        setJson(null)
+      } else if (jsonData) {
+        loadFromJSON(jsonData)
+        setIsCopy(json.id)
+        setJson(null)
+      } else {
+        initCanvas({
+          width: 500,
+          height: 400,
+        })
+        setIsCopy(null)
+      }
     }
-  }, [])
+  }, [canvasRef, json, canvas, initCanvas, loadFromJSON, setJson, jsonData, setIsCopy])
 
   const updateActiveObject = useCallback(
     (e) => {
-      if (!e) {
+      if (!e || (!canvas && !canvasRef.current)) {
         return
       }
       setActiveObject(canvas.getActiveObject())
       canvas.renderAll()
     },
-    [canvas, setActiveObject]
+    [canvas, setActiveObject, canvasRef]
   )
 
   const onObjectModified = useCallback(
@@ -62,8 +68,9 @@ export const FabricCanvas = ({ jsonData = null, width = 500, height = 400 }) => 
       canvas.off('selection:created')
       canvas.off('selection:cleared')
       canvas.off('selection:updated')
+      resetCanvas()
     }
-  }, [canvas, updateActiveObject, onObjectModified])
+  }, [canvas, updateActiveObject, onObjectModified, resetCanvas])
 
   return (
     <div>

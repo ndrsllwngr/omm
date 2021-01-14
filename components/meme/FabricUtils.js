@@ -132,3 +132,108 @@ export const loadJSON = (json, canvas) => {
     canvas.renderAll()
   })
 }
+
+// NEW
+
+export const getOpacity = (object, canvas) => {
+  return getActiveStyle('opacity', object, canvas) * 100
+}
+export const setOpacity = (value, object, canvas) => {
+  setActiveStyle('opacity', parseInt(value, 10) / 100, object, canvas)
+}
+
+export const getFill = (object, canvas) => {
+  return getActiveStyle('fill', object, canvas)
+}
+export const setFill = (value, object, canvas) => {
+  setActiveStyle('fill', value, object, canvas)
+}
+
+export const isBold = (object, canvas) => {
+  return getActiveStyle('fontWeight', object, canvas) === 'bold'
+}
+export const toggleBold = (object, canvas) => {
+  setActiveStyle(
+    'fontWeight',
+    getActiveStyle('fontWeight', object, canvas) === 'bold' ? '' : 'bold',
+    object,
+    canvas
+  )
+}
+export const isItalic = (object, canvas) => {
+  return getActiveStyle('fontStyle', object, canvas) === 'italic'
+}
+export const toggleItalic = (object, canvas) => {
+  setActiveStyle(
+    'fontStyle',
+    getActiveStyle('fontStyle', object, canvas) === 'italic' ? '' : 'italic',
+    object,
+    canvas
+  )
+}
+
+export const isUnderline = (object, canvas) => {
+  return (
+    getActiveStyle('textDecoration', object, canvas).indexOf('underline') > -1 ||
+    getActiveStyle('underline', object, canvas)
+  )
+}
+export const toggleUnderline = (object, canvas) => {
+  const value = isUnderline(object, canvas)
+    ? getActiveStyle('textDecoration', object, canvas).replace('underline', '')
+    : getActiveStyle('textDecoration', object, canvas) + ' underline'
+
+  setActiveStyle('textDecoration', value, object, canvas)
+  setActiveStyle('underline', !getActiveStyle('underline', object, canvas), object, canvas)
+}
+
+export const isLinethrough = (object, canvas) => {
+  return (
+    getActiveStyle('textDecoration', object, canvas).indexOf('line-through') > -1 ||
+    getActiveStyle('linethrough', object, canvas)
+  )
+}
+export const toggleLinethrough = (object, canvas) => {
+  const value = isLinethrough(object, canvas)
+    ? getActiveStyle('textDecoration', object, canvas).replace('line-through', '')
+    : getActiveStyle('textDecoration', object, canvas) + ' line-through'
+
+  setActiveStyle('textDecoration', value, object, canvas)
+  setActiveStyle('linethrough', !getActiveStyle('linethrough', object, canvas), object, canvas)
+}
+export const isOverline = (object, canvas) => {
+  return (
+    getActiveStyle('textDecoration', object, canvas).indexOf('overline') > -1 ||
+    getActiveStyle('overline', object, canvas)
+  )
+}
+export const toggleOverline = (object, canvas) => {
+  const value = isOverline(object, canvas)
+    ? getActiveStyle('textDecoration', object, canvas).replace('overline', '')
+    : getActiveStyle('textDecoration', object, canvas) + ' overline'
+
+  setActiveStyle('textDecoration', value, object, canvas)
+  setActiveStyle('overline', !getActiveStyle('overline', object, canvas), object, canvas)
+}
+
+export const getText = (object, canvas) => {
+  return getActiveProp('text', object, canvas)
+}
+export const setText = (value, object, canvas) => {
+  setActiveProp('text', value, canvas)
+}
+
+export const getTextAlign = (object, canvas) => {
+  const str = getActiveProp('textAlign', object, canvas)
+  return str.replace(/^\w/, (c) => c.toUpperCase())
+}
+export const setTextAlign = (value, object, canvas) => {
+  setActiveProp('textAlign', value.toLowerCase(), canvas)
+}
+
+export const getFontFamily = (object, canvas) => {
+  return getActiveProp('fontFamily', object, canvas).toLowerCase()
+}
+export const setFontFamily = (value, object, canvas) => {
+  setActiveProp('fontFamily', value.toLowerCase(), canvas)
+}

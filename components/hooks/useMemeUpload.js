@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
 import firebase from '@/lib/firebase'
+import { FIRESTORE_COLLECTION } from '@/lib/constants'
 
 const useMemeUpload = () => {
   const [data, setData] = useState(null)
@@ -11,19 +12,26 @@ const useMemeUpload = () => {
     // references
     if (data !== null) {
       const firestore = firebase.firestore()
-      const memesRef = firestore.collection('memes-tmp')
+      const memesRef = firestore.collection(FIRESTORE_COLLECTION.MEMES)
       setLoading(true)
       // https://firebase.google.com/docs/firestore/manage-data/add-data#add_a_document
       memesRef
         .add({
           ...data,
           // https://firebase.google.com/docs/firestore/manage-data/add-data#server_timestamp
-          created_at: firebase.firestore.FieldValue.serverTimestamp(),
+          createdAt: firebase.firestore.FieldValue.serverTimestamp(),
         })
         .then((docRef) => {
           setLoading(false)
           setSuccess(docRef.id)
           console.log('Document written with ID: ', docRef.id)
+          memesRef
+            .doc(data.forkedFrom)
+            .update({ forkedBy: firebase.firestore.FieldValue.arrayUnion(docRef.id) })
+            .then(() => {
+              console.log('SUCCESS')
+            })
+            .catch(() => console.error('ERROR'))
           setData(null)
         })
         .catch((error) => {

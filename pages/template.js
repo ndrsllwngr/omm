@@ -6,6 +6,7 @@ import { WebcamPhoto } from '@/components/WebcamPhoto'
 import { ScreenshotUrl } from '@/components/ScreenshotUrl'
 import { PasteUrlImage } from '@/components/PasteUrlImage'
 import { Canvas } from '@/components/drawing/Canvas'
+
 // eslint-disable-next-line react/prop-types
 const Section = ({ children, title }) => {
   return (
