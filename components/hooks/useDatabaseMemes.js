@@ -26,6 +26,9 @@ export const useDatabaseMemes = () => {
       case 'Oldest':
         loadNextMemes('createdAt', 'asc', false)
         break
+      case 'Views':
+        loadNextMemes('views', 'desc', false)
+        break
       default:
         console.log('Unsupported case')
     }
@@ -59,6 +62,9 @@ export const useDatabaseMemes = () => {
         break
       case 'Oldest':
         loadNextMemes('createdAt', 'asc', true)
+        break
+      case 'Views':
+        loadNextMemes('views', 'desc', true)
         break
       default:
         console.log('Unsupported case')

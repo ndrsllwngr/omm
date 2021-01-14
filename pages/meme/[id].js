@@ -22,6 +22,7 @@ export default function SingleView() {
   useEffect(() => {
     // TODO subscribe to get updates
     // TODO pass order by
+    // TODO look up "unterabfragen" when sorting can not differential wihci element is newer with same views
     async function getMemes() {
       let Meme = []
       const db = firebase.firestore()
@@ -46,7 +47,6 @@ export default function SingleView() {
       Meme.push({
         id: !(docnext.docs.length > 0) ? '' : docnext.docs[0].id,
       })
-
       return Meme
     }
 
