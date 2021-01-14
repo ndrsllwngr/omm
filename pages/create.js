@@ -24,7 +24,6 @@ const CreatePage = () => {
           </div>
         </div>
       </ProtectedRoute>
-        
     </>
   )
 }
