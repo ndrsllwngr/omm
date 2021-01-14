@@ -1,18 +1,16 @@
-import React, { useEffect } from 'react'
-import PropTypes from 'prop-types'
+import React from 'react'
 import { MemeRenderer } from '@/components/MemeRenderer'
 import Link from 'next/link'
 import InfiniteScroll from 'react-infinite-scroller'
-
-export const Overview = ({ memes, triggerNextMemes, endOfFiles }) => {
-  useEffect(() => {
-    console.log({ memes })
-    console.log({ ENDOFFILES: endOfFiles })
-  }, [endOfFiles, memes])
+import { useDatabaseMemes } from '@/components/hooks/useDatabaseMemes'
+{
+  /* // https://github.com/danbovey/react-infinite-scroller */
+}
+export const Overview = () => {
+  const { dbMemes: memes, triggerNextMemes, endOfFiles } = useDatabaseMemes()
   if (!memes || !(memes.length > 0)) return <div>loading...</div>
   return (
     <>
-      {/* // https://github.com/danbovey/react-infinite-scroller */}
       <InfiniteScroll
         pageStart={0}
         loadMore={triggerNextMemes}
@@ -36,35 +34,4 @@ export const Overview = ({ memes, triggerNextMemes, endOfFiles }) => {
       </InfiniteScroll>
     </>
   )
-}
-
-Overview.propTypes = {
-  triggerNextMemes: PropTypes.func,
-  endOfFiles: PropTypes.bool,
-  memes: PropTypes.arrayOf(
-    PropTypes.shape({
-      title: PropTypes.string.isRequired,
-      createdAt: PropTypes.any.isRequired,
-      createdBy: PropTypes.string.isRequired,
-      upVotes: PropTypes.arrayOf(PropTypes.string).isRequired,
-      downVotes: PropTypes.arrayOf(PropTypes.string).isRequired,
-      forkedBy: PropTypes.arrayOf(PropTypes.string),
-      forkedFrom: PropTypes.any,
-      views: PropTypes.number.isRequired,
-      template: PropTypes.shape({
-        id: PropTypes.any,
-        url: PropTypes.string,
-      }).isRequired,
-      url: PropTypes.string, // if a real png was created (requirement)
-      svg: PropTypes.string.isRequired,
-      json: PropTypes.shape({
-        background: PropTypes.string,
-        height: PropTypes.number,
-        width: PropTypes.number,
-        preserveObjectStacking: PropTypes.bool,
-        version: PropTypes.string,
-        objects: PropTypes.arrayOf(PropTypes.any),
-      }).isRequired,
-    })
-  ),
 }

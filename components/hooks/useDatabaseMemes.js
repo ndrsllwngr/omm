@@ -1,22 +1,53 @@
 import { useState, useEffect } from 'react'
 import firebase from '@/lib/firebase'
 import { FIRESTORE_COLLECTION } from '@/lib/constants'
+import { useFilterContext } from '@/components/context/filterContext'
 
-export const useDatabaseMemes = (limit) => {
+export const useDatabaseMemes = () => {
+  const limit = 9
   const [Memes, setMemes] = useState([])
-  const [filter, setFilter] = useState('Latest')
+  //const [filter, setFilter] = useState('Latest')
+  const { filter } = useFilterContext()
   const [latestDoc, setLatestDoc] = useState(null)
   const [hasMoreFiles, setHasMoreFiles] = useState(true)
 
   const loadCreds = () => {
     return firebase.firestore().collection(FIRESTORE_COLLECTION.MEMES)
   }
-  const onFilterChange = (f) => {
-    setMemes([])
-    setLatestDoc(null)
-    setHasMoreFiles(true)
-    setFilter(f)
-  }
+  useEffect(() => {
+    //https://dev.to/bmcmahen/using-firebase-with-react-hooks-21ap
+    //https://blog.logrocket.com/react-hooks-with-firebase-firestore/
+    //TODO usecallback to prevent dependency issues
+
+    switch (filter) {
+      case 'Latest':
+        loadNextMemes('createdAt', 'desc', false)
+        break
+      case 'Oldest':
+        loadNextMemes('createdAt', 'asc', false)
+        break
+      default:
+        console.log('Unsupported case')
+    }
+  }, [filter])
+
+  // useEffect(() => {
+  //   const onFilterChange = (f) => {
+  //     setMemes([])
+  //     setLatestDoc(null)
+  //     setHasMoreFiles(true)
+  //     setFilter(f)
+  //   }
+  //   onFilterChange(filter)
+  // }, [setFilter])
+
+  // useEffect(() => {
+  //   console.log({ FILTER: filter })
+  //   setMemes([])
+  //   setLatestDoc(null)
+  //   setHasMoreFiles(true)
+  // }, [filter])
+
   const triggerNextMemes = () => {
     //console.warn('handleClick')
     // if (docSize === 0) {
@@ -24,10 +55,10 @@ export const useDatabaseMemes = (limit) => {
     // }
     switch (filter) {
       case 'Latest':
-        loadNextMemes('createdAt', 'desc')
+        loadNextMemes('createdAt', 'desc', true)
         break
       case 'Oldest':
-        loadNextMemes('createdAt', 'asc')
+        loadNextMemes('createdAt', 'asc', true)
         break
       default:
         console.log('Unsupported case')
@@ -58,7 +89,6 @@ export const useDatabaseMemes = (limit) => {
   //   })
   //   setLatestDoc(docs.docs[docs.docs.length - 1])
   //   return snapShotMemes
-
   // }
 
   // const resolveMemes = useCallback((cb) => {
@@ -75,14 +105,19 @@ export const useDatabaseMemes = (limit) => {
   //     console.log({ error })
   //   })
   // }
-  const loadNextMemes = async (c, d) => {
-    let query = ''
-    if (d) {
-      query = loadCreds().orderBy('' + c + '', '' + d + '')
-    } else {
-      query = loadCreds().orderBy('' + c + '')
+  async function loadNextMemes(create, sort, triggerNext) {
+    if (!triggerNext) {
+      setMemes([])
+      setLatestDoc(null)
+      setHasMoreFiles(true)
     }
-    if (latestDoc) {
+    let query = ''
+    if (sort) {
+      query = loadCreds().orderBy('' + create + '', '' + sort + '')
+    } else {
+      query = loadCreds().orderBy('' + create + '')
+    }
+    if (triggerNext && latestDoc) {
       query = query.startAfter(latestDoc)
     }
     const docs = await query.limit(limit).get()
@@ -98,28 +133,15 @@ export const useDatabaseMemes = (limit) => {
     })
 
     setLatestDoc(docs.docs[docs.docs.length - 1])
-    !Memes || !(Memes.length > 0) ? setMemes(snapShotMemes) : setMemes([...Memes, ...snapShotMemes])
-  }
-  useEffect(() => {
-    //https://dev.to/bmcmahen/using-firebase-with-react-hooks-21ap
-    //https://blog.logrocket.com/react-hooks-with-firebase-firestore/
-    //TODOuse callbackl to prevent dependency issues
 
-    switch (filter) {
-      case 'Latest':
-        loadNextMemes('createdAt', 'desc')
-        break
-      case 'Oldest':
-        loadNextMemes('createdAt', 'asc')
-        break
-      default:
-        console.log('Unsupported case')
-    }
-  }, [setMemes, filter, limit])
+    console.log({ Snaopshotmemes: snapShotMemes })
+    console.log({ MemesboforeSet: Memes })
+    console.log({ Memeslenght: Memes.length })
+    triggerNext ? setMemes([...Memes, ...snapShotMemes]) : setMemes(snapShotMemes)
+  }
+
   return {
     dbMemes: Memes,
-    dbFilter: filter,
-    setFilter: onFilterChange,
     triggerNextMemes: triggerNextMemes,
     endOfFiles: hasMoreFiles,
   }
