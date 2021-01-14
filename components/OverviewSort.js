@@ -1,18 +1,25 @@
-import React, { useRef, useState } from 'react'
-import PropTypes from 'prop-types'
+import React, { useEffect, useRef, useState } from 'react'
 import { useDetectOutsideClick } from '@/components/hooks/useDetectOutsideClick'
+import { useFilterContext } from '@/components/context/filterContext'
 //https://tailwindui.com/components/application-ui/elements/dropdowns
 //https://letsbuildui.dev/articles/building-a-dropdown-menu-component-with-react-hooks
-export const OverviewSort = ({ filter, onFilterChange }) => {
+export const OverviewSort = () => {
   const dropdownRef = useRef(null)
   const [isActive, setIsActive] = useDetectOutsideClick(dropdownRef, false)
   const onClick = () => setIsActive(!isActive)
 
-  const [localFilter, setFilter] = useState(filter)
+  //const { props.state } = useFilterContext()
+  const { filter, setFilter } = useFilterContext()
+  const [localFilter, setLocalFilter] = useState(filter)
 
+  useEffect(() => {
+    //console.log({ THISSTATE: state })
+    console.log(filter)
+  }, [filter])
   //handle statefunction für state und callback
   const handleClick = (f) => {
-    onFilterChange(f)
+    //onFilterChange(f)
+    setLocalFilter(f)
     setFilter(f)
   }
   return (
@@ -79,13 +86,13 @@ export const OverviewSort = ({ filter, onFilterChange }) => {
             >
               Oldest
             </div>
-            {/* <div
+            <div
               onClick={() => handleClick('Views')}
               className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900"
               role="menuitem"
             >
               Views
-            </div> */}
+            </div>
             <div
               onClick={() => handleClick('Votes')}
               className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900"
@@ -100,7 +107,7 @@ export const OverviewSort = ({ filter, onFilterChange }) => {
   )
 }
 
-OverviewSort.propTypes = {
-  filter: PropTypes.string,
-  onFilterChange: PropTypes.func,
-}
+// OverviewSort.propTypes = {
+//   filter: PropTypes.string,
+//   onFilterChange: PropTypes.func,
+// }

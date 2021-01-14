@@ -26,7 +26,7 @@ export const AutoplayProvider = ({ children }) => {
   const router = useRouter()
   useEffect(() => {
     if (router) {
-      console.log({ PATHNAME: router.pathname })
+      //console.log({ PATHNAME: router.pathname })
       if (router.pathname !== '/meme/[id]') {
         dispatch({ type: 'falseBool' })
       }

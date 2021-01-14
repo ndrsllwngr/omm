@@ -7,6 +7,7 @@ import Link from 'next/link'
 import { FIRESTORE_COLLECTION } from '@/lib/constants'
 import { useAutoPlayState, useAutoPlayDispatch } from '@/components/context/autoplayContext'
 import { useRandomMeme } from '@/components/hooks/useRandomMeme'
+import { OverviewSort } from '@/components/OverviewSort'
 
 export default function SingleView() {
   const router = useRouter()
@@ -21,6 +22,7 @@ export default function SingleView() {
   useEffect(() => {
     // TODO subscribe to get updates
     // TODO pass order by
+    // TODO look up "unterabfragen" when sorting can not differential wihci element is newer with same views
     async function getMemes() {
       let Meme = []
       const db = firebase.firestore()
@@ -45,7 +47,6 @@ export default function SingleView() {
       Meme.push({
         id: !(docnext.docs.length > 0) ? '' : docnext.docs[0].id,
       })
-
       return Meme
     }
 
@@ -105,6 +106,7 @@ export default function SingleView() {
   return (
     <div className="flex flex-col">
       <Navbar />
+      <OverviewSort />
       <Slideshow memes={Memes} />
       <div className="flex flex-col items-center font-semibold text-xl my-2 text-white">
         <Link href={`/meme/${id}`}>

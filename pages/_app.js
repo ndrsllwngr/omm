@@ -5,6 +5,7 @@ import '@/styles/tailwind.css'
 import AuthProvider from '@/components/context/authContext'
 import { FabricProvider } from '@/components/context/fabricContext'
 import { AutoplayProvider } from '@/components/context/autoplayContext'
+import { FilterContextProvider } from '@/components/context/filterContext'
 
 class MyApp extends App {
   render() {
@@ -13,9 +14,11 @@ class MyApp extends App {
       <AuthProvider>
         <ThemeProvider attribute="class" defaultTheme="system">
           <AutoplayProvider>
-            <FabricProvider>
-              <Component {...pageProps} />
-            </FabricProvider>
+            <FilterContextProvider>
+              <FabricProvider>
+                <Component {...pageProps} />
+              </FabricProvider>
+            </FilterContextProvider>
           </AutoplayProvider>
         </ThemeProvider>
       </AuthProvider>
