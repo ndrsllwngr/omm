@@ -6,6 +6,7 @@ import { WebcamPhoto } from '@/components/WebcamPhoto'
 import { ScreenshotUrl } from '@/components/ScreenshotUrl'
 import { PasteUrlImage } from '@/components/PasteUrlImage'
 import { Canvas } from '@/components/drawing/Canvas'
+import { ProtectedRoute } from '@/components/context/authContext'
 
 // eslint-disable-next-line react/prop-types
 const Section = ({ children, title }) => {
@@ -20,23 +21,25 @@ const Section = ({ children, title }) => {
 const TemplatePage = () => {
   return (
     <>
-      <HtmlHead />
-      <Navbar />
-      <Section title={'UploadImage'}>
-        <UploadImage />
-      </Section>
-      <Section title={'WebcamPhoto'}>
-        <WebcamPhoto />
-      </Section>
-      <Section title={'ScreenshotUrl'}>
-        <ScreenshotUrl />
-      </Section>
-      <Section title={'PasteUrlImage'}>
-        <PasteUrlImage />
-      </Section>
-      <Section title={'Canvas'}>
-        <Canvas />
-      </Section>
+      <ProtectedRoute>
+        <HtmlHead />
+        <Navbar />
+        <Section title={'UploadImage'}>
+          <UploadImage />
+        </Section>
+        <Section title={'WebcamPhoto'}>
+          <WebcamPhoto />
+        </Section>
+        <Section title={'ScreenshotUrl'}>
+          <ScreenshotUrl />
+        </Section>
+        <Section title={'PasteUrlImage'}>
+          <PasteUrlImage />
+        </Section>
+        <Section title={'Canvas'}>
+          <Canvas />
+        </Section>
+      </ProtectedRoute>
     </>
   )
 }
