@@ -10,7 +10,7 @@ export const useVoting = (initMeme) => {
 
   const auth = useAuth()
 
-  const getVote = (meme) => {
+  const getVoteState = (meme) => {
     if (auth.user && meme && meme.upVotes.includes(auth.user.uid)) {
       return VOTE.up
     } else if (auth.user && meme && meme.downVotes.includes(auth.user.uid)) {
@@ -79,7 +79,7 @@ export const useVoting = (initMeme) => {
   useEffect(() => {
     if (meme) {
       console.log({ src: 'useVoting', meme })
-      setVoteState(getVote(meme))
+      setVoteState(getVoteState(meme))
       // Subscribe to user document on mount
       const db = firebase.firestore()
       const unsubscribe = db
@@ -87,7 +87,7 @@ export const useVoting = (initMeme) => {
         .doc(meme.id)
         .onSnapshot((doc) => {
           setMeme({ id: doc.id, ...doc.data() })
-          setVoteState(getVote(doc.data()))
+          setVoteState(getVoteState(doc.data()))
         })
       return () => unsubscribe()
     }
