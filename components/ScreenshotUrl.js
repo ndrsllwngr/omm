@@ -1,4 +1,6 @@
 import React, { useState } from 'react'
+import useStorage from '@/lib/useStorage'
+
 // import firebase from '@/lib/firebase'
 
 // const memeFirestore = firebase.firestore()
@@ -6,17 +8,18 @@ import React, { useState } from 'react'
 export const ScreenshotUrl = () => {
   const [search, setSearch] = useState('')
   const URL = `https://api.apiflash.com/v1/urltoimage?access_key=${process.env.NEXT_PUBLIC_APIFLASH_SCREENSHOT_API_KEY}&url=${search}&response_type=json&fresh=true&width=1920&height=1080`
+  const { setExternalUrl } = useStorage()
+
   const getScreenshot = () =>
     fetch(URL, {
       method: 'GET',
     })
       .then((res) => {
-        console.log(res)
+        //console.log('res: ', res.json())
+        return res.json()
       })
-      .then((url) => {
-        return url
-      })
-      .catch((e) => console.error(e))
+      .then((json) => setExternalUrl(json))
+      .catch((e) => console.error('error:', e))
 
   const handleSubmit = (e) => {
     e.preventDefault()

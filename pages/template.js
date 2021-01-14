@@ -6,7 +6,6 @@ import { WebcamPhoto } from '@/components/WebcamPhoto'
 import { ScreenshotUrl } from '@/components/ScreenshotUrl'
 import { PasteUrlImage } from '@/components/PasteUrlImage'
 import { Canvas } from '@/components/drawing/Canvas'
-
 // eslint-disable-next-line react/prop-types
 const Section = ({ children, title }) => {
   return (
@@ -28,14 +27,14 @@ const TemplatePage = () => {
       <Section title={'WebcamPhoto'}>
         <WebcamPhoto />
       </Section>
-      <Section title={'ScreenshotUrl'}>
+      <Section title={'Screenshot'}>
         <ScreenshotUrl />
       </Section>
       <Section title={'PasteUrlImage'}>
         <PasteUrlImage />
       </Section>
       <Section title={'DrawonCanvas'}>
-        <Canvas/>
+        <Canvas />
       </Section>
     </>
   )

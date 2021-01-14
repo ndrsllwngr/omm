@@ -7,7 +7,7 @@ export const Canvas = () => {
   const canvasContextRef = useRef(null)
 
   useLayoutEffect(() => {
-    const canvas = document.getElementById('canvas')
+    const canvas = document.getElementById('drawingCanvas')
     const canvasContext = canvas.getContext('2d')
     canvasContext.lineCap = 'round'
     canvasContext.strokeStyle = 'black'
@@ -18,20 +18,29 @@ export const Canvas = () => {
     //console.log('rerender canvas')
   })
 
+  function getMousePos(evt) {
+    const canvas = document.getElementById('drawingCanvas')
+    var rect = canvas.getBoundingClientRect()
+    return {
+      clientX: evt.clientX - rect.left,
+      clientY: evt.clientY - rect.top,
+    }
+  }
+
   const handleMouseDown = (e) => {
     setIsDrawing(true)
-    const { clientX, clientY } = e
+    const { clientX, clientY } = getMousePos(e)
     canvasContextRef.current.beginPath()
     canvasContextRef.current.moveTo(clientX, clientY)
   }
 
   const handleMouseMove = (e) => {
     if (!isDrawing) return
-    const { clientX, clientY } = e
+    const { clientX, clientY } = getMousePos(e)
     canvasContextRef.current.lineTo(clientX, clientY)
     canvasContextRef.current.stroke()
+    console.log('x, y: ', clientX, clientY)
     setIsDrawing(true)
-    console.log(clientX, clientY)
   }
 
   const handleMouseUp = (e) => {
@@ -43,14 +52,14 @@ export const Canvas = () => {
     canvasContextRef.current.clearRect(
       0,
       0,
-      document.getElementById('canvas').width,
-      document.getElementById('canvas').height
+      document.getElementById('drawingCanvas').width,
+      document.getElementById('drawingCanvas').height
     )
     console.log('clear canvas:', canvasContextRef.current)
   }
 
   const saveImage = () => {
-    const dataUrl = document.getElementById('canvas').toDataURL('canvas.png')
+    const dataUrl = document.getElementById('drawingCanvas').toDataURL('canvas.png')
     fetch(dataUrl)
       .then((res) => {
         return res.blob()
@@ -59,14 +68,14 @@ export const Canvas = () => {
         setFile(blob)
       })
   }
-
+  //if (typeof window === 'undefined') return <div>loading...</div>
   return (
     <div>
       <canvas
-        id="canvas"
+        id="drawingCanvas"
         style={{ backgroundColor: 'blue' }}
-        width="500"
-        height="500"
+        width={300}
+        height={300}
         onMouseDown={handleMouseDown}
         onMouseMove={handleMouseMove}
         onMouseUp={handleMouseUp}
