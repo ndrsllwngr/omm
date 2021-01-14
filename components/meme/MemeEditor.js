@@ -107,7 +107,7 @@ export const MemeEditor = () => {
       forkedFrom: isCopy,
       views: 0,
       template: {
-        id: template.id,
+        id: template.id ? template.id : null,
         url: template.url,
       },
       url: '', // TODO if a real png was created (requirement)
