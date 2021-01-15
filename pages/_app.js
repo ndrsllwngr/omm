@@ -6,6 +6,7 @@ import AuthProvider from '@/components/context/authContext'
 import { FabricProvider } from '@/components/context/fabricContext'
 import { AutoplayProvider } from '@/components/context/autoplayContext'
 import { FilterContextProvider } from '@/components/context/filterContext'
+import { ReloadContextProvider } from '@/components/context/reloadContext'
 
 class MyApp extends App {
   render() {
@@ -15,9 +16,11 @@ class MyApp extends App {
         <ThemeProvider attribute="class" defaultTheme="system">
           <AutoplayProvider>
             <FilterContextProvider>
-              <FabricProvider>
-                <Component {...pageProps} />
-              </FabricProvider>
+              <ReloadContextProvider>
+                <FabricProvider>
+                  <Component {...pageProps} />
+                </FabricProvider>
+              </ReloadContextProvider>
             </FilterContextProvider>
           </AutoplayProvider>
         </ThemeProvider>

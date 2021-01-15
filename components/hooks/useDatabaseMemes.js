@@ -2,12 +2,15 @@ import { useState, useEffect } from 'react'
 import firebase from '@/lib/firebase'
 import { FIRESTORE_COLLECTION } from '@/lib/constants'
 import { useFilterContext } from '@/components/context/filterContext'
+import { useReloadContext } from '@/components/context/reloadContext'
 
 export const useDatabaseMemes = () => {
   const limit = 9
   const [Memes, setMemes] = useState([])
   //const [filter, setFilter] = useState('Latest')
   const { filter } = useFilterContext()
+  const { reload } = useReloadContext()
+
   const [latestDoc, setLatestDoc] = useState(null)
   const [hasMoreFiles, setHasMoreFiles] = useState(true)
 
@@ -32,7 +35,7 @@ export const useDatabaseMemes = () => {
       default:
         console.log('Unsupported case')
     }
-  }, [filter])
+  }, [filter, reload])
 
   // useEffect(() => {
   //   const onFilterChange = (f) => {
@@ -140,9 +143,9 @@ export const useDatabaseMemes = () => {
 
     setLatestDoc(docs.docs[docs.docs.length - 1])
 
-    console.log({ Snaopshotmemes: snapShotMemes })
-    console.log({ MemesboforeSet: Memes })
-    console.log({ Memeslenght: Memes.length })
+    // console.log({ Snaopshotmemes: snapShotMemes })
+    // console.log({ MemesboforeSet: Memes })
+    // console.log({ Memeslenght: Memes.length })
     triggerNext ? setMemes([...Memes, ...snapShotMemes]) : setMemes(snapShotMemes)
   }
 

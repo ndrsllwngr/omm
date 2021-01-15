@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useRef, useState } from 'react'
 import { useDetectOutsideClick } from '@/components/hooks/useDetectOutsideClick'
 import { useFilterContext } from '@/components/context/filterContext'
 //https://tailwindui.com/components/application-ui/elements/dropdowns
@@ -7,18 +7,10 @@ export const OverviewSort = () => {
   const dropdownRef = useRef(null)
   const [isActive, setIsActive] = useDetectOutsideClick(dropdownRef, false)
   const onClick = () => setIsActive(!isActive)
-
-  //const { props.state } = useFilterContext()
   const { filter, setFilter } = useFilterContext()
   const [localFilter, setLocalFilter] = useState(filter)
 
-  useEffect(() => {
-    //console.log({ THISSTATE: state })
-    console.log(filter)
-  }, [filter])
-  //handle statefunction für state und callback
   const handleClick = (f) => {
-    //onFilterChange(f)
     setLocalFilter(f)
     setFilter(f)
   }
