@@ -10,21 +10,15 @@ import { useReloadContext } from '@/components/context/reloadContext'
 
 const LandingPage = () => {
   const [showNewMemes, setShowNewMemes] = useState(false)
-  const { setReload } = useReloadContext()
+  const { reload, setReload } = useReloadContext()
   const [counter, setCounter] = useState(0)
+  const [date, setDate] = useState(firebase.firestore.Timestamp.now())
   useEffect(() => {
-    var date = firebase.firestore.Timestamp.now()
     const db = firebase.firestore()
     let unsub = db
       .collection(FIRESTORE_COLLECTION.MEMES)
       .where('createdAt', '>', date)
       .onSnapshot(function (snapshot) {
-        // snapshot.docChanges().forEach(function (change) {
-        //   if (change.type === 'added') {
-        //     setCounter(counter + 1)
-        //     setShowNewMemes(true)
-        //   }
-        // })
         snapshot.docChanges().forEach(function (change) {
           if (change.type === 'added') {
             setCounter(counter + 1)
@@ -33,14 +27,17 @@ const LandingPage = () => {
         })
       })
     return () => unsub()
-  }, [])
+  }, [reload])
 
   return (
     <>
       {showNewMemes && (
         <button
           onClick={() => {
-            setReload(), setShowNewMemes(false), setCounter(0)
+            setReload(!reload),
+              setShowNewMemes(false),
+              setCounter(0),
+              setDate(firebase.firestore.Timestamp.now())
           }}
           className="w-full h-8"
         >
