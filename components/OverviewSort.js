@@ -3,6 +3,7 @@ import { useDetectOutsideClick } from '@/components/hooks/useDetectOutsideClick'
 import { useFilterContext } from '@/components/context/filterContext'
 import { useMemeReload } from '@/components/hooks/useMemeReload'
 import firebase from '@/lib/firebase'
+import { IoCloud } from 'react-icons/io5'
 //https://tailwindui.com/components/application-ui/elements/dropdowns
 //https://letsbuildui.dev/articles/building-a-dropdown-menu-component-with-react-hooks
 export const OverviewSort = () => {
@@ -27,21 +28,22 @@ export const OverviewSort = () => {
     setFilter(f)
   }
   return (
-    <div className="flex justify-end">
+    <div className="flex justify-end items-center">
+      {showNewMemes && (
+        <button
+          onClick={() => {
+            //needed when we do not trigger setFilter('Latest')
+            setReload(!reload)
+            setShowNewMemes(false), setCounter(0), setDate(firebase.firestore.Timestamp.now())
+            setFilter('Latest')
+          }}
+          className="text-custom-green uppercase font-semibold flex items-center mr-4"
+        >
+          <IoCloud size={18} className={'fill-current mr-2'} /> {counter} New Meme
+          {counter > 1 && 's'}
+        </button>
+      )}
       <div className="flex relative">
-        {showNewMemes && (
-          <button
-            onClick={() => {
-              //needed when we do not trigger setFilter('Latest')
-              setReload(!reload)
-              setShowNewMemes(false), setCounter(0), setDate(firebase.firestore.Timestamp.now())
-              setFilter('Latest')
-            }}
-            className="w-full h-8"
-          >
-            Load {counter} new Memes
-          </button>
-        )}
         <button
           type="button"
           className="inline-flex justify-center w-full border-b-2 shadow-sm px-4 py-2 bg-transparent text-sm font-medium text-black dark:text-white focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-200 focus:ring-gray-200"
