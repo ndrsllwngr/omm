@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react'
+import React, { useRef } from 'react'
 import { useDetectOutsideClick } from '@/components/hooks/useDetectOutsideClick'
 import { useFilterContext } from '@/components/context/filterContext'
 //https://tailwindui.com/components/application-ui/elements/dropdowns

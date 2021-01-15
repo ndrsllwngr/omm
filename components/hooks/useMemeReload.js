@@ -8,9 +8,6 @@ export const useMemeReload = () => {
   const { reload, setReload } = useReloadContext()
   const [counter, setCounter] = useState(0)
   const [date, setDate] = useState(firebase.firestore.Timestamp.now())
-  useEffect(() => {
-    console.log({ GCOUNTER: counter })
-  }, [counter])
 
   useEffect(() => {
     const db = firebase.firestore()
