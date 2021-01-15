@@ -7,6 +7,7 @@ import { useVoting } from '@/components/hooks/useVoting'
 import { VOTE } from '@/lib/constants'
 import Link from 'next/link'
 import moment from 'moment'
+import { IoCaretDownOutline, IoCaretUpOutline } from 'react-icons/io5'
 
 export const SingleMeme = ({ meme, enableLink }) => {
   const { setJson } = useFabricJson()
@@ -14,20 +15,20 @@ export const SingleMeme = ({ meme, enableLink }) => {
   const { upVote, downVote, voteState } = useVoting(meme)
   return (
     <div className="flex-col max-w-md">
-      <p className={'uppercase text-xs text-gray-300 font-medium'}>
+      <p className={'uppercase text-xs text-gray-600 dark:text-gray-300 font-medium'}>
         {moment(meme.createdAt.toMillis()).fromNow()}
       </p>
       {enableLink ? (
         <Link href={`/meme/${meme.id}`}>
           <a>
-            <h1 className={'text-lg font-bold text-white truncate'}>
+            <h1 className={'text-lg font-bold text-black dark:text-white truncate'}>
               {meme.title ? meme.title : 'Untitled'}
             </h1>
           </a>
         </Link>
       ) : (
         <a>
-          <h1 className={'text-lg font-bold text-black truncate'}>
+          <h1 className={'text-lg font-bold text-black dark:text-white truncate'}>
             {meme.title ? meme.title : 'Untitled'}
           </h1>
         </a>
@@ -42,28 +43,37 @@ export const SingleMeme = ({ meme, enableLink }) => {
       ) : (
         <MemeRenderer meme={meme} />
       )}
-      <button
-        onClick={() => {
-          setJson(meme)
-          router.push('/create')
-        }}
-      >
-        Copy Meme
-      </button>
-      <button
-        className={voteState === VOTE.up ? 'bg-green-100' : 'bg-green-500'}
-        disabled={voteState === VOTE.up}
-        onClick={upVote}
-      >
-        Upvote
-      </button>
-      <button
-        className={voteState === VOTE.down ? 'bg-red-100' : 'bg-red-500'}
-        disabled={voteState === VOTE.down}
-        onClick={downVote}
-      >
-        Downvote
-      </button>
+      <div className={'flex justify-between items-center'}>
+        <button
+          className={'text-black dark:text-white'}
+          onClick={() => {
+            setJson(meme)
+            router.push('/create')
+          }}
+        >
+          Copy Meme
+        </button>
+        <div className={'flex space-x-1 mt-1'}>
+          <button
+            className={`rounded px-1 py-1 text-black ${
+              voteState === VOTE.up ? 'bg-green-100' : 'bg-green-500'
+            }`}
+            disabled={voteState === VOTE.up}
+            onClick={upVote}
+          >
+            <IoCaretUpOutline className={'fill-current'} />
+          </button>
+          <button
+            className={`rounded px-1 py-1 text-black ${
+              voteState === VOTE.down ? 'bg-red-100' : 'bg-red-500'
+            }`}
+            disabled={voteState === VOTE.down}
+            onClick={downVote}
+          >
+            <IoCaretDownOutline className={'fill-current'} />
+          </button>
+        </div>
+      </div>
     </div>
   )
 }

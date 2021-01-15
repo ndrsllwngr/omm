@@ -12,7 +12,7 @@ class MyApp extends App {
     const { Component, pageProps } = this.props
     return (
       <AuthProvider>
-        <ThemeProvider attribute="class" defaultTheme="system">
+        <ThemeProvider forcedTheme={Component.theme || undefined} attribute="class">
           <AutoplayProvider>
             <FilterContextProvider>
               <FabricProvider>

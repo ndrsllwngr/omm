@@ -19,6 +19,7 @@ export const OverviewSort = () => {
   //handle statefunction für state und callback
   const handleClick = (f) => {
     //onFilterChange(f)
+    setIsActive(false)
     setLocalFilter(f)
     setFilter(f)
   }
@@ -27,7 +28,7 @@ export const OverviewSort = () => {
       <div className="flex relative">
         <button
           type="button"
-          className="inline-flex justify-center w-full border-b-2 shadow-sm px-4 py-2 bg-transparent text-sm font-medium text-white focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-200 focus:ring-gray-200"
+          className="inline-flex justify-center w-full border-b-2 shadow-sm px-4 py-2 bg-transparent text-sm font-medium text-black dark:text-white focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-200 focus:ring-gray-200"
           id="options-menu"
           aria-haspopup="true"
           aria-expanded="true"

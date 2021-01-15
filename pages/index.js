@@ -22,7 +22,7 @@ const LandingPage = () => {
           hasMore={endOfFiles}
           threshold={100}
           loader={<h4 key="1">Loading...</h4>}
-          className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-y-16 gap-x-2 px-4 py-4 sm:px-6 sm:py-12 lg:px-8"
+          className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-y-16 gap-x-2 px-4 py-4 sm:px-6 sm:py-12 lg:px-0"
         >
           {memes.map((meme, i) => (
             <div key={i} className="place-self-center justify-self-center">
