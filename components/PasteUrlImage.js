@@ -1,4 +1,4 @@
-import useStorage from '@/lib/useStorage'
+import useStorage from '@/components/hooks/useStorage'
 import React, { useState } from 'react'
 
 export const PasteUrlImage = () => {
@@ -38,7 +38,7 @@ const fetchImage = (imageUrl) => {
         console.log(blob)
       })
   }
-  
+
   .then((blob) => {
         setFile(blob)
         console.log('blob:', blob)

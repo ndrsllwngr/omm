@@ -1,5 +1,5 @@
 import React, { useState, useLayoutEffect, useRef } from 'react'
-import useStorage from '@/lib/useStorage'
+import useStorage from '@/components/hooks/useStorage'
 
 export const Canvas = () => {
   const { setFile } = useStorage()

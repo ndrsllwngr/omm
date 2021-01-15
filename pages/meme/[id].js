@@ -4,10 +4,11 @@ import firebase from '@/lib/firebase'
 import { Slideshow } from '@/components/Slideshow'
 import { Navbar } from '@/components/Navbar'
 import Link from 'next/link'
-import { FIRESTORE_COLLECTION } from '@/lib/constants'
+import { FIRESTORE_COLLECTION, SINGLEVIEWNAVIGATION } from '@/lib/constants'
 import { useAutoPlayState, useAutoPlayDispatch } from '@/components/context/autoplayContext'
 import { useRandomMeme } from '@/components/hooks/useRandomMeme'
 import { OverviewSort } from '@/components/OverviewSort'
+import { HtmlHead } from '@/components/HtmlHead'
 
 export default function SingleView() {
   const router = useRouter()
@@ -97,24 +98,29 @@ export default function SingleView() {
 
   if (!Memes || !(Memes.length > 0))
     return (
-      <div className="flex flex-col">
+      <>
+        <HtmlHead title={'Meme · Loading... '} />
         <Navbar />
         <div>Loading...</div>
-      </div>
+      </>
     )
   //https://stackoverflow.com/questions/53857063/changing-state-on-route-change-next-js
   return (
-    <div className="flex flex-col">
+    <>
+      <HtmlHead title={`Meme · ${Memes[SINGLEVIEWNAVIGATION.current].title}`} />
       <Navbar />
       <OverviewSort />
-      <Slideshow memes={Memes} />
+      <Slideshow
+        prevMeme={Memes[SINGLEVIEWNAVIGATION.prev]}
+        meme={Memes[SINGLEVIEWNAVIGATION.current]}
+        nextMeme={Memes[SINGLEVIEWNAVIGATION.next]}
+      />
       <div className="flex flex-col items-center font-semibold text-xl my-2 text-white">
         <Link href={`/meme/${id}`}>
           <a onClick={() => dispatch({ type: 'falseBool' })}>
             <span className="my-2 p-2 rounded bg-green-600">Random Meme</span>
           </a>
         </Link>
-
         {!(Memes[2].id === '') && (
           <button
             className="my-2 p-2 rounded bg-green-600"
@@ -124,6 +130,6 @@ export default function SingleView() {
           </button>
         )}
       </div>
-    </div>
+    </>
   )
 }

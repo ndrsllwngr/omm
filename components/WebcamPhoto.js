@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import useStorage from '@/lib/useStorage'
+import useStorage from '@/components/hooks/useStorage'
 
 export const WebcamPhoto = () => {
   const [playing, setPlaying] = useState(false)

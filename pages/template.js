@@ -21,7 +21,7 @@ const TemplatePage = () => {
   return (
     <>
       <ProtectedRoute>
-        <HtmlHead />
+        <HtmlHead title={'Create a New Template'} />
         <Navbar />
         <Section title={'UploadImage'}>
           <UploadImage />
