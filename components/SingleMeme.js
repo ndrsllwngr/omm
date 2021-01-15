@@ -55,8 +55,10 @@ export const SingleMeme = ({ meme, enableLink }) => {
         </button>
         <div className={'flex space-x-1 mt-1'}>
           <button
-            className={`rounded px-1 py-1 text-black ${
-              voteState === VOTE.up ? 'bg-green-100' : 'bg-green-500'
+            className={`rounded border border-1 px-1 py-1 ${
+              voteState === VOTE.up
+                ? 'text-custom-green border-custom-green'
+                : 'text-black dark:text-white border-black dark:border-white'
             }`}
             disabled={voteState === VOTE.up}
             onClick={upVote}
@@ -64,8 +66,10 @@ export const SingleMeme = ({ meme, enableLink }) => {
             <IoCaretUpOutline className={'fill-current'} />
           </button>
           <button
-            className={`rounded px-1 py-1 text-black ${
-              voteState === VOTE.down ? 'bg-red-100' : 'bg-red-500'
+            className={`rounded border border-1 px-1 py-1 ${
+              voteState === VOTE.down
+                ? 'text-red-500 border-red-500'
+                : 'text-black dark:text-white border-black dark:border-white'
             }`}
             disabled={voteState === VOTE.down}
             onClick={downVote}
