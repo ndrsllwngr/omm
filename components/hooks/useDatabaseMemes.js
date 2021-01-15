@@ -5,7 +5,7 @@ import { useFilterContext } from '@/components/context/filterContext'
 import { useReloadContext } from '@/components/context/reloadContext'
 
 export const useDatabaseMemes = () => {
-  const limit = 9
+  const limit = 20
   const [Memes, setMemes] = useState([])
   //const [filter, setFilter] = useState('Latest')
   const { filter } = useFilterContext()
