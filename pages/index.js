@@ -7,27 +7,40 @@ import { Navbar } from '@/components/Navbar'
 import { OverviewSort } from '@/components/OverviewSort'
 import { FIRESTORE_COLLECTION } from '@/lib/constants'
 import { useReloadContext } from '@/components/context/reloadContext'
+import { useMemeReload } from '@/components/hooks/useMemeReload'
+import { useFilterContext } from '@/components/context/filterContext'
 
 const LandingPage = () => {
-  const [showNewMemes, setShowNewMemes] = useState(false)
-  const { reload, setReload } = useReloadContext()
-  const [counter, setCounter] = useState(0)
-  const [date, setDate] = useState(firebase.firestore.Timestamp.now())
-  useEffect(() => {
-    const db = firebase.firestore()
-    let unsub = db
-      .collection(FIRESTORE_COLLECTION.MEMES)
-      .where('createdAt', '>', date)
-      .onSnapshot(function (snapshot) {
-        snapshot.docChanges().forEach(function (change) {
-          if (change.type === 'added') {
-            setCounter(counter + 1)
-            setShowNewMemes(true)
-          }
-        })
-      })
-    return () => unsub()
-  }, [reload])
+  const { filter, setFilter } = useFilterContext()
+  const {
+    showNewMemes,
+    setReload,
+    setShowNewMemes,
+    setCounter,
+    setDate,
+    counter,
+    reload,
+  } = useMemeReload()
+
+  // const [showNewMemes, setShowNewMemes] = useState(false)
+  // const { reload, setReload } = useReloadContext()
+  // const [counter, setCounter] = useState(0)
+  // const [date, setDate] = useState(firebase.firestore.Timestamp.now())
+
+  // useEffect(() => {
+  //   const db = firebase.firestore()
+  //   let unsub = db
+  //     .collection(FIRESTORE_COLLECTION.MEMES)
+  //     .where('createdAt', '>', date)
+  //     .onSnapshot(function (snapshot) {
+  //       if (snapshot.size > 0) {
+  //         setCounter(snapshot.size)
+  //         setShowNewMemes(true)
+  //       }
+  //     })
+
+  //   return () => unsub()
+  // }, [reload])
 
   return (
     <>
@@ -38,6 +51,7 @@ const LandingPage = () => {
               setShowNewMemes(false),
               setCounter(0),
               setDate(firebase.firestore.Timestamp.now())
+            setFilter('Latest')
           }}
           className="w-full h-8"
         >

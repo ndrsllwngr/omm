@@ -8,10 +8,10 @@ export const OverviewSort = () => {
   const [isActive, setIsActive] = useDetectOutsideClick(dropdownRef, false)
   const onClick = () => setIsActive(!isActive)
   const { filter, setFilter } = useFilterContext()
-  const [localFilter, setLocalFilter] = useState(filter)
+  //const [localFilter, setLocalFilter] = useState(filter)
 
   const handleClick = (f) => {
-    setLocalFilter(f)
+    //setLocalFilter(f)
     setFilter(f)
   }
   return (
@@ -25,7 +25,7 @@ export const OverviewSort = () => {
           aria-expanded="true"
           onClick={onClick}
         >
-          Sortby: {localFilter}
+          Sortby: {filter}
           {/* <!-- Heroicon name: chevron-down --> */}
           <svg
             className="-mr-1 ml-2 h-5 w-5"
