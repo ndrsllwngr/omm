@@ -1,31 +1,47 @@
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useRef } from 'react'
 import { useDetectOutsideClick } from '@/components/hooks/useDetectOutsideClick'
 import { useFilterContext } from '@/components/context/filterContext'
+import { useMemeReload } from '@/components/hooks/useMemeReload'
+import firebase from '@/lib/firebase'
 //https://tailwindui.com/components/application-ui/elements/dropdowns
 //https://letsbuildui.dev/articles/building-a-dropdown-menu-component-with-react-hooks
 export const OverviewSort = () => {
   const dropdownRef = useRef(null)
   const [isActive, setIsActive] = useDetectOutsideClick(dropdownRef, false)
   const onClick = () => setIsActive(!isActive)
-
-  //const { props.state } = useFilterContext()
   const { filter, setFilter } = useFilterContext()
-  const [localFilter, setLocalFilter] = useState(filter)
+  const {
+    showNewMemes,
+    setShowNewMemes,
+    setCounter,
+    setDate,
+    counter,
+    setReload,
+    reload,
+  } = useMemeReload()
+  //const [localFilter, setLocalFilter] = useState(filter)
 
-  useEffect(() => {
-    //console.log({ THISSTATE: state })
-    console.log(filter)
-  }, [filter])
-  //handle statefunction für state und callback
   const handleClick = (f) => {
     //onFilterChange(f)
     setIsActive(false)
-    setLocalFilter(f)
     setFilter(f)
   }
   return (
     <div className="flex justify-end">
       <div className="flex relative">
+        {showNewMemes && (
+          <button
+            onClick={() => {
+              //needed when we do not trigger setFilter('Latest')
+              setReload(!reload)
+              setShowNewMemes(false), setCounter(0), setDate(firebase.firestore.Timestamp.now())
+              setFilter('Latest')
+            }}
+            className="w-full h-8"
+          >
+            Load {counter} new Memes
+          </button>
+        )}
         <button
           type="button"
           className="inline-flex justify-center w-full border-b-2 shadow-sm px-4 py-2 bg-transparent text-sm font-medium text-black dark:text-white focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-200 focus:ring-gray-200"
@@ -34,7 +50,7 @@ export const OverviewSort = () => {
           aria-expanded="true"
           onClick={onClick}
         >
-          {localFilter}
+          {filter}
           {/* <!-- Heroicon name: chevron-down --> */}
           <svg
             className="-mr-1 ml-2 h-5 w-5"
