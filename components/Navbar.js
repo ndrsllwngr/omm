@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React from 'react'
 import Link from 'next/link'
 import { ThemeToggle } from '@/components/ThemeToggle'
 import { NavButtons } from '@/components/NavButtons'
