@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useRef } from 'react'
 import { useDetectOutsideClick } from '@/components/hooks/useDetectOutsideClick'
 import { useFilterContext } from '@/components/context/filterContext'
 //https://tailwindui.com/components/application-ui/elements/dropdowns
@@ -7,19 +7,11 @@ export const OverviewSort = () => {
   const dropdownRef = useRef(null)
   const [isActive, setIsActive] = useDetectOutsideClick(dropdownRef, false)
   const onClick = () => setIsActive(!isActive)
-
-  //const { props.state } = useFilterContext()
   const { filter, setFilter } = useFilterContext()
-  const [localFilter, setLocalFilter] = useState(filter)
+  //const [localFilter, setLocalFilter] = useState(filter)
 
-  useEffect(() => {
-    //console.log({ THISSTATE: state })
-    console.log(filter)
-  }, [filter])
-  //handle statefunction für state und callback
   const handleClick = (f) => {
-    //onFilterChange(f)
-    setLocalFilter(f)
+    //setLocalFilter(f)
     setFilter(f)
   }
   return (
@@ -33,7 +25,7 @@ export const OverviewSort = () => {
           aria-expanded="true"
           onClick={onClick}
         >
-          Sortby: {localFilter}
+          Sortby: {filter}
           {/* <!-- Heroicon name: chevron-down --> */}
           <svg
             className="-mr-1 ml-2 h-5 w-5"
