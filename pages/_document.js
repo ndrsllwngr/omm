@@ -36,7 +36,7 @@ class NextSite extends Document {
             }site.webmanifest`}
           />
         </Head>
-        <body className="antialiased font-sans bg-gray-200">
+        <body className="antialiased font-sans bg-custom-gray">
           <Main />
           <NextScript />
         </body>

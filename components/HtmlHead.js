@@ -5,7 +5,7 @@ import PropTypes from 'prop-types'
 export const HtmlHead = ({ title }) => {
   return (
     <Head>
-      <title>{title || `OMM Group Task 01`}</title>
+      <title>{title ? `${title}` : `It's fine!`}</title>
       <meta
         name="author"
         content="Andreas Ellwanger, Andreas Griesbeck, Havy Ha, Maximilian Rauh"

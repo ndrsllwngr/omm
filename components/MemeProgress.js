@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react'
-import useStorage from '@/lib/useStorage'
+import useStorage from '@/components/hooks/useStorage'
 import { motion } from 'framer-motion'
 import PropTypes from 'prop-types'
 

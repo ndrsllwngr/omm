@@ -5,14 +5,43 @@ import { useFabricJson } from '@/components/context/fabricContext'
 import { useRouter } from 'next/router'
 import { useVoting } from '@/components/hooks/useVoting'
 import { VOTE } from '@/lib/constants'
+import Link from 'next/link'
+import moment from 'moment'
 
-export const Slide = ({ meme }) => {
+export const SingleMeme = ({ meme, enableLink }) => {
   const { setJson } = useFabricJson()
   const router = useRouter()
   const { upVote, downVote, voteState } = useVoting(meme)
   return (
     <div className="flex-col max-w-md">
-      <div className="title">{meme.title}</div>
+      <p className={'uppercase text-xs text-gray-300 font-medium'}>
+        {moment(meme.createdAt.toMillis()).fromNow()}
+      </p>
+      {enableLink ? (
+        <Link href={`/meme/${meme.id}`}>
+          <a>
+            <h1 className={'text-lg font-bold text-white truncate'}>
+              {meme.title ? meme.title : 'Untitled'}
+            </h1>
+          </a>
+        </Link>
+      ) : (
+        <a>
+          <h1 className={'text-lg font-bold text-black truncate'}>
+            {meme.title ? meme.title : 'Untitled'}
+          </h1>
+        </a>
+      )}
+
+      {enableLink ? (
+        <Link href={`/meme/${meme.id}`}>
+          <a>
+            <MemeRenderer meme={meme} />
+          </a>
+        </Link>
+      ) : (
+        <MemeRenderer meme={meme} />
+      )}
       <button
         onClick={() => {
           setJson(meme)
@@ -35,13 +64,14 @@ export const Slide = ({ meme }) => {
       >
         Downvote
       </button>
-      <MemeRenderer meme={meme} />
     </div>
   )
 }
 
-Slide.propTypes = {
+SingleMeme.propTypes = {
+  enableLink: PropTypes.bool,
   meme: PropTypes.shape({
+    id: PropTypes.string.isRequired,
     title: PropTypes.string.isRequired,
     createdAt: PropTypes.any.isRequired,
     createdBy: PropTypes.string.isRequired,

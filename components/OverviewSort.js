@@ -23,17 +23,17 @@ export const OverviewSort = () => {
     setFilter(f)
   }
   return (
-    <div className="relative block text-left">
-      <div>
+    <div className="flex justify-end">
+      <div className="flex relative">
         <button
           type="button"
-          className="inline-flex justify-center w-full rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-100 focus:ring-indigo-500"
+          className="inline-flex justify-center w-full border-b-2 shadow-sm px-4 py-2 bg-transparent text-sm font-medium text-white focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-200 focus:ring-gray-200"
           id="options-menu"
           aria-haspopup="true"
           aria-expanded="true"
           onClick={onClick}
         >
-          Sortby: {localFilter}
+          {localFilter}
           {/* <!-- Heroicon name: chevron-down --> */}
           <svg
             className="-mr-1 ml-2 h-5 w-5"
@@ -49,6 +49,48 @@ export const OverviewSort = () => {
             />
           </svg>
         </button>
+        {isActive && (
+          <div
+            ref={dropdownRef}
+            className="origin-top-right absolute right-0 mt-10 w-56 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 z-50"
+          >
+            <div
+              className="py-1"
+              role="menu"
+              aria-orientation="vertical"
+              aria-labelledby="options-menu"
+            >
+              <div
+                onClick={() => handleClick('Latest')}
+                className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900"
+                role="menuitem"
+              >
+                Latest
+              </div>
+              <div
+                onClick={() => handleClick('Oldest')}
+                className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900"
+                role="menuitem"
+              >
+                Oldest
+              </div>
+              <div
+                onClick={() => handleClick('Views')}
+                className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900"
+                role="menuitem"
+              >
+                Views
+              </div>
+              <div
+                onClick={() => handleClick('Votes')}
+                className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900"
+                role="menuitem"
+              >
+                Votes
+              </div>
+            </div>
+          </div>
+        )}
       </div>
 
       {/* <!--
@@ -61,48 +103,6 @@ export const OverviewSort = () => {
 		From: "transform opacity-100 scale-100"
 		To: "transform opacity-0 scale-95"
 	--> */}
-      {isActive && (
-        <div
-          ref={dropdownRef}
-          className="origin-top-right absolute left-0 mt-2 w-56 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 z-50"
-        >
-          <div
-            className="py-1"
-            role="menu"
-            aria-orientation="vertical"
-            aria-labelledby="options-menu"
-          >
-            <div
-              onClick={() => handleClick('Latest')}
-              className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900"
-              role="menuitem"
-            >
-              Latest
-            </div>
-            <div
-              onClick={() => handleClick('Oldest')}
-              className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900"
-              role="menuitem"
-            >
-              Oldest
-            </div>
-            <div
-              onClick={() => handleClick('Views')}
-              className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900"
-              role="menuitem"
-            >
-              Views
-            </div>
-            <div
-              onClick={() => handleClick('Votes')}
-              className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900"
-              role="menuitem"
-            >
-              Votes
-            </div>
-          </div>
-        </div>
-      )}
     </div>
   )
 }

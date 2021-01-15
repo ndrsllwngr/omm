@@ -10,7 +10,7 @@ const CreatePage = () => {
   return (
     <>
       <ProtectedRoute>
-        <HtmlHead />
+        <HtmlHead title={'Create a New Meme'} />
         <Navbar />
         <div className="p-8 grid grid-cols-12 gap-6">
           <div className="col-span-9 h-full rounded-lg bg-gray-100 flex items-start justify-center space-x-2 pl-2">

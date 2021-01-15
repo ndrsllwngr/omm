@@ -37,4 +37,8 @@
 html, body, #__next {
   @apply h-full;
 }
+
+html {
+  @apply overflow-y-scroll;
+}
 /*! purgecss end ignore */
