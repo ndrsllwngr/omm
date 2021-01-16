@@ -16,6 +16,10 @@ export const useVoting = () => {
     }
   }
 
+  const getTotalPoints = (meme) => {
+    return meme.upVotes.length - meme.downVotes.length
+  }
+
   const upVote = (meme) => {
     if (getVoteState(meme) !== VOTE.up) {
       const db = firebase.firestore()
@@ -87,5 +91,5 @@ export const useVoting = () => {
   //   }
   // }, [])
 
-  return { upVote, downVote, getVoteState }
+  return { upVote, downVote, getVoteState, getTotalPoints }
 }
