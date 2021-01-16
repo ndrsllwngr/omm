@@ -8,6 +8,7 @@ import useMemeUpload from '@/components/hooks/useMemeUpload'
 import { ImageToolbar } from '@/components/meme/ImageToolbar'
 import { useRouter } from 'next/router'
 import { useAuth } from '@/components/context/authContext'
+import { VISIBILITY } from '@/lib/constants'
 
 // eslint-disable-next-line react/prop-types
 const Button = ({ children, type = 'button', disabled = false, onClick }) => {
@@ -35,6 +36,7 @@ export const MemeEditor = () => {
   const [imgURL, setImgURL] = useState('')
   const { template } = useTemplate()
   const [title, setTitle] = useState('')
+  const [visibility, setVisibility] = useState(VISIBILITY.PUBLIC)
   const [svgExport, setSvgExport] = useState('')
   const [jsonExport, setJsonExport] = useState({})
   const [previewMode, setPreviewMode] = useState(false)
@@ -101,6 +103,7 @@ export const MemeEditor = () => {
       title,
       // createdAt is added during insert
       createdBy: auth.user.uid,
+      visibility: visibility,
       upVotes: [],
       downVotes: [],
       forkedBy: [],
@@ -120,9 +123,9 @@ export const MemeEditor = () => {
 
   const clearAll = () => canvas.getObjects().forEach((obj) => canvas.remove(obj))
 
-  const canvasEvents = () => {
-    canvas.getObjects().forEach((obj) => console.log(obj))
-  }
+  // const canvasEvents = () => {
+  //   canvas.getObjects().forEach((obj) => console.log(obj))
+  // }
 
   const customSelect = (obj) => {
     return obj.set({
@@ -155,11 +158,6 @@ export const MemeEditor = () => {
         <Button onClick={addText}>Add Textbox</Button>
         {/*<Button onClick={addTemplate}>Add Template</Button>*/}
         <Button onClick={clearAll}>Clear All</Button>
-        <Button onClick={canvasEvents}>Test</Button>
-        <Button onClick={exportSVG}>Export to SVG</Button>
-        <Button onClick={generateMeme} disabled={loading}>
-          Generate {!loading && success && 'success'} {!loading && error && 'error'}
-        </Button>
         <form className={'flex justify-center space-x-2'} onSubmit={(e) => addImg(e, imgURL)}>
           <input
             className={
@@ -173,13 +171,21 @@ export const MemeEditor = () => {
         </form>
         <input
           className={
-            'flex-1 appearance-none border border-transparent w-full py-2 px-4 bg-white text-gray-700 placeholder-gray-400 shadow-md rounded-lg text-base focus:outline-none focus:ring-2 focus:ring-purple-600 focus:border-transparent'
+            'appearance-none border border-transparent w-full py-2 px-4 bg-white text-gray-700 placeholder-gray-400 shadow-md rounded-lg text-base focus:outline-none focus:ring-2 focus:ring-purple-600 focus:border-transparent'
           }
           type="text"
           value={title}
           placeholder={'Title'}
           onChange={(e) => setTitle(e.target.value)}
         />
+        <select value={visibility} onChange={(e) => setVisibility(e.target.value)}>
+          <option value={VISIBILITY.PUBLIC}>Public</option>
+          <option value={VISIBILITY.UNLISTED}>Unlisted</option>
+          <option value={VISIBILITY.PRIVATE}>Private</option>
+        </select>
+        <Button onClick={generateMeme} disabled={loading}>
+          Generate {!loading && success && 'success'} {!loading && error && 'error'}
+        </Button>
       </div>
       {previewMode && (
         <>
