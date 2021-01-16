@@ -108,22 +108,24 @@ export default function SingleView() {
     <>
       <HtmlHead title={`Meme · ${currentMeme && currentMeme.title}`} />
       <Navbar />
-      <OverviewSort />
-      <Slideshow prevMeme={prevMeme} meme={currentMeme} nextMeme={nextMeme} />
-      <div className="flex flex-col items-center font-semibold text-xl my-2 text-white">
-        <Link href={`/meme/${id}`}>
-          <a onClick={() => dispatch({ type: 'falseBool' })}>
-            <span className="my-2 p-2 rounded bg-green-600">Random Meme</span>
-          </a>
-        </Link>
-        {nextMeme && !(nextMeme.id === '') && (
-          <button
-            className="my-2 p-2 rounded bg-green-600"
-            onClick={() => dispatch({ type: 'toggleBool' })}
-          >
-            {state.bool ? `Autoplay On` : `Autoplay Off`}
-          </button>
-        )}
+      <div className={'max-w-7xl mx-auto mt-4'}>
+        <OverviewSort />
+        <Slideshow prevMeme={prevMeme} meme={currentMeme} nextMeme={nextMeme} />
+        <div className="flex flex-col items-center font-semibold text-xl my-2 text-white">
+          <Link href={`/meme/${id}`}>
+            <a onClick={() => dispatch({ type: 'falseBool' })}>
+              <span className="my-2 p-2 rounded bg-green-600">Random Meme</span>
+            </a>
+          </Link>
+          {nextMeme && !(nextMeme.id === '') && (
+            <button
+              className="my-2 p-2 rounded bg-green-600"
+              onClick={() => dispatch({ type: 'toggleBool' })}
+            >
+              {state.bool ? `Autoplay On` : `Autoplay Off`}
+            </button>
+          )}
+        </div>
       </div>
     </>
   )
