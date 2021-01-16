@@ -1,7 +1,7 @@
 import React, { createContext, useContext, useEffect } from 'react'
 import Proptypes from 'prop-types'
 import { useRouter } from 'next/router'
-
+// https://kentcdodds.com/blog/how-to-use-react-context-effectively
 //Create Context
 export const AutoplayStateContext = createContext()
 export const AutoplayDispatchContext = createContext()
