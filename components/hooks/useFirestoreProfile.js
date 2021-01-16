@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react'
 import firebase from '@/lib/firebase'
 import { useAuth } from '@/components/context/authContext'
 
-export const useDrafts = (collection) => {
+export const useFirestoreProfile = (collection) => {
   const [docs, setDocs] = useState([])
   const auth = useAuth()
 

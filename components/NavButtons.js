@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import Link from 'next/link'
 import { useAuth } from '@/components/context/authContext'
-import { IoCreate, IoLogIn, IoLogOut, IoPerson } from 'react-icons/io5'
+import { IoCreate, IoLogIn, IoPerson } from 'react-icons/io5'
 
 // eslint-disable-next-line react/prop-types
 export const NavButtons = ({ className }) => {
@@ -35,7 +35,7 @@ export const NavButtons = ({ className }) => {
       ) : (
         <div className={'flex'}>
           <Link href={'/login'}>
-            <a className="block font-semibold lg:mt-0 rounded-lg text-md px-4 ml-2 py-2 text-white hover:text-custom-green">
+            <a className="inline-flex self-center block font-semibold lg:mt-0 rounded-lg text-md px-4 ml-2 py-2 text-white hover:text-custom-green">
               <IoLogIn size={18} className={'fill-current inline-flex self-center mr-2'} /> Log in
             </a>
           </Link>

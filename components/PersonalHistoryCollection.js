@@ -2,17 +2,13 @@ import React, { useState, useEffect } from 'react'
 import PropTypes from 'prop-types'
 import { FIRESTORE_COLLECTION } from '@/lib/constants'
 import { MemeRenderer } from '@/components/MemeRenderer'
-import { useDrafts } from '@/components/hooks/useDrafts'
-import { useFabricJson } from '@/components/context/fabricContext'
-import { useRouter } from 'next/router'
+import { useFirestoreProfile } from '@/components/hooks/useFirestoreProfile'
 import moment from 'moment'
 import Link from 'next/link'
 
 export const PersonalHistoryCollection = ({ className }) => {
-  const { docs } = useDrafts(FIRESTORE_COLLECTION.MEMES)
-  const router = useRouter()
+  const { docs } = useFirestoreProfile(FIRESTORE_COLLECTION.MEMES)
   const [drafts, setDrafts] = useState(null)
-  const { setJson } = useFabricJson()
 
   useEffect(() => {
     async function getDrafts() {

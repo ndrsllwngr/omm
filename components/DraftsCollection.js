@@ -2,13 +2,13 @@ import React, { useState, useEffect } from 'react'
 import PropTypes from 'prop-types'
 import { FIRESTORE_COLLECTION } from '@/lib/constants'
 import { MemeRenderer } from '@/components/MemeRenderer'
-import { useDrafts } from '@/components/hooks/useDrafts'
+import { useFirestoreProfile } from '@/components/hooks/useFirestoreProfile'
 import { useFabricJson } from '@/components/context/fabricContext'
 import { useRouter } from 'next/router'
 import moment from 'moment'
 
 export const DraftsCollection = ({ className }) => {
-  const { docs, deleteDraft } = useDrafts(FIRESTORE_COLLECTION.DRAFTS)
+  const { docs, deleteDraft } = useFirestoreProfile(FIRESTORE_COLLECTION.DRAFTS)
   const router = useRouter()
   const [drafts, setDrafts] = useState(null)
   const { setJson } = useFabricJson()
