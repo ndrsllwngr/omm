@@ -1,13 +1,9 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { useState, useEffect } from 'react'
 import firebase from '@/lib/firebase'
 import { useAuth } from '@/components/context/authContext'
 import { FIRESTORE_COLLECTION, VOTE } from '@/lib/constants'
 
-export const useVoting = (initMeme) => {
-  const [meme, setMeme] = useState(initMeme)
-  const [voteState, setVoteState] = useState(VOTE.none)
-
+export const useVoting = () => {
   const auth = useAuth()
 
   const getVoteState = (meme) => {
@@ -20,11 +16,14 @@ export const useVoting = (initMeme) => {
     }
   }
 
-  const upVote = () => {
-    const db = firebase.firestore()
-    const memeRef = db.collection(FIRESTORE_COLLECTION.MEMES).doc(meme.id)
+  const getTotalPoints = (meme) => {
+    return meme.upVotes.length - meme.downVotes.length
+  }
 
-    if (voteState !== VOTE.up) {
+  const upVote = (meme) => {
+    if (getVoteState(meme) !== VOTE.up) {
+      const db = firebase.firestore()
+      const memeRef = db.collection(FIRESTORE_COLLECTION.MEMES).doc(meme.id)
       db.runTransaction((transaction) => {
         return transaction.get(memeRef).then((doc) => {
           if (!doc.exists) {
@@ -47,11 +46,10 @@ export const useVoting = (initMeme) => {
     }
   }
 
-  const downVote = () => {
-    const db = firebase.firestore()
-    const memeRef = db.collection(FIRESTORE_COLLECTION.MEMES).doc(meme.id)
-
-    if (voteState !== VOTE.down) {
+  const downVote = (meme) => {
+    if (getVoteState(meme) !== VOTE.down) {
+      const db = firebase.firestore()
+      const memeRef = db.collection(FIRESTORE_COLLECTION.MEMES).doc(meme.id)
       // Remove any possible upVotes first
       db.runTransaction((transaction) => {
         return transaction.get(memeRef).then((doc) => {
@@ -76,22 +74,22 @@ export const useVoting = (initMeme) => {
   }
 
   // Handle updates of the user document
-  useEffect(() => {
-    if (meme) {
-      console.log({ src: 'useVoting', meme })
-      setVoteState(getVoteState(meme))
-      // Subscribe to user document on mount
-      const db = firebase.firestore()
-      const unsubscribe = db
-        .collection(FIRESTORE_COLLECTION.MEMES)
-        .doc(meme.id)
-        .onSnapshot((doc) => {
-          setMeme({ id: doc.id, ...doc.data() })
-          setVoteState(getVoteState(doc.data()))
-        })
-      return () => unsubscribe()
-    }
-  }, [])
+  // useEffect(() => {
+  //   if (meme) {
+  //     console.log({ src: 'useVoting', meme })
+  //     setVoteState(getVoteState(meme))
+  //     // Subscribe to user document on mount
+  //     const db = firebase.firestore()
+  //     const unsubscribe = db
+  //       .collection(FIRESTORE_COLLECTION.MEMES)
+  //       .doc(meme.id)
+  //       .onSnapshot((doc) => {
+  //         setMeme({ id: doc.id, ...doc.data() })
+  //         setVoteState(getVoteState(doc.data()))
+  //       })
+  //     return () => unsubscribe()
+  //   }
+  // }, [])
 
-  return { upVote, downVote, voteState }
+  return { upVote, downVote, getVoteState, getTotalPoints }
 }
