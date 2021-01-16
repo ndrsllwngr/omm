@@ -4,11 +4,12 @@ import SVG from 'react-inlinesvg'
 import { FabricCanvas } from '@/components/meme/FabricCanvas'
 import { TextToolbar } from '@/components/meme/TextToolbar'
 import { useFabricCanvas, useTemplate } from '@/components/context/fabricContext'
-import useMemeUpload from '@/components/hooks/useMemeUpload'
+import { useMemeUpload } from '@/components/hooks/useMemeUpload'
 import { ImageToolbar } from '@/components/meme/ImageToolbar'
 import { useRouter } from 'next/router'
 import { useAuth } from '@/components/context/authContext'
 import { VISIBILITY } from '@/lib/constants'
+import { useDraftUpload } from '@/components/hooks/useDraftUpload'
 
 // eslint-disable-next-line react/prop-types
 const Button = ({ children, type = 'button', disabled = false, onClick }) => {
@@ -41,6 +42,7 @@ export const MemeEditor = () => {
   const [jsonExport, setJsonExport] = useState({})
   const [previewMode, setPreviewMode] = useState(false)
   const [loading, success, error, setData] = useMemeUpload()
+  const [loadingDraft, successDraft, errorDraft, setDataDraft] = useDraftUpload()
   const auth = useAuth()
 
   const addImg = (e, url) => {
@@ -121,6 +123,37 @@ export const MemeEditor = () => {
     setData(newObj)
   }
 
+  const generateDraft = () => {
+    const canvasAsJson = canvas.toJSON([
+      'width',
+      'height',
+      'id',
+      'preserveObjectStacking',
+      'enableRetinaScaling',
+    ])
+    const svg = canvas.toSVG()
+    const newObj = {
+      title,
+      // createdAt is added during insert
+      createdBy: auth.user.uid,
+      visibility: visibility,
+      upVotes: [],
+      downVotes: [],
+      forkedBy: [],
+      forkedFrom: isCopy,
+      views: 0,
+      template: {
+        id: template.id ? template.id : null,
+        url: template.url,
+      },
+      url: '', // TODO if a real png was created (requirement)
+      svg,
+      json: canvasAsJson,
+    }
+    console.log({ src: 'MemeEditor.generateDraft', newObj, svg })
+    setDataDraft(newObj)
+  }
+
   const clearAll = () => canvas.getObjects().forEach((obj) => canvas.remove(obj))
 
   // const canvasEvents = () => {
@@ -143,6 +176,12 @@ export const MemeEditor = () => {
       router.push(`/meme/${success}`)
     }
   }, [success, router])
+
+  useEffect(() => {
+    if (successDraft) {
+      router.push(`/profile`)
+    }
+  }, [successDraft, router])
 
   return (
     <div className="p-8 grid grid-cols-3 gap-6">
@@ -183,6 +222,10 @@ export const MemeEditor = () => {
           <option value={VISIBILITY.UNLISTED}>Unlisted</option>
           <option value={VISIBILITY.PRIVATE}>Private</option>
         </select>
+        <Button onClick={generateDraft} disabled={loadingDraft}>
+          Save as Draft {!loadingDraft && successDraft && 'success'}{' '}
+          {!loadingDraft && errorDraft && 'error'}
+        </Button>
         <Button onClick={generateMeme} disabled={loading}>
           Generate {!loading && success && 'success'} {!loading && error && 'error'}
         </Button>
