@@ -12,7 +12,7 @@ import { IoCaretDownOutline, IoCaretUpOutline } from 'react-icons/io5'
 export const SingleMeme = ({ meme, enableLink }) => {
   const { setJson } = useFabricJson()
   const router = useRouter()
-  const { upVote, downVote, voteState } = useVoting(meme)
+  const { upVote, downVote, getVoteState } = useVoting()
   return (
     <div className="flex-col max-w-md">
       <p className={'uppercase text-xs text-gray-600 dark:text-gray-300 font-medium'}>
@@ -56,23 +56,23 @@ export const SingleMeme = ({ meme, enableLink }) => {
         <div className={'flex space-x-1 mt-1'}>
           <button
             className={`rounded border border-1 px-1 py-1 ${
-              voteState === VOTE.up
+              getVoteState(meme) === VOTE.up
                 ? 'text-custom-green border-custom-green'
                 : 'text-black dark:text-white border-black dark:border-white'
             }`}
-            disabled={voteState === VOTE.up}
-            onClick={upVote}
+            disabled={getVoteState(meme) === VOTE.up}
+            onClick={() => upVote(meme)}
           >
             <IoCaretUpOutline className={'fill-current'} />
           </button>
           <button
             className={`rounded border border-1 px-1 py-1 ${
-              voteState === VOTE.down
+              getVoteState(meme) === VOTE.down
                 ? 'text-red-500 border-red-500'
                 : 'text-black dark:text-white border-black dark:border-white'
             }`}
-            disabled={voteState === VOTE.down}
-            onClick={downVote}
+            disabled={getVoteState(meme) === VOTE.down}
+            onClick={() => downVote(meme)}
           >
             <IoCaretDownOutline className={'fill-current'} />
           </button>
