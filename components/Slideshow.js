@@ -1,14 +1,9 @@
-import React, { useEffect } from 'react'
+import React from 'react'
 import PropTypes from 'prop-types'
 import { SlideshowButton } from '@/components/SlideshowButton'
 import { SingleMeme } from '@/components/SingleMeme'
 
 export const Slideshow = ({ prevMeme, meme, nextMeme }) => {
-  useEffect(() => {
-    console.log({ PM: prevMeme })
-    console.log({ NM: nextMeme })
-  }, [nextMeme, prevMeme])
-
   if (!meme) return <div className="flex flex-row justify-center">loading..</div>
   return (
     <div className="flex flex-row justify-center">
