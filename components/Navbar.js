@@ -1,6 +1,5 @@
 import React from 'react'
 import Link from 'next/link'
-import { ThemeToggle } from '@/components/ThemeToggle'
 import { NavButtons } from '@/components/NavButtons'
 
 //https://tailwindcomponents.com/component/responsive-navbar-2
@@ -58,13 +57,8 @@ export const Navbar = () => {
           </div>
         </div>
 
-        <div className="w-full lg:flex lg:items-center lg:w-auto lg:px-3 px-8">
+        <div className="w-full lg:flex lg:items-center lg:w-auto px-8 lg:px-0">
           <NavButtons className={'flex'} />
-          <ThemeToggle
-            className={
-              'inline-flex self-center ml-4 rounded-lg shadow-md hover:text-custom-green text-white'
-            }
-          />
         </div>
       </div>
     </nav>

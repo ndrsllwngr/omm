@@ -4,10 +4,12 @@ import SVG from 'react-inlinesvg'
 import { FabricCanvas } from '@/components/meme/FabricCanvas'
 import { TextToolbar } from '@/components/meme/TextToolbar'
 import { useFabricCanvas, useTemplate } from '@/components/context/fabricContext'
-import useMemeUpload from '@/components/hooks/useMemeUpload'
+import { useMemeUpload } from '@/components/hooks/useMemeUpload'
 import { ImageToolbar } from '@/components/meme/ImageToolbar'
 import { useRouter } from 'next/router'
 import { useAuth } from '@/components/context/authContext'
+import { VISIBILITY } from '@/lib/constants'
+import { useDraftUpload } from '@/components/hooks/useDraftUpload'
 
 // eslint-disable-next-line react/prop-types
 const Button = ({ children, type = 'button', disabled = false, onClick }) => {
@@ -35,10 +37,12 @@ export const MemeEditor = () => {
   const [imgURL, setImgURL] = useState('')
   const { template } = useTemplate()
   const [title, setTitle] = useState('')
+  const [visibility, setVisibility] = useState(VISIBILITY.PUBLIC)
   const [svgExport, setSvgExport] = useState('')
   const [jsonExport, setJsonExport] = useState({})
   const [previewMode, setPreviewMode] = useState(false)
   const [loading, success, error, setData] = useMemeUpload()
+  const [loadingDraft, successDraft, errorDraft, setDataDraft] = useDraftUpload()
   const auth = useAuth()
 
   const addImg = (e, url) => {
@@ -101,6 +105,7 @@ export const MemeEditor = () => {
       title,
       // createdAt is added during insert
       createdBy: auth.user.uid,
+      visibility: visibility,
       upVotes: [],
       downVotes: [],
       forkedBy: [],
@@ -118,11 +123,42 @@ export const MemeEditor = () => {
     setData(newObj)
   }
 
+  const generateDraft = () => {
+    const canvasAsJson = canvas.toJSON([
+      'width',
+      'height',
+      'id',
+      'preserveObjectStacking',
+      'enableRetinaScaling',
+    ])
+    const svg = canvas.toSVG()
+    const newObj = {
+      title,
+      // createdAt is added during insert
+      createdBy: auth.user.uid,
+      visibility: visibility,
+      upVotes: [],
+      downVotes: [],
+      forkedBy: [],
+      forkedFrom: isCopy,
+      views: 0,
+      template: {
+        id: template.id ? template.id : null,
+        url: template.url,
+      },
+      url: '', // TODO if a real png was created (requirement)
+      svg,
+      json: canvasAsJson,
+    }
+    console.log({ src: 'MemeEditor.generateDraft', newObj, svg })
+    setDataDraft(newObj)
+  }
+
   const clearAll = () => canvas.getObjects().forEach((obj) => canvas.remove(obj))
 
-  const canvasEvents = () => {
-    canvas.getObjects().forEach((obj) => console.log(obj))
-  }
+  // const canvasEvents = () => {
+  //   canvas.getObjects().forEach((obj) => console.log(obj))
+  // }
 
   const customSelect = (obj) => {
     return obj.set({
@@ -141,6 +177,12 @@ export const MemeEditor = () => {
     }
   }, [success, router])
 
+  useEffect(() => {
+    if (successDraft) {
+      router.push(`/profile`)
+    }
+  }, [successDraft, router])
+
   return (
     <div className="p-8 grid grid-cols-3 gap-6">
       <div className="col-span-3 h-16 rounded-lg bg-gray-100 flex items-center justify-start space-x-2 pl-2">
@@ -155,11 +197,6 @@ export const MemeEditor = () => {
         <Button onClick={addText}>Add Textbox</Button>
         {/*<Button onClick={addTemplate}>Add Template</Button>*/}
         <Button onClick={clearAll}>Clear All</Button>
-        <Button onClick={canvasEvents}>Test</Button>
-        <Button onClick={exportSVG}>Export to SVG</Button>
-        <Button onClick={generateMeme} disabled={loading}>
-          Generate {!loading && success && 'success'} {!loading && error && 'error'}
-        </Button>
         <form className={'flex justify-center space-x-2'} onSubmit={(e) => addImg(e, imgURL)}>
           <input
             className={
@@ -173,13 +210,25 @@ export const MemeEditor = () => {
         </form>
         <input
           className={
-            'flex-1 appearance-none border border-transparent w-full py-2 px-4 bg-white text-gray-700 placeholder-gray-400 shadow-md rounded-lg text-base focus:outline-none focus:ring-2 focus:ring-purple-600 focus:border-transparent'
+            'appearance-none border border-transparent w-full py-2 px-4 bg-white text-gray-700 placeholder-gray-400 shadow-md rounded-lg text-base focus:outline-none focus:ring-2 focus:ring-purple-600 focus:border-transparent'
           }
           type="text"
           value={title}
           placeholder={'Title'}
           onChange={(e) => setTitle(e.target.value)}
         />
+        <select value={visibility} onChange={(e) => setVisibility(e.target.value)}>
+          <option value={VISIBILITY.PUBLIC}>Public</option>
+          <option value={VISIBILITY.UNLISTED}>Unlisted</option>
+          <option value={VISIBILITY.PRIVATE}>Private</option>
+        </select>
+        <Button onClick={generateDraft} disabled={loadingDraft}>
+          Save as Draft {!loadingDraft && successDraft && 'success'}{' '}
+          {!loadingDraft && errorDraft && 'error'}
+        </Button>
+        <Button onClick={generateMeme} disabled={loading}>
+          Generate {!loading && success && 'success'} {!loading && error && 'error'}
+        </Button>
       </div>
       {previewMode && (
         <>
