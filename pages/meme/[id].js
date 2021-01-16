@@ -16,56 +16,59 @@ export default function SingleView() {
     return [useAutoPlayState(), useAutoPlayDispatch()]
   }
   const { id } = useRandomMeme(router)
-  const [Memes, setMemes] = useState([])
+  // const [Memes, setMemes] = useState([])
   const [state, dispatch] = useAutoPlay()
   const timeOut = useRef(null)
 
+  const [currentMeme, setCurrent] = useState(null)
+  const [prevMeme, setPrev] = useState(null)
+  const [nextMeme, setNext] = useState(null)
+
+  // TODO pass order by
+  // TODO look up "unterabfragen" when sorting can not differential wihci element is newer with same views
+
   useEffect(() => {
-    // TODO subscribe to get updates
-    // TODO pass order by
-    // TODO look up "unterabfragen" when sorting can not differential wihci element is newer with same views
-    async function getMemes() {
-      let Meme = []
-      const db = firebase.firestore()
-      const memeRef = db.collection(FIRESTORE_COLLECTION.MEMES)
+    const db = firebase.firestore()
+    let unsubscribe = db
+      .collection(FIRESTORE_COLLECTION.MEMES)
+      .doc(router.query.id)
+      .onSnapshot(
+        function (doc) {
+          let time = doc.data().createdAt
+          setCurrent({ id: doc.id, ...doc.data() })
 
-      const doc = await memeRef.doc(router.query.id).get()
-
-      const docprev = await memeRef
-        .where('createdAt', '<', doc.data().createdAt)
-        .orderBy('createdAt', 'desc')
-        .limit(1)
-        .get()
-      // if (!(docprev.docs.size > 0) && !docprev.docs[0].exists) {
-      //   console.log({ docprev: docprev })
-      // }
-      const docnext = await memeRef.where('createdAt', '>', doc.data().createdAt).limit(1).get()
-      // console.log({ docnext: docnext })
-      Meme.push({
-        id: !(docprev.docs.length > 0) ? '' : docprev.docs[0].id,
-      })
-      Meme.push({ id: doc.id, ...doc.data() })
-      Meme.push({
-        id: !(docnext.docs.length > 0) ? '' : docnext.docs[0].id,
-      })
-      return Meme
-    }
-
-    getMemes()
-      .then((res) => {
-        setMemes(res)
-      })
-      .catch(function (error) {
-        console.log({ error })
-      })
-  }, [setMemes, router.query.id])
+          db.collection(FIRESTORE_COLLECTION.MEMES)
+            .where('createdAt', '<', time)
+            .orderBy('createdAt', 'desc')
+            .limit(1)
+            .onSnapshot(function (prev) {
+              prev.size > 0
+                ? setPrev({ id: prev.docs[0].id, ...prev.docs[0].data() })
+                : setPrev(null)
+            })
+          db.collection(FIRESTORE_COLLECTION.MEMES)
+            .where('createdAt', '>', time)
+            .limit(1)
+            .onSnapshot(function (next) {
+              next.size > 0
+                ? setNext({ id: next.docs[0].id, ...next.docs[0].data() })
+                : setNext(null)
+            })
+        },
+        function (error) {
+          console.log('SINGLEMEME SNAPSHOT FAILED')
+          console.log(error)
+        }
+      )
+    return () => unsubscribe()
+  }, [router.query.id])
 
   const startAutoplay = () => {
     timeOut.current = setTimeout(function () {
       //console.log(Memes)
       //console.log({ STARTTIMER: timeOut.current })
       //Prevent Autoplay at EOF
-      if (Memes[2].id) router.push(`/meme/${Memes[2].id}`)
+      if (nextMeme.id) router.push(`/meme/${nextMeme.id}`)
       else {
         endAutoplay
         dispatch({ type: 'falseBool' })
@@ -94,9 +97,9 @@ export default function SingleView() {
   //Toogle Autoplay
   useEffect(() => {
     state.bool ? startAutoplay() : endAutoplay()
-  }, [Memes, state.bool])
+  }, [currentMeme, state.bool])
 
-  if (!Memes || !(Memes.length > 0))
+  if (!currentMeme)
     return (
       <>
         <HtmlHead title={'Meme · Loading... '} />
@@ -107,13 +110,16 @@ export default function SingleView() {
   //https://stackoverflow.com/questions/53857063/changing-state-on-route-change-next-js
   return (
     <>
-      <HtmlHead title={`Meme · ${Memes[SINGLEVIEWNAVIGATION.current].title}`} />
+      {/* <HtmlHead title={`Meme · ${Memes[SINGLEVIEWNAVIGATION.current].title}`} /> */}
       <Navbar />
       <OverviewSort />
       <Slideshow
-        prevMeme={Memes[SINGLEVIEWNAVIGATION.prev]}
-        meme={Memes[SINGLEVIEWNAVIGATION.current]}
-        nextMeme={Memes[SINGLEVIEWNAVIGATION.next]}
+        // prevMeme={Memes[SINGLEVIEWNAVIGATION.prev]}
+        // meme={Memes[SINGLEVIEWNAVIGATION.current]}
+        // nextMeme={Memes[SINGLEVIEWNAVIGATION.next]}
+        prevMeme={prevMeme}
+        meme={currentMeme}
+        nextMeme={nextMeme}
       />
       <div className="flex flex-col items-center font-semibold text-xl my-2 text-white">
         <Link href={`/meme/${id}`}>
@@ -121,7 +127,7 @@ export default function SingleView() {
             <span className="my-2 p-2 rounded bg-green-600">Random Meme</span>
           </a>
         </Link>
-        {!(Memes[2].id === '') && (
+        {nextMeme && !(nextMeme.id === '') && (
           <button
             className="my-2 p-2 rounded bg-green-600"
             onClick={() => dispatch({ type: 'toggleBool' })}
