@@ -17,7 +17,7 @@ export const useRandomMeme = (router) => {
       const ids = []
       memeCollection.forEach((meme) => ids.push(meme.id))
 
-      const random = getRandomInt(0, ids.length - 1)
+      var random = getRandomInt(0, ids.length - 1)
 
       while (ids[random] === router.query.id) {
         random = getRandomInt(0, ids.length - 1)
