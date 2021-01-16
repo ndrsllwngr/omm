@@ -31,12 +31,6 @@ export const NavButtons = ({ className }) => {
               <IoPerson size={18} className={'fill-current inline-flex self-center mr-2'} /> Profile
             </a>
           </Link>
-          <button
-            onClick={auth.signOut}
-            className="inline-flex self-center block font-semibold lg:mt-0 rounded-lg shadow-md text-md px-4 ml-2 py-2 text-white hover:text-custom-green bg-gray-700 hover:bg-gray-600"
-          >
-            <IoLogOut size={18} className={'fill-current inline-flex self-center mr-2'} /> Log out
-          </button>
         </div>
       ) : (
         <div className={'flex'}>

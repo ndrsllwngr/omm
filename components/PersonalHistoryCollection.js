@@ -6,9 +6,10 @@ import { useDrafts } from '@/components/hooks/useDrafts'
 import { useFabricJson } from '@/components/context/fabricContext'
 import { useRouter } from 'next/router'
 import moment from 'moment'
+import Link from 'next/link'
 
-export const DraftsCollection = ({ className }) => {
-  const { docs, deleteDraft } = useDrafts(FIRESTORE_COLLECTION.DRAFTS)
+export const PersonalHistoryCollection = ({ className }) => {
+  const { docs } = useDrafts(FIRESTORE_COLLECTION.MEMES)
   const router = useRouter()
   const [drafts, setDrafts] = useState(null)
   const { setJson } = useFabricJson()
@@ -35,34 +36,24 @@ export const DraftsCollection = ({ className }) => {
     <div className={className}>
       {drafts &&
         drafts.map((draft, i) => (
-          <button
-            key={i}
-            className="flex flex-col max-w-md"
-            onClick={() => {
-              setJson(draft)
-              deleteDraft(draft.id)
-                .then(function () {
-                  console.log('Document successfully deleted!')
-                  router.push('/create')
-                })
-                .catch(function (error) {
-                  console.error('Error removing document: ', error)
-                })
-            }}
-          >
+          <button key={i} className="flex flex-col max-w-md">
             <p className={'uppercase text-xs text-gray-600 dark:text-gray-300 font-medium'}>
               {moment(draft.createdAt.toMillis()).fromNow()}
             </p>
-            <h1 className={'text-lg font-bold text-black dark:text-white truncate'}>
-              {draft.title ? draft.title : 'Untitled'}
-            </h1>
-            <MemeRenderer meme={draft} />
+            <Link href={`/meme/${draft.id}`}>
+              <a className={'flex flex-col justify-center items-start'}>
+                <h1 className={'text-lg font-bold text-black dark:text-white truncate'}>
+                  {draft.title ? draft.title : 'Untitled'}
+                </h1>
+                <MemeRenderer meme={draft} />
+              </a>
+            </Link>
           </button>
         ))}
     </div>
   )
 }
 
-DraftsCollection.propTypes = {
+PersonalHistoryCollection.propTypes = {
   className: PropTypes.string,
 }
