@@ -106,7 +106,9 @@ export default function SingleView() {
   //https://stackoverflow.com/questions/53857063/changing-state-on-route-change-next-js
   return (
     <>
-      <HtmlHead title={`Meme · ${currentMeme && currentMeme.title}`} />
+      <HtmlHead
+        title={`Meme · ${currentMeme && currentMeme.title ? currentMeme.title : 'Untitled'}`}
+      />
       <Navbar />
       <div className={'max-w-7xl mx-auto mt-4'}>
         <OverviewSort />
