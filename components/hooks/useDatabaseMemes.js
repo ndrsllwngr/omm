@@ -1,13 +1,11 @@
 import { useState, useEffect } from 'react'
 import firebase from '@/lib/firebase'
 import { FIRESTORE_COLLECTION } from '@/lib/constants'
-import { useFilterContext } from '@/components/context/filterContext'
-import { useReloadContext } from '@/components/context/reloadContext'
+import { useFilterContext, useReloadContext } from '@/components/context/viewsContext'
 
 export const useDatabaseMemes = () => {
   const limit = 20
   const [Memes, setMemes] = useState([])
-  //const [filter, setFilter] = useState('Latest')
   const { filter } = useFilterContext()
   const { reload } = useReloadContext()
 
@@ -37,28 +35,7 @@ export const useDatabaseMemes = () => {
     }
   }, [filter, reload])
 
-  // useEffect(() => {
-  //   const onFilterChange = (f) => {
-  //     setMemes([])
-  //     setLatestDoc(null)
-  //     setHasMoreFiles(true)
-  //     setFilter(f)
-  //   }
-  //   onFilterChange(filter)
-  // }, [setFilter])
-
-  // useEffect(() => {
-  //   console.log({ FILTER: filter })
-  //   setMemes([])
-  //   setLatestDoc(null)
-  //   setHasMoreFiles(true)
-  // }, [filter])
-
   const triggerNextMemes = () => {
-    //console.warn('handleClick')
-    // if (docSize === 0) {
-    //   return
-    // }
     switch (filter) {
       case 'Latest':
         loadNextMemes('createdAt', 'desc', true)
@@ -114,18 +91,17 @@ export const useDatabaseMemes = () => {
   //     console.log({ error })
   //   })
   // }
-  async function loadNextMemes(create, sort, triggerNext) {
+  async function loadNextMemes(create, sorting, triggerNext) {
     if (!triggerNext) {
       setMemes([])
       setLatestDoc(null)
       setHasMoreFiles(true)
     }
     let query = ''
-    if (sort) {
-      query = loadCreds().orderBy('' + create + '', '' + sort + '')
-    } else {
-      query = loadCreds().orderBy('' + create + '')
-    }
+    sorting
+      ? (query = loadCreds().orderBy('' + create + '', '' + sorting + ''))
+      : (query = loadCreds().orderBy('' + create + ''))
+
     if (triggerNext && latestDoc) {
       query = query.startAfter(latestDoc)
     }
@@ -135,7 +111,7 @@ export const useDatabaseMemes = () => {
       setHasMoreFiles(false)
     }
 
-    let snapShotMemes = []
+    const snapShotMemes = []
 
     docs.forEach((doc) => {
       snapShotMemes.push({ id: doc.id, ...doc.data() })

@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { FIRESTORE_COLLECTION } from '@/lib/constants'
-import { useReloadContext } from '@/components/context/reloadContext'
+import { useReloadContext } from '@/components/context/viewsContext'
 import firebase from '@/lib/firebase'
 
 export const useMemeReload = () => {

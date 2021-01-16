@@ -1,6 +1,6 @@
 import React, { useRef } from 'react'
 import { useDetectOutsideClick } from '@/components/hooks/useDetectOutsideClick'
-import { useFilterContext } from '@/components/context/filterContext'
+import { useFilterContext } from '@/components/context/viewsContext'
 import { useMemeReload } from '@/components/hooks/useMemeReload'
 import firebase from '@/lib/firebase'
 import { IoCloud } from 'react-icons/io5'
@@ -32,7 +32,6 @@ export const OverviewSort = () => {
       {showNewMemes && (
         <button
           onClick={() => {
-            //needed when we do not trigger setFilter('Latest')
             setReload(!reload)
             setShowNewMemes(false), setCounter(0), setDate(firebase.firestore.Timestamp.now())
             setFilter('Latest')
