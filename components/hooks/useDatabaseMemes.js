@@ -1,8 +1,7 @@
 import { useState, useEffect } from 'react'
 import firebase from '@/lib/firebase'
 import { FIRESTORE_COLLECTION } from '@/lib/constants'
-import { useFilterContext } from '@/components/context/filterContext'
-import { useReloadContext } from '@/components/context/reloadContext'
+import { useFilterContext, useReloadContext } from '@/components/context/viewsContext'
 
 export const useDatabaseMemes = () => {
   const limit = 20
