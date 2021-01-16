@@ -6,15 +6,15 @@ import { FabricProvider } from '@/components/context/fabricContext'
 import AuthProvider from '@/components/context/authContext'
 import React from 'react'
 import { AutoplayProvider } from '@/components/context/autoplayContext'
-import { FilterContextProvider } from '@/components/context/filterContext'
+import { ViewsProvider } from '@/components/context/viewsContext'
 
 addDecorator((story) => (
   <AuthProvider>
     <ThemeProvider attribute="class" defaultTheme="system">
       <AutoplayProvider>
-        <FabricProvider>
-          <FilterContextProvider>{story()}</FilterContextProvider>
-        </FabricProvider>
+        <ViewsProvider>
+          <FabricProvider>{story()}</FabricProvider>
+        </ViewsProvider>
       </AutoplayProvider>
     </ThemeProvider>
   </AuthProvider>
