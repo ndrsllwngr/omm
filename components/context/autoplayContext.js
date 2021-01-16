@@ -57,6 +57,9 @@ export const useAutoPlayDispatch = () => {
   }
   return context
 }
+export function useAutoPlay() {
+  return [useAutoPlayState(), useAutoPlayDispatch()]
+}
 
 AutoplayProvider.propTypes = {
   children: Proptypes.any,

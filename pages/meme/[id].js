@@ -4,19 +4,15 @@ import firebase from '@/lib/firebase'
 import { Slideshow } from '@/components/Slideshow'
 import { Navbar } from '@/components/Navbar'
 import Link from 'next/link'
-import { FIRESTORE_COLLECTION, SINGLEVIEWNAVIGATION } from '@/lib/constants'
-import { useAutoPlayState, useAutoPlayDispatch } from '@/components/context/autoplayContext'
+import { FIRESTORE_COLLECTION } from '@/lib/constants'
+import { useAutoPlay } from '@/components/context/autoplayContext'
 import { useRandomMeme } from '@/components/hooks/useRandomMeme'
 import { OverviewSort } from '@/components/OverviewSort'
 import { HtmlHead } from '@/components/HtmlHead'
 
 export default function SingleView() {
   const router = useRouter()
-  function useAutoPlay() {
-    return [useAutoPlayState(), useAutoPlayDispatch()]
-  }
   const { id } = useRandomMeme(router)
-  // const [Memes, setMemes] = useState([])
   const [state, dispatch] = useAutoPlay()
   const timeOut = useRef(null)
 
@@ -110,17 +106,10 @@ export default function SingleView() {
   //https://stackoverflow.com/questions/53857063/changing-state-on-route-change-next-js
   return (
     <>
-      {/* <HtmlHead title={`Meme · ${Memes[SINGLEVIEWNAVIGATION.current].title}`} /> */}
+      <HtmlHead title={`Meme · ${currentMeme && currentMeme.title}`} />
       <Navbar />
       <OverviewSort />
-      <Slideshow
-        // prevMeme={Memes[SINGLEVIEWNAVIGATION.prev]}
-        // meme={Memes[SINGLEVIEWNAVIGATION.current]}
-        // nextMeme={Memes[SINGLEVIEWNAVIGATION.next]}
-        prevMeme={prevMeme}
-        meme={currentMeme}
-        nextMeme={nextMeme}
-      />
+      <Slideshow prevMeme={prevMeme} meme={currentMeme} nextMeme={nextMeme} />
       <div className="flex flex-col items-center font-semibold text-xl my-2 text-white">
         <Link href={`/meme/${id}`}>
           <a onClick={() => dispatch({ type: 'falseBool' })}>
