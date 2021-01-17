@@ -50,9 +50,10 @@ export default function SingleView() {
         collectionRef
           .where('views', '<', currentMeme.views)
           .orderBy('views', 'desc')
-          .limit(1)
+          .limit(2)
           .get()
           .then((prev) => {
+            //TODO check if first entry equals currentMeme id then take second one else fisrt one
             prev.size > 0 ? setPrev({ id: prev.docs[0].id, ...prev.docs[0].data() }) : setPrev(null)
           })
           .catch((e) => console.error(e))
