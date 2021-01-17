@@ -1,12 +1,13 @@
 import React, { useRef } from 'react'
 import { useDetectOutsideClick } from '@/components/hooks/useDetectOutsideClick'
 import { useFilterContext } from '@/components/context/viewsContext'
+import PropTypes from 'prop-types'
 // import { useMemeReload } from '@/components/hooks/useMemeReload'
 // import firebase from '@/lib/firebase'
 // import { IoCloud } from 'react-icons/io5'
 //https://tailwindui.com/components/application-ui/elements/dropdowns
 //https://letsbuildui.dev/articles/building-a-dropdown-menu-component-with-react-hooks
-export const OverviewSort = () => {
+export const OverviewSort = ({ callback = null }) => {
   const dropdownRef = useRef(null)
   const [isActive, setIsActive] = useDetectOutsideClick(dropdownRef, false)
   const onClick = () => setIsActive(!isActive)
@@ -22,6 +23,9 @@ export const OverviewSort = () => {
   // } = useMemeReload()
 
   const handleClick = (f) => {
+    if (callback) {
+      callback()
+    }
     setIsActive(false)
     setFilter(f)
   }
@@ -127,3 +131,6 @@ export const OverviewSort = () => {
 //   filter: PropTypes.string,
 //   onFilterChange: PropTypes.func,
 // }
+OverviewSort.propTypes = {
+  callback: PropTypes.func,
+}

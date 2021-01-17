@@ -6,6 +6,7 @@ import { Navbar } from '@/components/Navbar'
 import Link from 'next/link'
 import { FIRESTORE_COLLECTION } from '@/lib/constants'
 import { useAutoPlay } from '@/components/context/autoplayContext'
+import { useFilterContext } from '@/components/context/viewsContext'
 import { useRandomMeme } from '@/components/hooks/useRandomMeme'
 import { OverviewSort } from '@/components/OverviewSort'
 import { HtmlHead } from '@/components/HtmlHead'
@@ -15,6 +16,7 @@ export default function SingleView() {
   const { id } = useRandomMeme(router)
   const [state, dispatch] = useAutoPlay()
   const timeOut = useRef(null)
+  const { filter } = useFilterContext()
 
   const [currentMeme, setCurrent] = useState(null)
   const [prevMeme, setPrev] = useState(null)
@@ -24,30 +26,75 @@ export default function SingleView() {
   // TODO look up "unterabfragen" when sorting can not differential wihci element is newer with same views
 
   useEffect(() => {
+    let operator = {}
+    let sort = {}
+    switch (filter) {
+      case 'Latest':
+        operator = { prev: '<', next: '>' }
+        sort = { prev: 'desc', next: 'asc' }
+        break
+      case 'Oldest':
+        operator = { prev: '>', next: '<' }
+        sort = { prev: 'asc', next: 'desc' }
+        break
+      case 'Views':
+        console.log('Sorting Views')
+        break
+      default:
+        console.log('Unsupported Case')
+    }
     if (currentMeme && !prevMeme) {
-      const db = firebase.firestore()
-      db.collection(FIRESTORE_COLLECTION.MEMES)
-        .where('createdAt', '<', time)
-        .orderBy('createdAt', 'desc')
-        .limit(1)
-        .get()
-        .then((prev) => {
-          prev.size > 0 ? setPrev({ id: prev.docs[0].id, ...prev.docs[0].data() }) : setPrev(null)
-        })
-        .catch((e) => console.error(e))
+      let collectionRef = firebase.firestore().collection(FIRESTORE_COLLECTION.MEMES)
+
+      if (filter === 'Views') {
+        collectionRef
+          .where('views', '<', currentMeme.views)
+          .orderBy('views', 'desc')
+          .limit(2)
+          .get()
+          .then((prev) => {
+            //TODO check if first entry equals currentMeme id then take second one else fisrt one
+            prev.size > 0 ? setPrev({ id: prev.docs[0].id, ...prev.docs[0].data() }) : setPrev(null)
+          })
+          .catch((e) => console.error(e))
+      } else {
+        collectionRef
+          .where('createdAt', operator.prev, currentMeme.createdAt)
+          .orderBy('createdAt', sort.prev)
+          .limit(1)
+          .get()
+          .then((prev) => {
+            prev.size > 0 ? setPrev({ id: prev.docs[0].id, ...prev.docs[0].data() }) : setPrev(null)
+          })
+          .catch((e) => console.error(e))
+      }
     }
     if (currentMeme && !nextMeme) {
-      const db = firebase.firestore()
-      db.collection(FIRESTORE_COLLECTION.MEMES)
-        .where('createdAt', '>', time)
-        .limit(1)
-        .get()
-        .then((next) => {
-          next.size > 0 ? setNext({ id: next.docs[0].id, ...next.docs[0].data() }) : setNext(null)
-        })
-        .catch((e) => console.error(e))
+      let collectionRef = firebase.firestore().collection(FIRESTORE_COLLECTION.MEMES)
+
+      if (filter === 'Views') {
+        collectionRef
+          .where('views', '>', currentMeme.views)
+          .orderBy('views', 'asc')
+          .limit(1)
+          .get()
+          .then((next) => {
+            next.size > 0 ? setNext({ id: next.docs[0].id, ...next.docs[0].data() }) : setNext(null)
+          })
+          .catch((e) => console.error(e))
+      } else {
+        collectionRef
+          .where('createdAt', operator.next, currentMeme.createdAt)
+          .orderBy('createdAt', sort.next)
+          .limit(1)
+          .get()
+          .then((next) => {
+            next.size > 0 ? setNext({ id: next.docs[0].id, ...next.docs[0].data() }) : setNext(null)
+          })
+          .catch((e) => console.error(e))
+      }
     }
-  }, [currentMeme])
+  }, [currentMeme, filter, nextMeme, prevMeme])
 
   useEffect(() => {
     const db = firebase.firestore()
@@ -56,6 +103,10 @@ export default function SingleView() {
       .doc(router.query.id)
       .onSnapshot(
         function (doc) {
+          if (currentMeme && currentMeme.id !== doc.id) {
+            setNext(null)
+            setPrev(null)
+          }
           setCurrent({ id: doc.id, ...doc.data() })
         },
         function (error) {
@@ -64,7 +115,7 @@ export default function SingleView() {
         }
       )
     return () => unsubscribe()
-  }, [router.query.id])
+  }, [router.query.id, filter])
 
   const startAutoplay = () => {
     timeOut.current = setTimeout(function () {
@@ -118,7 +169,12 @@ export default function SingleView() {
       />
       <Navbar />
       <div className={'max-w-7xl mx-auto mt-4'}>
-        <OverviewSort />
+        <OverviewSort
+          callback={() => {
+            setPrev(null)
+            setNext(null)
+          }}
+        />
         <Slideshow prevMeme={prevMeme} meme={currentMeme} nextMeme={nextMeme} />
         <div className="flex flex-col items-center font-semibold text-xl my-2 text-white">
           <Link href={`/meme/${id}`}>
