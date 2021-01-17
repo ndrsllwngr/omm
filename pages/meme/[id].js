@@ -37,6 +37,9 @@ export default function SingleView() {
         operator = { prev: '>', next: '<' }
         sort = { prev: 'asc', next: 'desc' }
         break
+      case 'Views':
+        console.log('Sorting Views')
+        break
       default:
         console.log('Unsupported Case')
     }
@@ -47,27 +50,32 @@ export default function SingleView() {
       .doc(router.query.id)
       .onSnapshot(
         function (doc) {
-          let time = doc.data().createdAt
+          let currentCreationTime = doc.data().createdAt
+          let views = doc.data().views
           setCurrent({ id: doc.id, ...doc.data() })
+          const dbRef = db.collection(FIRESTORE_COLLECTION.MEMES)
 
-          db.collection(FIRESTORE_COLLECTION.MEMES)
-            .where('createdAt', operator.prev, time)
-            .orderBy('createdAt', sort.prev)
-            .limit(1)
-            .onSnapshot(function (prev) {
-              prev.size > 0
-                ? setPrev({ id: prev.docs[0].id, ...prev.docs[0].data() })
-                : setPrev(null)
-            })
-          db.collection(FIRESTORE_COLLECTION.MEMES)
-            .where('createdAt', operator.next, time)
-            .orderBy('createdAt', sort.next)
-            .limit(1)
-            .onSnapshot(function (next) {
-              next.size > 0
-                ? setNext({ id: next.docs[0].id, ...next.docs[0].data() })
-                : setNext(null)
-            })
+          let prevQuery = null
+          let nextQuery = null
+          if (filter === 'Views') {
+            prevQuery = dbRef.where('views', '<=', views).orderBy('views', 'desc')
+            nextQuery = dbRef.where('views', '>', views).orderBy('views', 'asc')
+          } else {
+            prevQuery = dbRef
+              .where('createdAt', operator.prev, currentCreationTime)
+              .orderBy('createdAt', sort.prev)
+            nextQuery = dbRef
+              .where('createdAt', operator.next, currentCreationTime)
+              .orderBy('createdAt', sort.next)
+          }
+          prevQuery.limit(1).onSnapshot(function (prev) {
+            console.log({ PREVQUERY: prev })
+            prev.size > 0 ? setPrev({ id: prev.docs[0].id, ...prev.docs[0].data() }) : setPrev(null)
+          })
+
+          nextQuery.limit(1).onSnapshot(function (next) {
+            next.size > 0 ? setNext({ id: next.docs[0].id, ...next.docs[0].data() }) : setNext(null)
+          })
         },
         function (error) {
           console.log('SINGLEMEME SNAPSHOT FAILED')
