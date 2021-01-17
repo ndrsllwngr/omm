@@ -21,7 +21,7 @@ const LandingPage = () => {
 }
 
 const LandingPageInner = () => {
-  const { dbMemes: memes, triggerNextMemes, endOfFiles } = useDatabaseMemes()
+  const { dbMemes: memes, triggerNextMemes, endOfFiles, updateMemes } = useDatabaseMemes()
   if (!memes || !(memes.length > 0))
     return <div className={'text-black dark:text-white'}>loading...</div>
   return (
@@ -35,7 +35,7 @@ const LandingPageInner = () => {
     >
       {memes.map((meme) => (
         <div key={meme.id} className="place-self-center justify-self-center">
-          <SingleMeme meme={meme} enableLink={true} />
+          <SingleMeme meme={meme} enableLink={true} updateMemes={updateMemes} />
         </div>
       ))}
     </InfiniteScroll>

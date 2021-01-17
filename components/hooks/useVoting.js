@@ -3,7 +3,7 @@ import firebase from '@/lib/firebase'
 import { useAuth } from '@/components/context/authContext'
 import { FIRESTORE_COLLECTION, VOTE } from '@/lib/constants'
 
-export const useVoting = () => {
+export const useVoting = (updateMemes = null) => {
   const auth = useAuth()
 
   const getVoteState = (meme) => {
@@ -39,6 +39,13 @@ export const useVoting = () => {
       })
         .then(function () {
           console.log('(UP) Transaction successfully committed!')
+          if (updateMemes) {
+            updateMemes((draft) => {
+              const index = draft.findIndex((el) => el.id === meme.id)
+              draft[index].downVotes = draft[index].downVotes.filter((el) => el !== auth.user.uid)
+              draft[index].upVotes.push(auth.user.uid)
+            })
+          }
         })
         .catch(function (error) {
           console.log('(UP) Transaction failed: ', error)
@@ -66,6 +73,13 @@ export const useVoting = () => {
       })
         .then(function () {
           console.log('(DOWN) Transaction successfully committed!')
+          if (updateMemes) {
+            updateMemes((draft) => {
+              const index = draft.findIndex((el) => el.id === meme.id)
+              draft[index].upVotes = draft[index].upVotes.filter((el) => el !== auth.user.uid)
+              draft[index].downVotes.push(auth.user.uid)
+            })
+          }
         })
         .catch(function (error) {
           console.log('(DOWN) Transaction failed: ', error)
