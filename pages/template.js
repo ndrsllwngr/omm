@@ -1,11 +1,11 @@
 import React from 'react'
 import { HtmlHead } from '@/components/HtmlHead'
 import { Navbar } from '@/components/Navbar'
-import { UploadImage } from '@/components/UploadImage'
-import { WebcamPhoto } from '@/components/WebcamPhoto'
-import { ScreenshotUrl } from '@/components/ScreenshotUrl'
-import { PasteUrlImage } from '@/components/PasteUrlImage'
-import { Canvas } from '@/components/drawing/Canvas'
+import { UploadImage } from '@/components/template/UploadImage'
+import { WebcamPhoto } from '@/components/template/WebcamPhoto'
+import { ScreenshotUrl } from '@/components/template/ScreenshotUrl'
+import { PasteUrlImage } from '@/components/template/PasteUrlImage'
+import { Canvas } from '@/components/template/Canvas'
 import { ProtectedRoute } from '@/components/context/authContext'
 // eslint-disable-next-line react/prop-types
 const Section = ({ children, title }) => {

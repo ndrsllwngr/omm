@@ -2,9 +2,9 @@ import React from 'react'
 import { HtmlHead } from '@/components/HtmlHead'
 import { Navbar } from '@/components/Navbar'
 import { MemeEditor } from '@/components/meme/MemeEditor'
-import { ImageSelection } from '@/components/ImageSelection'
+import { TemplateCollection } from '@/components/TemplateCollection'
 import { ProtectedRoute } from '@/components/context/authContext'
-import { FlipImage } from '@/components/FlipImage'
+import { ImgFlipCollection } from '@/components/ImgFlipCollection'
 
 const CreatePage = () => {
   return (
@@ -17,10 +17,10 @@ const CreatePage = () => {
             <MemeEditor />
           </div>
           <div className="col-span-3 h-full rounded-lg bg-gray-100 flex items-start justify-center flex space-x-2 pl-2">
-            <ImageSelection />
+            <TemplateCollection />
           </div>
           <div className="col-span-3 h-full rounded-lg bg-gray-100 flex items-start justify-center flex space-x-2 pl-2">
-            <FlipImage />
+            <ImgFlipCollection />
           </div>
         </div>
       </ProtectedRoute>

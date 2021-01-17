@@ -4,7 +4,7 @@ import useFirestore from '@/components/hooks/useFirestore'
 import { useTemplate } from '@/components/context/fabricContext'
 import { FIRESTORE_COLLECTION } from '@/lib/constants'
 
-export const ImageSelection = () => {
+export const TemplateCollection = () => {
   const { docs } = useFirestore(FIRESTORE_COLLECTION.TEMPLATES)
   const [imageUrls, setImageUrls] = useState([])
   const { updateTemplate } = useTemplate()

@@ -6,7 +6,7 @@ import { useFirestoreProfile } from '@/components/hooks/useFirestoreProfile'
 import moment from 'moment'
 import Link from 'next/link'
 
-export const PersonalHistoryCollection = ({ className }) => {
+export const ProfileMemeHistory = ({ className }) => {
   const { docs: memes } = useFirestoreProfile(FIRESTORE_COLLECTION.MEMES)
 
   return (
@@ -31,6 +31,6 @@ export const PersonalHistoryCollection = ({ className }) => {
   )
 }
 
-PersonalHistoryCollection.propTypes = {
+ProfileMemeHistory.propTypes = {
   className: PropTypes.string,
 }

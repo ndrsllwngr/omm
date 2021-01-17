@@ -7,7 +7,7 @@ import { useFabricJson } from '@/components/context/fabricContext'
 import { useRouter } from 'next/router'
 import moment from 'moment'
 
-export const DraftsCollection = ({ className }) => {
+export const ProfileDrafts = ({ className }) => {
   const { docs: drafts, deleteDoc } = useFirestoreProfile(FIRESTORE_COLLECTION.DRAFTS)
   const router = useRouter()
   const { setJson } = useFabricJson()
@@ -42,6 +42,6 @@ export const DraftsCollection = ({ className }) => {
   )
 }
 
-DraftsCollection.propTypes = {
+ProfileDrafts.propTypes = {
   className: PropTypes.string,
 }
