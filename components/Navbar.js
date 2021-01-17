@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react'
 import Link from 'next/link'
 import { useAuth } from '@/components/context/authContext'
 import { IoCreate, IoLogIn, IoPerson } from 'react-icons/io5'
+import PropTypes from 'prop-types'
 
 //https://tailwindcomponents.com/component/responsive-navbar-2
 export const Navbar = () => {
@@ -66,7 +67,6 @@ export const Navbar = () => {
   )
 }
 
-// eslint-disable-next-line react/prop-types
 const NavButtons = ({ className }) => {
   const auth = useAuth()
   const [mounted, setMounted] = useState(false)
@@ -111,4 +111,8 @@ const NavButtons = ({ className }) => {
       )}
     </div>
   )
+}
+
+NavButtons.propTypes = {
+  className: PropTypes.string,
 }

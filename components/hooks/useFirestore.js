@@ -4,12 +4,12 @@ import firebase from '@/lib/firebase'
 const useFirestore = (collection) => {
   const [docs, setDocs] = useState([])
 
-  async function getData() {
-    const db = firebase.firestore()
-    return db.collection(collection).orderBy('createdAt', 'desc').get()
-  }
-
   useEffect(() => {
+    async function getData() {
+      const db = firebase.firestore()
+      return db.collection(collection).orderBy('createdAt', 'desc').get()
+    }
+
     getData()
       .then((data) => {
         let documents = []

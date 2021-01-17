@@ -7,7 +7,8 @@ import { ScreenshotUrl } from '@/components/template/ScreenshotUrl'
 import { PasteUrlImage } from '@/components/template/PasteUrlImage'
 import { Canvas } from '@/components/template/Canvas'
 import { ProtectedRoute } from '@/components/context/authContext'
-// eslint-disable-next-line react/prop-types
+import PropTypes from 'prop-types'
+
 const Section = ({ children, title }) => {
   return (
     <div className={'bg-white rounded-lg m-2 p-2 flex flex-col'}>
@@ -15,6 +16,11 @@ const Section = ({ children, title }) => {
       {children}
     </div>
   )
+}
+
+Section.propTypes = {
+  children: PropTypes.any,
+  title: PropTypes.string,
 }
 
 const TemplatePage = () => {

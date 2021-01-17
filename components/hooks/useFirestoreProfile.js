@@ -6,18 +6,18 @@ export const useFirestoreProfile = (collection) => {
   const [docs, setDocs] = useState([])
   const auth = useAuth()
 
-  async function getData() {
-    if (auth && auth.user) {
-      const db = firebase.firestore()
-      return db
-        .collection(collection)
-        .where('createdBy', '==', auth.user.uid)
-        .orderBy('createdAt', 'desc')
-        .get()
-    }
-  }
-
   useEffect(() => {
+    async function getData() {
+      if (auth && auth.user) {
+        const db = firebase.firestore()
+        return db
+          .collection(collection)
+          .where('createdBy', '==', auth.user.uid)
+          .orderBy('createdAt', 'desc')
+          .get()
+      }
+    }
+
     getData()
       .then((data) => {
         let documents = []

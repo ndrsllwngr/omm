@@ -1,4 +1,3 @@
-/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useState, useEffect, createContext, useContext } from 'react'
 import PropTypes from 'prop-types'
 import firebase from '@/lib/firebase'
@@ -113,6 +112,7 @@ export default function AuthContextComp({ children }) {
         .onSnapshot((doc) => setUser(doc.data()))
       return () => unsubscribe()
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   return (

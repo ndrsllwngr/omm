@@ -1,4 +1,3 @@
-/* eslint-disable react-hooks/exhaustive-deps */
 import firebase from '@/lib/firebase'
 import { useAuth } from '@/components/context/authContext'
 import { FIRESTORE_COLLECTION, VOTE } from '@/lib/constants'

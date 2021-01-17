@@ -10,27 +10,11 @@ import { useRouter } from 'next/router'
 import { useAuth } from '@/components/context/authContext'
 import { VISIBILITY } from '@/lib/constants'
 import { useDraftUpload } from '@/components/hooks/useDraftUpload'
-
-// eslint-disable-next-line react/prop-types
-const Button = ({ children, type = 'button', disabled = false, onClick }) => {
-  return (
-    <button
-      onClick={onClick}
-      disabled={disabled}
-      className={
-        'flex-shrink-0 bg-purple-600 text-white text-base font-semibold py-2 px-4 rounded-lg shadow-md hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2 focus:ring-offset-purple-200'
-      }
-      type={type}
-    >
-      {children}
-    </button>
-  )
-}
+import PropTypes from 'prop-types'
 
 // inspired by https://github.com/aprilescobar/fabric.js-intro
 // inspired by https://github.com/saninmersion/react-context-fabricjs
 // uses http://fabricjs.com/
-// eslint-disable-next-line react/prop-types
 export const MemeEditor = () => {
   const router = useRouter()
   const { canvas, isCopy } = useFabricCanvas()
@@ -246,4 +230,26 @@ export const MemeEditor = () => {
       )}
     </div>
   )
+}
+
+const Button = ({ children, type = 'button', disabled = false, onClick }) => {
+  return (
+    <button
+      onClick={onClick}
+      disabled={disabled}
+      className={
+        'flex-shrink-0 bg-purple-600 text-white text-base font-semibold py-2 px-4 rounded-lg shadow-md hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2 focus:ring-offset-purple-200'
+      }
+      type={type}
+    >
+      {children}
+    </button>
+  )
+}
+
+Button.propTypes = {
+  children: PropTypes.any,
+  type: PropTypes.string,
+  disabled: PropTypes.bool,
+  onClick: PropTypes.func,
 }
