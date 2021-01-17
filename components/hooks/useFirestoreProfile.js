@@ -7,21 +7,25 @@ export const useFirestoreProfile = (collection) => {
   const auth = useAuth()
 
   useEffect(() => {
-    if (auth && auth.user) {
-      const db = firebase.firestore()
-      const unsubscribe = db
-        .collection(collection)
-        .where('createdBy', '==', auth.user.uid)
-        .orderBy('createdAt', 'desc')
-        .onSnapshot((snap) => {
-          let documents = []
-          snap.forEach((doc) => {
-            documents.push({ id: doc.id, ...doc.data() })
-          })
-          setDocs(documents)
-        })
-      return () => unsubscribe()
+    async function getData() {
+      if (auth && auth.user) {
+        const db = firebase.firestore()
+        return db
+          .collection(collection)
+          .where('createdBy', '==', auth.user.uid)
+          .orderBy('createdAt', 'desc')
+          .get()
+      }
     }
+    getData()
+      .then((data) => {
+        let documents = []
+        data.forEach((doc) => {
+          documents.push({ id: doc.id, ...doc.data() })
+        })
+        setDocs(documents)
+      })
+      .catch((e) => console.error(e))
   }, [collection, auth])
 
   async function deleteDraft(id) {
