@@ -2,10 +2,11 @@ import { useState, useEffect } from 'react'
 import firebase from '@/lib/firebase'
 import { FIRESTORE_COLLECTION } from '@/lib/constants'
 import { useFilterContext, useReloadContext } from '@/components/context/viewsContext'
+import { useImmer } from 'use-immer'
 
 export const useDatabaseMemes = () => {
   const limit = 20
-  const [Memes, setMemes] = useState([])
+  const [memes, updateMemes] = useImmer([])
   const { filter } = useFilterContext()
   const { reload } = useReloadContext()
 
@@ -93,7 +94,9 @@ export const useDatabaseMemes = () => {
   // }
   async function loadNextMemes(create, sorting, triggerNext) {
     if (!triggerNext) {
-      setMemes([])
+      updateMemes((_draft) => {
+        return []
+      })
       setLatestDoc(null)
       setHasMoreFiles(true)
     }
@@ -122,11 +125,19 @@ export const useDatabaseMemes = () => {
     // console.log({ Snaopshotmemes: snapShotMemes })
     // console.log({ MemesboforeSet: Memes })
     // console.log({ Memeslenght: Memes.length })
-    triggerNext ? setMemes([...Memes, ...snapShotMemes]) : setMemes(snapShotMemes)
+    // setMemes([...Memes, ...snapShotMemes])
+    triggerNext
+      ? updateMemes((draft) => {
+          draft.push(...snapShotMemes)
+        })
+      : updateMemes((draft) => {
+          return snapShotMemes
+        })
   }
 
   return {
-    dbMemes: Memes,
+    dbMemes: memes,
+    updateMemes,
     triggerNextMemes: triggerNextMemes,
     endOfFiles: hasMoreFiles,
   }
