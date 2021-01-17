@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React from 'react'
 import PropTypes from 'prop-types'
 import { FIRESTORE_COLLECTION } from '@/lib/constants'
 import { MemeRenderer } from '@/components/MemeRenderer'
@@ -8,28 +8,9 @@ import { useRouter } from 'next/router'
 import moment from 'moment'
 
 export const DraftsCollection = ({ className }) => {
-  const { docs, deleteDraft } = useFirestoreProfile(FIRESTORE_COLLECTION.DRAFTS)
+  const { docs: drafts, deleteDoc } = useFirestoreProfile(FIRESTORE_COLLECTION.DRAFTS)
   const router = useRouter()
-  const [drafts, setDrafts] = useState(null)
   const { setJson } = useFabricJson()
-
-  useEffect(() => {
-    async function getDrafts() {
-      let draftsArr = []
-      for (let i = 0; i < docs.length; i++) {
-        draftsArr.push(docs[i])
-      }
-      return draftsArr
-    }
-    getDrafts()
-      .then((res) => {
-        if (res) {
-          console.log(res)
-          setDrafts(res)
-        }
-      })
-      .catch((e) => console.log({ src: 'getDrafts', e }))
-  }, [docs, setDrafts])
 
   return (
     <div className={className}>
@@ -40,14 +21,12 @@ export const DraftsCollection = ({ className }) => {
             className="flex flex-col max-w-md"
             onClick={() => {
               setJson(draft)
-              deleteDraft(draft.id)
-                .then(function () {
+              deleteDoc(draft.id)
+                .then((doc) => {
                   console.log('Document successfully deleted!')
                   router.push('/create')
                 })
-                .catch(function (error) {
-                  console.error('Error removing document: ', error)
-                })
+                .catch((e) => console.error('Error removing document: ', e))
             }}
           >
             <p className={'uppercase text-xs text-gray-600 dark:text-gray-300 font-medium'}>

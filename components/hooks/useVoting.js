@@ -37,7 +37,7 @@ export const useVoting = (updateMemes = null) => {
           })
         })
       })
-        .then(function () {
+        .then(() => {
           console.log('(UP) Transaction successfully committed!')
           if (updateMemes) {
             updateMemes((draft) => {
@@ -47,8 +47,8 @@ export const useVoting = (updateMemes = null) => {
             })
           }
         })
-        .catch(function (error) {
-          console.log('(UP) Transaction failed: ', error)
+        .catch((e) => {
+          console.error('(UP) Transaction failed: ', e)
         })
     }
   }
@@ -71,7 +71,7 @@ export const useVoting = (updateMemes = null) => {
           })
         })
       })
-        .then(function () {
+        .then(() => {
           console.log('(DOWN) Transaction successfully committed!')
           if (updateMemes) {
             updateMemes((draft) => {
@@ -81,29 +81,11 @@ export const useVoting = (updateMemes = null) => {
             })
           }
         })
-        .catch(function (error) {
-          console.log('(DOWN) Transaction failed: ', error)
+        .catch((e) => {
+          console.error('(DOWN) Transaction failed: ', e)
         })
     }
   }
-
-  // Handle updates of the user document
-  // useEffect(() => {
-  //   if (meme) {
-  //     console.log({ src: 'useVoting', meme })
-  //     setVoteState(getVoteState(meme))
-  //     // Subscribe to user document on mount
-  //     const db = firebase.firestore()
-  //     const unsubscribe = db
-  //       .collection(FIRESTORE_COLLECTION.MEMES)
-  //       .doc(meme.id)
-  //       .onSnapshot((doc) => {
-  //         setMeme({ id: doc.id, ...doc.data() })
-  //         setVoteState(getVoteState(doc.data()))
-  //       })
-  //     return () => unsubscribe()
-  //   }
-  // }, [])
 
   return { upVote, downVote, getVoteState, getTotalPoints }
 }

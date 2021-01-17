@@ -97,24 +97,19 @@ export default function SingleView() {
   }, [currentMeme, filter, nextMeme, prevMeme])
 
   useEffect(() => {
-    const db = firebase.firestore()
-    let unsubscribe = db
-      .collection(FIRESTORE_COLLECTION.MEMES)
-      .doc(router.query.id)
-      .onSnapshot(
-        function (doc) {
-          if (currentMeme && currentMeme.id !== doc.id) {
-            setNext(null)
-            setPrev(null)
-          }
-          setCurrent({ id: doc.id, ...doc.data() })
-        },
-        function (error) {
-          console.log('SINGLEMEME SNAPSHOT FAILED')
-          console.log(error)
+    async function getData() {
+      const db = firebase.firestore()
+      return db.collection(FIRESTORE_COLLECTION.MEMES).doc(router.query.id).get()
+    }
+    getData()
+      .then((data) => {
+        if (currentMeme && currentMeme.id !== data.id) {
+          setNext(null)
+          setPrev(null)
         }
-      )
-    return () => unsubscribe()
+        setCurrent({ id: data.id, ...data.data() })
+      })
+      .catch((e) => console.error(e))
   }, [router.query.id, filter])
 
   const startAutoplay = () => {

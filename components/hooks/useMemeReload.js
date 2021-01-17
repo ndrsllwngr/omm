@@ -9,10 +9,12 @@ export const useMemeReload = () => {
   const [counter, setCounter] = useState(0)
   const [date, setDate] = useState(firebase.firestore.Timestamp.now())
 
+  // TODO pause onSnapshot if tab is not in focus
+  // TODO see for example https://github.com/jpalumickas/use-window-focus or use react-query
   useEffect(() => {
     const db = firebase.firestore()
-    let unsub = db
-      .collection(FIRESTORE_COLLECTION.MEMES)
+    let unsubscribe = db
+      .collection(FIRESTORE_COLLECTION.MEME_HISTORY)
       .where('createdAt', '>', date)
       .onSnapshot(function (snapshot) {
         if (snapshot.size > 0) {
@@ -21,7 +23,7 @@ export const useMemeReload = () => {
         }
       })
 
-    return () => unsub()
+    return () => unsubscribe()
   }, [reload])
 
   return {

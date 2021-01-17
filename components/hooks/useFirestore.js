@@ -4,19 +4,21 @@ import firebase from '@/lib/firebase'
 const useFirestore = (collection) => {
   const [docs, setDocs] = useState([])
 
+  async function getData() {
+    const db = firebase.firestore()
+    return db.collection(collection).orderBy('createdAt', 'desc').get()
+  }
+
   useEffect(() => {
-    const imageFirestore = firebase.firestore()
-    const unsubscribe = imageFirestore
-      .collection(collection)
-      .orderBy('createdAt', 'desc')
-      .onSnapshot((snap) => {
+    getData()
+      .then((data) => {
         let documents = []
-        snap.forEach((doc) => {
+        data.forEach((doc) => {
           documents.push({ id: doc.id, ...doc.data() })
         })
         setDocs(documents)
       })
-    return () => unsubscribe()
+      .catch((e) => console.error(e))
   }, [collection])
 
   return { docs }

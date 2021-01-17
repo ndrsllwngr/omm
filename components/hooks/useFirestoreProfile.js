@@ -6,17 +6,18 @@ export const useFirestoreProfile = (collection) => {
   const [docs, setDocs] = useState([])
   const auth = useAuth()
 
-  useEffect(() => {
-    async function getData() {
-      if (auth && auth.user) {
-        const db = firebase.firestore()
-        return db
-          .collection(collection)
-          .where('createdBy', '==', auth.user.uid)
-          .orderBy('createdAt', 'desc')
-          .get()
-      }
+  async function getData() {
+    if (auth && auth.user) {
+      const db = firebase.firestore()
+      return db
+        .collection(collection)
+        .where('createdBy', '==', auth.user.uid)
+        .orderBy('createdAt', 'desc')
+        .get()
     }
+  }
+
+  useEffect(() => {
     getData()
       .then((data) => {
         let documents = []
@@ -28,10 +29,10 @@ export const useFirestoreProfile = (collection) => {
       .catch((e) => console.error(e))
   }, [collection, auth])
 
-  async function deleteDraft(id) {
+  async function deleteDoc(id) {
     const db = firebase.firestore()
     return db.collection(collection).doc(id).delete()
   }
 
-  return { docs, deleteDraft }
+  return { docs, deleteDoc }
 }

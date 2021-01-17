@@ -2,9 +2,9 @@ import React, { useRef } from 'react'
 import { useDetectOutsideClick } from '@/components/hooks/useDetectOutsideClick'
 import { useFilterContext } from '@/components/context/viewsContext'
 import PropTypes from 'prop-types'
-// import { useMemeReload } from '@/components/hooks/useMemeReload'
-// import firebase from '@/lib/firebase'
-// import { IoCloud } from 'react-icons/io5'
+import { useMemeReload } from '@/components/hooks/useMemeReload'
+import firebase from '@/lib/firebase'
+import { IoCloud } from 'react-icons/io5'
 //https://tailwindui.com/components/application-ui/elements/dropdowns
 //https://letsbuildui.dev/articles/building-a-dropdown-menu-component-with-react-hooks
 export const OverviewSort = ({ callback = null }) => {
@@ -12,15 +12,15 @@ export const OverviewSort = ({ callback = null }) => {
   const [isActive, setIsActive] = useDetectOutsideClick(dropdownRef, false)
   const onClick = () => setIsActive(!isActive)
   const { filter, setFilter } = useFilterContext()
-  // const {
-  //   showNewMemes,
-  //   setShowNewMemes,
-  //   setCounter,
-  //   setDate,
-  //   counter,
-  //   setReload,
-  //   reload,
-  // } = useMemeReload()
+  const {
+    showNewMemes,
+    setShowNewMemes,
+    setCounter,
+    setDate,
+    counter,
+    setReload,
+    reload,
+  } = useMemeReload()
 
   const handleClick = (f) => {
     if (callback) {
@@ -31,7 +31,7 @@ export const OverviewSort = ({ callback = null }) => {
   }
   return (
     <div className="flex justify-end items-center">
-      {/* {showNewMemes && (
+      {showNewMemes && (
         <button
           onClick={() => {
             setReload(!reload)
@@ -43,7 +43,7 @@ export const OverviewSort = ({ callback = null }) => {
           <IoCloud size={18} className={'fill-current mr-2'} /> {counter} New Meme
           {counter > 1 && 's'}
         </button>
-      )} */}
+      )}
       <div className="flex relative">
         <button
           type="button"
