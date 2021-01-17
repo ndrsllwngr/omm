@@ -9,10 +9,11 @@ import Link from 'next/link'
 import moment from 'moment'
 import { IoCaretDownOutline, IoCaretUpOutline } from 'react-icons/io5'
 
-export const SingleMeme = ({ meme, enableLink }) => {
+export const SingleMeme = ({ meme, enableLink, updateMemes }) => {
   const { setJson } = useFabricJson()
   const router = useRouter()
-  const { upVote, downVote, getVoteState, getTotalPoints } = useVoting()
+  const { upVote, downVote, getVoteState, getTotalPoints } = useVoting(updateMemes)
+
   return (
     <div className="flex-col max-w-md">
       <p className={'uppercase text-xs text-gray-600 dark:text-gray-300 font-medium'}>
@@ -88,6 +89,7 @@ export const SingleMeme = ({ meme, enableLink }) => {
 
 SingleMeme.propTypes = {
   enableLink: PropTypes.bool,
+  updateMemes: PropTypes.func,
   meme: PropTypes.shape({
     id: PropTypes.string.isRequired,
     title: PropTypes.string.isRequired,
