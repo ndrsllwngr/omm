@@ -71,6 +71,7 @@ export default function SingleView() {
     }
     if (currentMeme && !nextMeme) {
       let collectionRef = firebase.firestore().collection(FIRESTORE_COLLECTION.MEMES)
+
       if (filter === 'Views') {
         collectionRef
           .where('views', '>', currentMeme.views)
@@ -94,53 +95,6 @@ export default function SingleView() {
       }
     }
   }, [currentMeme, filter, nextMeme, prevMeme])
-
-  // useEffect(() => {
-  //   const db = firebase.firestore()
-  //   let unsubscribe = db
-  //     .collection(FIRESTORE_COLLECTION.MEMES)
-  //     .doc(router.query.id)
-  //     .onSnapshot(
-  //       function (doc) {
-  //         let currentCreationTime = doc.data().createdAt
-  //         let views = doc.data().views
-  //         setCurrent({ id: doc.id, ...doc.data() })
-  //         const dbRef = db.collection(FIRESTORE_COLLECTION.MEMES)
-
-  //         let prevQuery = null
-  //         let nextQuery = null
-  //         if (filter === 'Views') {
-  //           prevQuery = dbRef.where('views', '<', views).orderBy('views', 'desc')
-  //           console.log({ PREVQUERY: prevQuery })
-  //           // if (!prevQuery) {
-  //           //   console.log({ NOTPREVQUERY: prevQuery })
-  //           //   prevQuery = dbRef.where('views', '<', views).orderBy('views', 'desc')
-  //           // }
-  //           nextQuery = dbRef.where('views', '>', views).orderBy('views', 'asc')
-  //         } else {
-  //           prevQuery = dbRef
-  //             .where('createdAt', operator.prev, currentCreationTime)
-  //             .orderBy('createdAt', sort.prev)
-  //           nextQuery = dbRef
-  //             .where('createdAt', operator.next, currentCreationTime)
-  //             .orderBy('createdAt', sort.next)
-  //         }
-  //         prevQuery.limit(1).onSnapshot(function (prev) {
-  //           console.log({ RESOLVEQUERY: prev })
-  //           prev.size > 0 ? setPrev({ id: prev.docs[0].id, ...prev.docs[0].data() }) : setPrev(null)
-  //         })
-
-  //         nextQuery.limit(1).onSnapshot(function (next) {
-  //           next.size > 0 ? setNext({ id: next.docs[0].id, ...next.docs[0].data() }) : setNext(null)
-  //         })
-  //       },
-  //       function (error) {
-  //         console.log('SINGLEMEME SNAPSHOT FAILED')
-  //         console.log(error)
-  //       }
-  //     )
-  //   return () => unsubscribe()
-  // }, [router.query.id, filter])
 
   useEffect(() => {
     const db = firebase.firestore()
