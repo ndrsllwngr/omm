@@ -43,39 +43,44 @@ export default function SingleView() {
       default:
         console.log('Unsupported Case')
     }
+    if (currentMeme && !prevMeme) {
+      const db = firebase.firestore()
+      db.collection(FIRESTORE_COLLECTION.MEMES)
+        .where('createdAt', operator.prev, currentMeme.createdAt)
+        .orderBy('createdAt', sort.prev)
+        .limit(1)
+        .get()
+        .then((prev) => {
+          prev.size > 0 ? setPrev({ id: prev.docs[0].id, ...prev.docs[0].data() }) : setPrev(null)
+        })
+        .catch((e) => console.error(e))
+    }
+    if (currentMeme && !nextMeme) {
+      const db = firebase.firestore()
+      db.collection(FIRESTORE_COLLECTION.MEMES)
+        .where('createdAt', operator.next, currentMeme.createdAt)
+        .orderBy('createdAt', sort.next)
+        .limit(1)
+        .get()
+        .then((next) => {
+          next.size > 0 ? setNext({ id: next.docs[0].id, ...next.docs[0].data() }) : setNext(null)
+        })
+        .catch((e) => console.error(e))
+    }
+  }, [currentMeme, filter, nextMeme, prevMeme])
 
+  useEffect(() => {
     const db = firebase.firestore()
     let unsubscribe = db
       .collection(FIRESTORE_COLLECTION.MEMES)
       .doc(router.query.id)
       .onSnapshot(
         function (doc) {
-          let currentCreationTime = doc.data().createdAt
-          let views = doc.data().views
-          setCurrent({ id: doc.id, ...doc.data() })
-          const dbRef = db.collection(FIRESTORE_COLLECTION.MEMES)
-
-          let prevQuery = null
-          let nextQuery = null
-          if (filter === 'Views') {
-            prevQuery = dbRef.where('views', '<=', views).orderBy('views', 'desc')
-            nextQuery = dbRef.where('views', '>', views).orderBy('views', 'asc')
-          } else {
-            prevQuery = dbRef
-              .where('createdAt', operator.prev, currentCreationTime)
-              .orderBy('createdAt', sort.prev)
-            nextQuery = dbRef
-              .where('createdAt', operator.next, currentCreationTime)
-              .orderBy('createdAt', sort.next)
+          if (currentMeme && currentMeme.id !== doc.id) {
+            setNext(null)
+            setPrev(null)
           }
-          prevQuery.limit(1).onSnapshot(function (prev) {
-            console.log({ PREVQUERY: prev })
-            prev.size > 0 ? setPrev({ id: prev.docs[0].id, ...prev.docs[0].data() }) : setPrev(null)
-          })
-
-          nextQuery.limit(1).onSnapshot(function (next) {
-            next.size > 0 ? setNext({ id: next.docs[0].id, ...next.docs[0].data() }) : setNext(null)
-          })
+          setCurrent({ id: doc.id, ...doc.data() })
         },
         function (error) {
           console.log('SINGLEMEME SNAPSHOT FAILED')
@@ -137,7 +142,12 @@ export default function SingleView() {
       />
       <Navbar />
       <div className={'max-w-7xl mx-auto mt-4'}>
-        <OverviewSort />
+        <OverviewSort
+          callback={() => {
+            setPrev(null)
+            setNext(null)
+          }}
+        />
         <Slideshow prevMeme={prevMeme} meme={currentMeme} nextMeme={nextMeme} />
         <div className="flex flex-col items-center font-semibold text-xl my-2 text-white">
           <Link href={`/meme/${id}`}>
