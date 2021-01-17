@@ -24,32 +24,39 @@ export default function SingleView() {
   // TODO look up "unterabfragen" when sorting can not differential wihci element is newer with same views
 
   useEffect(() => {
+    if (currentMeme && !prevMeme) {
+      const db = firebase.firestore()
+      db.collection(FIRESTORE_COLLECTION.MEMES)
+        .where('createdAt', '<', time)
+        .orderBy('createdAt', 'desc')
+        .limit(1)
+        .get()
+        .then((prev) => {
+          prev.size > 0 ? setPrev({ id: prev.docs[0].id, ...prev.docs[0].data() }) : setPrev(null)
+        })
+        .catch((e) => console.error(e))
+    }
+    if (currentMeme && !nextMeme) {
+      const db = firebase.firestore()
+      db.collection(FIRESTORE_COLLECTION.MEMES)
+        .where('createdAt', '>', time)
+        .limit(1)
+        .get()
+        .then((next) => {
+          next.size > 0 ? setNext({ id: next.docs[0].id, ...next.docs[0].data() }) : setNext(null)
+        })
+        .catch((e) => console.error(e))
+    }
+  }, [currentMeme])
+
+  useEffect(() => {
     const db = firebase.firestore()
     let unsubscribe = db
       .collection(FIRESTORE_COLLECTION.MEMES)
       .doc(router.query.id)
       .onSnapshot(
         function (doc) {
-          let time = doc.data().createdAt
           setCurrent({ id: doc.id, ...doc.data() })
-
-          db.collection(FIRESTORE_COLLECTION.MEMES)
-            .where('createdAt', '<', time)
-            .orderBy('createdAt', 'desc')
-            .limit(1)
-            .onSnapshot(function (prev) {
-              prev.size > 0
-                ? setPrev({ id: prev.docs[0].id, ...prev.docs[0].data() })
-                : setPrev(null)
-            })
-          db.collection(FIRESTORE_COLLECTION.MEMES)
-            .where('createdAt', '>', time)
-            .limit(1)
-            .onSnapshot(function (next) {
-              next.size > 0
-                ? setNext({ id: next.docs[0].id, ...next.docs[0].data() })
-                : setNext(null)
-            })
         },
         function (error) {
           console.log('SINGLEMEME SNAPSHOT FAILED')
