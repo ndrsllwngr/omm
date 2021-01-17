@@ -6,6 +6,7 @@ import { Navbar } from '@/components/Navbar'
 import Link from 'next/link'
 import { FIRESTORE_COLLECTION } from '@/lib/constants'
 import { useAutoPlay } from '@/components/context/autoplayContext'
+import { useFilterContext } from '@/components/context/viewsContext'
 import { useRandomMeme } from '@/components/hooks/useRandomMeme'
 import { OverviewSort } from '@/components/OverviewSort'
 import { HtmlHead } from '@/components/HtmlHead'
@@ -15,6 +16,7 @@ export default function SingleView() {
   const { id } = useRandomMeme(router)
   const [state, dispatch] = useAutoPlay()
   const timeOut = useRef(null)
+  const { filter } = useFilterContext()
 
   const [currentMeme, setCurrent] = useState(null)
   const [prevMeme, setPrev] = useState(null)
@@ -24,6 +26,21 @@ export default function SingleView() {
   // TODO look up "unterabfragen" when sorting can not differential wihci element is newer with same views
 
   useEffect(() => {
+    let operator = {}
+    let sort = {}
+    switch (filter) {
+      case 'Latest':
+        operator = { prev: '<', next: '>' }
+        sort = { prev: 'desc', next: 'asc' }
+        break
+      case 'Oldest':
+        operator = { prev: '>', next: '<' }
+        sort = { prev: 'asc', next: 'desc' }
+        break
+      default:
+        console.log('Unsupported Case')
+    }
+
     const db = firebase.firestore()
     let unsubscribe = db
       .collection(FIRESTORE_COLLECTION.MEMES)
@@ -34,8 +51,8 @@ export default function SingleView() {
           setCurrent({ id: doc.id, ...doc.data() })
 
           db.collection(FIRESTORE_COLLECTION.MEMES)
-            .where('createdAt', '<', time)
-            .orderBy('createdAt', 'desc')
+            .where('createdAt', operator.prev, time)
+            .orderBy('createdAt', sort.prev)
             .limit(1)
             .onSnapshot(function (prev) {
               prev.size > 0
@@ -43,7 +60,8 @@ export default function SingleView() {
                 : setPrev(null)
             })
           db.collection(FIRESTORE_COLLECTION.MEMES)
-            .where('createdAt', '>', time)
+            .where('createdAt', operator.next, time)
+            .orderBy('createdAt', sort.next)
             .limit(1)
             .onSnapshot(function (next) {
               next.size > 0
@@ -57,7 +75,7 @@ export default function SingleView() {
         }
       )
     return () => unsubscribe()
-  }, [router.query.id])
+  }, [router.query.id, filter])
 
   const startAutoplay = () => {
     timeOut.current = setTimeout(function () {
