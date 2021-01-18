@@ -3,7 +3,7 @@ import { FIRESTORE_COLLECTION } from '@/lib/constants'
 import { useReloadContext } from '@/components/context/viewsContext'
 import firebase from '@/lib/firebase'
 
-export const useMemeReload = () => {
+export const useMemeReload = (enabled) => {
   const [showNewMemes, setShowNewMemes] = useState(false)
   const { reload, setReload } = useReloadContext()
   const [counter, setCounter] = useState(0)
