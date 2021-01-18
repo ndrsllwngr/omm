@@ -278,3 +278,5 @@ fabric.properties
 storybook-static/
 
 .idea/
+
+old.env.local
