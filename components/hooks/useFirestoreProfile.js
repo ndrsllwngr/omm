@@ -17,6 +17,7 @@ export const useFirestoreProfile = (collection) => {
           .get()
       }
     }
+
     getData()
       .then((data) => {
         let documents = []
@@ -28,10 +29,10 @@ export const useFirestoreProfile = (collection) => {
       .catch((e) => console.error(e))
   }, [collection, auth])
 
-  async function deleteDraft(id) {
+  async function deleteDoc(id) {
     const db = firebase.firestore()
     return db.collection(collection).doc(id).delete()
   }
 
-  return { docs, deleteDraft }
+  return { docs, deleteDoc }
 }

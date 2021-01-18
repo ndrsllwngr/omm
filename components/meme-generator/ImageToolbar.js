@@ -7,7 +7,7 @@ import {
   removeSelected,
   sendBackwards,
   sendToBack,
-} from '@/components/meme/FabricUtils'
+} from '@/components/meme-generator/FabricUtils'
 
 export const ImageToolbar = (_props) => {
   const { canvas } = useFabricCanvas()

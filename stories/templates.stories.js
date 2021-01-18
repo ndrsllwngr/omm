@@ -1,14 +1,17 @@
 import React from 'react'
-import { ImageSelection } from '@/components/ImageSelection'
-import { ScreenshotUrl } from '@/components/ScreenshotUrl'
-import { Canvas } from '@/components/drawing/Canvas'
-import { UploadImage } from '@/components/UploadImage'
-import { PasteUrlImage } from '@/components/PasteUrlImage'
-import { WebcamPhoto } from '@/components/WebcamPhoto'
+import { TemplateCollection } from '@/components/template-generator/TemplateCollection'
+import { ScreenshotUrl } from '@/components/template-generator/ScreenshotUrl'
+import { Canvas } from '@/components/template-generator/Canvas'
+import { UploadImage } from '@/components/template-generator/UploadImage'
+import { PasteUrlImage } from '@/components/template-generator/PasteUrlImage'
+import { WebcamPhoto } from '@/components/template-generator/WebcamPhoto'
+import { ImgFlipCollection } from '@/components/template-generator/ImgFlipCollection'
 
 export default { title: 'Templates' }
 
-export const templateOverview = () => <ImageSelection />
+export const templateCollection = () => <TemplateCollection />
+
+export const imgFlipCollection = () => <ImgFlipCollection />
 
 export const screenshotUrl = () => <ScreenshotUrl />
 

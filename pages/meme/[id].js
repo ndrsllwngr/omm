@@ -11,6 +11,7 @@ import { useRandomMeme } from '@/components/hooks/useRandomMeme'
 import { OverviewSort } from '@/components/OverviewSort'
 import { HtmlHead } from '@/components/HtmlHead'
 import { useViewCount } from '@/components/hooks/useViewCount'
+import { useImmer } from 'use-immer'
 
 export default function SingleView() {
   const router = useRouter()
@@ -19,11 +20,10 @@ export default function SingleView() {
   const timeOut = useRef(null)
   const { filter } = useFilterContext()
 
-  const viewCount = useViewCount()
-
-  const [currentMeme, setCurrent] = useState(null)
+  const [currentMeme, updateCurrent] = useImmer(null)
   const [prevMeme, setPrev] = useState(null)
   const [nextMeme, setNext] = useState(null)
+  const viewCount = useViewCount(updateCurrent)
 
   // TODO pass order by
   // TODO look up "unterabfragen" when sorting can not differential wihci element is newer with same views
@@ -97,28 +97,29 @@ export default function SingleView() {
           .catch((e) => console.error(e))
       }
     }
+    // TODO Evaluate the dependencies of this useEffect.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentMeme, filter, nextMeme, prevMeme])
 
   useEffect(() => {
-    const db = firebase.firestore()
-    let unsubscribe = db
-      .collection(FIRESTORE_COLLECTION.MEMES)
-      .doc(router.query.id)
-      .onSnapshot(
-        function (doc) {
-          if (currentMeme && currentMeme.id !== doc.id) {
-            setNext(null)
-            setPrev(null)
-          }
-          setCurrent({ id: doc.id, ...doc.data() })
-          viewCount.addView(doc.id)
-        },
-        function (error) {
-          console.log('SINGLEMEME SNAPSHOT FAILED')
-          console.log(error)
+    async function getData() {
+      const db = firebase.firestore()
+      return db.collection(FIRESTORE_COLLECTION.MEMES).doc(router.query.id).get()
+    }
+    getData()
+      .then((data) => {
+        if (currentMeme && currentMeme.id !== data.id) {
+          setNext(null)
+          setPrev(null)
         }
-      )
-    return () => unsubscribe()
+        viewCount.addView(data.id)
+        updateCurrent((_draft) => {
+          return { id: data.id, ...data.data() }
+        })
+      })
+      .catch((e) => console.error(e))
+    // TODO Evaluate the dependencies of this useEffect.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [router.query.id, filter])
 
   const startAutoplay = () => {
@@ -155,6 +156,8 @@ export default function SingleView() {
   //Toogle Autoplay
   useEffect(() => {
     state.bool ? startAutoplay() : endAutoplay()
+    // TODO Evaluate if moving these two functions into the useEffect might be feasible.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentMeme, state.bool])
 
   if (!currentMeme)
@@ -179,7 +182,12 @@ export default function SingleView() {
             setNext(null)
           }}
         />
-        <Slideshow prevMeme={prevMeme} meme={currentMeme} nextMeme={nextMeme} />
+        <Slideshow
+          prevMeme={prevMeme}
+          meme={currentMeme}
+          nextMeme={nextMeme}
+          updateMeme={updateCurrent}
+        />
         <div className="flex flex-col items-center font-semibold text-xl my-2 text-white">
           <Link href={`/meme/${id}`}>
             <a onClick={() => dispatch({ type: 'falseBool' })}>

@@ -5,18 +5,20 @@ const useFirestore = (collection) => {
   const [docs, setDocs] = useState([])
 
   useEffect(() => {
-    const imageFirestore = firebase.firestore()
-    const unsubscribe = imageFirestore
-      .collection(collection)
-      .orderBy('createdAt', 'desc')
-      .onSnapshot((snap) => {
+    async function getData() {
+      const db = firebase.firestore()
+      return db.collection(collection).orderBy('createdAt', 'desc').get()
+    }
+
+    getData()
+      .then((data) => {
         let documents = []
-        snap.forEach((doc) => {
+        data.forEach((doc) => {
           documents.push({ id: doc.id, ...doc.data() })
         })
         setDocs(documents)
       })
-    return () => unsubscribe()
+      .catch((e) => console.error(e))
   }, [collection])
 
   return { docs }

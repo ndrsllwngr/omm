@@ -34,6 +34,8 @@ export const useDatabaseMemes = () => {
       default:
         console.log('Unsupported case')
     }
+    // TODO Evaluate the dependencies of this useEffect.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [filter, reload])
 
   const triggerNextMemes = () => {

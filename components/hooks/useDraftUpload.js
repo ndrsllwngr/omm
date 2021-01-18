@@ -31,14 +31,14 @@ export const useDraftUpload = () => {
             .then(() => {
               console.log('SUCCESS')
             })
-            .catch(() => console.error('ERROR'))
+            .catch((e) => console.error(e))
           setData(null)
         })
-        .catch((error) => {
+        .catch((e) => {
           setLoading(false)
           setData(null)
-          setError(error)
-          console.error('Error adding document: ', error)
+          setError(e)
+          console.error('Error adding document: ', e)
           setData(null)
         })
     }

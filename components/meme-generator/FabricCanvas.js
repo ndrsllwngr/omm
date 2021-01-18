@@ -1,11 +1,11 @@
 import React, { useEffect, useLayoutEffect, useCallback } from 'react'
+import PropTypes from 'prop-types'
 import {
   useFabricJson,
   useFabricCanvas,
   useFabricActiveObject,
 } from '@/components/context/fabricContext'
 
-// eslint-disable-next-line react/prop-types
 export const FabricCanvas = ({ jsonData = null }) => {
   const { json, setJson } = useFabricJson()
   const { canvas, initCanvas, loadFromJSON, canvasRef, resetCanvas, setIsCopy } = useFabricCanvas()
@@ -83,4 +83,8 @@ export const FabricCanvas = ({ jsonData = null }) => {
       />
     </div>
   )
+}
+
+FabricCanvas.propTypes = {
+  jsonData: PropTypes.any,
 }

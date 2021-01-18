@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react'
+import PropTypes from 'prop-types'
 import { useTheme } from 'next-themes'
 import { IoContrastOutline, IoMoon, IoSunny } from 'react-icons/io5'
 
-// eslint-disable-next-line react/prop-types
 export const ThemeToggle = ({ className }) => {
   const [mounted, setMounted] = useState(false)
   const { theme, setTheme } = useTheme()
@@ -28,4 +28,8 @@ export const ThemeToggle = ({ className }) => {
       )}
     </div>
   )
+}
+
+ThemeToggle.propTypes = {
+  className: PropTypes.string,
 }

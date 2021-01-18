@@ -1,6 +1,5 @@
 import React from 'react'
-import { Slideshow } from '@/components/Slideshow'
-import { SlideshowButton } from '@/components/SlideshowButton'
+import { Slideshow, SlideshowButton } from '@/components/Slideshow'
 import mockData from '@/assets/mockData'
 import { OverviewSort } from '@/components/OverviewSort'
 
@@ -23,6 +22,6 @@ export const memeSlideshowButtons = () => {
   )
 }
 
-export const sortingDropdown = () => {
+export const overviewSort = () => {
   return <OverviewSort />
 }

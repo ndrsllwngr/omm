@@ -17,7 +17,7 @@ import {
   setFontFamily,
   setText,
   // getActiveStyle,
-} from '@/components/meme/FabricUtils'
+} from '@/components/meme-generator/FabricUtils'
 import { useImmer } from 'use-immer'
 
 const shadows = {

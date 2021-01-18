@@ -1,9 +1,8 @@
-/* eslint-disable react-hooks/exhaustive-deps */
 import firebase from '@/lib/firebase'
 import { useAuth } from '@/components/context/authContext'
 import { FIRESTORE_COLLECTION, VOTE } from '@/lib/constants'
 
-export const useVoting = (updateMemes = null) => {
+export const useVoting = ({ updateMemes = null, updateMeme = null }) => {
   const auth = useAuth()
 
   const getVoteState = (meme) => {
@@ -37,7 +36,7 @@ export const useVoting = (updateMemes = null) => {
           })
         })
       })
-        .then(function () {
+        .then(() => {
           console.log('(UP) Transaction successfully committed!')
           if (updateMemes) {
             updateMemes((draft) => {
@@ -46,9 +45,15 @@ export const useVoting = (updateMemes = null) => {
               draft[index].upVotes.push(auth.user.uid)
             })
           }
+          if (updateMeme) {
+            updateMeme((draft) => {
+              draft.downVotes = draft.downVotes.filter((el) => el !== auth.user.uid)
+              draft.upVotes.push(auth.user.uid)
+            })
+          }
         })
-        .catch(function (error) {
-          console.log('(UP) Transaction failed: ', error)
+        .catch((e) => {
+          console.error('(UP) Transaction failed: ', e)
         })
     }
   }
@@ -71,7 +76,7 @@ export const useVoting = (updateMemes = null) => {
           })
         })
       })
-        .then(function () {
+        .then(() => {
           console.log('(DOWN) Transaction successfully committed!')
           if (updateMemes) {
             updateMemes((draft) => {
@@ -80,30 +85,18 @@ export const useVoting = (updateMemes = null) => {
               draft[index].downVotes.push(auth.user.uid)
             })
           }
+          if (updateMeme) {
+            updateMeme((draft) => {
+              draft.upVotes = draft.upVotes.filter((el) => el !== auth.user.uid)
+              draft.downVotes.push(auth.user.uid)
+            })
+          }
         })
-        .catch(function (error) {
-          console.log('(DOWN) Transaction failed: ', error)
+        .catch((e) => {
+          console.error('(DOWN) Transaction failed: ', e)
         })
     }
   }
-
-  // Handle updates of the user document
-  // useEffect(() => {
-  //   if (meme) {
-  //     console.log({ src: 'useVoting', meme })
-  //     setVoteState(getVoteState(meme))
-  //     // Subscribe to user document on mount
-  //     const db = firebase.firestore()
-  //     const unsubscribe = db
-  //       .collection(FIRESTORE_COLLECTION.MEMES)
-  //       .doc(meme.id)
-  //       .onSnapshot((doc) => {
-  //         setMeme({ id: doc.id, ...doc.data() })
-  //         setVoteState(getVoteState(doc.data()))
-  //       })
-  //     return () => unsubscribe()
-  //   }
-  // }, [])
 
   return { upVote, downVote, getVoteState, getTotalPoints }
 }

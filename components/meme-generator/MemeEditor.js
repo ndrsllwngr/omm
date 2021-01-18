@@ -1,36 +1,20 @@
 import React, { useEffect, useState } from 'react'
 import { fabric } from 'fabric'
 import SVG from 'react-inlinesvg'
-import { FabricCanvas } from '@/components/meme/FabricCanvas'
-import { TextToolbar } from '@/components/meme/TextToolbar'
+import { FabricCanvas } from '@/components/meme-generator/FabricCanvas'
+import { TextToolbar } from '@/components/meme-generator/TextToolbar'
 import { useFabricCanvas, useTemplate } from '@/components/context/fabricContext'
 import { useMemeUpload } from '@/components/hooks/useMemeUpload'
-import { ImageToolbar } from '@/components/meme/ImageToolbar'
+import { ImageToolbar } from '@/components/meme-generator/ImageToolbar'
 import { useRouter } from 'next/router'
 import { useAuth } from '@/components/context/authContext'
 import { VISIBILITY } from '@/lib/constants'
 import { useDraftUpload } from '@/components/hooks/useDraftUpload'
-
-// eslint-disable-next-line react/prop-types
-const Button = ({ children, type = 'button', disabled = false, onClick }) => {
-  return (
-    <button
-      onClick={onClick}
-      disabled={disabled}
-      className={
-        'flex-shrink-0 bg-purple-600 text-white text-base font-semibold py-2 px-4 rounded-lg shadow-md hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2 focus:ring-offset-purple-200'
-      }
-      type={type}
-    >
-      {children}
-    </button>
-  )
-}
+import PropTypes from 'prop-types'
 
 // inspired by https://github.com/aprilescobar/fabric.js-intro
 // inspired by https://github.com/saninmersion/react-context-fabricjs
 // uses http://fabricjs.com/
-// eslint-disable-next-line react/prop-types
 export const MemeEditor = () => {
   const router = useRouter()
   const { canvas, isCopy } = useFabricCanvas()
@@ -246,4 +230,26 @@ export const MemeEditor = () => {
       )}
     </div>
   )
+}
+
+const Button = ({ children, type = 'button', disabled = false, onClick }) => {
+  return (
+    <button
+      onClick={onClick}
+      disabled={disabled}
+      className={
+        'flex-shrink-0 bg-purple-600 text-white text-base font-semibold py-2 px-4 rounded-lg shadow-md hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2 focus:ring-offset-purple-200'
+      }
+      type={type}
+    >
+      {children}
+    </button>
+  )
+}
+
+Button.propTypes = {
+  children: PropTypes.any,
+  type: PropTypes.string,
+  disabled: PropTypes.bool,
+  onClick: PropTypes.func,
 }

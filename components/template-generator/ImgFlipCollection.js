@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react'
 import { getImgFlipMemes } from '@/lib/external-meme-api'
 import { useTemplate } from '@/components/context/fabricContext'
 
-export const FlipImage = () => {
+export const ImgFlipCollection = () => {
   const [memeArray, setMemeArray] = useState([])
   const { updateTemplate } = useTemplate()
 

@@ -13,7 +13,7 @@ const LandingPage = () => {
       <HtmlHead />
       <Navbar />
       <div className={'max-w-7xl mx-auto mt-4'}>
-        <OverviewSort />
+        <OverviewSort enableNotification={true} />
         <LandingPageInner />
       </div>
     </>
