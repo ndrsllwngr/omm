@@ -40,8 +40,13 @@ export default function SingleView() {
         operator = { prev: '>', next: '<' }
         sort = { prev: 'asc', next: 'desc' }
         break
-      case 'Views':
-        console.log('Sorting Views')
+      case 'MostViewed':
+        operator = { prev: '<=', next: '>=' }
+        sort = { prev: 'desc', next: 'asc' }
+        break
+      case 'NeverViewed':
+        operator = { prev: '>=', next: '<=' }
+        sort = { prev: 'asc', next: 'desc' }
         break
       default:
         console.log('Unsupported Case')
@@ -49,15 +54,14 @@ export default function SingleView() {
     if (currentMeme && !prevMeme && !nextMeme) {
       let collectionRef = firebase.firestore().collection(FIRESTORE_COLLECTION.MEMES)
 
-      if (filter === 'Views') {
+      if (filter === 'MostViewed') {
         collectionRef
-          .where('views', '<=', currentMeme.views)
-          .orderBy('views', 'desc')
+          .where('views', operator.prev, currentMeme.views)
+          .orderBy('views', sort.prev)
           .limit()
           .get()
           .then((prev) => {
             if (prev.docs.length > 0) {
-              console.log('BEFORELOOP')
               for (let i = 0; i < prev.size; i++) {
                 if (
                   prev.docs[i].data().views == currentMeme.views &&
@@ -78,8 +82,8 @@ export default function SingleView() {
           })
           .catch((e) => console.error(e))
         collectionRef
-          .where('views', '>=', currentMeme.views)
-          .orderBy('views', 'asc')
+          .where('views', operator.next, currentMeme.views)
+          .orderBy('views', sort.next)
           .limit()
           .get()
           .then((next) => {
@@ -104,8 +108,62 @@ export default function SingleView() {
             // next.size > 0 ? setNext({ id: next.docs[0].id, ...next.docs[0].data() }) : setNext(null)
           })
           .catch((e) => console.error(e))
+      } else if (filter === 'NeverViewed') {
+        collectionRef
+          .where('views', operator.prev, currentMeme.views)
+          .orderBy('views', sort.prev)
+          .limit()
+          .get()
+          .then((prev) => {
+            if (prev.docs.length > 0) {
+              console.log('BEFORELOOP')
+              for (let i = 0; i < prev.size; i++) {
+                if (
+                  prev.docs[i].data().views == currentMeme.views &&
+                  prev.docs[i].id > currentMeme.id
+                ) {
+                  // console.log({ Firstcase: prev.docs[i].id, ...prev.docs[i].data() })
+                  setPrev({ id: prev.docs[i].id, ...prev.docs[i].data() })
+                  break
+                } else {
+                  if (prev.docs[i].data().views != currentMeme.views) {
+                    // console.log({ Secondcase: prev.docs[i].id, ...prev.docs[i].data() })
+                    setPrev({ id: prev.docs[i].id, ...prev.docs[i].data() })
+                    break
+                  }
+                }
+              }
+            }
+          })
+          .catch((e) => console.error(e))
+        collectionRef
+          .where('views', operator.next, currentMeme.views)
+          .orderBy('views', sort.next)
+          .limit()
+          .get()
+          .then((next) => {
+            if (next.docs.length > 0) {
+              for (let i = 0; i < next.size; i++) {
+                if (
+                  next.docs[i].data().views == currentMeme.views &&
+                  next.docs[i].id < currentMeme.id
+                ) {
+                  //console.log({ Firstcase: next.docs[i].id, ...next.docs[i].data() })
+                  setNext({ id: next.docs[i].id, ...next.docs[i].data() })
+                  break
+                } else {
+                  if (next.docs[i].data().views != currentMeme.views) {
+                    //console.log({ Secondcase: next.docs[i].id, ...next.docs[i].data() })
+                    setNext({ id: next.docs[i].id, ...next.docs[i].data() })
+                    break
+                  }
+                }
+              }
+            }
+            // next.size > 0 ? setNext({ id: next.docs[0].id, ...next.docs[0].data() }) : setNext(null)
+          })
+          .catch((e) => console.error(e))
       } else {
-        console.log('LATEST')
         collectionRef
           .where('createdAt', operator.prev, currentMeme.createdAt)
           .orderBy('createdAt', sort.prev)

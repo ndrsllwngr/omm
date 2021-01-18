@@ -74,11 +74,18 @@ export const OverviewSort = ({ callback = null, enableNotification = false }) =>
                 Oldest
               </div>
               <div
-                onClick={() => handleClick('Views')}
+                onClick={() => handleClick('MostViewed')}
                 className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900"
                 role="menuitem"
               >
-                Views
+                Most Viewed
+              </div>
+              <div
+                onClick={() => handleClick('NeverViewed')}
+                className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900"
+                role="menuitem"
+              >
+                Never Viewed
               </div>
               <div
                 onClick={() => handleClick('Votes')}
