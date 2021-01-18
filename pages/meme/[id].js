@@ -111,7 +111,7 @@ export default function SingleView() {
         console.debug('FIRESTORE_COLLECTION.MEMES', 'READ')
         if (data.data()) {
           viewCount.addView(data.id)
-          updateCurrent((draft) => {
+          updateCurrent((_draft) => {
             return { id: data.id, ...data.data() }
           })
           if (currentMeme && currentMeme.id !== data.id) {
