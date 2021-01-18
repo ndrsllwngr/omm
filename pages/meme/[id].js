@@ -63,35 +63,45 @@ export default function SingleView() {
                   prev.docs[i].data().views == currentMeme.views &&
                   prev.docs[i].id < currentMeme.id
                 ) {
-                  console.log({ Firstcase: prev.docs[i].id, ...prev.docs[i].data() })
+                  // console.log({ Firstcase: prev.docs[i].id, ...prev.docs[i].data() })
                   setPrev({ id: prev.docs[i].id, ...prev.docs[i].data() })
                   break
                 } else {
                   if (prev.docs[i].data().views != currentMeme.views) {
-                    console.log({ Secondcase: prev.docs[i].id, ...prev.docs[i].data() })
+                    // console.log({ Secondcase: prev.docs[i].id, ...prev.docs[i].data() })
                     setPrev({ id: prev.docs[i].id, ...prev.docs[i].data() })
                     break
                   }
                 }
               }
             }
-            // prev.forEach((doc) => {
-            //   if (doc.views == currentMeme.views && doc.id < currentMeme.id) {
-            //     setPrev({ id: doc.id, ...doc.data() })
-            //     return
-            //   }
-            // })
-            //TODO check if first entry equals currentMeme id then take second one else fisrt one
-            //prev.size > 0 ? setPrev({ id: prev.docs[0].id, ...prev.docs[0].data() }) : setPrev(null)
           })
           .catch((e) => console.error(e))
         collectionRef
-          .where('views', '>', currentMeme.views)
+          .where('views', '>=', currentMeme.views)
           .orderBy('views', 'asc')
-          .limit(1)
+          .limit()
           .get()
           .then((next) => {
-            next.size > 0 ? setNext({ id: next.docs[0].id, ...next.docs[0].data() }) : setNext(null)
+            if (next.docs.length > 0) {
+              for (let i = 0; i < next.size; i++) {
+                if (
+                  next.docs[i].data().views == currentMeme.views &&
+                  next.docs[i].id > currentMeme.id
+                ) {
+                  //console.log({ Firstcase: next.docs[i].id, ...next.docs[i].data() })
+                  setNext({ id: next.docs[i].id, ...next.docs[i].data() })
+                  break
+                } else {
+                  if (next.docs[i].data().views != currentMeme.views) {
+                    //console.log({ Secondcase: next.docs[i].id, ...next.docs[i].data() })
+                    setNext({ id: next.docs[i].id, ...next.docs[i].data() })
+                    break
+                  }
+                }
+              }
+            }
+            // next.size > 0 ? setNext({ id: next.docs[0].id, ...next.docs[0].data() }) : setNext(null)
           })
           .catch((e) => console.error(e))
       } else {
