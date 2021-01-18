@@ -7,7 +7,9 @@ export const SingleDraft = ({ meme, onClick }) => {
   return (
     <div className="flex-col max-w-md" onClick={onClick}>
       <p className={'uppercase text-xs text-gray-600 dark:text-gray-300 font-medium'}>
-        {moment(meme.createdAt.toMillis()).fromNow()}
+        {typeof meme.createdAt !== 'object'
+          ? moment(meme.createdAt).fromNow()
+          : moment(meme.createdAt.toMillis()).fromNow()}
       </p>
       <h1 className={'text-lg font-bold text-black dark:text-white truncate'}>
         {meme.title ? meme.title : 'Untitled'}

@@ -4,20 +4,21 @@ import { SingleMeme } from '@/components/SingleMeme'
 import { useRouter } from 'next/router'
 import { useAutoPlayDispatch } from '@/components/context/autoplayContext'
 
-export const Slideshow = ({ prevMeme, meme, nextMeme }) => {
+export const Slideshow = ({ prevMeme, meme, nextMeme, updateMeme }) => {
   if (!meme) return <div className="flex flex-row justify-center">loading..</div>
   return (
     <div className="flex flex-row justify-center">
       {/*alternative would be to use css disbable*/}
 
       {prevMeme && prevMeme.id && <SlideshowButton name="prev" changeSlide={prevMeme.id} />}
-      <SingleMeme meme={meme} />
+      <SingleMeme meme={meme} updateMeme={updateMeme} />
       {nextMeme && nextMeme.id && <SlideshowButton name="next" changeSlide={nextMeme.id} />}
     </div>
   )
 }
 
 Slideshow.propTypes = {
+  updateMeme: PropTypes.func,
   prevMeme: PropTypes.shape({
     id: PropTypes.string.isRequired,
     title: PropTypes.string.isRequired,

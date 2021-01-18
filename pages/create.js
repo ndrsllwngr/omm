@@ -1,10 +1,10 @@
 import React from 'react'
 import { HtmlHead } from '@/components/HtmlHead'
 import { Navbar } from '@/components/Navbar'
-import { MemeEditor } from '@/components/meme/MemeEditor'
-import { TemplateCollection } from '@/components/template/TemplateCollection'
+import { MemeEditor } from '@/components/generator/MemeEditor'
+import { TemplateCollection } from '@/components/templates/TemplateCollection'
 import { ProtectedRoute } from '@/components/context/authContext'
-import { ImgFlipCollection } from '@/components/template/ImgFlipCollection'
+import { ImgFlipCollection } from '@/components/templates/ImgFlipCollection'
 
 const CreatePage = () => {
   return (
