@@ -117,7 +117,6 @@ export default function SingleView() {
             .get()
             .then((prev) => {
               if (prev.docs.length > 0) {
-                console.log('BEFORELOOP')
                 for (let i = 0; i < prev.size; i++) {
                   if (
                     prev.docs[i].data().views == currentMeme.views &&
@@ -172,7 +171,7 @@ export default function SingleView() {
             .limit(1)
             .get()
             .then((prev) => {
-              console.log({ PREV: prev.docs[0].id })
+              //console.log({ PREV: prev.docs[0].id })
               prev.size > 0
                 ? setPrev({ id: prev.docs[0].id, ...prev.docs[0].data() })
                 : setPrev(null)
@@ -204,7 +203,7 @@ export default function SingleView() {
       .then((data) => {
         if (data.data()) {
           console.debug('FIRESTORE_COLLECTION.MEMES', 'READ')
-          // viewCount.addView(data.id)
+          viewCount.addView(data.id)
           updateCurrent((_draft) => {
             return { id: data.id, ...data.data() }
           })
