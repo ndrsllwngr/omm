@@ -1,4 +1,3 @@
-/* eslint-disable react-hooks/exhaustive-deps */
 import firebase from '@/lib/firebase'
 import cookieCutter from 'cookie-cutter'
 import { FIRESTORE_COLLECTION } from '@/lib/constants'

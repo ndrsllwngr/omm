@@ -112,6 +112,7 @@ export default function AuthContextComp({ children }) {
         .onSnapshot((doc) => setUser(doc.data()))
       return () => unsubscribe()
     }
+    // TODO Evaluate the dependencies of this useEffect.
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
