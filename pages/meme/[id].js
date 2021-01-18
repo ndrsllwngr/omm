@@ -108,14 +108,17 @@ export default function SingleView() {
     }
     getData()
       .then((data) => {
-        if (currentMeme && currentMeme.id !== data.id) {
-          setNext(null)
-          setPrev(null)
+        console.debug('FIRESTORE_COLLECTION.MEMES', 'READ')
+        if (data.data()) {
+          viewCount.addView(data.id)
+          updateCurrent((draft) => {
+            return { id: data.id, ...data.data() }
+          })
+          if (currentMeme && currentMeme.id !== data.id) {
+            setNext(null)
+            setPrev(null)
+          }
         }
-        viewCount.addView(data.id)
-        updateCurrent((_draft) => {
-          return { id: data.id, ...data.data() }
-        })
       })
       .catch((e) => console.error(e))
     // TODO Evaluate the dependencies of this useEffect.
