@@ -46,7 +46,7 @@ export default function SingleView() {
       default:
         console.log('Unsupported Case')
     }
-    if (currentMeme && !prevMeme) {
+    if (currentMeme && !prevMeme && !nextMeme) {
       let collectionRef = firebase.firestore().collection(FIRESTORE_COLLECTION.MEMES)
 
       if (filter === 'Views') {
@@ -85,22 +85,6 @@ export default function SingleView() {
             //prev.size > 0 ? setPrev({ id: prev.docs[0].id, ...prev.docs[0].data() }) : setPrev(null)
           })
           .catch((e) => console.error(e))
-      } else {
-        collectionRef
-          .where('createdAt', operator.prev, currentMeme.createdAt)
-          .orderBy('createdAt', sort.prev)
-          .limit(1)
-          .get()
-          .then((prev) => {
-            prev.size > 0 ? setPrev({ id: prev.docs[0].id, ...prev.docs[0].data() }) : setPrev(null)
-          })
-          .catch((e) => console.error(e))
-      }
-    }
-    if (currentMeme && !nextMeme) {
-      let collectionRef = firebase.firestore().collection(FIRESTORE_COLLECTION.MEMES)
-
-      if (filter === 'Views') {
         collectionRef
           .where('views', '>', currentMeme.views)
           .orderBy('views', 'asc')
@@ -111,6 +95,17 @@ export default function SingleView() {
           })
           .catch((e) => console.error(e))
       } else {
+        console.log('LATEST')
+        collectionRef
+          .where('createdAt', operator.prev, currentMeme.createdAt)
+          .orderBy('createdAt', sort.prev)
+          .limit(1)
+          .get()
+          .then((prev) => {
+            console.log({ PREV: prev.docs[0].id })
+            prev.size > 0 ? setPrev({ id: prev.docs[0].id, ...prev.docs[0].data() }) : setPrev(null)
+          })
+          .catch((e) => console.error(e))
         collectionRef
           .where('createdAt', operator.next, currentMeme.createdAt)
           .orderBy('createdAt', sort.next)
@@ -124,7 +119,7 @@ export default function SingleView() {
     }
     // TODO Evaluate the dependencies of this useEffect.
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [currentMeme, filter, nextMeme, prevMeme])
+  }, [currentMeme, filter, prevMeme, nextMeme])
 
   useEffect(() => {
     async function getData() {
@@ -133,8 +128,8 @@ export default function SingleView() {
     }
     getData()
       .then((data) => {
-        console.debug('FIRESTORE_COLLECTION.MEMES', 'READ')
         if (data.data()) {
+          console.debug('FIRESTORE_COLLECTION.MEMES', 'READ')
           // viewCount.addView(data.id)
           updateCurrent((_draft) => {
             return { id: data.id, ...data.data() }
@@ -162,7 +157,6 @@ export default function SingleView() {
       }
     }, 3000)
   }
-
   const endAutoplay = () => {
     clearTimeout(timeOut.current)
     //console.log({ ENDTIMER: timeOut.current })
