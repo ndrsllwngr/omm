@@ -97,6 +97,8 @@ export default function SingleView() {
           .catch((e) => console.error(e))
       }
     }
+    // TODO Evaluate the dependencies of this useEffect.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentMeme, filter, nextMeme, prevMeme])
 
   useEffect(() => {
@@ -116,6 +118,8 @@ export default function SingleView() {
         })
       })
       .catch((e) => console.error(e))
+    // TODO Evaluate the dependencies of this useEffect.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [router.query.id, filter])
 
   const startAutoplay = () => {
@@ -152,6 +156,8 @@ export default function SingleView() {
   //Toogle Autoplay
   useEffect(() => {
     state.bool ? startAutoplay() : endAutoplay()
+    // TODO Evaluate if moving these two functions into the useEffect might be feasible.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentMeme, state.bool])
 
   if (!currentMeme)
