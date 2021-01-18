@@ -25,8 +25,7 @@ export default function SingleView() {
   const [nextMeme, setNext] = useState(null)
   const viewCount = useViewCount(updateCurrent)
 
-  // TODO pass order by
-  // TODO look up "unterabfragen" when sorting can not differential wihci element is newer with same views
+  // TODO Sort by votes
 
   useEffect(() => {
     let operator = {}
@@ -58,7 +57,6 @@ export default function SingleView() {
           collectionRef
             .where('views', operator.prev, currentMeme.views)
             .orderBy('views', sort.prev)
-            .limit()
             .get()
             .then((prev) => {
               if (prev.docs.length > 0) {
@@ -84,7 +82,6 @@ export default function SingleView() {
           collectionRef
             .where('views', operator.next, currentMeme.views)
             .orderBy('views', sort.next)
-            .limit()
             .get()
             .then((next) => {
               if (next.docs.length > 0) {
@@ -113,7 +110,6 @@ export default function SingleView() {
           collectionRef
             .where('views', operator.prev, currentMeme.views)
             .orderBy('views', sort.prev)
-            .limit()
             .get()
             .then((prev) => {
               if (prev.docs.length > 0) {
@@ -139,7 +135,6 @@ export default function SingleView() {
           collectionRef
             .where('views', operator.next, currentMeme.views)
             .orderBy('views', sort.next)
-            .limit()
             .get()
             .then((next) => {
               if (next.docs.length > 0) {
