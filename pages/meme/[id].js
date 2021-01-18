@@ -10,6 +10,7 @@ import { useFilterContext } from '@/components/context/viewsContext'
 import { useRandomMeme } from '@/components/hooks/useRandomMeme'
 import { OverviewSort } from '@/components/OverviewSort'
 import { HtmlHead } from '@/components/HtmlHead'
+import { useViewCount } from '@/components/hooks/useViewCount'
 
 export default function SingleView() {
   const router = useRouter()
@@ -17,6 +18,8 @@ export default function SingleView() {
   const [state, dispatch] = useAutoPlay()
   const timeOut = useRef(null)
   const { filter } = useFilterContext()
+
+  const viewCount = useViewCount()
 
   const [currentMeme, setCurrent] = useState(null)
   const [prevMeme, setPrev] = useState(null)
@@ -106,6 +109,7 @@ export default function SingleView() {
         if (currentMeme && currentMeme.id !== data.id) {
           setNext(null)
           setPrev(null)
+          viewCount.addView(doc.id)
         }
         setCurrent({ id: data.id, ...data.data() })
       })
