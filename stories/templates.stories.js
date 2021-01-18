@@ -1,11 +1,11 @@
 import React from 'react'
-import { TemplateCollection } from '@/components/templates/TemplateCollection'
-import { ScreenshotUrl } from '@/components/templates/ScreenshotUrl'
-import { Canvas } from '@/components/templates/Canvas'
-import { UploadImage } from '@/components/templates/UploadImage'
-import { PasteUrlImage } from '@/components/templates/PasteUrlImage'
-import { WebcamPhoto } from '@/components/templates/WebcamPhoto'
-import { ImgFlipCollection } from '@/components/templates/ImgFlipCollection'
+import { TemplateCollection } from '@/components/template-generator/TemplateCollection'
+import { ScreenshotUrl } from '@/components/template-generator/ScreenshotUrl'
+import { Canvas } from '@/components/template-generator/Canvas'
+import { UploadImage } from '@/components/template-generator/UploadImage'
+import { PasteUrlImage } from '@/components/template-generator/PasteUrlImage'
+import { WebcamPhoto } from '@/components/template-generator/WebcamPhoto'
+import { ImgFlipCollection } from '@/components/template-generator/ImgFlipCollection'
 
 export default { title: 'Templates' }
 
