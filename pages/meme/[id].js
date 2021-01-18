@@ -51,13 +51,38 @@ export default function SingleView() {
 
       if (filter === 'Views') {
         collectionRef
-          .where('views', '<', currentMeme.views)
+          .where('views', '<=', currentMeme.views)
           .orderBy('views', 'desc')
-          .limit(2)
+          .limit()
           .get()
           .then((prev) => {
+            if (prev.docs.length > 0) {
+              console.log('BEFORELOOP')
+              for (let i = 0; i < prev.size; i++) {
+                if (
+                  prev.docs[i].data().views == currentMeme.views &&
+                  prev.docs[i].id < currentMeme.id
+                ) {
+                  console.log({ Firstcase: prev.docs[i].id, ...prev.docs[i].data() })
+                  setPrev({ id: prev.docs[i].id, ...prev.docs[i].data() })
+                  break
+                } else {
+                  if (prev.docs[i].data().views != currentMeme.views) {
+                    console.log({ Secondcase: prev.docs[i].id, ...prev.docs[i].data() })
+                    setPrev({ id: prev.docs[i].id, ...prev.docs[i].data() })
+                    break
+                  }
+                }
+              }
+            }
+            // prev.forEach((doc) => {
+            //   if (doc.views == currentMeme.views && doc.id < currentMeme.id) {
+            //     setPrev({ id: doc.id, ...doc.data() })
+            //     return
+            //   }
+            // })
             //TODO check if first entry equals currentMeme id then take second one else fisrt one
-            prev.size > 0 ? setPrev({ id: prev.docs[0].id, ...prev.docs[0].data() }) : setPrev(null)
+            //prev.size > 0 ? setPrev({ id: prev.docs[0].id, ...prev.docs[0].data() }) : setPrev(null)
           })
           .catch((e) => console.error(e))
       } else {
@@ -110,7 +135,7 @@ export default function SingleView() {
       .then((data) => {
         console.debug('FIRESTORE_COLLECTION.MEMES', 'READ')
         if (data.data()) {
-          viewCount.addView(data.id)
+          // viewCount.addView(data.id)
           updateCurrent((_draft) => {
             return { id: data.id, ...data.data() }
           })
