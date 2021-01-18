@@ -2,9 +2,9 @@ import React from 'react'
 import { HtmlHead } from '@/components/HtmlHead'
 import { Navbar } from '@/components/Navbar'
 import { MemeEditor } from '@/components/meme/MemeEditor'
-import { TemplateCollection } from '@/components/TemplateCollection'
+import { TemplateCollection } from '@/components/template/TemplateCollection'
 import { ProtectedRoute } from '@/components/context/authContext'
-import { ImgFlipCollection } from '@/components/ImgFlipCollection'
+import { ImgFlipCollection } from '@/components/template/ImgFlipCollection'
 
 const CreatePage = () => {
   return (

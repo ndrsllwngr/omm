@@ -1,11 +1,11 @@
 import React from 'react'
-import { TemplateCollection } from '@/components/TemplateCollection'
+import { TemplateCollection } from '@/components/template/TemplateCollection'
 import { ScreenshotUrl } from '@/components/template/ScreenshotUrl'
 import { Canvas } from '@/components/template/Canvas'
 import { UploadImage } from '@/components/template/UploadImage'
 import { PasteUrlImage } from '@/components/template/PasteUrlImage'
 import { WebcamPhoto } from '@/components/template/WebcamPhoto'
-import { ImgFlipCollection } from '@/components/ImgFlipCollection'
+import { ImgFlipCollection } from '@/components/template/ImgFlipCollection'
 
 export default { title: 'Templates' }
 
