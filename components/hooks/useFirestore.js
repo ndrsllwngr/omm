@@ -12,6 +12,7 @@ const useFirestore = (collection) => {
 
     getData()
       .then((data) => {
+        console.debug(`FIRESTORE_COLLECTION.${collection}`, 'READ', 'useFirestore')
         let documents = []
         data.forEach((doc) => {
           documents.push({ id: doc.id, ...doc.data() })

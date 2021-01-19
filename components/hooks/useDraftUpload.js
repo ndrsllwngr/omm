@@ -22,13 +22,22 @@ export const useDraftUpload = () => {
           createdAt: firebase.firestore.FieldValue.serverTimestamp(),
         })
         .then((docRef) => {
+          console.debug(`FIRESTORE_COLLECTION.DRAFTS`, 'WRITE', 'useDraftUpload', 'useEffect')
           setLoading(false)
           setSuccess(docRef.id)
           console.log('Document written with ID: ', docRef.id)
+          // TODO Could we handle the forkedBy update action better?
           memesRef
             .doc(data.forkedFrom)
             .update({ forkedBy: firebase.firestore.FieldValue.arrayUnion(docRef.id) })
             .then(() => {
+              console.debug(
+                `FIRESTORE_COLLECTION.DRAFTS`,
+                'WRITE',
+                'useDraftUpload',
+                'useEffect',
+                'forkedBy'
+              )
               console.log('SUCCESS')
             })
             .catch((e) => console.error(e))
