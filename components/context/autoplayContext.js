@@ -57,7 +57,7 @@ export const useAutoPlayDispatch = () => {
   }
   return context
 }
-export function useAutoPlay() {
+export function useAutoPlayContext() {
   return [useAutoPlayState(), useAutoPlayDispatch()]
 }
 

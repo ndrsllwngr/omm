@@ -1,17 +1,28 @@
-import { useEffect, useState } from 'react'
+import { useEffect } from 'react'
 import firebase from '@/lib/firebase'
 import { useFilterContext } from '@/components/context/viewsContext'
-import { useImmer } from 'use-immer'
+
 import { FIRESTORE_COLLECTION } from '@/lib/constants'
 import { useViewCount } from '@/components/hooks/useViewCount'
+import { useSingleMemeContext } from '@/components/context/singlememeContext'
+import { useRouter } from 'next/router'
 
-export const useSingleMeme = (routerQueryId) => {
-  const [currentMeme, updateCurrent] = useImmer(null)
-  const [prevMeme, setPrev] = useState(null)
-  const [nextMeme, setNext] = useState(null)
+export const useSingleMeme = () => {
+  const router = useRouter()
+  const {
+    currentMeme,
+    updateCurrent,
+    prevMeme,
+    setPrev,
+    nextMeme,
+    setNext,
+  } = useSingleMemeContext()
   const { filter } = useFilterContext()
   const viewCount = useViewCount(updateCurrent)
 
+  useEffect(() => {
+    console.log({ CALCNEXTMEME: nextMeme })
+  }, [nextMeme])
   useEffect(() => {
     let operator = {}
     let sort = {}
@@ -177,7 +188,7 @@ export const useSingleMeme = (routerQueryId) => {
   useEffect(() => {
     async function getData() {
       const db = firebase.firestore()
-      return db.collection(FIRESTORE_COLLECTION.MEMES).doc(routerQueryId).get()
+      return db.collection(FIRESTORE_COLLECTION.MEMES).doc(router.query.id).get()
     }
     getData()
       .then((data) => {
@@ -196,7 +207,5 @@ export const useSingleMeme = (routerQueryId) => {
       .catch((e) => console.error(e))
     // TODO Evaluate the dependencies of this useEffect.
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [routerQueryId, filter])
-
-  return { currentMeme, nextMeme, prevMeme, updateCurrent, setNext, setPrev }
+  }, [router.query.id, filter])
 }
