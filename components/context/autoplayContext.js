@@ -1,12 +1,12 @@
-import React, { createContext, useContext, useEffect } from 'react'
+import React, { createContext, useContext, useEffect, useRef } from 'react'
 import Proptypes from 'prop-types'
 import { useRouter } from 'next/router'
+import { useSingleMemeContext } from '@/components/context/singlememeContext'
 // https://kentcdodds.com/blog/how-to-use-react-context-effectively
-//Create Context
+
 export const AutoplayStateContext = createContext()
 export const AutoplayDispatchContext = createContext()
 
-//Reducer to control Autoplay Button State
 function boolReducer(state, action) {
   switch (action.type) {
     case 'toggleBool': {
@@ -20,18 +20,34 @@ function boolReducer(state, action) {
     }
   }
 }
+
 //Exports the Provider himself
 export const AutoplayProvider = ({ children }) => {
   const [state, dispatch] = React.useReducer(boolReducer, { bool: false })
   const router = useRouter()
+  const timeOut = useRef(null)
+  const { nextMeme } = useSingleMemeContext()
+
   useEffect(() => {
-    if (router) {
-      //console.log({ PATHNAME: router.pathname })
-      if (router.pathname !== '/meme/[id]') {
+    const startAutoplay = () => {
+      timeOut.current = setTimeout(function () {
+        if (nextMeme.id) {
+          router.push(`/meme/${nextMeme.id}`)
+        }
+      }, 3000)
+    }
+    if (nextMeme) {
+      state.bool ? startAutoplay() : clearTimeout(timeOut.current)
+    }
+  }, [nextMeme, state.bool, router])
+
+  useEffect(() => {
+    if (router.pathname !== '/meme/[id]') {
+      if (state.bool) {
         dispatch({ type: 'falseBool' })
       }
     }
-  }, [router])
+  }, [router, state.bool])
 
   return (
     <AutoplayStateContext.Provider value={state}>
@@ -57,7 +73,7 @@ export const useAutoPlayDispatch = () => {
   }
   return context
 }
-export function useAutoPlay() {
+export function useAutoPlayContext() {
   return [useAutoPlayState(), useAutoPlayDispatch()]
 }
 
