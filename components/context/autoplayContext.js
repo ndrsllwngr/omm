@@ -26,12 +26,17 @@ export const AutoplayProvider = ({ children }) => {
   const [state, dispatch] = React.useReducer(boolReducer, { bool: false })
   const router = useRouter()
   const timeOut = useRef(null)
-  const { nextMeme } = useSingleMemeContext()
+  const { nextMeme, currentMeme, updateCurrent, setNext, setPrev } = useSingleMemeContext()
 
   useEffect(() => {
     const startAutoplay = () => {
       timeOut.current = setTimeout(function () {
         if (nextMeme.id) {
+          setNext(null)
+          setPrev(currentMeme)
+          updateCurrent((_draft) => {
+            return nextMeme
+          })
           router.push(`/meme/${nextMeme.id}`)
         }
       }, 3000)

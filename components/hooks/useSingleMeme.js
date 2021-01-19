@@ -1,4 +1,4 @@
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import firebase from '@/lib/firebase'
 import { FIRESTORE_COLLECTION } from '@/lib/constants'
 import { useFilterContext } from '@/components/context/viewsContext'
@@ -18,6 +18,8 @@ export const useSingleMeme = () => {
   } = useSingleMemeContext()
   const { filter } = useFilterContext()
   const viewCount = useViewCount(updateCurrent)
+  const [loadingPrev, setLoadingPrev] = useState(false)
+  const [loadingNext, setLoadingNext] = useState(false)
 
   useEffect(() => {
     let operator = {}
@@ -42,18 +44,19 @@ export const useSingleMeme = () => {
       default:
         console.log('Unsupported Case')
     }
-    console.log({ src: 'useEffect - start', prevMeme, currentMeme, nextMeme })
     if (currentMeme) {
       let collectionRef = firebase.firestore().collection(FIRESTORE_COLLECTION.MEMES)
       switch (filter) {
         case 'MostViewed':
           if (prevMeme && nextMeme) return
-          if (!prevMeme) {
+          if (!prevMeme && !loadingPrev) {
+            setLoadingPrev(true)
             collectionRef
               .where('views', operator.prev, currentMeme.views)
               .orderBy('views', sort.prev)
               .get()
               .then((prev) => {
+                setLoadingPrev(false)
                 console.debug(
                   'FIRESTORE_COLLECTION.MEMES',
                   'READ',
@@ -82,12 +85,14 @@ export const useSingleMeme = () => {
               })
               .catch((e) => console.error(e))
           }
-          if (!nextMeme) {
+          if (!nextMeme && !loadingNext) {
+            setLoadingNext(true)
             collectionRef
               .where('views', operator.next, currentMeme.views)
               .orderBy('views', sort.next)
               .get()
               .then((next) => {
+                setLoadingNext(false)
                 console.debug(
                   'FIRESTORE_COLLECTION.MEMES',
                   'READ',
@@ -120,12 +125,14 @@ export const useSingleMeme = () => {
           break
         case 'NeverViewed':
           if (prevMeme && nextMeme) return
-          if (!prevMeme) {
+          if (!prevMeme && !loadingPrev) {
+            setLoadingPrev(true)
             collectionRef
               .where('views', operator.prev, currentMeme.views)
               .orderBy('views', sort.prev)
               .get()
               .then((prev) => {
+                setLoadingPrev(false)
                 console.debug(
                   'FIRESTORE_COLLECTION.MEMES',
                   'READ',
@@ -154,12 +161,14 @@ export const useSingleMeme = () => {
               })
               .catch((e) => console.error(e))
           }
-          if (!nextMeme) {
+          if (!nextMeme && !loadingNext) {
+            setLoadingNext(true)
             collectionRef
               .where('views', operator.next, currentMeme.views)
               .orderBy('views', sort.next)
               .get()
               .then((next) => {
+                setLoadingNext(false)
                 console.debug(
                   'FIRESTORE_COLLECTION.MEMES',
                   'READ',
@@ -192,13 +201,15 @@ export const useSingleMeme = () => {
           break
         default:
           if (prevMeme && nextMeme) return
-          if (!prevMeme) {
+          if (!prevMeme && !loadingPrev) {
+            setLoadingPrev(true)
             collectionRef
               .where('createdAt', operator.prev, currentMeme.createdAt)
               .orderBy('createdAt', sort.prev)
               .limit(1)
               .get()
               .then((prev) => {
+                setLoadingPrev(false)
                 console.debug(
                   'FIRESTORE_COLLECTION.MEMES',
                   'READ',
@@ -213,13 +224,15 @@ export const useSingleMeme = () => {
               })
               .catch((e) => console.error(e))
           }
-          if (!nextMeme) {
+          if (!nextMeme && !loadingNext) {
+            setLoadingNext(true)
             collectionRef
               .where('createdAt', operator.next, currentMeme.createdAt)
               .orderBy('createdAt', sort.next)
               .limit(1)
               .get()
               .then((next) => {
+                setLoadingNext(false)
                 console.debug(
                   'FIRESTORE_COLLECTION.MEMES',
                   'READ',
@@ -235,7 +248,6 @@ export const useSingleMeme = () => {
           }
       }
     }
-    console.log({ src: 'useEffect - end', prevMeme, currentMeme, nextMeme })
     // TODO Evaluate the dependencies of this useEffect.
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentMeme, filter, router])

@@ -13,7 +13,7 @@ import { useAutoPlayContext } from '@/components/context/autoplayContext'
 export default function SingleView() {
   const router = useRouter()
   const { id } = useRandomMeme(router)
-  const { currentMeme, nextMeme, setNext, setPrev } = useSingleMemeContext()
+  const { currentMeme, nextMeme, setNext, setPrev, updateCurrent } = useSingleMemeContext()
   useSingleMeme()
   const [state, dispatch] = useAutoPlayContext()
 
@@ -42,7 +42,16 @@ export default function SingleView() {
         <Slideshow />
         <div className="flex flex-col items-center font-semibold text-xl my-2 text-white">
           <Link href={`/meme/${id}`}>
-            <a onClick={() => dispatch({ type: 'falseBool' })}>
+            <a
+              onClick={() => {
+                dispatch({ type: 'falseBool' })
+                setPrev(null)
+                setNext(null)
+                updateCurrent((_draft) => {
+                  return null
+                })
+              }}
+            >
               <span className="my-2 p-2 rounded bg-green-600">Random Meme</span>
             </a>
           </Link>
