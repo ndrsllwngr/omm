@@ -6,6 +6,7 @@ const memeCollection = db.collection(FIRESTORE_COLLECTION.MEMES)
 
 export default async function handler(req, res) {
   const memes = await memeCollection.get()
+  console.debug(`FIRESTORE_COLLECTION.MEMES`, 'READ')
   // Get data from your database
   res.status(200).json(
     memes.docs.map((meme) => {

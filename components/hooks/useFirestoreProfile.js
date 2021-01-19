@@ -20,6 +20,7 @@ export const useFirestoreProfile = (collection) => {
 
     getData()
       .then((data) => {
+        console.debug(`FIRESTORE_COLLECTION.${collection}`, 'READ')
         let documents = []
         data.forEach((doc) => {
           documents.push({ id: doc.id, ...doc.data() })

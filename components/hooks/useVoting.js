@@ -37,6 +37,7 @@ export const useVoting = ({ updateMemes = null, updateMeme = null }) => {
         })
       })
         .then(() => {
+          console.debug(`FIRESTORE_COLLECTION.MEMES`, 'WRITE', 'useVoting', 'upVote')
           console.log('(UP) Transaction successfully committed!')
           if (updateMemes) {
             updateMemes((draft) => {
@@ -77,6 +78,7 @@ export const useVoting = ({ updateMemes = null, updateMeme = null }) => {
         })
       })
         .then(() => {
+          console.debug(`FIRESTORE_COLLECTION.MEMES`, 'WRITE', 'useVoting', 'downVote')
           console.log('(DOWN) Transaction successfully committed!')
           if (updateMemes) {
             updateMemes((draft) => {
