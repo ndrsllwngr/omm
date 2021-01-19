@@ -3,26 +3,23 @@ import PropTypes from 'prop-types'
 import { SingleMeme } from '@/components/SingleMeme'
 import { useRouter } from 'next/router'
 import { useAutoPlayDispatch } from '@/components/context/autoplayContext'
-import { memeType } from '@/components/types/types'
+import { useSingleMemeContext } from '@/components/context/singlememeContext'
 
-export const Slideshow = ({ prevMeme, meme, nextMeme, updateMeme }) => {
+export const Slideshow = () => {
+  const {
+    currentMeme: meme,
+    nextMeme,
+    prevMeme,
+    updateCurrent: updateMeme,
+  } = useSingleMemeContext()
   if (!meme) return <div className="flex flex-row justify-center">loading..</div>
   return (
     <div className="flex flex-row justify-center">
-      {/*alternative would be to use css disbable*/}
-
       {prevMeme && prevMeme.id && <SlideshowButton name="prev" changeSlide={prevMeme.id} />}
       <SingleMeme meme={meme} updateMeme={updateMeme} />
       {nextMeme && nextMeme.id && <SlideshowButton name="next" changeSlide={nextMeme.id} />}
     </div>
   )
-}
-
-Slideshow.propTypes = {
-  updateMeme: PropTypes.func,
-  prevMeme: memeType,
-  meme: memeType,
-  nextMeme: memeType,
 }
 
 export const SlideshowButton = ({ name, changeSlide }) => {
