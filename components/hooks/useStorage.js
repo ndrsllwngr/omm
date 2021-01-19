@@ -24,14 +24,15 @@ const useStorage = () => {
         (snap) => {
           let percentage = (snap.bytesTransferred / snap.totalBytes) * 100
           setProgress(percentage)
-          console.log('precentage:', percentage)
-          console.log('in pufile', file)
+          console.log('percentage:', percentage)
+          console.log('in file', file)
         },
         (err) => {
           setError(err)
           console.log(err)
         },
         async () => {
+          console.debug(`STORAGE_COLLECTION.TEMPLATES`, 'WRITE', 'useStorage', 'useEffect', file)
           collectionRef
             .add({
               //name: file.name,
@@ -46,6 +47,13 @@ const useStorage = () => {
             })
             .then(() => {
               setFile(null)
+              console.debug(
+                `FIRESTORE_COLLECTION.TEMPLATES`,
+                'WRITE',
+                'useStorage',
+                'useEffect',
+                file
+              )
               console.log('send external url to storage', id)
             })
             .catch((e) => console.error(e))
@@ -69,6 +77,13 @@ const useStorage = () => {
         })
         .then(() => {
           setExternalUrl('')
+          console.debug(
+            `FIRESTORE_COLLECTION.TEMPLATES`,
+            'WRITE',
+            'useStorage',
+            'useEffect',
+            externalUrl
+          )
           console.log('send external url to storage', id)
         })
         .catch((e) => console.error(e))

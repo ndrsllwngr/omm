@@ -42,6 +42,7 @@ export const useSingleMeme = () => {
       default:
         console.log('Unsupported Case')
     }
+    console.log({ src: 'useEffect - start', prevMeme, currentMeme, nextMeme })
     if (currentMeme) {
       let collectionRef = firebase.firestore().collection(FIRESTORE_COLLECTION.MEMES)
       switch (filter) {
@@ -234,6 +235,7 @@ export const useSingleMeme = () => {
           }
       }
     }
+    console.log({ src: 'useEffect - end', prevMeme, currentMeme, nextMeme })
     // TODO Evaluate the dependencies of this useEffect.
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentMeme, filter, router])

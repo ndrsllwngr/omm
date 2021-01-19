@@ -3,7 +3,7 @@ import { FIRESTORE_COLLECTION } from '@/lib/constants'
 import { useReloadContext } from '@/components/context/viewsContext'
 import firebase from '@/lib/firebase'
 
-export const useMemeReload = (enabled) => {
+export const useMemeReload = () => {
   const [showNewMemes, setShowNewMemes] = useState(false)
   const { reload, setReload } = useReloadContext()
   const [counter, setCounter] = useState(0)
@@ -17,6 +17,7 @@ export const useMemeReload = (enabled) => {
       .collection(FIRESTORE_COLLECTION.MEME_HISTORY)
       .where('createdAt', '>', date)
       .onSnapshot(function (snapshot) {
+        console.debug(`FIRESTORE_COLLECTION.MEME_HISTORY`, 'READ', 'useMemeReload', 'useEffect')
         if (snapshot.size > 0) {
           setCounter(snapshot.size)
           setShowNewMemes(true)
