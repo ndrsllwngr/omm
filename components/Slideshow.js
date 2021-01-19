@@ -3,29 +3,54 @@ import PropTypes from 'prop-types'
 import { SingleMeme } from '@/components/SingleMeme'
 import { useRouter } from 'next/router'
 import { useAutoPlayDispatch } from '@/components/context/autoplayContext'
-import { memeType } from '@/components/types/types'
+import { useSingleMemeContext } from '@/components/context/singlememeContext'
 
-export const Slideshow = ({ prevMeme, meme, nextMeme, updateMeme }) => {
-  if (!meme) return <div className="flex flex-row justify-center">loading..</div>
+export const Slideshow = () => {
+  const {
+    currentMeme,
+    updateCurrent,
+    prevMeme,
+    setPrev,
+    nextMeme,
+    setNext,
+  } = useSingleMemeContext()
+  if (!currentMeme) return <div className="flex flex-row justify-center">loading..</div>
   return (
     <div className="flex flex-row justify-center">
       {/*alternative would be to use css disbable*/}
 
-      {prevMeme && prevMeme.id && <SlideshowButton name="prev" changeSlide={prevMeme.id} />}
-      <SingleMeme meme={meme} updateMeme={updateMeme} />
-      {nextMeme && nextMeme.id && <SlideshowButton name="next" changeSlide={nextMeme.id} />}
+      {prevMeme && prevMeme.id && (
+        <SlideshowButton
+          name="prev"
+          changeSlide={prevMeme.id}
+          cb={() => {
+            setPrev(null)
+            setNext(currentMeme)
+            updateCurrent((_draft) => {
+              return prevMeme
+            })
+          }}
+        />
+      )}
+      <SingleMeme meme={currentMeme} updateMeme={updateCurrent} />
+      {nextMeme && nextMeme.id && (
+        <SlideshowButton
+          name="next"
+          changeSlide={nextMeme.id}
+          cb={() => {
+            setNext(null)
+            setPrev(currentMeme)
+            updateCurrent((_draft) => {
+              return nextMeme
+            })
+          }}
+        />
+      )}
     </div>
   )
 }
 
-Slideshow.propTypes = {
-  updateMeme: PropTypes.func,
-  prevMeme: memeType,
-  meme: memeType,
-  nextMeme: memeType,
-}
-
-export const SlideshowButton = ({ name, changeSlide }) => {
+export const SlideshowButton = ({ name, changeSlide, cb }) => {
   const router = useRouter()
   const dispatch = useAutoPlayDispatch()
   return (
@@ -35,8 +60,9 @@ export const SlideshowButton = ({ name, changeSlide }) => {
       }`}
       onClick={(e) => {
         e.preventDefault()
-        router.push(changeSlide)
         dispatch({ type: 'falseBool' })
+        cb()
+        router.push(changeSlide)
       }}
     >
       {name}
@@ -44,6 +70,7 @@ export const SlideshowButton = ({ name, changeSlide }) => {
   )
 }
 SlideshowButton.propTypes = {
+  cb: PropTypes.func,
   name: PropTypes.string,
   changeSlide: PropTypes.string,
 }

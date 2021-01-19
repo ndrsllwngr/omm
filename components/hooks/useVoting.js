@@ -16,6 +16,7 @@ export const useVoting = ({ updateMemes = null, updateMeme = null }) => {
   }
 
   const getTotalPoints = (meme) => {
+    //console.log({ src: 'getTotalPoints', meme })
     return meme.upVotes.length - meme.downVotes.length
   }
 

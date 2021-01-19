@@ -9,12 +9,13 @@ import Link from 'next/link'
 import moment from 'moment'
 import { IoCaretDownOutline, IoCaretUpOutline } from 'react-icons/io5'
 import { memeType } from '@/components/types/types'
+import { useSingleMemeContext } from '@/components/context/singlememeContext'
 
 export const SingleMeme = ({ meme, enableLink, updateMemes, updateMeme }) => {
   const { setJson } = useFabricJson()
+  const { updateCurrent } = useSingleMemeContext()
   const router = useRouter()
   const { upVote, downVote, getVoteState, getTotalPoints } = useVoting({ updateMemes, updateMeme })
-
   return (
     <div className="flex-col max-w-md">
       <p className={'uppercase text-xs text-gray-600 dark:text-gray-300 font-medium'}>
@@ -24,7 +25,13 @@ export const SingleMeme = ({ meme, enableLink, updateMemes, updateMeme }) => {
       </p>
       {enableLink ? (
         <Link href={`/meme/${meme.id}`}>
-          <a>
+          <a
+            onClick={() =>
+              updateCurrent((_draft) => {
+                return meme
+              })
+            }
+          >
             <h1 className={'text-lg font-bold text-black dark:text-white truncate'}>
               {meme.title ? meme.title : 'Untitled'}
             </h1>
@@ -40,7 +47,13 @@ export const SingleMeme = ({ meme, enableLink, updateMemes, updateMeme }) => {
 
       {enableLink ? (
         <Link href={`/meme/${meme.id}`}>
-          <a>
+          <a
+            onClick={() =>
+              updateCurrent((_draft) => {
+                return meme
+              })
+            }
+          >
             <MemeRenderer meme={meme} />
           </a>
         </Link>
