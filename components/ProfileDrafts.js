@@ -5,7 +5,7 @@ import { MemeRenderer } from '@/components/MemeRenderer'
 import { useFirestoreProfile } from '@/components/hooks/useFirestoreProfile'
 import { useFabricJson } from '@/components/context/fabricContext'
 import { useRouter } from 'next/router'
-import moment from 'moment'
+import formatDistance from 'date-fns/formatDistance'
 
 export const ProfileDrafts = ({ className }) => {
   const { docs: drafts, deleteDoc } = useFirestoreProfile(FIRESTORE_COLLECTION.DRAFTS)
@@ -30,7 +30,11 @@ export const ProfileDrafts = ({ className }) => {
             }}
           >
             <p className={'uppercase text-xs text-gray-600 dark:text-gray-300 font-medium'}>
-              {moment(draft.createdAt.toMillis()).fromNow()}
+              {typeof draft.createdAt !== 'object'
+                ? formatDistance(new Date(draft.createdAt), new Date(), { addSuffix: true })
+                : formatDistance(new Date(draft.createdAt.toMillis()), new Date(), {
+                    addSuffix: true,
+                  })}
             </p>
             <h1 className={'text-lg font-bold text-black dark:text-white truncate'}>
               {draft.title ? draft.title : 'Untitled'}
