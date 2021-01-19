@@ -33,6 +33,7 @@ export const AutoplayProvider = ({ children }) => {
   const { id } = useRandomMeme(router)
 
   useEffect(() => {
+    console.log('TRIGGER')
     const startAutoplay = () => {
       timeOut.current = setTimeout(function () {
         if (filter === 'Ordered') {
@@ -44,7 +45,8 @@ export const AutoplayProvider = ({ children }) => {
         }
       }, 3000)
     }
-    if (filter == 'Ordered') {
+    if (filter == 'Random') {
+      console.log('FIRED')
       state.bool ? startAutoplay() : clearTimeout(timeOut.current)
     } else {
       if (nextMeme) {
@@ -60,6 +62,7 @@ export const AutoplayProvider = ({ children }) => {
     if (router.pathname !== '/meme/[id]') {
       if (state.bool) {
         dispatch({ type: 'falseBool' })
+        clearTimeout(timeOut.current)
       }
     }
   }, [router, state.bool])
