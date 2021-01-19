@@ -39,7 +39,10 @@ export const AutoplayProvider = ({ children }) => {
     if (nextMeme) {
       state.bool ? startAutoplay() : clearTimeout(timeOut.current)
     }
-  }, [nextMeme, state.bool, router])
+
+    // Intentionally, we were leaving 'router' out of the dependency array. Otherwise autoplay would executed even-though the route changed
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [nextMeme, state.bool])
 
   useEffect(() => {
     if (router.pathname !== '/meme/[id]') {
