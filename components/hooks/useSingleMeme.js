@@ -51,6 +51,7 @@ export const useSingleMeme = () => {
             .orderBy('views', sort.prev)
             .get()
             .then((prev) => {
+              console.debug('FIRESTORE_COLLECTION.MEMES', 'READ', 'SingleView', 'prevMeme', filter)
               if (prev.docs.length > 0) {
                 for (let i = 0; i < prev.size; i++) {
                   if (
@@ -76,6 +77,7 @@ export const useSingleMeme = () => {
             .orderBy('views', sort.next)
             .get()
             .then((next) => {
+              console.debug('FIRESTORE_COLLECTION.MEMES', 'READ', 'SingleView', 'nextMeme', filter)
               if (next.docs.length > 0) {
                 for (let i = 0; i < next.size; i++) {
                   if (
@@ -104,6 +106,7 @@ export const useSingleMeme = () => {
             .orderBy('views', sort.prev)
             .get()
             .then((prev) => {
+              console.debug('FIRESTORE_COLLECTION.MEMES', 'READ', 'SingleView', 'prevMeme', filter)
               if (prev.docs.length > 0) {
                 for (let i = 0; i < prev.size; i++) {
                   if (
@@ -129,6 +132,7 @@ export const useSingleMeme = () => {
             .orderBy('views', sort.next)
             .get()
             .then((next) => {
+              console.debug('FIRESTORE_COLLECTION.MEMES', 'READ', 'SingleView', 'nextMeme', filter)
               if (next.docs.length > 0) {
                 for (let i = 0; i < next.size; i++) {
                   if (
@@ -158,7 +162,7 @@ export const useSingleMeme = () => {
             .limit(1)
             .get()
             .then((prev) => {
-              //console.log({ PREV: prev.docs[0].id })
+              console.debug('FIRESTORE_COLLECTION.MEMES', 'READ', 'SingleView', 'prevMeme', filter)
               prev.size > 0
                 ? setPrev({ id: prev.docs[0].id, ...prev.docs[0].data() })
                 : setPrev(null)
@@ -170,6 +174,7 @@ export const useSingleMeme = () => {
             .limit(1)
             .get()
             .then((next) => {
+              console.debug('FIRESTORE_COLLECTION.MEMES', 'READ', 'SingleView', 'nextMeme', filter)
               next.size > 0
                 ? setNext({ id: next.docs[0].id, ...next.docs[0].data() })
                 : setNext(null)
@@ -188,6 +193,7 @@ export const useSingleMeme = () => {
     }
     getData()
       .then((data) => {
+        console.debug('FIRESTORE_COLLECTION.MEMES', 'READ', 'SingleView', 'currentMeme')
         if (data.data()) {
           console.debug('FIRESTORE_COLLECTION.MEMES', 'READ')
           if (currentMeme && currentMeme.id !== data.id) {
