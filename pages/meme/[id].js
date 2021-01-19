@@ -8,21 +8,16 @@ import { OverviewSort } from '@/components/OverviewSort'
 import { HtmlHead } from '@/components/HtmlHead'
 import { useSingleMeme } from '@/components/hooks/useSingleMeme'
 import { useSingleMemeContext } from '@/components/context/singlememeContext'
-import { useAutoPlayContext } from '@/components/context/autoplayContext'
+import { useAutoPlayContext, useAutoPlayFilter } from '@/components/context/autoplayContext'
+import { AutoplaySort } from '@/components/AutoplaySort'
 
 export default function SingleView() {
   const router = useRouter()
   const { id } = useRandomMeme(router)
-  const {
-    currentMeme,
-    nextMeme,
-    prevMeme,
-    updateCurrent,
-    setNext,
-    setPrev,
-  } = useSingleMemeContext()
+  const { currentMeme, nextMeme, setNext, setPrev } = useSingleMemeContext()
   useSingleMeme()
   const [state, dispatch] = useAutoPlayContext()
+  const { filter } = useAutoPlayFilter()
 
   if (!currentMeme)
     return (
@@ -46,25 +41,37 @@ export default function SingleView() {
             setNext(null)
           }}
         />
-        <Slideshow
-          prevMeme={prevMeme}
-          meme={currentMeme}
-          nextMeme={nextMeme}
-          updateMeme={updateCurrent}
-        />
+        <Slideshow />
         <div className="flex flex-col items-center font-semibold text-xl my-2 text-white">
           <Link href={`/meme/${id}`}>
             <a onClick={() => dispatch({ type: 'falseBool' })}>
               <span className="my-2 p-2 rounded bg-green-600">Random Meme</span>
             </a>
           </Link>
-          {nextMeme && !(nextMeme.id === '') && (
-            <button
-              className="my-2 p-2 rounded bg-green-600"
-              onClick={() => dispatch({ type: 'toggleBool' })}
-            >
-              {state.bool ? `Autoplay On` : `Autoplay Off`}
-            </button>
+
+          {filter === 'Random' ? (
+            <div className="flex flex-row">
+              <button
+                className="my-2 p-2 rounded bg-green-600"
+                onClick={() => dispatch({ type: 'toggleBool' })}
+              >
+                {state.bool ? `On` : `Off`}
+              </button>
+              <AutoplaySort />
+            </div>
+          ) : (
+            nextMeme &&
+            !(nextMeme.id === '') && (
+              <div className="flex flex-row">
+                <button
+                  className="my-2 p-2 rounded bg-green-600"
+                  onClick={() => dispatch({ type: 'toggleBool' })}
+                >
+                  {state.bool ? `On` : `Off`}
+                </button>
+                <AutoplaySort />
+              </div>
+            )
           )}
         </div>
       </div>
