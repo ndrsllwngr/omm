@@ -7,8 +7,8 @@ import { useRandomMeme } from '@/components/hooks/useRandomMeme'
 import { OverviewSort } from '@/components/OverviewSort'
 import { HtmlHead } from '@/components/HtmlHead'
 import { useSingleMeme } from '@/components/hooks/useSingleMeme'
-import { useAutoplay } from '@/components/hooks/useAutoplay'
 import { useSingleMemeContext } from '@/components/context/singlememeContext'
+import { useAutoPlayContext } from '@/components/context/autoplayContext'
 
 export default function SingleView() {
   const router = useRouter()
@@ -22,41 +22,7 @@ export default function SingleView() {
     setPrev,
   } = useSingleMemeContext()
   useSingleMeme()
-  const { state, dispatch } = useAutoplay(currentMeme, nextMeme)
-  // const startAutoplay = () => {
-  //   timeOut.current = setTimeout(function () {
-  //     //Prevent Autoplay at EOF
-  //     if (nextMeme.id) router.push(`/meme/${nextMeme.id}`)
-  //     else {
-  //       endAutoplay
-  //       dispatch({ type: 'falseBool' })
-  //     }
-  //   }, 3000)
-  // }
-  // const endAutoplay = () => {
-  //   clearTimeout(timeOut.current)
-  //   //console.log({ ENDTIMER: timeOut.current })
-  // }
-  // //Errorhandling leave page while autoplay enabled
-  // useEffect(() => {
-  //   const handleRouteChange = (url) => {
-  //     if (url !== '/meme/[id]') {
-  //       endAutoplay()
-  //     }
-  //   }
-  //   router.events.on('routeChangeStart', handleRouteChange)
-  //   // If the component is unmounted, unsubscribe
-  //   // from the event with the `off` method:
-  //   return () => {
-  //     router.events.off('routeChangeStart', handleRouteChange)
-  //   }
-  // }, [router.events])
-  // //Toogle Autoplay
-  // useEffect(() => {
-  //   state.bool ? startAutoplay() : endAutoplay()
-  //   // TODO Evaluate if moving these two functions into the useEffect might be feasible.
-  //   // eslint-disable-next-line react-hooks/exhaustive-deps
-  // }, [currentMeme, state.bool])
+  const [state, dispatch] = useAutoPlayContext()
 
   if (!currentMeme)
     return (

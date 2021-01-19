@@ -1,8 +1,7 @@
 import { useEffect } from 'react'
 import firebase from '@/lib/firebase'
-import { useFilterContext } from '@/components/context/viewsContext'
-
 import { FIRESTORE_COLLECTION } from '@/lib/constants'
+import { useFilterContext } from '@/components/context/viewsContext'
 import { useViewCount } from '@/components/hooks/useViewCount'
 import { useSingleMemeContext } from '@/components/context/singlememeContext'
 import { useRouter } from 'next/router'
@@ -20,9 +19,6 @@ export const useSingleMeme = () => {
   const { filter } = useFilterContext()
   const viewCount = useViewCount(updateCurrent)
 
-  useEffect(() => {
-    console.log({ CALCNEXTMEME: nextMeme })
-  }, [nextMeme])
   useEffect(() => {
     let operator = {}
     let sort = {}
@@ -183,7 +179,7 @@ export const useSingleMeme = () => {
     }
     // TODO Evaluate the dependencies of this useEffect.
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [currentMeme, filter, prevMeme, nextMeme])
+  }, [currentMeme, filter])
 
   useEffect(() => {
     async function getData() {
@@ -194,14 +190,14 @@ export const useSingleMeme = () => {
       .then((data) => {
         if (data.data()) {
           console.debug('FIRESTORE_COLLECTION.MEMES', 'READ')
-          viewCount.addView(data.id)
-          updateCurrent((_draft) => {
-            return { id: data.id, ...data.data() }
-          })
           if (currentMeme && currentMeme.id !== data.id) {
             setNext(null)
             setPrev(null)
           }
+          updateCurrent((_draft) => {
+            return { id: data.id, ...data.data() }
+          })
+          viewCount.addView(data.id)
         }
       })
       .catch((e) => console.error(e))
