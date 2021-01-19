@@ -17,6 +17,7 @@ export const useViewCount = (updateCurrent = null) => {
         .doc(memeID)
         .update({ views: increment })
         .then(() => {
+          console.debug(`FIRESTORE_COLLECTION.MEMES`, 'WRITE', 'useViewCount')
           console.log({ src: 'useViewCount', updateCurrent, memeID })
           if (updateCurrent) {
             updateCurrent((draft) => {

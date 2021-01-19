@@ -79,6 +79,12 @@ export default function AuthContextComp({ children }) {
       .doc(user.uid)
       .get()
       .then((userData) => {
+        console.debug(
+          'FIRESTORE_COLLECTION.USERS',
+          'READ',
+          'AuthContextComp',
+          'getUserAdditionalData'
+        )
         if (userData.data()) {
           setUser(userData.data())
         }
@@ -109,7 +115,10 @@ export default function AuthContextComp({ children }) {
       const unsubscribe = db
         .collection(FIRESTORE_COLLECTION.USERS)
         .doc(user.uid)
-        .onSnapshot((doc) => setUser(doc.data()))
+        .onSnapshot((doc) => {
+          console.debug(`FIRESTORE_COLLECTION.USERS`, 'READ', 'AuthContextComp', 'useEffect')
+          setUser(doc.data())
+        })
       return () => unsubscribe()
     }
     // TODO Evaluate the dependencies of this useEffect.

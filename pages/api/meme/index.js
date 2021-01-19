@@ -28,6 +28,7 @@ export default async function memeHandler(req, res) {
       }
       // Upload meme data to Firestore
       await meme.set(memeData)
+      console.debug(`FIRESTORE_COLLECTION.MEMES`, 'WRITE', '/')
 
       // Add id to response
       memeData.id = meme.id

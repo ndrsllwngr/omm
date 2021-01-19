@@ -117,6 +117,7 @@ export const useDatabaseMemes = () => {
       query = query.startAfter(latestDoc)
     }
     const docs = await query.limit(limit).get()
+    console.debug(`FIRESTORE_COLLECTION.MEMES`, 'READ', 'useDatabaseMemes', 'loadNextMemes')
 
     if (docs.size === 0) {
       setHasMoreFiles(false)
