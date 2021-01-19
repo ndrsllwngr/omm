@@ -6,7 +6,7 @@ import { useRouter } from 'next/router'
 import { useVoting } from '@/components/hooks/useVoting'
 import { VOTE } from '@/lib/constants'
 import Link from 'next/link'
-import moment from 'moment'
+import formatDistance from 'date-fns/formatDistance'
 import { IoCaretDownOutline, IoCaretUpOutline } from 'react-icons/io5'
 import { memeType } from '@/components/types/types'
 
@@ -19,8 +19,8 @@ export const SingleMeme = ({ meme, enableLink, updateMemes, updateMeme }) => {
     <div className="flex-col max-w-md">
       <p className={'uppercase text-xs text-gray-600 dark:text-gray-300 font-medium'}>
         {typeof meme.createdAt !== 'object'
-          ? moment(meme.createdAt).fromNow()
-          : moment(meme.createdAt.toMillis()).fromNow()}
+          ? formatDistance(new Date(meme.createdAt), new Date(), { addSuffix: true })
+          : formatDistance(new Date(meme.createdAt.toMillis()), new Date(), { addSuffix: true })}
       </p>
       {enableLink ? (
         <Link href={`/meme/${meme.id}`}>

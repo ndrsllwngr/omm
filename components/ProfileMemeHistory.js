@@ -3,8 +3,8 @@ import PropTypes from 'prop-types'
 import { FIRESTORE_COLLECTION } from '@/lib/constants'
 import { MemeRenderer } from '@/components/MemeRenderer'
 import { useFirestoreProfile } from '@/components/hooks/useFirestoreProfile'
-import moment from 'moment'
 import Link from 'next/link'
+import formatDistance from 'date-fns/formatDistance'
 
 export const ProfileMemeHistory = ({ className }) => {
   const { docs: memes } = useFirestoreProfile(FIRESTORE_COLLECTION.MEMES)
@@ -15,7 +15,11 @@ export const ProfileMemeHistory = ({ className }) => {
         memes.map((meme, i) => (
           <button key={i} className="flex flex-col max-w-md">
             <p className={'uppercase text-xs text-gray-600 dark:text-gray-300 font-medium'}>
-              {moment(meme.createdAt.toMillis()).fromNow()}
+              {typeof meme.createdAt !== 'object'
+                ? formatDistance(new Date(meme.createdAt), new Date(), { addSuffix: true })
+                : formatDistance(new Date(meme.createdAt.toMillis()), new Date(), {
+                    addSuffix: true,
+                  })}
             </p>
             <Link href={`/meme/${meme.id}`}>
               <a className={'flex flex-col justify-center items-start'}>
