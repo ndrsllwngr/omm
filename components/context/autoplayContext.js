@@ -67,31 +67,6 @@ export const AutoplayProvider = ({ children }) => {
     // Intentionally, we were leaving 'router' out of the dependency array. Otherwise autoplay would executed even-though the route changed
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [nextMeme, state.bool, filter])
-  /*  useEffect(() => {
-    console.log('TRIGGER')
-    const startAutoplay = () => {
-      timeOut.current = setTimeout(function () {
-        if (filter === 'Ordered') {
-          if (nextMeme.id) {
-            router.push(`/meme/${nextMeme.id}`)
-          }
-        } else {
-          router.push(`/meme/${id}`)
-        }
-      }, 3000)
-    }
-    if (filter == 'Random') {
-      console.log('FIRED')
-      state.bool ? startAutoplay() : clearTimeout(timeOut.current)
-    } else {
-      if (nextMeme) {
-        state.bool ? startAutoplay() : clearTimeout(timeOut.current)
-      }
-    }
-
-    // Intentionally, we were leaving 'router' out of the dependency array. Otherwise autoplay would executed even-though the route changed
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [nextMeme, state.bool, filter])*/
 
   useEffect(() => {
     if (router.pathname !== '/meme/[id]') {
