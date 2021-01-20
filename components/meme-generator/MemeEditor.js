@@ -162,7 +162,7 @@ export const MemeEditor = () => {
       setFilter(FILTER.LATEST)
       router.push(`/meme/${success}`)
     }
-  }, [success, router])
+  }, [success, router, setFilter])
 
   useEffect(() => {
     if (successDraft) {
