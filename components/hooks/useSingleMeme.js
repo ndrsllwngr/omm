@@ -5,9 +5,11 @@ import { useFilterContext } from '@/components/context/viewsContext'
 import { useViewCount } from '@/components/hooks/useViewCount'
 import { useSingleMemeContext } from '@/components/context/singlememeContext'
 import { useRouter } from 'next/router'
+import { useAuth } from '@/components/context/authContext'
 
 export const useSingleMeme = () => {
   const router = useRouter()
+  const auth = useAuth()
   const {
     currentMeme,
     updateCurrent,
@@ -216,15 +218,23 @@ export const useSingleMeme = () => {
     getData()
       .then((data) => {
         if (data.data()) {
-          console.debug('FIRESTORE_COLLECTION.MEMES', 'READ')
-          if (currentMeme && currentMeme.id !== data.id) {
-            setNext(null)
-            setPrev(null)
+          if (
+            data.data().visibility === VISIBILITY.PRIVATE &&
+            auth.user &&
+            data.data().createdBy !== auth.user.uid
+          ) {
+            router.push('/403')
+          } else {
+            console.debug('FIRESTORE_COLLECTION.MEMES', 'READ')
+            if (currentMeme && currentMeme.id !== data.id) {
+              setNext(null)
+              setPrev(null)
+            }
+            updateCurrent((_draft) => {
+              return { id: data.id, ...data.data() }
+            })
+            viewCount.addView(data.id)
           }
-          updateCurrent((_draft) => {
-            return { id: data.id, ...data.data() }
-          })
-          viewCount.addView(data.id)
         }
       })
       .catch((e) => console.error(e))
