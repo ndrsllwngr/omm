@@ -15,6 +15,7 @@ export const useRandomMeme = (router) => {
     async function getRandomMeme() {
       const memeCollection = await firebase.firestore().collection(FIRESTORE_COLLECTION.MEMES).get()
       console.debug(`FIRESTORE_COLLECTION.MEMES`, 'READ', 'useRandomMeme')
+      // TODO DON'T CALL IN CONTEXT
       const ids = []
       if (memeCollection.size > 1) {
         memeCollection.forEach((meme) => ids.push(meme.id))
