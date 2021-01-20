@@ -1,13 +1,26 @@
-import React, { useContext, useState, createContext } from 'react'
+import React, { useContext, useState, createContext, useEffect } from 'react'
 import Proptypes from 'prop-types'
 import { useImmer } from 'use-immer'
+import { useRouter } from 'next/router'
 
 export const SingleMemeContext = createContext({})
 
 export const SingleMemeProvider = ({ children }) => {
+  const router = useRouter()
   const [currentMeme, updateCurrent] = useImmer(null)
   const [prevMeme, setPrev] = useState(null)
   const [nextMeme, setNext] = useState(null)
+
+  useEffect(() => {
+    if (router.pathname !== '/meme/[id]') {
+      if (currentMeme) {
+        updateCurrent((_draft) => {
+          return null
+        })
+      }
+    }
+  }, [router, currentMeme, updateCurrent])
+
   return (
     <SingleMemeContext.Provider
       value={{ currentMeme, updateCurrent, prevMeme, setPrev, nextMeme, setNext }}
