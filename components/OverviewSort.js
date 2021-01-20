@@ -7,17 +7,13 @@ import firebase from '@/lib/firebase'
 import { IoCloud } from 'react-icons/io5'
 //https://tailwindui.com/components/application-ui/elements/dropdowns
 //https://letsbuildui.dev/articles/building-a-dropdown-menu-component-with-react-hooks
-export const OverviewSort = ({ callback = null, enableNotification = false }) => {
+export const OverviewSort = ({ enableNotification = false }) => {
   const dropdownRef = useRef(null)
   const [isActive, setIsActive] = useDetectOutsideClick(dropdownRef, false)
   const onClick = () => setIsActive(!isActive)
   const { filter, setFilter } = useFilterContext()
 
   const handleClick = (f) => {
-    //Excluded callback because onClick on same filter caused rerender with no next and prev
-    /*    if (callback) {
-      callback()
-    }*/
     setIsActive(false)
     if (f !== filter) {
       setFilter(f)
