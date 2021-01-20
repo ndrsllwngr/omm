@@ -40,7 +40,7 @@ export const SlideshowButton = ({ name, changeSlide, disabled }) => {
   return (
     <button
       disabled={disabled}
-      className={`rounded-sm ${
+      className={`rounded-lg ${
         disabled
           ? 'border border-custom-gray'
           : 'bg-custom-gray hover:bg-custom-green hover:stroke-gray'

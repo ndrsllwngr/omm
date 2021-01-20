@@ -14,11 +14,14 @@ export const OverviewSort = ({ callback = null, enableNotification = false }) =>
   const { filter, setFilter } = useFilterContext()
 
   const handleClick = (f) => {
-    if (callback) {
+    //Excluded callback because onClick on same filter caused rerender with no next and prev
+    /*    if (callback) {
       callback()
-    }
+    }*/
     setIsActive(false)
-    setFilter(f)
+    if (f !== filter) {
+      setFilter(f)
+    }
   }
   return (
     <div className="flex justify-end items-center">
