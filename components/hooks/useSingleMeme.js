@@ -219,9 +219,10 @@ export const useSingleMeme = () => {
       .then((data) => {
         if (data.data()) {
           if (
-            data.data().visibility === VISIBILITY.PRIVATE &&
-            auth.user &&
-            data.data().createdBy !== auth.user.uid
+            (data.data().visibility === VISIBILITY.PRIVATE &&
+              auth.user &&
+              data.data().createdBy !== auth.user.uid) ||
+            (data.data().visibility === VISIBILITY.PRIVATE && !auth.user)
           ) {
             router.push('/403')
           } else {
