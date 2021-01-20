@@ -16,14 +16,16 @@ export const useRandomMeme = (router) => {
       const memeCollection = await firebase.firestore().collection(FIRESTORE_COLLECTION.MEMES).get()
       console.debug(`FIRESTORE_COLLECTION.MEMES`, 'READ', 'useRandomMeme')
       const ids = []
-      memeCollection.forEach((meme) => ids.push(meme.id))
+      if (memeCollection.size > 1) {
+        memeCollection.forEach((meme) => ids.push(meme.id))
 
-      var random = getRandomInt(0, ids.length - 1)
+        var random = getRandomInt(0, ids.length - 1)
 
-      while (ids[random] === router.query.id) {
-        random = getRandomInt(0, ids.length - 1)
+        while (ids[random] === router.query.id) {
+          random = getRandomInt(0, ids.length - 1)
+        }
+        setId(ids[random])
       }
-      setId(ids[random])
     }
     getRandomMeme()
   }, [router.query.id])
