@@ -5,6 +5,7 @@ import PropTypes from 'prop-types'
 import { useMemeReload } from '@/components/hooks/useMemeReload'
 import firebase from '@/lib/firebase'
 import { IoCloud } from 'react-icons/io5'
+import { FILTER } from '@/lib/constants'
 //https://tailwindui.com/components/application-ui/elements/dropdowns
 //https://letsbuildui.dev/articles/building-a-dropdown-menu-component-with-react-hooks
 export const OverviewSort = ({ enableNotification = false }) => {
@@ -59,55 +60,51 @@ export const OverviewSort = ({ enableNotification = false }) => {
               aria-labelledby="options-menu"
             >
               <div
-                onClick={() => handleClick('Latest')}
+                onClick={() => handleClick(FILTER.LATEST)}
                 className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900"
                 role="menuitem"
               >
-                Latest
+                {FILTER.LATEST}
               </div>
               <div
-                onClick={() => handleClick('Oldest')}
+                onClick={() => handleClick(FILTER.OLDEST)}
                 className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900"
                 role="menuitem"
               >
-                Oldest
+                {FILTER.OLDEST}
               </div>
               <div
-                onClick={() => handleClick('MostViewed')}
+                onClick={() => handleClick(FILTER.MOST_VIEWED)}
                 className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900"
                 role="menuitem"
               >
-                Most Viewed
+                {FILTER.MOST_VIEWED}
               </div>
               <div
-                onClick={() => handleClick('NeverViewed')}
+                onClick={() => handleClick(FILTER.LEAST_VIEWED)}
                 className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900"
                 role="menuitem"
               >
-                Never Viewed
+                {FILTER.LEAST_VIEWED}
               </div>
               <div
-                onClick={() => handleClick('Votes')}
+                onClick={() => handleClick(FILTER.MOST_POINTS)}
                 className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900"
                 role="menuitem"
               >
-                Votes
+                {FILTER.MOST_POINTS}
+              </div>
+              <div
+                onClick={() => handleClick(FILTER.LEAST_POINTS)}
+                className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900"
+                role="menuitem"
+              >
+                {FILTER.LEAST_POINTS}
               </div>
             </div>
           </div>
         )}
       </div>
-
-      {/* <!--
-	  Dropdown panel, show/hide based on dropdown state.
-
-	  Entering: "transition ease-out duration-100"
-		From: "transform opacity-0 scale-95"
-		To: "transform opacity-100 scale-100"
-	  Leaving: "transition ease-in duration-75"
-		From: "transform opacity-100 scale-100"
-		To: "transform opacity-0 scale-95"
-	--> */}
     </div>
   )
 }
@@ -135,7 +132,7 @@ const NewMemeNotification = ({ setFilter }) => {
         setShowNewMemes(false)
         setCounter(0)
         setDate(firebase.firestore.Timestamp.now())
-        setFilter('Latest')
+        setFilter(FILTER.LATEST)
       }}
       className="text-custom-green uppercase font-semibold flex items-center mr-4"
     >

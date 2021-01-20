@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import firebase from '@/lib/firebase'
-import { FIRESTORE_COLLECTION, VISIBILITY } from '@/lib/constants'
+import { FILTER, FIRESTORE_COLLECTION, VISIBILITY } from '@/lib/constants'
 import { useFilterContext, useReloadContext } from '@/components/context/viewsContext'
 import { useImmer } from 'use-immer'
 
@@ -22,20 +22,20 @@ export const useDatabaseMemes = () => {
     //TODO usecallback to prevent dependency issues
 
     switch (filter) {
-      case 'Latest':
+      case FILTER.LATEST:
         loadNextMemes('createdAt', 'desc', false)
         break
-      case 'Oldest':
+      case FILTER.OLDEST:
         loadNextMemes('createdAt', 'asc', false)
         break
-      case 'MostViewed':
+      case FILTER.MOST_VIEWED:
         loadNextMemes('views', 'desc', false)
         break
-      case 'NeverViewed':
+      case FILTER.LEAST_VIEWED:
         loadNextMemes('views', 'asc', false)
         break
       default:
-        console.log('Unsupported case')
+        console.log('Unsupported filter', filter)
     }
     // TODO Evaluate the dependencies of this useEffect.
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -43,20 +43,20 @@ export const useDatabaseMemes = () => {
 
   const triggerNextMemes = () => {
     switch (filter) {
-      case 'Latest':
+      case FILTER.LATEST:
         loadNextMemes('createdAt', 'desc', true)
         break
-      case 'Oldest':
+      case FILTER.OLDEST:
         loadNextMemes('createdAt', 'asc', true)
         break
-      case 'MostViewed':
+      case FILTER.MOST_VIEWED:
         loadNextMemes('views', 'desc', true)
         break
-      case 'NeverViewed':
+      case FILTER.LEAST_VIEWED:
         loadNextMemes('views', 'asc', true)
         break
       default:
-        console.log('Unsupported case')
+        console.log('Unsupported filter', filter)
     }
   }
 

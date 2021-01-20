@@ -1,6 +1,6 @@
 import { useEffect } from 'react'
 import firebase from '@/lib/firebase'
-import { FIRESTORE_COLLECTION, VISIBILITY } from '@/lib/constants'
+import { FILTER, FIRESTORE_COLLECTION, VISIBILITY } from '@/lib/constants'
 import { useFilterContext } from '@/components/context/viewsContext'
 import { useViewCount } from '@/components/hooks/useViewCount'
 import { useSingleMemeContext } from '@/components/context/singlememeContext'
@@ -23,29 +23,29 @@ export const useSingleMeme = () => {
     let operator = {}
     let sort = {}
     switch (filter) {
-      case 'Latest':
+      case FILTER.LATEST:
         operator = { prev: '<', next: '>' }
         sort = { prev: 'desc', next: 'asc' }
         break
-      case 'Oldest':
+      case FILTER.OLDEST:
         operator = { prev: '>', next: '<' }
         sort = { prev: 'asc', next: 'desc' }
         break
-      case 'MostViewed':
+      case FILTER.MOST_VIEWED:
         operator = { prev: '<=', next: '>=' }
         sort = { prev: 'desc', next: 'asc' }
         break
-      case 'NeverViewed':
+      case FILTER.LEAST_VIEWED:
         operator = { prev: '>=', next: '<=' }
         sort = { prev: 'asc', next: 'desc' }
         break
       default:
-        console.log('Unsupported Case')
+        console.log('Unsupported filter', filter)
     }
     if (currentMeme && !prevMeme && !nextMeme) {
       let collectionRef = firebase.firestore().collection(FIRESTORE_COLLECTION.MEMES)
       switch (filter) {
-        case 'MostViewed':
+        case FILTER.MOST_VIEWED:
           collectionRef
             .where('visibility', '==', VISIBILITY.PUBLIC)
             .where('views', operator.prev, currentMeme.views)
@@ -102,7 +102,7 @@ export const useSingleMeme = () => {
             })
             .catch((e) => console.error(e))
           break
-        case 'NeverViewed':
+        case FILTER.LEAST_VIEWED:
           collectionRef
             .where('visibility', '==', VISIBILITY.PUBLIC)
             .where('views', operator.prev, currentMeme.views)
@@ -159,7 +159,7 @@ export const useSingleMeme = () => {
             })
             .catch((e) => console.error(e))
           break
-        default:
+        case FILTER.LATEST || FILTER.OLDEST:
           collectionRef
             .where('visibility', '==', VISIBILITY.PUBLIC)
             .where('createdAt', operator.prev, currentMeme.createdAt)
@@ -186,6 +186,9 @@ export const useSingleMeme = () => {
                 : setNext(null)
             })
             .catch((e) => console.error(e))
+          break
+        default:
+          console.log('Unsupported filter', filter)
       }
     }
     // TODO Evaluate the dependencies of this useEffect.

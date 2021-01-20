@@ -8,9 +8,10 @@ import { useMemeUpload } from '@/components/hooks/useMemeUpload'
 import { ImageToolbar } from '@/components/meme-generator/ImageToolbar'
 import { useRouter } from 'next/router'
 import { useAuth } from '@/components/context/authContext'
-import { VISIBILITY } from '@/lib/constants'
+import { FILTER, VISIBILITY } from '@/lib/constants'
 import { useDraftUpload } from '@/components/hooks/useDraftUpload'
 import PropTypes from 'prop-types'
+import { useFilterContext } from '@/components/context/viewsContext'
 
 // inspired by https://github.com/aprilescobar/fabric.js-intro
 // inspired by https://github.com/saninmersion/react-context-fabricjs
@@ -27,6 +28,7 @@ export const MemeEditor = () => {
   const [previewMode, setPreviewMode] = useState(false)
   const [loading, success, error, setData] = useMemeUpload()
   const [loadingDraft, successDraft, errorDraft, setDataDraft] = useDraftUpload()
+  const { setFilter } = useFilterContext()
   const auth = useAuth()
 
   const addImg = (e, url) => {
@@ -157,6 +159,7 @@ export const MemeEditor = () => {
 
   useEffect(() => {
     if (success) {
+      setFilter(FILTER.LATEST)
       router.push(`/meme/${success}`)
     }
   }, [success, router])
