@@ -5,9 +5,11 @@ import { useFilterContext } from '@/components/context/viewsContext'
 import { useViewCount } from '@/components/hooks/useViewCount'
 import { useSingleMemeContext } from '@/components/context/singlememeContext'
 import { useRouter } from 'next/router'
+import { useAuth } from '@/components/context/authContext'
 
 export const useSingleMeme = () => {
   const router = useRouter()
+  const auth = useAuth()
   const {
     currentMeme,
     updateCurrent,
@@ -52,7 +54,6 @@ export const useSingleMeme = () => {
             .orderBy('views', sort.prev)
             .get()
             .then((prev) => {
-              console.debug('FIRESTORE_COLLECTION.MEMES', 'READ', 'SingleView', 'prevMeme', filter)
               if (prev.docs.length > 0) {
                 for (let i = 0; i < prev.size; i++) {
                   if (
@@ -73,13 +74,15 @@ export const useSingleMeme = () => {
               }
             })
             .catch((e) => console.error(e))
+            .finally(() => {
+              console.debug('FIRESTORE_COLLECTION.MEMES', 'READ', 'SingleView', 'prevMeme', filter)
+            })
           collectionRef
             .where('visibility', '==', VISIBILITY.PUBLIC)
             .where('views', operator.next, currentMeme.views)
             .orderBy('views', sort.next)
             .get()
             .then((next) => {
-              console.debug('FIRESTORE_COLLECTION.MEMES', 'READ', 'SingleView', 'nextMeme', filter)
               if (next.docs.length > 0) {
                 for (let i = 0; i < next.size; i++) {
                   if (
@@ -101,6 +104,9 @@ export const useSingleMeme = () => {
               // next.size > 0 ? setNext({ id: next.docs[0].id, ...next.docs[0].data() }) : setNext(null)
             })
             .catch((e) => console.error(e))
+            .finally(() => {
+              console.debug('FIRESTORE_COLLECTION.MEMES', 'READ', 'SingleView', 'nextMeme', filter)
+            })
           break
         case FILTER.LEAST_VIEWED:
           collectionRef
@@ -109,7 +115,6 @@ export const useSingleMeme = () => {
             .orderBy('views', sort.prev)
             .get()
             .then((prev) => {
-              console.debug('FIRESTORE_COLLECTION.MEMES', 'READ', 'SingleView', 'prevMeme', filter)
               if (prev.docs.length > 0) {
                 for (let i = 0; i < prev.size; i++) {
                   if (
@@ -130,13 +135,15 @@ export const useSingleMeme = () => {
               }
             })
             .catch((e) => console.error(e))
+            .finally(() => {
+              console.debug('FIRESTORE_COLLECTION.MEMES', 'READ', 'SingleView', 'prevMeme', filter)
+            })
           collectionRef
             .where('visibility', '==', VISIBILITY.PUBLIC)
             .where('views', operator.next, currentMeme.views)
             .orderBy('views', sort.next)
             .get()
             .then((next) => {
-              console.debug('FIRESTORE_COLLECTION.MEMES', 'READ', 'SingleView', 'nextMeme', filter)
               if (next.docs.length > 0) {
                 for (let i = 0; i < next.size; i++) {
                   if (
@@ -158,6 +165,9 @@ export const useSingleMeme = () => {
               // next.size > 0 ? setNext({ id: next.docs[0].id, ...next.docs[0].data() }) : setNext(null)
             })
             .catch((e) => console.error(e))
+            .finally(() => {
+              console.debug('FIRESTORE_COLLECTION.MEMES', 'READ', 'SingleView', 'nextMeme', filter)
+            })
           break
         case FILTER.LATEST || FILTER.OLDEST:
           collectionRef
@@ -167,12 +177,14 @@ export const useSingleMeme = () => {
             .limit(1)
             .get()
             .then((prev) => {
-              console.debug('FIRESTORE_COLLECTION.MEMES', 'READ', 'SingleView', 'prevMeme', filter)
               prev.size > 0
                 ? setPrev({ id: prev.docs[0].id, ...prev.docs[0].data() })
                 : setPrev(null)
             })
             .catch((e) => console.error(e))
+            .finally(() => {
+              console.debug('FIRESTORE_COLLECTION.MEMES', 'READ', 'SingleView', 'prevMeme', filter)
+            })
           collectionRef
             .where('visibility', '==', VISIBILITY.PUBLIC)
             .where('createdAt', operator.next, currentMeme.createdAt)
@@ -180,12 +192,14 @@ export const useSingleMeme = () => {
             .limit(1)
             .get()
             .then((next) => {
-              console.debug('FIRESTORE_COLLECTION.MEMES', 'READ', 'SingleView', 'nextMeme', filter)
               next.size > 0
                 ? setNext({ id: next.docs[0].id, ...next.docs[0].data() })
                 : setNext(null)
             })
             .catch((e) => console.error(e))
+            .finally(() => {
+              console.debug('FIRESTORE_COLLECTION.MEMES', 'READ', 'SingleView', 'nextMeme', filter)
+            })
           break
         default:
           console.log('Unsupported filter', filter)
@@ -203,20 +217,31 @@ export const useSingleMeme = () => {
     }
     getData()
       .then((data) => {
-        console.debug('FIRESTORE_COLLECTION.MEMES', 'READ', 'SingleView', 'currentMeme')
         if (data.data()) {
-          console.debug('FIRESTORE_COLLECTION.MEMES', 'READ')
-          if (currentMeme && currentMeme.id !== data.id) {
-            setNext(null)
-            setPrev(null)
+          if (
+            (data.data().visibility === VISIBILITY.PRIVATE &&
+              auth.user &&
+              data.data().createdBy !== auth.user.uid) ||
+            (data.data().visibility === VISIBILITY.PRIVATE && !auth.user)
+          ) {
+            router.push('/403')
+          } else {
+            console.debug('FIRESTORE_COLLECTION.MEMES', 'READ')
+            if (currentMeme && currentMeme.id !== data.id) {
+              setNext(null)
+              setPrev(null)
+            }
+            updateCurrent((_draft) => {
+              return { id: data.id, ...data.data() }
+            })
+            viewCount.addView(data.id)
           }
-          updateCurrent((_draft) => {
-            return { id: data.id, ...data.data() }
-          })
-          viewCount.addView(data.id)
         }
       })
       .catch((e) => console.error(e))
+      .finally(() => {
+        console.debug('FIRESTORE_COLLECTION.MEMES', 'READ', 'SingleView', 'currentMeme')
+      })
     // TODO Evaluate the dependencies of this useEffect.
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [router.query.id, filter])

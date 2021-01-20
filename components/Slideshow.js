@@ -4,6 +4,7 @@ import { SingleMeme } from '@/components/SingleMeme'
 import { useRouter } from 'next/router'
 import { useAutoPlayDispatch } from '@/components/context/autoplayContext'
 import { useSingleMemeContext } from '@/components/context/singlememeContext'
+import { VISIBILITY } from '@/lib/constants'
 
 export const Slideshow = () => {
   const {
@@ -18,15 +19,19 @@ export const Slideshow = () => {
       <div className="flex flex-row justify-between my-2">
         {/*{prevMeme && prevMeme.id && <SlideshowButton name="prev" changeSlide={prevMeme.id} />}
         {nextMeme && nextMeme.id && <SlideshowButton name="next" changeSlide={nextMeme.id} />}*/}
-        {prevMeme && prevMeme.id ? (
-          <SlideshowButton name="prev" changeSlide={prevMeme.id} />
-        ) : (
-          <SlideshowButton name="prev" disabled={true} />
-        )}
-        {nextMeme && nextMeme.id ? (
-          <SlideshowButton name="next" changeSlide={nextMeme.id} />
-        ) : (
-          <SlideshowButton name="next" disabled={true} />
+        {meme.visibility === VISIBILITY.PUBLIC && (
+          <>
+            {prevMeme && prevMeme.id ? (
+              <SlideshowButton name="prev" changeSlide={prevMeme.id} />
+            ) : (
+              <SlideshowButton name="prev" disabled={true} />
+            )}
+            {nextMeme && nextMeme.id ? (
+              <SlideshowButton name="next" changeSlide={nextMeme.id} />
+            ) : (
+              <SlideshowButton name="next" disabled={true} />
+            )}
+          </>
         )}
       </div>
       <SingleMeme meme={meme} updateMeme={updateMeme} />
