@@ -10,6 +10,7 @@ import { useSingleMeme } from '@/components/hooks/useSingleMeme'
 import { useSingleMemeContext } from '@/components/context/singlememeContext'
 import { useAutoPlayContext, useAutoPlayFilter } from '@/components/context/autoplayContext'
 import { AutoplaySort } from '@/components/AutoplaySort'
+import { VISIBILITY } from '@/lib/constants'
 
 export default function SingleView() {
   const router = useRouter()
@@ -43,30 +44,33 @@ export default function SingleView() {
               <span className="my-2 p-2 rounded bg-green-600">Random Meme</span>
             </a>
           </Link>
-
-          {filter === 'Random' ? (
-            <div className="flex flex-row">
-              <button
-                className="my-2 p-2 rounded bg-green-600"
-                onClick={() => dispatch({ type: 'toggleBool' })}
-              >
-                {state.bool ? `On` : `Off`}
-              </button>
-              <AutoplaySort />
-            </div>
-          ) : (
-            nextMeme &&
-            !(nextMeme.id === '') && (
-              <div className="flex flex-row">
-                <button
-                  className="my-2 p-2 rounded bg-green-600"
-                  onClick={() => dispatch({ type: 'toggleBool' })}
-                >
-                  {state.bool ? `On` : `Off`}
-                </button>
-                <AutoplaySort />
-              </div>
-            )
+          {currentMeme.visibility === VISIBILITY.PUBLIC && (
+            <>
+              {filter === 'Random' ? (
+                <div className="flex flex-row">
+                  <button
+                    className="my-2 p-2 rounded bg-green-600"
+                    onClick={() => dispatch({ type: 'toggleBool' })}
+                  >
+                    {state.bool ? `On` : `Off`}
+                  </button>
+                  <AutoplaySort />
+                </div>
+              ) : (
+                nextMeme &&
+                !(nextMeme.id === '') && (
+                  <div className="flex flex-row">
+                    <button
+                      className="my-2 p-2 rounded bg-green-600"
+                      onClick={() => dispatch({ type: 'toggleBool' })}
+                    >
+                      {state.bool ? `On` : `Off`}
+                    </button>
+                    <AutoplaySort />
+                  </div>
+                )
+              )}
+            </>
           )}
         </div>
       </div>
