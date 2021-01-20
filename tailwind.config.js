@@ -25,6 +25,10 @@ module.exports = {
         green: theme('colors.custom-green'),
         gray: theme('colors.custom-gray'),
       }),
+      fill: (theme) => ({
+        green: theme('colors.custom-green'),
+        gray: theme('colors.custom-gray'),
+      }),
     },
   },
   variants: {
