@@ -48,7 +48,7 @@ export const SingleMeme = ({ meme, enableLink, updateMemes, updateMeme }) => {
         <MemeRenderer meme={meme} />
       )}
 
-      <SocialShareButtons />
+      <SocialShareButtons id={meme.id} />
       <div className={'flex justify-between items-center'}>
         <button
           className={'text-black dark:text-white'}

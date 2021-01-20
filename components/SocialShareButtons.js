@@ -13,10 +13,14 @@ import {
   WhatsappShareButton,
   WhatsappIcon,
 } from 'react-share'
-
+import { useRouter } from 'next/router'
+import PropTypes from 'prop-types'
+import { memeType } from '@/components/types/types'
+import { SingleMeme } from '@/components/SingleMeme'
 //https://www.npmjs.com/package/react-share
-export const SocialShareButtons = () => {
-  const url = window.location.href
+export const SocialShareButtons = ({ id }) => {
+  const url = `${window.location.origin}` + '/meme/' + `${id}`
+
   const style = 'w-8 h-8 mx-1 rounded-full'
   return (
     <div className="flex flex-row justify-end my-2">
@@ -40,4 +44,7 @@ export const SocialShareButtons = () => {
       </WhatsappShareButton>
     </div>
   )
+}
+SocialShareButtons.propTypes = {
+  id: PropTypes.string,
 }
