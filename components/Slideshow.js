@@ -40,8 +40,10 @@ export const SlideshowButton = ({ name, changeSlide, disabled }) => {
   return (
     <button
       disabled={disabled}
-      className={`py-2 px-2 rounded-sm ${
-        disabled ? 'border border-gray-200' : 'border border-custom-gray'
+      className={`rounded-sm ${
+        disabled
+          ? 'border border-custom-gray'
+          : 'bg-custom-gray hover:bg-custom-green hover:stroke-gray'
       } `}
       onClick={(e) => {
         e.preventDefault()
@@ -50,11 +52,12 @@ export const SlideshowButton = ({ name, changeSlide, disabled }) => {
       }}
     >
       <svg
-        className="w-6 h-6"
+        className={`w-12 h-12 py-2 px-2 ${
+          disabled ? 'stroke-gray' : 'stroke-green hover:stroke-gray'
+        }`}
         xmlns="http://www.w3.org/2000/svg"
         fill="none"
         viewBox="0 0 24 24"
-        stroke={`${disabled ? 'gray' : 'currentColor'}`}
       >
         {name === 'prev' ? (
           <path
