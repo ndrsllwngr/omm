@@ -4,7 +4,7 @@ import { MemeRenderer } from '@/components/MemeRenderer'
 import { useFabricJson } from '@/components/context/fabricContext'
 import { useRouter } from 'next/router'
 import { useVoting } from '@/components/hooks/useVoting'
-import { VOTE } from '@/lib/constants'
+import { VISIBILITY, VOTE } from '@/lib/constants'
 import Link from 'next/link'
 import formatDistance from 'date-fns/formatDistance'
 import { IoCaretDownOutline, IoCaretUpOutline } from 'react-icons/io5'
@@ -20,7 +20,12 @@ export const SingleMeme = ({ meme, enableLink, updateMemes, updateMeme }) => {
       <p className={'uppercase text-xs text-gray-600 dark:text-gray-300 font-medium'}>
         {typeof meme.createdAt !== 'object'
           ? formatDistance(new Date(meme.createdAt), new Date(), { addSuffix: true })
-          : formatDistance(new Date(meme.createdAt.toMillis()), new Date(), { addSuffix: true })}
+          : formatDistance(new Date(meme.createdAt.toMillis()), new Date(), {
+              addSuffix: true,
+            })}
+        {meme.visibility && meme.visibility !== VISIBILITY.PUBLIC && (
+          <span> - {meme.visibility}</span>
+        )}
       </p>
       {enableLink ? (
         <Link href={`/meme/${meme.id}`}>

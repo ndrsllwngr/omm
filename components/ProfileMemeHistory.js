@@ -1,6 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { FIRESTORE_COLLECTION } from '@/lib/constants'
+import { FIRESTORE_COLLECTION, VISIBILITY } from '@/lib/constants'
 import { MemeRenderer } from '@/components/MemeRenderer'
 import { useFirestoreProfile } from '@/components/hooks/useFirestoreProfile'
 import Link from 'next/link'
@@ -20,6 +20,9 @@ export const ProfileMemeHistory = ({ className }) => {
                 : formatDistance(new Date(meme.createdAt.toMillis()), new Date(), {
                     addSuffix: true,
                   })}
+              {meme.visibility && meme.visibility !== VISIBILITY.PUBLIC && (
+                <span> - {meme.visibility}</span>
+              )}
             </p>
             <Link href={`/meme/${meme.id}`}>
               <a className={'flex flex-col justify-center items-start'}>

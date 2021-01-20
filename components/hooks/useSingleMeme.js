@@ -1,6 +1,6 @@
 import { useEffect } from 'react'
 import firebase from '@/lib/firebase'
-import { FIRESTORE_COLLECTION } from '@/lib/constants'
+import { FIRESTORE_COLLECTION, VISIBILITY } from '@/lib/constants'
 import { useFilterContext } from '@/components/context/viewsContext'
 import { useViewCount } from '@/components/hooks/useViewCount'
 import { useSingleMemeContext } from '@/components/context/singlememeContext'
@@ -47,6 +47,7 @@ export const useSingleMeme = () => {
       switch (filter) {
         case 'MostViewed':
           collectionRef
+            .where('visibility', '==', VISIBILITY.PUBLIC)
             .where('views', operator.prev, currentMeme.views)
             .orderBy('views', sort.prev)
             .get()
@@ -73,6 +74,7 @@ export const useSingleMeme = () => {
             })
             .catch((e) => console.error(e))
           collectionRef
+            .where('visibility', '==', VISIBILITY.PUBLIC)
             .where('views', operator.next, currentMeme.views)
             .orderBy('views', sort.next)
             .get()
@@ -102,6 +104,7 @@ export const useSingleMeme = () => {
           break
         case 'NeverViewed':
           collectionRef
+            .where('visibility', '==', VISIBILITY.PUBLIC)
             .where('views', operator.prev, currentMeme.views)
             .orderBy('views', sort.prev)
             .get()
@@ -128,6 +131,7 @@ export const useSingleMeme = () => {
             })
             .catch((e) => console.error(e))
           collectionRef
+            .where('visibility', '==', VISIBILITY.PUBLIC)
             .where('views', operator.next, currentMeme.views)
             .orderBy('views', sort.next)
             .get()
@@ -157,6 +161,7 @@ export const useSingleMeme = () => {
           break
         default:
           collectionRef
+            .where('visibility', '==', VISIBILITY.PUBLIC)
             .where('createdAt', operator.prev, currentMeme.createdAt)
             .orderBy('createdAt', sort.prev)
             .limit(1)
@@ -169,6 +174,7 @@ export const useSingleMeme = () => {
             })
             .catch((e) => console.error(e))
           collectionRef
+            .where('visibility', '==', VISIBILITY.PUBLIC)
             .where('createdAt', operator.next, currentMeme.createdAt)
             .orderBy('createdAt', sort.next)
             .limit(1)
@@ -186,6 +192,7 @@ export const useSingleMeme = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentMeme, filter])
 
+  // TODO restrict query to just Public Memes, exclude Unlisted and Private
   useEffect(() => {
     async function getData() {
       const db = firebase.firestore()
