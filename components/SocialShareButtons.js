@@ -17,11 +17,16 @@ import PropTypes from 'prop-types'
 //https://www.npmjs.com/package/react-share
 export const SocialShareButtons = ({ id }) => {
   const url = `${window.location.origin}` + '/meme/' + `${id}`
-  const style = 'w-8 h-8 mx-1 rounded-full'
+  const style = 'w-8 h-8 mx-1 rounded-full bg-custom-green'
+  const color = 'custom.color-green'
   return (
     <div className="flex flex-row justify-end my-2">
       <FacebookShareButton url={url}>
-        <FacebookIcon className={style} />
+        <FacebookIcon
+          className={style}
+          iconFillColor={'transparent'}
+          bgStyle={{ fill: 'transparent' }}
+        />
       </FacebookShareButton>
       <TwitterShareButton url={url}>
         <TwitterIcon className={style} />
