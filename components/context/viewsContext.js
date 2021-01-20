@@ -1,11 +1,12 @@
 import React, { useContext, useState, createContext } from 'react'
 import Proptypes from 'prop-types'
+import { FILTER } from '@/lib/constants'
 
 export const FilterContext = createContext({})
 export const ReloadContext = createContext({})
 
 export const ViewsProvider = ({ children }) => {
-  const [filter, setFilter] = useState('Latest')
+  const [filter, setFilter] = useState(FILTER.LATEST)
   const [reload, setReload] = useState(false)
   return (
     <FilterContext.Provider value={{ filter, setFilter }}>
