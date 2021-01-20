@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import firebase from '@/lib/firebase'
-import { FIRESTORE_COLLECTION } from '@/lib/constants'
+import { FIRESTORE_COLLECTION, VISIBILITY } from '@/lib/constants'
 import { useFilterContext, useReloadContext } from '@/components/context/viewsContext'
 import { useImmer } from 'use-immer'
 
@@ -60,46 +60,6 @@ export const useDatabaseMemes = () => {
     }
   }
 
-  // const setDocs = (docs) => {
-  //   let dbMemes = []
-  //   docs.forEach((doc) => {
-  //     dbMemes.push({ id: doc.id, ...doc.data() })
-  //   })
-  //   setMemes(dbMemes)
-  // }
-  // const loadNextMemes = async (c, d) => {
-  //   let query = ''
-  //   if (d) {
-  //     query = loadCreds().orderBy('' + c + '', '' + d + '')
-  //   } else {
-  //     query = loadCreds().orderBy('' + c + '')
-  //   }
-  //   if (latestDoc) {
-  //     query = query.startAfter(latestDoc)
-  //   }
-  //   const docs = await query.limit(limit).get()
-  //   let snapShotMemes = []
-  //   docs.forEach((doc) => {
-  //     snapShotMemes.push({ id: doc.id, ...doc.data() })
-  //   })
-  //   setLatestDoc(docs.docs[docs.docs.length - 1])
-  //   return snapShotMemes
-  // }
-
-  // const resolveMemes = useCallback((cb) => {
-  //   cb.then((res) => {
-  //     !Memes || !(Memes.length > 0) ? setMemes(res) : setMemes([...Memes, ...res])
-  //   }).catch(function (error) {
-  //     console.log({ error })
-  //   })
-  // }, [])
-  // function resolveMemes(cb) {
-  //   cb.then((res) => {
-  //     !Memes || !(Memes.length > 0) ? setMemes(res) : setMemes([...Memes, ...res])
-  //   }).catch(function (error) {
-  //     console.log({ error })
-  //   })
-  // }
   async function loadNextMemes(create, sorting, triggerNext) {
     if (!triggerNext) {
       updateMemes((_draft) => {
@@ -110,7 +70,9 @@ export const useDatabaseMemes = () => {
     }
     let query = ''
     sorting
-      ? (query = loadCreds().orderBy('' + create + '', '' + sorting + ''))
+      ? (query = loadCreds()
+          .where('visibility', '==', VISIBILITY.PUBLIC)
+          .orderBy('' + create + '', '' + sorting + ''))
       : (query = loadCreds().orderBy('' + create + ''))
 
     if (triggerNext && latestDoc) {
