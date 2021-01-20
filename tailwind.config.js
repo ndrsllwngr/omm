@@ -21,10 +21,15 @@ module.exports = {
         source: ['Source Sans Pro', ...defaultTheme.fontFamily.sans],
         system: defaultTheme.fontFamily.sans,
       },
+      stroke: (theme) => ({
+        green: theme('colors.custom-green'),
+        gray: theme('colors.custom-gray'),
+      }),
     },
   },
   variants: {
     extend: {},
+    stroke: ['hover', 'focus'],
   },
   plugins: [],
 }

@@ -35,7 +35,6 @@ export const AutoplayProvider = ({ children }) => {
   useEffect(() => {
     clearTimeout(timeOut.current)
     let startAutoplay = null
-    console.log('TRIGGER')
     switch (filter) {
       case 'Ordered':
         startAutoplay = () => {
