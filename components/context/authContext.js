@@ -3,8 +3,7 @@ import PropTypes from 'prop-types'
 import firebase from '@/lib/firebase'
 import { FIRESTORE_COLLECTION } from '@/lib/constants'
 import { useRouter } from 'next/router'
-import { HtmlHead } from '@/components/HtmlHead'
-import { Navbar } from '@/components/Navbar'
+import UnauthorizedPage from '@/pages/403'
 
 export const AuthContext = createContext({ user: null })
 
@@ -141,13 +140,7 @@ export const useAuth = () => useContext(AuthContext)
 export const ProtectedRoute = ({ children }) => {
   const auth = useAuth()
   if (!auth.user) {
-    return (
-      <>
-        <HtmlHead title={'Unauthorized'} />
-        <Navbar />
-        <p className={'flex flex-col justify-center items-center'}>401 (Unauthorized)</p>
-      </>
-    )
+    return <UnauthorizedPage />
   }
   return children
 }
