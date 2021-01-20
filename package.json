@@ -65,6 +65,7 @@
     "react-infinite-scroller": "1.2.4",
     "react-inlinesvg": "2.2.2",
     "react-konva": "17.0.1-3",
+    "react-share": "4.3.1",
     "react-webcam": "5.2.2",
     "swr": "0.4.0",
     "tailwindcss": "npm:@tailwindcss/postcss7-compat",

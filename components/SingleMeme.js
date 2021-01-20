@@ -9,12 +9,12 @@ import Link from 'next/link'
 import formatDistance from 'date-fns/formatDistance'
 import { IoCaretDownOutline, IoCaretUpOutline } from 'react-icons/io5'
 import { memeType } from '@/components/types/types'
+import { SocialShareButtons } from '@/components/SocialShareButtons'
 
 export const SingleMeme = ({ meme, enableLink, updateMemes, updateMeme }) => {
   const { setJson } = useFabricJson()
   const router = useRouter()
   const { upVote, downVote, getVoteState, getTotalPoints } = useVoting({ updateMemes, updateMeme })
-
   return (
     <div className="flex-col max-w-md">
       <p className={'uppercase text-xs text-gray-600 dark:text-gray-300 font-medium'}>
@@ -47,6 +47,8 @@ export const SingleMeme = ({ meme, enableLink, updateMemes, updateMeme }) => {
       ) : (
         <MemeRenderer meme={meme} />
       )}
+
+      <SocialShareButtons />
       <div className={'flex justify-between items-center'}>
         <button
           className={'text-black dark:text-white'}
