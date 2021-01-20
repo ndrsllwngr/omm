@@ -14,12 +14,15 @@ export const SingleMemeProvider = ({ children }) => {
   useEffect(() => {
     if (router.pathname !== '/meme/[id]') {
       if (currentMeme) {
+        // purge cache
+        setNext(null)
+        setPrev(null)
         updateCurrent((_draft) => {
           return null
         })
       }
     }
-  }, [router, currentMeme, updateCurrent])
+  }, [router, currentMeme, updateCurrent, prevMeme, nextMeme])
 
   return (
     <SingleMemeContext.Provider

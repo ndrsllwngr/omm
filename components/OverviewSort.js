@@ -8,13 +8,17 @@ import { IoCloud } from 'react-icons/io5'
 import { FILTER } from '@/lib/constants'
 //https://tailwindui.com/components/application-ui/elements/dropdowns
 //https://letsbuildui.dev/articles/building-a-dropdown-menu-component-with-react-hooks
-export const OverviewSort = ({ enableNotification = false }) => {
+export const OverviewSort = ({ callback = null, enableNotification = false }) => {
   const dropdownRef = useRef(null)
   const [isActive, setIsActive] = useDetectOutsideClick(dropdownRef, false)
   const onClick = () => setIsActive(!isActive)
   const { filter, setFilter } = useFilterContext()
 
   const handleClick = (f) => {
+    // TODO onClick with callback on same filter causes rerender with no next and prev - this issue needs to be revalidated.
+    if (callback) {
+      callback()
+    }
     setIsActive(false)
     if (f !== filter) {
       setFilter(f)

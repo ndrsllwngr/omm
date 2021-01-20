@@ -15,7 +15,7 @@ import { VISIBILITY } from '@/lib/constants'
 export default function SingleView() {
   const router = useRouter()
   const { id } = useRandomMeme(router)
-  const { currentMeme, nextMeme } = useSingleMemeContext()
+  const { currentMeme, nextMeme, setNext, setPrev } = useSingleMemeContext()
   useSingleMeme()
   const [state, dispatch] = useAutoPlayContext()
   const { filter } = useAutoPlayFilter()
@@ -36,7 +36,12 @@ export default function SingleView() {
       />
       <Navbar />
       <div className={'max-w-7xl mx-auto mt-4'}>
-        <OverviewSort />
+        <OverviewSort
+          callback={() => {
+            setPrev(null)
+            setNext(null)
+          }}
+        />
         <Slideshow />
         <div className="flex flex-col items-center font-semibold text-xl my-2 text-white">
           <Link href={`/meme/${id}`}>

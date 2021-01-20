@@ -22,6 +22,10 @@ export const useSingleMeme = () => {
   const viewCount = useViewCount(updateCurrent)
 
   useEffect(() => {
+    console.info({ currentMeme, prevMeme, nextMeme })
+  }, [currentMeme, prevMeme, nextMeme])
+
+  useEffect(() => {
     let operator = {}
     let sort = {}
     switch (filter) {
@@ -169,7 +173,39 @@ export const useSingleMeme = () => {
               console.debug('FIRESTORE_COLLECTION.MEMES', 'READ', 'SingleView', 'nextMeme', filter)
             })
           break
-        case FILTER.LATEST || FILTER.OLDEST:
+        case FILTER.LATEST:
+          collectionRef
+            .where('visibility', '==', VISIBILITY.PUBLIC)
+            .where('createdAt', operator.prev, currentMeme.createdAt)
+            .orderBy('createdAt', sort.prev)
+            .limit(1)
+            .get()
+            .then((prev) => {
+              prev.size > 0
+                ? setPrev({ id: prev.docs[0].id, ...prev.docs[0].data() })
+                : setPrev(null)
+            })
+            .catch((e) => console.error(e))
+            .finally(() => {
+              console.debug('FIRESTORE_COLLECTION.MEMES', 'READ', 'SingleView', 'prevMeme', filter)
+            })
+          collectionRef
+            .where('visibility', '==', VISIBILITY.PUBLIC)
+            .where('createdAt', operator.next, currentMeme.createdAt)
+            .orderBy('createdAt', sort.next)
+            .limit(1)
+            .get()
+            .then((next) => {
+              next.size > 0
+                ? setNext({ id: next.docs[0].id, ...next.docs[0].data() })
+                : setNext(null)
+            })
+            .catch((e) => console.error(e))
+            .finally(() => {
+              console.debug('FIRESTORE_COLLECTION.MEMES', 'READ', 'SingleView', 'nextMeme', filter)
+            })
+          break
+        case FILTER.OLDEST:
           collectionRef
             .where('visibility', '==', VISIBILITY.PUBLIC)
             .where('createdAt', operator.prev, currentMeme.createdAt)
