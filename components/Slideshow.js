@@ -26,7 +26,7 @@ export const Slideshow = () => {
             ) : (
               <SlideshowButton name="prev" disabled={true} />
             )}
-            {nextMeme && nextMeme.id && meme.visibility === VISIBILITY.PUBLIC ? (
+            {nextMeme && nextMeme.id ? (
               <SlideshowButton name="next" changeSlide={nextMeme.id} />
             ) : (
               <SlideshowButton name="next" disabled={true} />
