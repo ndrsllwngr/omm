@@ -21,16 +21,16 @@ export const Slideshow = () => {
         {nextMeme && nextMeme.id && <SlideshowButton name="next" changeSlide={nextMeme.id} />}*/}
         {meme.visibility === VISIBILITY.PUBLIC && (
           <>
-            {prevMeme && prevMeme.id ? (
-              <SlideshowButton name="prev" changeSlide={prevMeme.id} />
-            ) : (
-              <SlideshowButton name="prev" disabled={true} />
-            )}
-            {nextMeme && nextMeme.id ? (
-              <SlideshowButton name="next" changeSlide={nextMeme.id} />
-            ) : (
-              <SlideshowButton name="next" disabled={true} />
-            )}
+            <SlideshowButton
+              name="prev"
+              disabled={!(prevMeme && prevMeme.id)}
+              changeSlide={prevMeme && prevMeme.id}
+            />
+            <SlideshowButton
+              name="next"
+              disabled={!(nextMeme && nextMeme.id)}
+              changeSlide={nextMeme && nextMeme.id}
+            />
           </>
         )}
       </div>
@@ -58,7 +58,7 @@ export const SlideshowButton = ({ name, changeSlide, disabled }) => {
     >
       <svg
         className={`w-12 h-12 py-2 px-2 ${
-          disabled ? 'stroke-gray' : 'stroke-green hover:stroke-gray'
+          disabled ? 'stroke-gray cursor-not-allowed' : 'stroke-green hover:stroke-gray'
         }`}
         xmlns="http://www.w3.org/2000/svg"
         fill="none"

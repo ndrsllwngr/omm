@@ -1,28 +1,32 @@
 import React, { useRef } from 'react'
 import { useDetectOutsideClick } from '@/components/hooks/useDetectOutsideClick'
-import { useFilterContext } from '@/components/context/viewsContext'
+import { useSortContext } from '@/components/context/viewsContext'
 import PropTypes from 'prop-types'
 import { useMemeReload } from '@/components/hooks/useMemeReload'
 import firebase from '@/lib/firebase'
 import { IoCloud } from 'react-icons/io5'
-import { FILTER } from '@/lib/constants'
+import { SORT } from '@/lib/constants'
 //https://tailwindui.com/components/application-ui/elements/dropdowns
 //https://letsbuildui.dev/articles/building-a-dropdown-menu-component-with-react-hooks
-export const OverviewSort = ({ enableNotification = false }) => {
+export const OverviewSort = ({ callback = null, enableNotification = false }) => {
   const dropdownRef = useRef(null)
   const [isActive, setIsActive] = useDetectOutsideClick(dropdownRef, false)
   const onClick = () => setIsActive(!isActive)
-  const { filter, setFilter } = useFilterContext()
+  const { sort, setSort } = useSortContext()
 
-  const handleClick = (f) => {
+  const handleClick = (newSort) => {
+    // TODO onClick with callback on same sorting causes rerender with no next and prev - this issue needs to be revalidated.
+    if (callback) {
+      callback()
+    }
     setIsActive(false)
-    if (f !== filter) {
-      setFilter(f)
+    if (newSort !== sort) {
+      setSort(newSort)
     }
   }
   return (
     <div className="flex justify-end items-center">
-      {enableNotification && <NewMemeNotification setFilter={setFilter} />}
+      {enableNotification && <NewMemeNotification setSort={setSort} />}
       <div className="flex relative">
         <button
           type="button"
@@ -32,7 +36,7 @@ export const OverviewSort = ({ enableNotification = false }) => {
           aria-expanded="true"
           onClick={onClick}
         >
-          {filter}
+          {sort}
           {/* <!-- Heroicon name: chevron-down --> */}
           <svg
             className="-mr-1 ml-2 h-5 w-5"
@@ -60,46 +64,46 @@ export const OverviewSort = ({ enableNotification = false }) => {
               aria-labelledby="options-menu"
             >
               <div
-                onClick={() => handleClick(FILTER.LATEST)}
+                onClick={() => handleClick(SORT.LATEST)}
                 className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900"
                 role="menuitem"
               >
-                {FILTER.LATEST}
+                {SORT.LATEST}
               </div>
               <div
-                onClick={() => handleClick(FILTER.OLDEST)}
+                onClick={() => handleClick(SORT.OLDEST)}
                 className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900"
                 role="menuitem"
               >
-                {FILTER.OLDEST}
+                {SORT.OLDEST}
               </div>
               <div
-                onClick={() => handleClick(FILTER.MOST_VIEWED)}
+                onClick={() => handleClick(SORT.MOST_VIEWED)}
                 className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900"
                 role="menuitem"
               >
-                {FILTER.MOST_VIEWED}
+                {SORT.MOST_VIEWED}
               </div>
               <div
-                onClick={() => handleClick(FILTER.LEAST_VIEWED)}
+                onClick={() => handleClick(SORT.LEAST_VIEWED)}
                 className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900"
                 role="menuitem"
               >
-                {FILTER.LEAST_VIEWED}
+                {SORT.LEAST_VIEWED}
               </div>
               <div
-                onClick={() => handleClick(FILTER.MOST_POINTS)}
+                onClick={() => handleClick(SORT.MOST_POINTS)}
                 className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900"
                 role="menuitem"
               >
-                {FILTER.MOST_POINTS}
+                {SORT.MOST_POINTS}
               </div>
               <div
-                onClick={() => handleClick(FILTER.LEAST_POINTS)}
+                onClick={() => handleClick(SORT.LEAST_POINTS)}
                 className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900"
                 role="menuitem"
               >
-                {FILTER.LEAST_POINTS}
+                {SORT.LEAST_POINTS}
               </div>
             </div>
           </div>
@@ -114,7 +118,7 @@ OverviewSort.propTypes = {
   enableNotification: PropTypes.bool,
 }
 
-const NewMemeNotification = ({ setFilter }) => {
+const NewMemeNotification = ({ setSort }) => {
   const {
     showNewMemes,
     setShowNewMemes,
@@ -132,7 +136,7 @@ const NewMemeNotification = ({ setFilter }) => {
         setShowNewMemes(false)
         setCounter(0)
         setDate(firebase.firestore.Timestamp.now())
-        setFilter(FILTER.LATEST)
+        setSort(SORT.LATEST)
       }}
       className="text-custom-green uppercase font-semibold flex items-center mr-4"
     >
@@ -143,5 +147,5 @@ const NewMemeNotification = ({ setFilter }) => {
 }
 
 NewMemeNotification.propTypes = {
-  setFilter: PropTypes.func,
+  setSort: PropTypes.func,
 }
