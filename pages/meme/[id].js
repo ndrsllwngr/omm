@@ -8,9 +8,9 @@ import { OverviewSort } from '@/components/OverviewSort'
 import { HtmlHead } from '@/components/HtmlHead'
 import { useSingleMeme } from '@/components/hooks/useSingleMeme'
 import { useSingleMemeContext } from '@/components/context/singlememeContext'
-import { useAutoPlayContext, useAutoPlayFilter } from '@/components/context/autoplayContext'
+import { useAutoPlayContext, useAutoPlayOrder } from '@/components/context/autoplayContext'
 import { AutoplaySort } from '@/components/AutoplaySort'
-import { VISIBILITY } from '@/lib/constants'
+import { AUTOPLAY_ORDER, VISIBILITY } from '@/lib/constants'
 
 export default function SingleView() {
   const router = useRouter()
@@ -18,7 +18,7 @@ export default function SingleView() {
   const { currentMeme, nextMeme, setNext, setPrev } = useSingleMemeContext()
   useSingleMeme()
   const [state, dispatch] = useAutoPlayContext()
-  const { filter } = useAutoPlayFilter()
+  const { order } = useAutoPlayOrder()
 
   if (!currentMeme)
     return (
@@ -51,7 +51,7 @@ export default function SingleView() {
           </Link>
           {currentMeme.visibility === VISIBILITY.PUBLIC && (
             <>
-              {filter === 'Random' ? (
+              {order === AUTOPLAY_ORDER.RANDOM ? (
                 <div className="flex flex-row">
                   <button
                     className="my-2 p-2 rounded bg-green-600"

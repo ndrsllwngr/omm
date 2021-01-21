@@ -1,16 +1,20 @@
 import React, { useRef } from 'react'
 import { useDetectOutsideClick } from '@/components/hooks/useDetectOutsideClick'
-import { useAutoPlayFilter } from '@/components/context/autoplayContext'
+import { useAutoPlayOrder } from '@/components/context/autoplayContext'
+import { AUTOPLAY_ORDER } from '@/lib/constants'
 
 export const AutoplaySort = () => {
   const dropdownRef = useRef(null)
   const [isActive, setIsActive] = useDetectOutsideClick(dropdownRef, false)
-  const { filter, setFilter } = useAutoPlayFilter()
+  const { order, setOrder } = useAutoPlayOrder()
+
   const onClick = () => setIsActive(!isActive)
-  const handleClick = (f) => {
+
+  const handleClick = (newOrder) => {
     setIsActive(false)
-    setFilter(f)
+    setOrder(newOrder)
   }
+
   return (
     <div className="relative inline-block text-left">
       <div>
@@ -22,7 +26,7 @@ export const AutoplaySort = () => {
           aria-expanded="true"
           onClick={onClick}
         >
-          {filter} Autoplay
+          {order} Autoplay
           <svg
             className="-mr-1 ml-2 h-5 w-5"
             xmlns="http://www.w3.org/2000/svg"
@@ -48,18 +52,18 @@ export const AutoplaySort = () => {
         >
           <div className="py-1">
             <div
-              onClick={() => handleClick('Random')}
+              onClick={() => handleClick(AUTOPLAY_ORDER.RANDOM)}
               className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900"
               role="menuitem"
             >
-              Random
+              {AUTOPLAY_ORDER.RANDOM}
             </div>
             <div
-              onClick={() => handleClick('Ordered')}
+              onClick={() => handleClick(AUTOPLAY_ORDER.ORDERED)}
               className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900"
               role="menuitem"
             >
-              Ordered
+              {AUTOPLAY_ORDER.ORDERED}
             </div>
           </div>
         </div>
