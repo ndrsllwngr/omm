@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import firebase from '@/lib/firebase'
-import { FIRESTORE_COLLECTION } from '@/lib/constants'
+import { FIRESTORE_COLLECTION, VISIBILITY } from '@/lib/constants'
 
 export const useRandomMeme = (router) => {
   const [id, setId] = useState([])
@@ -13,7 +13,11 @@ export const useRandomMeme = (router) => {
 
   useEffect(() => {
     async function getRandomMeme() {
-      const memeCollection = await firebase.firestore().collection(FIRESTORE_COLLECTION.MEMES).get()
+      const memeCollection = await firebase
+        .firestore()
+        .collection(FIRESTORE_COLLECTION.MEMES)
+        .where('visibility', '==', VISIBILITY.PUBLIC)
+        .get()
       console.debug(`FIRESTORE_COLLECTION.MEMES`, 'READ', 'useRandomMeme')
       // TODO DON'T CALL IN CONTEXT
       const ids = []
