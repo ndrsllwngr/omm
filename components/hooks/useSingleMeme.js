@@ -1,7 +1,7 @@
 import { useEffect } from 'react'
 import firebase from '@/lib/firebase'
-import { FILTER, FIRESTORE_COLLECTION, VISIBILITY } from '@/lib/constants'
-import { useFilterContext } from '@/components/context/viewsContext'
+import { SORT, FIRESTORE_COLLECTION, VISIBILITY } from '@/lib/constants'
+import { useSortContext } from '@/components/context/viewsContext'
 import { useViewCount } from '@/components/hooks/useViewCount'
 import { useSingleMemeContext } from '@/components/context/singlememeContext'
 import { useRouter } from 'next/router'
@@ -18,7 +18,7 @@ export const useSingleMeme = () => {
     nextMeme,
     setNext,
   } = useSingleMemeContext()
-  const { filter } = useFilterContext()
+  const { sort } = useSortContext()
   const viewCount = useViewCount(updateCurrent)
 
   useEffect(() => {
@@ -26,36 +26,36 @@ export const useSingleMeme = () => {
   }, [currentMeme, prevMeme, nextMeme])
 
   useEffect(() => {
-    let operator = {}
-    let sort = {}
-    switch (filter) {
-      case FILTER.LATEST:
-        operator = { prev: '<', next: '>' }
-        sort = { prev: 'desc', next: 'asc' }
+    let whereOpStr = {}
+    let orderByDirection = {}
+    switch (sort) {
+      case SORT.LATEST:
+        whereOpStr = { prev: '<', next: '>' }
+        orderByDirection = { prev: 'desc', next: 'asc' }
         break
-      case FILTER.OLDEST:
-        operator = { prev: '>', next: '<' }
-        sort = { prev: 'asc', next: 'desc' }
+      case SORT.OLDEST:
+        whereOpStr = { prev: '>', next: '<' }
+        orderByDirection = { prev: 'asc', next: 'desc' }
         break
-      case FILTER.MOST_VIEWED:
-        operator = { prev: '<=', next: '>=' }
-        sort = { prev: 'desc', next: 'asc' }
+      case SORT.MOST_VIEWED:
+        whereOpStr = { prev: '<=', next: '>=' }
+        orderByDirection = { prev: 'desc', next: 'asc' }
         break
-      case FILTER.LEAST_VIEWED:
-        operator = { prev: '>=', next: '<=' }
-        sort = { prev: 'asc', next: 'desc' }
+      case SORT.LEAST_VIEWED:
+        whereOpStr = { prev: '>=', next: '<=' }
+        orderByDirection = { prev: 'asc', next: 'desc' }
         break
       default:
-        console.log('Unsupported filter', filter)
+        console.log('Unsupported sort', sort)
     }
     if (currentMeme && !prevMeme && !nextMeme) {
       let collectionRef = firebase.firestore().collection(FIRESTORE_COLLECTION.MEMES)
-      switch (filter) {
-        case FILTER.MOST_VIEWED:
+      switch (sort) {
+        case SORT.MOST_VIEWED:
           collectionRef
             .where('visibility', '==', VISIBILITY.PUBLIC)
-            .where('views', operator.prev, currentMeme.views)
-            .orderBy('views', sort.prev)
+            .where('views', whereOpStr.prev, currentMeme.views)
+            .orderBy('views', orderByDirection.prev)
             .get()
             .then((prev) => {
               if (prev.docs.length > 0) {
@@ -79,12 +79,12 @@ export const useSingleMeme = () => {
             })
             .catch((e) => console.error(e))
             .finally(() => {
-              console.debug('FIRESTORE_COLLECTION.MEMES', 'READ', 'SingleView', 'prevMeme', filter)
+              console.debug('FIRESTORE_COLLECTION.MEMES', 'READ', 'SingleView', 'prevMeme', sort)
             })
           collectionRef
             .where('visibility', '==', VISIBILITY.PUBLIC)
-            .where('views', operator.next, currentMeme.views)
-            .orderBy('views', sort.next)
+            .where('views', whereOpStr.next, currentMeme.views)
+            .orderBy('views', orderByDirection.next)
             .get()
             .then((next) => {
               if (next.docs.length > 0) {
@@ -109,14 +109,14 @@ export const useSingleMeme = () => {
             })
             .catch((e) => console.error(e))
             .finally(() => {
-              console.debug('FIRESTORE_COLLECTION.MEMES', 'READ', 'SingleView', 'nextMeme', filter)
+              console.debug('FIRESTORE_COLLECTION.MEMES', 'READ', 'SingleView', 'nextMeme', sort)
             })
           break
-        case FILTER.LEAST_VIEWED:
+        case SORT.LEAST_VIEWED:
           collectionRef
             .where('visibility', '==', VISIBILITY.PUBLIC)
-            .where('views', operator.prev, currentMeme.views)
-            .orderBy('views', sort.prev)
+            .where('views', whereOpStr.prev, currentMeme.views)
+            .orderBy('views', orderByDirection.prev)
             .get()
             .then((prev) => {
               if (prev.docs.length > 0) {
@@ -140,12 +140,12 @@ export const useSingleMeme = () => {
             })
             .catch((e) => console.error(e))
             .finally(() => {
-              console.debug('FIRESTORE_COLLECTION.MEMES', 'READ', 'SingleView', 'prevMeme', filter)
+              console.debug('FIRESTORE_COLLECTION.MEMES', 'READ', 'SingleView', 'prevMeme', sort)
             })
           collectionRef
             .where('visibility', '==', VISIBILITY.PUBLIC)
-            .where('views', operator.next, currentMeme.views)
-            .orderBy('views', sort.next)
+            .where('views', whereOpStr.next, currentMeme.views)
+            .orderBy('views', orderByDirection.next)
             .get()
             .then((next) => {
               if (next.docs.length > 0) {
@@ -170,14 +170,14 @@ export const useSingleMeme = () => {
             })
             .catch((e) => console.error(e))
             .finally(() => {
-              console.debug('FIRESTORE_COLLECTION.MEMES', 'READ', 'SingleView', 'nextMeme', filter)
+              console.debug('FIRESTORE_COLLECTION.MEMES', 'READ', 'SingleView', 'nextMeme', sort)
             })
           break
-        case FILTER.LATEST:
+        case SORT.LATEST:
           collectionRef
             .where('visibility', '==', VISIBILITY.PUBLIC)
-            .where('createdAt', operator.prev, currentMeme.createdAt)
-            .orderBy('createdAt', sort.prev)
+            .where('createdAt', whereOpStr.prev, currentMeme.createdAt)
+            .orderBy('createdAt', orderByDirection.prev)
             .limit(1)
             .get()
             .then((prev) => {
@@ -187,12 +187,12 @@ export const useSingleMeme = () => {
             })
             .catch((e) => console.error(e))
             .finally(() => {
-              console.debug('FIRESTORE_COLLECTION.MEMES', 'READ', 'SingleView', 'prevMeme', filter)
+              console.debug('FIRESTORE_COLLECTION.MEMES', 'READ', 'SingleView', 'prevMeme', sort)
             })
           collectionRef
             .where('visibility', '==', VISIBILITY.PUBLIC)
-            .where('createdAt', operator.next, currentMeme.createdAt)
-            .orderBy('createdAt', sort.next)
+            .where('createdAt', whereOpStr.next, currentMeme.createdAt)
+            .orderBy('createdAt', orderByDirection.next)
             .limit(1)
             .get()
             .then((next) => {
@@ -202,14 +202,14 @@ export const useSingleMeme = () => {
             })
             .catch((e) => console.error(e))
             .finally(() => {
-              console.debug('FIRESTORE_COLLECTION.MEMES', 'READ', 'SingleView', 'nextMeme', filter)
+              console.debug('FIRESTORE_COLLECTION.MEMES', 'READ', 'SingleView', 'nextMeme', sort)
             })
           break
-        case FILTER.OLDEST:
+        case SORT.OLDEST:
           collectionRef
             .where('visibility', '==', VISIBILITY.PUBLIC)
-            .where('createdAt', operator.prev, currentMeme.createdAt)
-            .orderBy('createdAt', sort.prev)
+            .where('createdAt', whereOpStr.prev, currentMeme.createdAt)
+            .orderBy('createdAt', orderByDirection.prev)
             .limit(1)
             .get()
             .then((prev) => {
@@ -219,12 +219,12 @@ export const useSingleMeme = () => {
             })
             .catch((e) => console.error(e))
             .finally(() => {
-              console.debug('FIRESTORE_COLLECTION.MEMES', 'READ', 'SingleView', 'prevMeme', filter)
+              console.debug('FIRESTORE_COLLECTION.MEMES', 'READ', 'SingleView', 'prevMeme', sort)
             })
           collectionRef
             .where('visibility', '==', VISIBILITY.PUBLIC)
-            .where('createdAt', operator.next, currentMeme.createdAt)
-            .orderBy('createdAt', sort.next)
+            .where('createdAt', whereOpStr.next, currentMeme.createdAt)
+            .orderBy('createdAt', orderByDirection.next)
             .limit(1)
             .get()
             .then((next) => {
@@ -234,18 +234,17 @@ export const useSingleMeme = () => {
             })
             .catch((e) => console.error(e))
             .finally(() => {
-              console.debug('FIRESTORE_COLLECTION.MEMES', 'READ', 'SingleView', 'nextMeme', filter)
+              console.debug('FIRESTORE_COLLECTION.MEMES', 'READ', 'SingleView', 'nextMeme', sort)
             })
           break
         default:
-          console.log('Unsupported filter', filter)
+          console.log('Unsupported sort', sort)
       }
     }
     // TODO Evaluate the dependencies of this useEffect.
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [currentMeme, filter])
+  }, [currentMeme, sort])
 
-  // TODO restrict query to just Public Memes, exclude Unlisted and Private
   useEffect(() => {
     async function getData() {
       const db = firebase.firestore()
@@ -280,5 +279,5 @@ export const useSingleMeme = () => {
       })
     // TODO Evaluate the dependencies of this useEffect.
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [router.query.id, filter])
+  }, [router.query.id, sort])
 }

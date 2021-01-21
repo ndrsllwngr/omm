@@ -1,24 +1,24 @@
 import React, { useContext, useState, createContext } from 'react'
 import Proptypes from 'prop-types'
-import { FILTER } from '@/lib/constants'
+import { SORT } from '@/lib/constants'
 
-export const FilterContext = createContext({})
+export const SortContext = createContext({})
 export const ReloadContext = createContext({})
 
 export const ViewsProvider = ({ children }) => {
-  const [filter, setFilter] = useState(FILTER.LATEST)
+  const [sort, setSort] = useState(SORT.LATEST)
   const [reload, setReload] = useState(false)
   return (
-    <FilterContext.Provider value={{ filter, setFilter }}>
+    <SortContext.Provider value={{ sort, setSort }}>
       <ReloadContext.Provider value={{ reload, setReload }}>{children}</ReloadContext.Provider>
-    </FilterContext.Provider>
+    </SortContext.Provider>
   )
 }
 
-export const useFilterContext = () => {
-  const context = useContext(FilterContext)
+export const useSortContext = () => {
+  const context = useContext(SortContext)
   if (!context) {
-    throw new Error(`useFilterContext must be used within a TemplateProvider`)
+    throw new Error(`useSortContext must be used within a TemplateProvider`)
   }
   return context
 }

@@ -1,13 +1,13 @@
 import { useState, useEffect } from 'react'
 import firebase from '@/lib/firebase'
-import { FILTER, FIRESTORE_COLLECTION, VISIBILITY } from '@/lib/constants'
-import { useFilterContext, useReloadContext } from '@/components/context/viewsContext'
+import { SORT, FIRESTORE_COLLECTION, VISIBILITY } from '@/lib/constants'
+import { useSortContext, useReloadContext } from '@/components/context/viewsContext'
 import { useImmer } from 'use-immer'
 
 export const useDatabaseMemes = () => {
   const limit = 20
   const [memes, updateMemes] = useImmer([])
-  const { filter } = useFilterContext()
+  const { sort } = useSortContext()
   const { reload } = useReloadContext()
 
   const [latestDoc, setLatestDoc] = useState(null)
@@ -21,42 +21,42 @@ export const useDatabaseMemes = () => {
     //https://blog.logrocket.com/react-hooks-with-firebase-firestore/
     //TODO usecallback to prevent dependency issues
 
-    switch (filter) {
-      case FILTER.LATEST:
+    switch (sort) {
+      case SORT.LATEST:
         loadNextMemes('createdAt', 'desc', false)
         break
-      case FILTER.OLDEST:
+      case SORT.OLDEST:
         loadNextMemes('createdAt', 'asc', false)
         break
-      case FILTER.MOST_VIEWED:
+      case SORT.MOST_VIEWED:
         loadNextMemes('views', 'desc', false)
         break
-      case FILTER.LEAST_VIEWED:
+      case SORT.LEAST_VIEWED:
         loadNextMemes('views', 'asc', false)
         break
       default:
-        console.log('Unsupported filter', filter)
+        console.log('Unsupported sort', sort)
     }
     // TODO Evaluate the dependencies of this useEffect.
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [filter, reload])
+  }, [sort, reload])
 
   const triggerNextMemes = () => {
-    switch (filter) {
-      case FILTER.LATEST:
+    switch (sort) {
+      case SORT.LATEST:
         loadNextMemes('createdAt', 'desc', true)
         break
-      case FILTER.OLDEST:
+      case SORT.OLDEST:
         loadNextMemes('createdAt', 'asc', true)
         break
-      case FILTER.MOST_VIEWED:
+      case SORT.MOST_VIEWED:
         loadNextMemes('views', 'desc', true)
         break
-      case FILTER.LEAST_VIEWED:
+      case SORT.LEAST_VIEWED:
         loadNextMemes('views', 'asc', true)
         break
       default:
-        console.log('Unsupported filter', filter)
+        console.log('Unsupported sort', sort)
     }
   }
 
