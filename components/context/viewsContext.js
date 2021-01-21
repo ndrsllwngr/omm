@@ -18,14 +18,14 @@ export const ViewsProvider = ({ children }) => {
 export const useSortContext = () => {
   const context = useContext(SortContext)
   if (!context) {
-    throw new Error(`useSortContext must be used within a TemplateProvider`)
+    throw new Error(`useSortContext must be used within a ViewsProvider`)
   }
   return context
 }
 export const useReloadContext = () => {
   const context = useContext(ReloadContext)
   if (!context) {
-    throw new Error(`useReloadContext must be used within a TemplateProvider`)
+    throw new Error(`useReloadContext must be used within a ViewsProvider`)
   }
   return context
 }
