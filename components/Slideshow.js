@@ -12,6 +12,7 @@ import { AUTOPLAY_ORDER, VISIBILITY } from '@/lib/constants'
 import Link from 'next/link'
 import { AutoplaySort } from '@/components/AutoplaySort'
 import { useRandomMeme } from '@/components/hooks/useRandomMeme'
+import { IoHelp } from 'react-icons/io5'
 
 export const Slideshow = () => {
   const {
@@ -40,14 +41,14 @@ export const Slideshow = () => {
             <div className="flex flex-col items-center font-semibold text-xl my-2 text-white">
               <Link href={`/meme/${id}`}>
                 <a onClick={() => dispatch({ type: 'falseBool' })}>
-                  <span className="my-2 p-2 rounded bg-green-600">Random Meme</span>
+                  <IoHelp size={24} className="fill-current mr-2 text-custom-green" />
                 </a>
               </Link>
               {meme.visibility === VISIBILITY.PUBLIC && (
                 <div className="flex flex-row">
                   <button
                     disabled={order === AUTOPLAY_ORDER.ORDERED && !(nextMeme && nextMeme.id)}
-                    className="my-2 p-2 rounded bg-green-600"
+                    className="my-2 p-2 rounded bg-custom-green"
                     onClick={
                       !nextMeme && order !== AUTOPLAY_ORDER.RANDOM && state.bool
                         ? () => dispatch({ type: 'falseBool' })
