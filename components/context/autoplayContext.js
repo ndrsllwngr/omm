@@ -30,7 +30,7 @@ export const AutoplayProvider = ({ children }) => {
   const [order, setOrder] = useState(AUTOPLAY_ORDER.RANDOM)
   const router = useRouter()
   const timeOut = useRef(null)
-  const { nextMeme } = useSingleMemeContext()
+  const { nextMeme, prevMeme } = useSingleMemeContext()
   const { id } = useRandomMeme(router)
 
   useEffect(() => {
@@ -49,7 +49,11 @@ export const AutoplayProvider = ({ children }) => {
         if (nextMeme) {
           state.bool ? startAutoplay() : clearTimeout(timeOut.current)
         }
+        if (prevMeme && !nextMeme) {
+          dispatch({ type: 'falseBool' })
+        }
         break
+
       case AUTOPLAY_ORDER.RANDOM:
         startAutoplay = () => {
           timeOut.current = setTimeout(function () {
@@ -110,6 +114,7 @@ export const useAutoPlayDispatch = () => {
   }
   return context
 }
+
 export function useAutoPlayContext() {
   return [useAutoPlayState(), useAutoPlayDispatch()]
 }

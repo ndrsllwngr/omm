@@ -29,8 +29,6 @@ export const Slideshow = () => {
   return (
     <div className="flex flex-col justify-center max-w-md mx-auto">
       <div className="flex flex-row justify-between my-2">
-        {/*{prevMeme && prevMeme.id && <SlideshowButton name="prev" changeSlide={prevMeme.id} />}
-        {nextMeme && nextMeme.id && <SlideshowButton name="next" changeSlide={nextMeme.id} />}*/}
         {meme.visibility === VISIBILITY.PUBLIC && (
           <>
             <SlideshowButton
@@ -46,47 +44,20 @@ export const Slideshow = () => {
                 </a>
               </Link>
               {meme.visibility === VISIBILITY.PUBLIC && (
-                <>
-                  <div className="flex flex-row">
-                    <button
-                      disabled={
-                        order !== AUTOPLAY_ORDER.RANDOM && !(nextMeme && !(nextMeme.id === ''))
-                      }
-                      className="my-2 p-2 rounded-l bg-green-600"
-                      onClick={() => dispatch({ type: 'toggleBool' })}
-                    >
-                      {(state.bool && nextMeme && !(nextMeme.id === '')) ||
-                      (order === AUTOPLAY_ORDER.RANDOM && !nextMeme && state.bool)
-                        ? `On`
-                        : `Off`}
-                    </button>
-                    <AutoplaySort />
-                  </div>
-                  {/*{order === AUTOPLAY_ORDER.RANDOM ? (
-                    <div className="flex flex-row">
-                      <button
-                        className="my-2 p-2 rounded bg-green-600"
-                        onClick={() => dispatch({ type: 'toggleBool' })}
-                      >
-                        {state.bool ? `On` : `Off`}
-                      </button>
-                      <AutoplaySort />
-                    </div>
-                  ) : (
-                    nextMeme &&
-                    !(nextMeme.id === '') && (
-                      <div className="flex flex-row">
-                        <AutoplaySort />
-                        <button
-                          className="my-2 p-2 rounded- bg-green-600"
-                          onClick={() => dispatch({ type: 'toggleBool' })}
-                        >
-                          {state.bool ? `On` : `Off`}
-                        </button>
-                      </div>
-                    )
-                  )}*/}
-                </>
+                <div className="flex flex-row">
+                  <button
+                    disabled={order === AUTOPLAY_ORDER.ORDERED && !(nextMeme && nextMeme.id)}
+                    className="my-2 p-2 rounded bg-green-600"
+                    onClick={
+                      !nextMeme && order !== AUTOPLAY_ORDER.RANDOM && state.bool
+                        ? () => dispatch({ type: 'falseBool' })
+                        : () => dispatch({ type: 'toggleBool' })
+                    }
+                  >
+                    {state.bool ? `On` : `Off`}
+                  </button>
+                  <AutoplaySort />
+                </div>
               )}
             </div>
 
