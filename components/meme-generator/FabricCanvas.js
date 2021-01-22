@@ -24,8 +24,8 @@ export const FabricCanvas = ({ jsonData = null }) => {
   } = useFabricCanvas()
   const { setActiveObject } = useFabricActiveObject()
   const [size, updateSize] = useImmer({
-    width: json ? json.width : 500,
-    height: json ? json.width : 400,
+    width: jsonData ? jsonData.width : 500,
+    height: jsonData ? jsonData.width : 400,
   })
 
   const onResize = useCallback(
