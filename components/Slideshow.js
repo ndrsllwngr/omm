@@ -38,10 +38,10 @@ export const Slideshow = () => {
               changeSlide={prevMeme && prevMeme.id}
             />
 
-            <div className="flex flex-row items-center font-semibold text-xl my-2 text-white">
+            <div className="flex flex-row items-center font-semibold text-xl text-white">
               <Link href={`/meme/${id}`}>
                 <a
-                  className="bg-custom-gray rounded-full mr-2"
+                  className="bg-custom-gray rounded-md mr-2"
                   onClick={() => dispatch({ type: 'falseBool' })}
                 >
                   <IoHelp size={44} className="fill-current text-custom-green py-2" />
@@ -52,7 +52,7 @@ export const Slideshow = () => {
                   <AutoplaySort />
                   <button
                     disabled={order === AUTOPLAY_ORDER.ORDERED && !(nextMeme && nextMeme.id)}
-                    className="my-2 p-2 rounded-r bg-custom-gray"
+                    className="p-2 rounded-r bg-custom-gray"
                     onClick={
                       !nextMeme && order !== AUTOPLAY_ORDER.RANDOM && state.bool
                         ? () => dispatch({ type: 'falseBool' })
