@@ -2,9 +2,16 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { SingleMeme } from '@/components/SingleMeme'
 import { useRouter } from 'next/router'
-import { useAutoPlayDispatch } from '@/components/context/autoplayContext'
+import {
+  useAutoPlayContext,
+  useAutoPlayDispatch,
+  useAutoPlayOrder,
+} from '@/components/context/autoplayContext'
 import { useSingleMemeContext } from '@/components/context/singlememeContext'
-import { VISIBILITY } from '@/lib/constants'
+import { AUTOPLAY_ORDER, VISIBILITY } from '@/lib/constants'
+import Link from 'next/link'
+import { AutoplaySort } from '@/components/AutoplaySort'
+import { useRandomMeme } from '@/components/hooks/useRandomMeme'
 
 export const Slideshow = () => {
   const {
@@ -13,6 +20,11 @@ export const Slideshow = () => {
     prevMeme,
     updateCurrent: updateMeme,
   } = useSingleMemeContext()
+  const router = useRouter()
+  const [state, dispatch] = useAutoPlayContext()
+  const { order } = useAutoPlayOrder()
+  const { id } = useRandomMeme(router)
+
   if (!meme) return <div className="flex flex-row justify-center">loading..</div>
   return (
     <div className="flex flex-col justify-center max-w-md mx-auto">
@@ -26,6 +38,58 @@ export const Slideshow = () => {
               disabled={!(prevMeme && prevMeme.id)}
               changeSlide={prevMeme && prevMeme.id}
             />
+
+            <div className="flex flex-col items-center font-semibold text-xl my-2 text-white">
+              <Link href={`/meme/${id}`}>
+                <a onClick={() => dispatch({ type: 'falseBool' })}>
+                  <span className="my-2 p-2 rounded bg-green-600">Random Meme</span>
+                </a>
+              </Link>
+              {meme.visibility === VISIBILITY.PUBLIC && (
+                <>
+                  <div className="flex flex-row">
+                    <button
+                      disabled={
+                        order !== AUTOPLAY_ORDER.RANDOM && !(nextMeme && !(nextMeme.id === ''))
+                      }
+                      className="my-2 p-2 rounded-l bg-green-600"
+                      onClick={() => dispatch({ type: 'toggleBool' })}
+                    >
+                      {(state.bool && nextMeme && !(nextMeme.id === '')) ||
+                      (order === AUTOPLAY_ORDER.RANDOM && !nextMeme && state.bool)
+                        ? `On`
+                        : `Off`}
+                    </button>
+                    <AutoplaySort />
+                  </div>
+                  {/*{order === AUTOPLAY_ORDER.RANDOM ? (
+                    <div className="flex flex-row">
+                      <button
+                        className="my-2 p-2 rounded bg-green-600"
+                        onClick={() => dispatch({ type: 'toggleBool' })}
+                      >
+                        {state.bool ? `On` : `Off`}
+                      </button>
+                      <AutoplaySort />
+                    </div>
+                  ) : (
+                    nextMeme &&
+                    !(nextMeme.id === '') && (
+                      <div className="flex flex-row">
+                        <AutoplaySort />
+                        <button
+                          className="my-2 p-2 rounded- bg-green-600"
+                          onClick={() => dispatch({ type: 'toggleBool' })}
+                        >
+                          {state.bool ? `On` : `Off`}
+                        </button>
+                      </div>
+                    )
+                  )}*/}
+                </>
+              )}
+            </div>
+
             <SlideshowButton
               name="next"
               disabled={!(nextMeme && nextMeme.id)}

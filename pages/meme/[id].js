@@ -14,11 +14,11 @@ import { AUTOPLAY_ORDER, VISIBILITY } from '@/lib/constants'
 
 export default function SingleView() {
   const router = useRouter()
-  const { id } = useRandomMeme(router)
+  /*const { id } = useRandomMeme(router)*/
   const { currentMeme, nextMeme, setNext, setPrev } = useSingleMemeContext()
   useSingleMeme()
-  const [state, dispatch] = useAutoPlayContext()
-  const { order } = useAutoPlayOrder()
+  /*  const [state, dispatch] = useAutoPlayContext()
+  const { order } = useAutoPlayOrder()*/
 
   if (!currentMeme)
     return (
@@ -43,7 +43,7 @@ export default function SingleView() {
           }}
         />
         <Slideshow />
-        <div className="flex flex-col items-center font-semibold text-xl my-2 text-white">
+        {/*        <div className="flex flex-col items-center font-semibold text-xl my-2 text-white">
           <Link href={`/meme/${id}`}>
             <a onClick={() => dispatch({ type: 'falseBool' })}>
               <span className="my-2 p-2 rounded bg-green-600">Random Meme</span>
@@ -51,6 +51,16 @@ export default function SingleView() {
           </Link>
           {currentMeme.visibility === VISIBILITY.PUBLIC && (
             <>
+              <div className="flex flex-row">
+                <button
+                  disabled={!(nextMeme && !(nextMeme.id === ''))}
+                  className="my-2 p-2 rounded-l bg-green-600"
+                  onClick={() => dispatch({ type: 'toggleBool' })}
+                >
+                  {state.bool && nextMeme && !(nextMeme.id === '') ? `On` : `Off`}
+                </button>
+                <AutoplaySort />
+              </div>
               {order === AUTOPLAY_ORDER.RANDOM ? (
                 <div className="flex flex-row">
                   <button
@@ -65,19 +75,19 @@ export default function SingleView() {
                 nextMeme &&
                 !(nextMeme.id === '') && (
                   <div className="flex flex-row">
+                    <AutoplaySort />
                     <button
-                      className="my-2 p-2 rounded bg-green-600"
+                      className="my-2 p-2 rounded- bg-green-600"
                       onClick={() => dispatch({ type: 'toggleBool' })}
                     >
                       {state.bool ? `On` : `Off`}
                     </button>
-                    <AutoplaySort />
                   </div>
                 )
               )}
             </>
           )}
-        </div>
+        </div>*/}
       </div>
     </>
   )

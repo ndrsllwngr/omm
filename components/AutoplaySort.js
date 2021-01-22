@@ -20,7 +20,7 @@ export const AutoplaySort = () => {
       <div>
         <button
           type="button"
-          className="inline-flex justify-center w-full border-b-2 shadow-sm px-4 mt-4 py-2 bg-transparent text-sm font-medium text-black dark:text-white focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-200 focus:ring-gray-200"
+          className="inline-flex justify-center items-center w-full mt-2 shadow-sm rounded-r px-4 py-2 bg-custom-green font-medium dark:text-white focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-200 focus:ring-gray-200"
           id="options-menu"
           aria-haspopup="true"
           aria-expanded="true"
