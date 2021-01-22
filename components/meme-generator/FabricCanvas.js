@@ -10,6 +10,8 @@ import 'react-resizable/css/styles.css'
 import { useImmer } from 'use-immer'
 import debounce from 'lodash/debounce'
 
+// TODO @NDRS add option to set canvas background color
+
 export const FabricCanvas = ({ jsonData = null }) => {
   const { json, setJson } = useFabricJson()
   const {

@@ -46,7 +46,7 @@ export const FabricProvider = ({ children }) => {
         preserveObjectStacking: true,
         selection: true,
         defaultCursor: 'default',
-        backgroundColor: 'white',
+        backgroundColor: 'transparent',
         enableRetinaScaling: true,
         ...options,
       }
