@@ -8,7 +8,6 @@ import {
 import { ResizableBox } from 'react-resizable'
 import 'react-resizable/css/styles.css'
 import { useImmer } from 'use-immer'
-import debounce from 'lodash/debounce'
 
 // TODO @NDRS add option to set canvas background color
 
@@ -30,7 +29,7 @@ export const FabricCanvas = ({ jsonData = null }) => {
   })
 
   const onResize = useCallback(
-    debounce((_event, { _element, size, _handle }) => {
+    (_event, { _element, size, _handle }) => {
       let height = parseInt(size.height)
       let width = parseInt(size.width)
       updateSize((draft) => {
@@ -39,7 +38,7 @@ export const FabricCanvas = ({ jsonData = null }) => {
       })
       console.log(height, width)
       resizeCanvas({ width, height })
-    }, 5),
+    },
     [resizeCanvas, updateSize]
   )
   useLayoutEffect(() => {
