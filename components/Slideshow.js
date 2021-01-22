@@ -12,7 +12,7 @@ import { AUTOPLAY_ORDER, VISIBILITY } from '@/lib/constants'
 import Link from 'next/link'
 import { AutoplaySort } from '@/components/AutoplaySort'
 import { useRandomMeme } from '@/components/hooks/useRandomMeme'
-import { IoHelp } from 'react-icons/io5'
+import { IoHelp, IoPlay, IoPause } from 'react-icons/io5'
 
 export const Slideshow = () => {
   const {
@@ -38,26 +38,33 @@ export const Slideshow = () => {
               changeSlide={prevMeme && prevMeme.id}
             />
 
-            <div className="flex flex-col items-center font-semibold text-xl my-2 text-white">
+            <div className="flex flex-row items-center font-semibold text-xl my-2 text-white">
               <Link href={`/meme/${id}`}>
-                <a onClick={() => dispatch({ type: 'falseBool' })}>
-                  <IoHelp size={24} className="fill-current mr-2 text-custom-green" />
+                <a
+                  className="bg-custom-gray rounded-full mr-2"
+                  onClick={() => dispatch({ type: 'falseBool' })}
+                >
+                  <IoHelp size={44} className="fill-current text-custom-green py-2" />
                 </a>
               </Link>
               {meme.visibility === VISIBILITY.PUBLIC && (
                 <div className="flex flex-row">
+                  <AutoplaySort />
                   <button
                     disabled={order === AUTOPLAY_ORDER.ORDERED && !(nextMeme && nextMeme.id)}
-                    className="my-2 p-2 rounded bg-custom-green"
+                    className="my-2 p-2 rounded-r bg-custom-gray"
                     onClick={
                       !nextMeme && order !== AUTOPLAY_ORDER.RANDOM && state.bool
                         ? () => dispatch({ type: 'falseBool' })
                         : () => dispatch({ type: 'toggleBool' })
                     }
                   >
-                    {state.bool ? `On` : `Off`}
+                    {state.bool ? (
+                      <IoPause size={28} className="fill-current text-custom-green py-1" />
+                    ) : (
+                      <IoPlay size={28} className="fill-current text-custom-green py-1" />
+                    )}
                   </button>
-                  <AutoplaySort />
                 </div>
               )}
             </div>

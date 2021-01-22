@@ -2,31 +2,44 @@ import React, { useRef } from 'react'
 import { useDetectOutsideClick } from '@/components/hooks/useDetectOutsideClick'
 import { useAutoPlayOrder } from '@/components/context/autoplayContext'
 import { AUTOPLAY_ORDER } from '@/lib/constants'
+import { IoShuffle, IoReturnDownForwardOutline } from 'react-icons/io5'
 
 export const AutoplaySort = () => {
   const dropdownRef = useRef(null)
   const [isActive, setIsActive] = useDetectOutsideClick(dropdownRef, false)
   const { order, setOrder } = useAutoPlayOrder()
 
-  const onClick = () => setIsActive(!isActive)
+  const onClick = () => {
+    setIsActive(!isActive)
+    if (order === AUTOPLAY_ORDER.RANDOM) {
+      setOrder(AUTOPLAY_ORDER.ORDERED)
+    } else {
+      setOrder(AUTOPLAY_ORDER.RANDOM)
+    }
+  }
 
-  const handleClick = (newOrder) => {
+  /*  const handleClick = (newOrder) => {
     setIsActive(false)
     setOrder(newOrder)
-  }
+  }*/
 
   return (
     <div className="relative inline-block text-left">
       <div>
         <button
           type="button"
-          className="inline-flex justify-center items-center w-full mt-2 shadow-sm rounded-r px-4 py-2 bg-custom-green font-medium dark:text-white focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-200 focus:ring-gray-200"
+          className="inline-flex justify-center items-center w-full mt-2 shadow-sm rounded-l px-4 py-2 bg-custom-gray font-medium dark:text-white focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-200 focus:ring-gray-200"
           id="options-menu"
           aria-haspopup="true"
           aria-expanded="true"
           onClick={onClick}
         >
-          {order} Autoplay
+          {order === AUTOPLAY_ORDER.RANDOM ? (
+            <IoShuffle size={28} className="fill-current text-custom-green" />
+          ) : (
+            <IoReturnDownForwardOutline size={28} className="fill-current text-custom-green" />
+          )}
+          {'Autoplay'}
           <svg
             className="-mr-1 ml-2 h-5 w-5"
             xmlns="http://www.w3.org/2000/svg"
@@ -42,7 +55,7 @@ export const AutoplaySort = () => {
           </svg>
         </button>
       </div>
-      {isActive && (
+      {/*{isActive && (
         <div
           ref={dropdownRef}
           className="origin-top-right absolute right-0 mt-2 w-56 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 divide-y divide-gray-100"
@@ -67,7 +80,7 @@ export const AutoplaySort = () => {
             </div>
           </div>
         </div>
-      )}
+      )}*/}
     </div>
   )
 }
