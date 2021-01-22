@@ -15,12 +15,11 @@ export const OverviewSort = ({ callback = null, enableNotification = false }) =>
   const { sort, setSort } = useSortContext()
 
   const handleClick = (newSort) => {
-    // TODO onClick with callback on same sorting causes rerender with no next and prev - this issue needs to be revalidated.
-    if (callback) {
-      callback()
-    }
     setIsActive(false)
     if (newSort !== sort) {
+      if (callback) {
+        callback()
+      }
       setSort(newSort)
     }
   }
