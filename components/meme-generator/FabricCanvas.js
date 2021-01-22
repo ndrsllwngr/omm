@@ -5,12 +5,42 @@ import {
   useFabricCanvas,
   useFabricActiveObject,
 } from '@/components/context/fabricContext'
+import { ResizableBox } from 'react-resizable'
+import 'react-resizable/css/styles.css'
+import { useImmer } from 'use-immer'
+
+// TODO @NDRS add option to set canvas background color
 
 export const FabricCanvas = ({ jsonData = null }) => {
   const { json, setJson } = useFabricJson()
-  const { canvas, initCanvas, loadFromJSON, canvasRef, resetCanvas, setIsCopy } = useFabricCanvas()
+  const {
+    canvas,
+    initCanvas,
+    loadFromJSON,
+    canvasRef,
+    resetCanvas,
+    setIsCopy,
+    resizeCanvas,
+  } = useFabricCanvas()
   const { setActiveObject } = useFabricActiveObject()
+  const [size, updateSize] = useImmer({
+    width: jsonData ? jsonData.width : 500,
+    height: jsonData ? jsonData.width : 400,
+  })
 
+  const onResize = useCallback(
+    (_event, { _element, size, _handle }) => {
+      let height = parseInt(size.height)
+      let width = parseInt(size.width)
+      updateSize((draft) => {
+        draft.height = height
+        draft.width = width
+      })
+      console.log(height, width)
+      resizeCanvas({ width, height })
+    },
+    [resizeCanvas, updateSize]
+  )
   useLayoutEffect(() => {
     console.log({ src: 'FabricCanvas.useLayoutEffect', jsonData, json, canvas, canvasRef })
     if (!canvas && canvasRef.current) {
@@ -74,13 +104,22 @@ export const FabricCanvas = ({ jsonData = null }) => {
 
   return (
     <div>
-      <canvas
-        ref={canvasRef}
-        id="fabric-canvas"
-        width={800}
-        height={400}
-        style={{ border: '1px solid red' }}
-      />
+      <ResizableBox
+        className="box"
+        width={size.width}
+        height={size.height}
+        minConstraints={[150, 150]}
+        maxConstraints={[1000, 1000]}
+        onResize={onResize}
+      >
+        <canvas
+          ref={canvasRef}
+          id="fabric-canvas"
+          width={800}
+          height={400}
+          style={{ border: '1px solid red' }}
+        />
+      </ResizableBox>
     </div>
   )
 }

@@ -46,7 +46,7 @@ export const FabricProvider = ({ children }) => {
         preserveObjectStacking: true,
         selection: true,
         defaultCursor: 'default',
-        backgroundColor: 'white',
+        backgroundColor: 'transparent',
         enableRetinaScaling: true,
         ...options,
       }
@@ -96,6 +96,13 @@ export const FabricProvider = ({ children }) => {
       console.log({ src: 'FabricProvider.loadFromJSON', json, canvas })
     },
     [canvasRef, canvas, setTemplate]
+  )
+
+  const resizeCanvas = useCallback(
+    ({ width, height }) => {
+      canvas.setDimensions({ height, width })
+    },
+    [canvas]
   )
 
   const resetCanvas = useCallback(() => {
@@ -155,6 +162,7 @@ export const FabricProvider = ({ children }) => {
     [canvas, canvasRef, setTemplate]
   )
 
+  // TODO @NDRS either remove it, or apply to all selectable objects
   const customSelect = (obj) => {
     return obj.set({
       borderColor: 'black',
@@ -169,7 +177,16 @@ export const FabricProvider = ({ children }) => {
   return (
     <FabricJsonContext.Provider value={{ json, setJson }}>
       <FabricCanvasContext.Provider
-        value={{ canvas, initCanvas, loadFromJSON, canvasRef, resetCanvas, isCopy, setIsCopy }}
+        value={{
+          canvas,
+          initCanvas,
+          loadFromJSON,
+          canvasRef,
+          resetCanvas,
+          isCopy,
+          setIsCopy,
+          resizeCanvas,
+        }}
       >
         <FabricActiveObjectContext.Provider value={{ activeObject, setActiveObject }}>
           <TemplateContext.Provider value={{ template, updateTemplate }}>
