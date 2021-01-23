@@ -1,11 +1,10 @@
 import React from 'react'
-import { useAutoPlayContext, useAutoPlayOrder } from '@/components/context/autoplayContext'
+import { useAutoPlayOrder } from '@/components/context/autoplayContext'
 import { AUTOPLAY_ORDER } from '@/lib/constants'
-import { IoShuffle, IoReturnDownForwardOutline } from 'react-icons/io5'
+import { IoShuffle } from 'react-icons/io5'
 
 export const AutoplaySort = () => {
   const { order, setOrder } = useAutoPlayOrder()
-  const [state] = useAutoPlayContext()
 
   const onClick = () => {
     order === AUTOPLAY_ORDER.RANDOM
