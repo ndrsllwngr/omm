@@ -52,7 +52,11 @@ export const Slideshow = () => {
                   <AutoplaySort />
                   <button
                     disabled={order === AUTOPLAY_ORDER.ORDERED && !(nextMeme && nextMeme.id)}
-                    className="p-2 rounded-r bg-custom-gray"
+                    className={`p-2 rounded-r bg-custom-gray ${
+                      order === AUTOPLAY_ORDER.ORDERED && !(nextMeme && nextMeme.id)
+                        ? 'cursor-not-allowed'
+                        : ''
+                    }`}
                     onClick={
                       !nextMeme && order !== AUTOPLAY_ORDER.RANDOM && state.bool
                         ? () => dispatch({ type: 'falseBool' })
@@ -62,11 +66,10 @@ export const Slideshow = () => {
                     {state.bool ? (
                       <IoPause size={28} className="fill-current text-custom-green py-1" />
                     ) : (
-                      /*<IoPlay size={28} className="fill-current text-custom-green py-1" />*/
                       <IoPlay
                         size={28}
                         className={`py-1 fill-current ${
-                          order == AUTOPLAY_ORDER.ORDERED && !(nextMeme && nextMeme.id)
+                          order === AUTOPLAY_ORDER.ORDERED && !(nextMeme && nextMeme.id)
                             ? 'text-gray-400'
                             : 'text-custom-green'
                         } `}
