@@ -1,7 +1,11 @@
 import { useState, useEffect } from 'react'
 import firebase from '@/lib/firebase'
-import { SORT, FIRESTORE_COLLECTION, VISIBILITY } from '@/lib/constants'
-import { useSortContext, useReloadContext } from '@/components/context/viewsContext'
+import { SORT, FIRESTORE_COLLECTION, VISIBILITY, FILTER } from '@/lib/constants'
+import {
+  useSortContext,
+  useReloadContext,
+  useFilterContext,
+} from '@/components/context/viewsContext'
 import { useImmer } from 'use-immer'
 
 export const useDatabaseMemes = () => {
@@ -9,7 +13,7 @@ export const useDatabaseMemes = () => {
   const [memes, updateMemes] = useImmer([])
   const { sort } = useSortContext()
   const { reload } = useReloadContext()
-
+  const { filter, setFilter } = useFilterContext()
   const [latestDoc, setLatestDoc] = useState(null)
   const [hasMoreFiles, setHasMoreFiles] = useState(true)
 
@@ -39,7 +43,7 @@ export const useDatabaseMemes = () => {
     }
     // TODO Evaluate the dependencies of this useEffect.
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [sort, reload])
+  }, [sort, reload, filter])
 
   const triggerNextMemes = () => {
     switch (sort) {
@@ -60,7 +64,7 @@ export const useDatabaseMemes = () => {
     }
   }
 
-  async function loadNextMemes(create, sorting, triggerNext) {
+  async function loadNextMemes(dbField, sorting, triggerNext) {
     if (!triggerNext) {
       updateMemes((_draft) => {
         return []
@@ -68,11 +72,29 @@ export const useDatabaseMemes = () => {
       setLatestDoc(null)
       setHasMoreFiles(true)
     }
-    let query = ''
-    sorting
-      ? (query = loadCreds().where('visibility', '==', VISIBILITY.PUBLIC).orderBy(create, sorting))
-      : (query = loadCreds().where('visibility', '==', VISIBILITY.PUBLIC).orderBy(create))
 
+    const preflight = loadCreds().where('visibility', '==', VISIBILITY.PUBLIC)
+
+    let query = ''
+    switch (filter) {
+      case FILTER.HOT:
+        query = preflight
+        break
+      case FILTER.TRENDING:
+        const today = new Date()
+        const date = new Date(today.getFullYear(), today.getMonth(), today.getDate() - 3)
+        query = preflight.where('createdAt', '<=', date)
+        break
+      case FILTER.FRESH:
+        query = preflight
+        break
+      default:
+        query = preflight.orderBy(dbField, sorting)
+    }
+
+    /*let query = ''
+    sorting ? (query = filtering.orderBy(dbField, sorting)) : (query = filtering.orderBy(dbField))
+*/
     if (triggerNext && latestDoc) {
       query = query.startAfter(latestDoc)
     }

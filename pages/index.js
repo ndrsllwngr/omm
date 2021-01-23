@@ -5,6 +5,7 @@ import { Sort } from '@/components/Sort'
 import { SingleMeme } from '@/components/SingleMeme'
 import InfiniteScroll from 'react-infinite-scroller'
 import { useDatabaseMemes } from '@/components/hooks/useDatabaseMemes'
+import { Filter } from '@/components/Filter'
 
 // https://github.com/danbovey/react-infinite-scroller
 const LandingPage = () => {
@@ -13,6 +14,7 @@ const LandingPage = () => {
       <HtmlHead />
       <Navbar />
       <div className={'max-w-7xl mx-auto mt-4'}>
+        <Filter />
         <Sort enableNotification={true} />
         <LandingPageInner />
       </div>
