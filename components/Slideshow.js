@@ -7,12 +7,15 @@ import {
   useAutoPlayDispatch,
   useAutoPlayOrder,
 } from '@/components/context/autoplayContext'
-import { useSingleMemeContext } from '@/components/context/singlememeContext'
+import {
+  useSingleMemeContext,
+  useSingleMemeLoadingContext,
+} from '@/components/context/singlememeContext'
 import { AUTOPLAY_ORDER, VISIBILITY } from '@/lib/constants'
 import Link from 'next/link'
 import { AutoplaySort } from '@/components/AutoplaySort'
 import { useRandomMeme } from '@/components/hooks/useRandomMeme'
-import { IoHelp, IoPlay, IoPause } from 'react-icons/io5'
+import { IoHelp, IoPlay, IoPause, IoArrowForward, IoArrowBack } from 'react-icons/io5'
 
 export const Slideshow = () => {
   const {
@@ -99,39 +102,20 @@ export const SlideshowButton = ({ name, changeSlide, disabled }) => {
   return (
     <button
       disabled={disabled}
-      className={`rounded-lg  ${
-        disabled ? '' : 'bg-custom-gray hover:bg-custom-green hover:stroke-gray'
-      } `}
+      className={`p-2 rounded bg-custom-gray ${
+        disabled ? 'text-gray-400 cursor-not-allowed' : 'text-custom-green'
+      }`}
       onClick={(e) => {
         e.preventDefault()
         router.push(changeSlide)
         dispatch({ type: 'falseBool' })
       }}
     >
-      <svg
-        className={`w-12 h-12 py-2 px-2 ${
-          disabled ? 'stroke-gray cursor-not-allowed' : 'stroke-green hover:stroke-gray'
-        }`}
-        xmlns="http://www.w3.org/2000/svg"
-        fill="none"
-        viewBox="0 0 24 24"
-      >
-        {name === 'prev' ? (
-          <path
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            strokeWidth={2}
-            d="M10 19l-7-7m0 0l7-7m-7 7h18"
-          />
-        ) : (
-          <path
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            strokeWidth={2}
-            d="M14 5l7 7m0 0l-7 7m7-7H3"
-          />
-        )}
-      </svg>
+      {name === 'prev' ? (
+        <IoArrowBack size={28} className={`fill-current`} />
+      ) : (
+        <IoArrowForward size={28} className={`fill-current`} />
+      )}
     </button>
   )
 }
