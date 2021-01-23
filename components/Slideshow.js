@@ -62,7 +62,15 @@ export const Slideshow = () => {
                     {state.bool ? (
                       <IoPause size={28} className="fill-current text-custom-green py-1" />
                     ) : (
-                      <IoPlay size={28} className="fill-current text-custom-green py-1" />
+                      /*<IoPlay size={28} className="fill-current text-custom-green py-1" />*/
+                      <IoPlay
+                        size={28}
+                        className={`py-1 fill-current ${
+                          order == AUTOPLAY_ORDER.ORDERED && !(nextMeme && nextMeme.id)
+                            ? 'text-gray-400'
+                            : 'text-custom-green'
+                        } `}
+                      />
                     )}
                   </button>
                 </div>
