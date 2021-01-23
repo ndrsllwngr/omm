@@ -24,14 +24,14 @@ export const AutoplaySort = () => {
           aria-expanded="true"
           onClick={onClick}
         >
-            <IoShuffle
-              size={28}
-              className={
-                order === AUTOPLAY_ORDER.RANDOM ? `fill-current text-custom-green` : `fill-current text-gray-400`
-              }
-            />
-            />
-          )}
+          <IoShuffle
+            size={28}
+            className={
+              order === AUTOPLAY_ORDER.RANDOM
+                ? `fill-current text-custom-green`
+                : `fill-current text-gray-400`
+            }
+          />
         </button>
       </div>
     </div>

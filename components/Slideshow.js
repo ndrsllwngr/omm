@@ -41,10 +41,10 @@ export const Slideshow = () => {
             <div className="flex flex-row items-center font-semibold text-xl text-white">
               <Link href={`/meme/${id}`}>
                 <a
-                  className="bg-custom-gray rounded-md mr-2"
+                  className="bg-custom-gray rounded-md mr-2 p-2"
                   onClick={() => dispatch({ type: 'falseBool' })}
                 >
-                  <IoHelp size={44} className="fill-current text-custom-green py-2" />
+                  <IoHelp size={28} className="fill-current text-custom-green" />
                 </a>
               </Link>
               {meme.visibility === VISIBILITY.PUBLIC && (
