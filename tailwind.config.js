@@ -13,7 +13,7 @@ module.exports = {
     extend: {
       colors: {
         'custom-gray': '#28292F',
-        'custom-green': '#1CE783',
+        'custom-green': '#1ce783',
       },
       fontFamily: {
         sans: ['Inter var', ...defaultTheme.fontFamily.sans],
