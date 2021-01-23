@@ -8,7 +8,7 @@ import { IoCloud } from 'react-icons/io5'
 import { SORT } from '@/lib/constants'
 //https://tailwindui.com/components/application-ui/elements/dropdowns
 //https://letsbuildui.dev/articles/building-a-dropdown-menu-component-with-react-hooks
-export const OverviewSort = ({ callback = null, enableNotification = false }) => {
+export const Sort = ({ callback = null, enableNotification = false }) => {
   const dropdownRef = useRef(null)
   const [isActive, setIsActive] = useDetectOutsideClick(dropdownRef, false)
   const onClick = () => setIsActive(!isActive)
@@ -112,7 +112,7 @@ export const OverviewSort = ({ callback = null, enableNotification = false }) =>
   )
 }
 
-OverviewSort.propTypes = {
+Sort.propTypes = {
   callback: PropTypes.func,
   enableNotification: PropTypes.bool,
 }
