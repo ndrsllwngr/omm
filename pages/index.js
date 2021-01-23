@@ -1,7 +1,7 @@
 import React from 'react'
 import { HtmlHead } from '@/components/HtmlHead'
 import { Navbar } from '@/components/Navbar'
-import { OverviewSort } from '@/components/OverviewSort'
+import { Sort } from '@/components/Sort'
 import { SingleMeme } from '@/components/SingleMeme'
 import InfiniteScroll from 'react-infinite-scroller'
 import { useDatabaseMemes } from '@/components/hooks/useDatabaseMemes'
@@ -13,7 +13,7 @@ const LandingPage = () => {
       <HtmlHead />
       <Navbar />
       <div className={'max-w-7xl mx-auto mt-4'}>
-        <OverviewSort enableNotification={true} />
+        <Sort enableNotification={true} />
         <LandingPageInner />
       </div>
     </>

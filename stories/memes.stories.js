@@ -1,7 +1,7 @@
 import React from 'react'
 import { Slideshow, SlideshowButton } from '@/components/Slideshow'
 import mockData from '@/assets/mockData'
-import { OverviewSort } from '@/components/OverviewSort'
+import { Sort } from '@/components/Sort'
 
 const memes = mockData.data.memes
 
@@ -23,5 +23,5 @@ export const memeSlideshowButtons = () => {
 }
 
 export const overviewSort = () => {
-  return <OverviewSort />
+  return <Sort />
 }

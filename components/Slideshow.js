@@ -1,6 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { SingleMeme } from '@/components/SingleMeme'
+import Link from 'next/link'
 import { useRouter } from 'next/router'
 import {
   useAutoPlayContext,
@@ -8,11 +8,10 @@ import {
   useAutoPlayOrder,
 } from '@/components/context/autoplayContext'
 import { useSingleMemeContext } from '@/components/context/singlememeContext'
-import { AUTOPLAY_ORDER, VISIBILITY } from '@/lib/constants'
-import Link from 'next/link'
-import { AutoplaySort } from '@/components/AutoplaySort'
 import { useRandomMeme } from '@/components/hooks/useRandomMeme'
-import { IoHelp } from 'react-icons/io5'
+import { SingleMeme } from '@/components/SingleMeme'
+import { AUTOPLAY_ORDER, VISIBILITY } from '@/lib/constants'
+import { IoHelp, IoPlay, IoPause, IoArrowForward, IoArrowBack, IoShuffle } from 'react-icons/io5'
 
 export const Slideshow = () => {
   const {
@@ -21,14 +20,10 @@ export const Slideshow = () => {
     prevMeme,
     updateCurrent: updateMeme,
   } = useSingleMemeContext()
-  const router = useRouter()
-  const [state, dispatch] = useAutoPlayContext()
-  const { order } = useAutoPlayOrder()
-  const { id } = useRandomMeme(router)
 
   if (!meme) return <div className="flex flex-row justify-center">loading..</div>
   return (
-    <div className="flex flex-col justify-center max-w-md mx-auto">
+    <div className="flex flex-col max-w-md mx-auto">
       <div className="flex flex-row justify-between my-2">
         {meme.visibility === VISIBILITY.PUBLIC && (
           <>
@@ -38,28 +33,10 @@ export const Slideshow = () => {
               changeSlide={prevMeme && prevMeme.id}
             />
 
-            <div className="flex flex-col items-center font-semibold text-xl my-2 text-white">
-              <Link href={`/meme/${id}`}>
-                <a onClick={() => dispatch({ type: 'falseBool' })}>
-                  <IoHelp size={24} className="fill-current mr-2 text-custom-green" />
-                </a>
-              </Link>
-              {meme.visibility === VISIBILITY.PUBLIC && (
-                <div className="flex flex-row">
-                  <button
-                    disabled={order === AUTOPLAY_ORDER.ORDERED && !(nextMeme && nextMeme.id)}
-                    className="my-2 p-2 rounded bg-custom-green"
-                    onClick={
-                      !nextMeme && order !== AUTOPLAY_ORDER.RANDOM && state.bool
-                        ? () => dispatch({ type: 'falseBool' })
-                        : () => dispatch({ type: 'toggleBool' })
-                    }
-                  >
-                    {state.bool ? `On` : `Off`}
-                  </button>
-                  <AutoplaySort />
-                </div>
-              )}
+            <div className="flex flex-row">
+              <AutoplayRandomButton />
+              <AutoplaySortButton />
+              <AutoplayActionButton />
             </div>
 
             <SlideshowButton
@@ -75,47 +52,104 @@ export const Slideshow = () => {
   )
 }
 
+export const AutoplayActionButton = () => {
+  const [state, dispatch] = useAutoPlayContext()
+  const { order } = useAutoPlayOrder()
+  const { nextMeme } = useSingleMemeContext()
+
+  return (
+    <button
+      disabled={order === AUTOPLAY_ORDER.ORDERED && !(nextMeme && nextMeme.id)}
+      className={`p-2 rounded-r bg-custom-gray ${
+        order === AUTOPLAY_ORDER.ORDERED && !(nextMeme && nextMeme.id) ? 'cursor-not-allowed' : ''
+      }`}
+      onClick={
+        !nextMeme && order !== AUTOPLAY_ORDER.RANDOM && state.bool
+          ? () => dispatch({ type: 'falseBool' })
+          : () => dispatch({ type: 'toggleBool' })
+      }
+    >
+      {state.bool ? (
+        <IoPause size={28} className="fill-current text-custom-green py-1" />
+      ) : (
+        <IoPlay
+          size={28}
+          className={`py-1 fill-current ${
+            order === AUTOPLAY_ORDER.ORDERED && !(nextMeme && nextMeme.id)
+              ? 'text-gray-400'
+              : 'text-custom-green'
+          } `}
+        />
+      )}
+    </button>
+  )
+}
+
+export const AutoplayRandomButton = () => {
+  const router = useRouter()
+  const { id } = useRandomMeme(router)
+  return (
+    <Link href={`/meme/${id}`}>
+      <a
+        className="flex flex-col p-2 mr-2 justify-center rounded-md bg-custom-gray  "
+        onClick={() => dispatch({ type: 'falseBool' })}
+      >
+        <IoHelp size={28} className="fill-current text-custom-green" />
+      </a>
+    </Link>
+  )
+}
+
+export const AutoplaySortButton = () => {
+  const { order, setOrder } = useAutoPlayOrder()
+
+  const changeAutoplayOrder = () => {
+    order === AUTOPLAY_ORDER.RANDOM
+      ? setOrder(AUTOPLAY_ORDER.ORDERED)
+      : setOrder(AUTOPLAY_ORDER.RANDOM)
+  }
+
+  return (
+    <button
+      type="button"
+      className="px-4 items-center bg-custom-gray rounded-l"
+      id="options-menu"
+      aria-haspopup="true"
+      aria-expanded="true"
+      onClick={changeAutoplayOrder}
+    >
+      <IoShuffle
+        size={28}
+        className={
+          order === AUTOPLAY_ORDER.RANDOM
+            ? `fill-current text-custom-green`
+            : `fill-current text-gray-400`
+        }
+      />
+    </button>
+  )
+}
+
 export const SlideshowButton = ({ name, changeSlide, disabled }) => {
   const router = useRouter()
   const dispatch = useAutoPlayDispatch()
   return (
     <button
       disabled={disabled}
-      className={`rounded-lg ${
-        disabled
-          ? 'border border-custom-gray'
-          : 'bg-custom-gray hover:bg-custom-green hover:stroke-gray'
-      } `}
+      className={`p-2 rounded bg-custom-gray ${
+        disabled ? 'text-gray-400 cursor-not-allowed' : 'text-custom-green'
+      }`}
       onClick={(e) => {
         e.preventDefault()
         router.push(changeSlide)
         dispatch({ type: 'falseBool' })
       }}
     >
-      <svg
-        className={`w-12 h-12 py-2 px-2 ${
-          disabled ? 'stroke-gray cursor-not-allowed' : 'stroke-green hover:stroke-gray'
-        }`}
-        xmlns="http://www.w3.org/2000/svg"
-        fill="none"
-        viewBox="0 0 24 24"
-      >
-        {name === 'prev' ? (
-          <path
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            strokeWidth={2}
-            d="M10 19l-7-7m0 0l7-7m-7 7h18"
-          />
-        ) : (
-          <path
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            strokeWidth={2}
-            d="M14 5l7 7m0 0l-7 7m7-7H3"
-          />
-        )}
-      </svg>
+      {name === 'prev' ? (
+        <IoArrowBack size={28} className={`fill-current`} />
+      ) : (
+        <IoArrowForward size={28} className={`fill-current`} />
+      )}
     </button>
   )
 }
