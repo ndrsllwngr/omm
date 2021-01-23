@@ -15,25 +15,23 @@ export const AutoplaySort = () => {
 
   return (
     <div className="relative inline-block text-left">
-      <div>
-        <button
-          type="button"
-          className="inline-flex justify-center items-center w-full shadow-sm rounded-l px-4 py-2 bg-custom-gray font-medium dark:text-white focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-200 focus:ring-gray-200"
-          id="options-menu"
-          aria-haspopup="true"
-          aria-expanded="true"
-          onClick={onClick}
-        >
-          <IoShuffle
-            size={28}
-            className={
-              order === AUTOPLAY_ORDER.RANDOM
-                ? `fill-current text-custom-green`
-                : `fill-current text-gray-400`
-            }
-          />
-        </button>
-      </div>
+      <button
+        type="button"
+        className="inline-flex h-full justify-center items-center w-full shadow-sm rounded-l px-4 py-2 bg-custom-gray font-medium dark:text-white focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-200 focus:ring-gray-200"
+        id="options-menu"
+        aria-haspopup="true"
+        aria-expanded="true"
+        onClick={onClick}
+      >
+        <IoShuffle
+          size={28}
+          className={
+            order === AUTOPLAY_ORDER.RANDOM
+              ? `fill-current text-custom-green`
+              : `fill-current text-gray-400`
+          }
+        />
+      </button>
     </div>
   )
 }

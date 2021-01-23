@@ -38,10 +38,10 @@ export const Slideshow = () => {
               changeSlide={prevMeme && prevMeme.id}
             />
 
-            <div className="flex flex-row items-center font-semibold text-xl text-white">
+            <div className="flex flex-row font-semibold text-xl text-white">
               <Link href={`/meme/${id}`}>
                 <a
-                  className="bg-custom-gray rounded-md mr-2 p-2"
+                  className="bg-custom-gray rounded-md mr-2 p-2 flex flex-col justify-center"
                   onClick={() => dispatch({ type: 'falseBool' })}
                 >
                   <IoHelp size={28} className="fill-current text-custom-green" />
@@ -88,7 +88,7 @@ export const SlideshowButton = ({ name, changeSlide, disabled }) => {
   return (
     <button
       disabled={disabled}
-      className={`rounded-lg h-12 ${
+      className={`rounded-lg  ${
         disabled ? '' : 'bg-custom-gray hover:bg-custom-green hover:stroke-gray'
       } `}
       onClick={(e) => {
