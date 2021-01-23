@@ -70,10 +70,8 @@ export const useDatabaseMemes = () => {
     }
     let query = ''
     sorting
-      ? (query = loadCreds()
-          .where('visibility', '==', VISIBILITY.PUBLIC)
-          .orderBy('' + create + '', '' + sorting + ''))
-      : (query = loadCreds().orderBy('' + create + ''))
+      ? (query = loadCreds().where('visibility', '==', VISIBILITY.PUBLIC).orderBy(create, sorting))
+      : (query = loadCreds().where('visibility', '==', VISIBILITY.PUBLIC).orderBy(create))
 
     if (triggerNext && latestDoc) {
       query = query.startAfter(latestDoc)
