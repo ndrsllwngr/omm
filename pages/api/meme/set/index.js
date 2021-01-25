@@ -2,6 +2,7 @@ import firebase from '@/lib/firebaseNode'
 import tmp from 'tmp'
 import { writeMemeContentToImage } from '@/helpers/imageProcessing'
 import Archiver from 'archiver'
+import { FIRESTORE_COLLECTION } from '@/lib/constants'
 
 export default async function memeHandler(req, res) {
   const {
@@ -12,7 +13,7 @@ export default async function memeHandler(req, res) {
 
   // Initialize firebase variables
   const db = firebase.firestore()
-  const memeCollection = db.collection('memes')
+  const memeCollection = db.collection(FIRESTORE_COLLECTION.MEMES)
   const storage = firebase.storage().bucket()
 
   switch (method) {
@@ -37,6 +38,7 @@ export default async function memeHandler(req, res) {
       for (let id of ids) {
         // Get meme from Firestore
         const meme = await memeCollection.doc(id).get()
+        console.debug(`FIRESTORE_COLLECTION.MEMES`, 'READ', '/set/')
         // When meme doesn't exist return 404
         if (!meme.exists) {
           res.status(404).end(`Meme with id ${id} Not Found`)

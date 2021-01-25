@@ -13,7 +13,7 @@ module.exports = {
     extend: {
       colors: {
         'custom-gray': '#28292F',
-        'custom-green': '#1CE783',
+        'custom-green': '#1ce783',
       },
       fontFamily: {
         sans: ['Inter var', ...defaultTheme.fontFamily.sans],
@@ -21,10 +21,19 @@ module.exports = {
         source: ['Source Sans Pro', ...defaultTheme.fontFamily.sans],
         system: defaultTheme.fontFamily.sans,
       },
+      stroke: (theme) => ({
+        green: theme('colors.custom-green'),
+        gray: theme('colors.custom-gray'),
+      }),
+      fill: (theme) => ({
+        green: theme('colors.custom-green'),
+        gray: theme('colors.custom-gray'),
+      }),
     },
   },
   variants: {
     extend: {},
+    stroke: ['hover', 'focus'],
   },
   plugins: [],
 }
