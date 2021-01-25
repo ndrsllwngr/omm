@@ -83,8 +83,7 @@ export const useDatabaseMemes = () => {
       case FILTER.TRENDING:
         const today = new Date()
         const date = new Date(today.getFullYear(), today.getMonth(), today.getDate() - 3)
-        query = preflight.where('createdAt', '<=', date)
-        break
+        query = preflight.where('createdAt', '<=', date).where('views', '==', '3')
       case FILTER.FRESH:
         query = preflight
         break
@@ -92,9 +91,11 @@ export const useDatabaseMemes = () => {
         query = preflight.orderBy(dbField, sorting)
     }
 
-    /*let query = ''
-    sorting ? (query = filtering.orderBy(dbField, sorting)) : (query = filtering.orderBy(dbField))
-*/
+    // let sortedQuery = ''
+    // sorting
+    //   ? (sortedQuery = query.orderBy(dbField, sorting))
+    //   : (sortedQuery = query.orderBy(dbField))
+
     if (triggerNext && latestDoc) {
       query = query.startAfter(latestDoc)
     }

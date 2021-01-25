@@ -9,7 +9,6 @@ export const Filter = () => {
   const handleFilterChange = (changeEvent) => {
     setFilter(changeEvent.target.value)
   }
-
   return (
     <div className="flex flex-row justify-end items-center">
       <div className="radio">
