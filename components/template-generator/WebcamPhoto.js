@@ -27,7 +27,9 @@ export const WebcamPhoto = () => {
   const stopVideo = () => {
     setPlaying(false)
     let video = document.getElementsByClassName('app__videoFeed')[0]
-    video.srcObject.getTracks()[0].stop()
+    if (video && video.srcObject) {
+      video.srcObject.getTracks()[0].stop()
+    }
   }
 
   const captureVideo = () => {
@@ -50,14 +52,7 @@ export const WebcamPhoto = () => {
   return (
     <div className="app">
       <div className="app__container">
-        <video
-          id="video"
-          height={HEIGHT}
-          width={WIDTH}
-          muted
-          autoPlay
-          className="app__videoFeed"
-        ></video>
+        <video id="video" height={HEIGHT} width={WIDTH} muted autoPlay className="app__videoFeed" />
       </div>
       <div className="app__input">
         {playing ? (
@@ -67,7 +62,7 @@ export const WebcamPhoto = () => {
         )}
         <button onClick={captureVideo}>Capture Picture</button>
       </div>
-      <canvas id="canvas"></canvas>
+      <canvas id="canvas" />
     </div>
   )
 }
