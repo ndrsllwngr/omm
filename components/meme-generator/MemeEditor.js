@@ -12,12 +12,97 @@ import { SORT, VISIBILITY } from '@/lib/constants'
 import { useDraftUpload } from '@/components/hooks/useDraftUpload'
 import PropTypes from 'prop-types'
 import { useSortContext } from '@/components/context/viewsContext'
+import { gql, useMutation } from '@apollo/client'
+
+const ADD_DRAFT = gql`
+  mutation AddMeme($draft: DraftInsertInput!) {
+    insertOneDraft(data: $draft) {
+      url
+      json
+      views
+      createdBy {
+        _id
+      }
+      downVotes {
+        _id
+      }
+      upVotes {
+        _id
+      }
+      _id
+      createdAt
+      title
+      visibility
+      forkedFrom {
+        _id
+      }
+      forkedBy {
+        _id
+      }
+      template {
+        id {
+          _id
+        }
+        url
+      }
+      svg
+    }
+  }
+`
+
+const ADD_MEME = gql`
+  mutation AddMeme($meme: MemeInsertInput!) {
+    insertOneMeme(data: $meme) {
+      url
+      json
+      views
+      createdBy {
+        _id
+      }
+      downVotes {
+        _id
+      }
+      upVotes {
+        _id
+      }
+      _id
+      createdAt
+      title
+      visibility
+      forkedFrom {
+        _id
+      }
+      forkedBy {
+        _id
+      }
+      template {
+        id {
+          _id
+        }
+        url
+      }
+      svg
+    }
+  }
+`
+
+/*
+# The parameterised GraphQL mutation
+mutation($todo: todos_insert_input!){
+  insert_todos(objects: [$todo]) {
+    returning {
+      id
+    }
+  }
+}*/
 
 // inspired by https://github.com/aprilescobar/fabric.js-intro
 // inspired by https://github.com/saninmersion/react-context-fabricjs
 // uses http://fabricjs.com/
 export const MemeEditor = () => {
   const router = useRouter()
+  const [insertOneMeme, { dataMeme }] = useMutation(ADD_MEME)
+  const [insertOneDraft, { dataDraft }] = useMutation(ADD_DRAFT)
   const { canvas, isCopy } = useFabricCanvas()
   const [imgURL, setImgURL] = useState('')
   const { template } = useTemplate()
@@ -89,24 +174,25 @@ export const MemeEditor = () => {
     const svg = canvas.toSVG()
     const newObj = {
       title,
-      // createdAt is added during insert
-      createdBy: auth.user.uid,
+      createdAt: new Date(),
+      createdBy: { link: '536374345163413537596142' },
       visibility: visibility,
-      upVotes: [],
-      downVotes: [],
-      forkedBy: [],
-      forkedFrom: isCopy,
-      views: 0,
+      upVotes: { link: [] },
+      downVotes: { link: [] },
+      forkedBy: { link: [] },
+      forkedFrom: isCopy ? { link: isCopy } : null,
       template: {
         id: template.id ? template.id : null,
         url: template.url,
       },
       url: '', // TODO if a real png was created (requirement)
       svg,
-      json: canvasAsJson,
+      json: JSON.stringify(canvasAsJson),
     }
     console.log({ src: 'MemeEditor.generateMeme', newObj, svg })
-    setData(newObj)
+    insertOneMeme({ variables: { meme: newObj } })
+      .then((r) => console.log(r))
+      .catch((e) => console.error(e))
   }
 
   const generateDraft = () => {
@@ -120,13 +206,13 @@ export const MemeEditor = () => {
     const svg = canvas.toSVG()
     const newObj = {
       title,
-      // createdAt is added during insert
-      createdBy: auth.user.uid,
+      createdAt: new Date(),
+      createdBy: { link: '536374345163413537596142' },
       visibility: visibility,
-      upVotes: [],
-      downVotes: [],
-      forkedBy: [],
-      forkedFrom: isCopy,
+      upVotes: { link: [] },
+      downVotes: { link: [] },
+      forkedBy: { link: [] },
+      forkedFrom: isCopy ? { link: isCopy } : null,
       views: 0,
       template: {
         id: template.id ? template.id : null,
@@ -134,10 +220,12 @@ export const MemeEditor = () => {
       },
       url: '', // TODO if a real png was created (requirement)
       svg,
-      json: canvasAsJson,
+      json: JSON.stringify(canvasAsJson),
     }
     console.log({ src: 'MemeEditor.generateDraft', newObj, svg })
-    setDataDraft(newObj)
+    insertOneDraft({ variables: { draft: newObj } })
+      .then((r) => console.log(r))
+      .catch((e) => console.error(e))
   }
 
   const clearAll = () => canvas.getObjects().forEach((obj) => canvas.remove(obj))

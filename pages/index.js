@@ -1,26 +1,132 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { HtmlHead } from '@/components/HtmlHead'
 import { Navbar } from '@/components/Navbar'
 import { Sort } from '@/components/Sort'
 import { SingleMeme } from '@/components/SingleMeme'
 import InfiniteScroll from 'react-infinite-scroller'
 import { useDatabaseMemes } from '@/components/hooks/useDatabaseMemes'
+import { gql, NetworkStatus, useQuery } from '@apollo/client'
+import { useSortContext } from '@/components/context/viewsContext'
+import { SORT } from '@/lib/constants'
 
 // https://github.com/danbovey/react-infinite-scroller
 const LandingPage = () => {
+  const { sort } = useSortContext()
   return (
     <>
       <HtmlHead />
       <Navbar />
       <div className={'max-w-7xl mx-auto mt-4'}>
-        <Sort enableNotification={true} />
-        <LandingPageInner />
+        <Sort enableNotification={false} />
+        <LandingPageInner sort={sort} />
       </div>
     </>
   )
 }
 
-const LandingPageInner = () => {
+export const ALL_PUBLIC_MEMES_QUERY = gql`
+  query getAllPublicMemes($sortBy: MemeSortByInput) {
+    memes(query: { visibility: "PUBLIC" }, sortBy: $sortBy, limit: 4) {
+      _id
+      createdAt
+      createdBy {
+        _id
+      }
+      downVotes {
+        _id
+      }
+      forkedBy {
+        _id
+      }
+      forkedFrom {
+        _id
+      }
+      json
+      svg
+      template {
+        id {
+          _id
+        }
+      }
+      title
+      upVotes {
+        _id
+      }
+      url
+      views
+      visibility
+    }
+  }
+`
+
+const translateSort = (sortEnum) => {
+  switch (sortEnum) {
+    case SORT.LATEST:
+      return 'CREATEDAT_DESC'
+    case SORT.OLDEST:
+      return 'CREATEDAT_ASC'
+    case SORT.MOST_VIEWED:
+      return 'VIEWS_DESC'
+    case SORT.LEAST_VIEWED:
+      return 'VIEWS_ASC'
+    case SORT.LEAST_POINTS:
+      // TODO
+      return 'CREATEDAT_DESC'
+    case SORT.MOST_POINTS:
+      // TODO
+      return 'CREATEDAT_DESC'
+    default:
+      console.error('sortEnum not supported', sortEnum)
+  }
+}
+
+// eslint-disable-next-line react/prop-types
+const LandingPageInner = ({ sort }) => {
+  const { loading, error, data, fetchMore, networkStatus } = useQuery(ALL_PUBLIC_MEMES_QUERY, {
+    variables: { sortBy: translateSort(sort) },
+    // Setting this value to true will make the component rerender when
+    // the "networkStatus" changes, so we are able to know if it is fetching
+    // more data
+    notifyOnNetworkStatusChange: true,
+  })
+  const loadingMorePosts = networkStatus === NetworkStatus.fetchMore
+
+  // const loadMorePosts = () => {
+  //   fetchMore({
+  //     variables: {
+  //       skip: data.length,
+  //     },
+  //   })
+  //     .then((r) => console.log(r))
+  //     .catch((e) => console.error(e))
+  // }
+
+  useEffect(() => {
+    console.log({ data, error, loading })
+  }, [data, error, loading])
+
+  if (error) return <div>Error loading posts.</div>
+  if (loading && !loadingMorePosts) return <div>Loading</div>
+
+  // const { allMemes, _allMemesMeta } = data
+  // const areMorePosts = allMemes?.length < _allMemesMeta?.count
+  return (
+    <>
+      {data &&
+        data.memes.map((meme, index) => (
+          <div key={index} className="place-self-center justify-self-center">
+            <SingleMeme meme={meme} enableLink={true} />
+          </div>
+        ))}
+
+      {/*     <button onClick={() => loadMorePosts()} disabled={loadingMorePosts}>
+        {loadingMorePosts ? 'Loading...' : 'Show More'}
+      </button>*/}
+    </>
+  )
+}
+
+/*const LandingPageInner = () => {
   const { dbMemes: memes, triggerNextMemes, endOfFiles, updateMemes } = useDatabaseMemes()
   if (!memes || !(memes.length > 0))
     return <div className={'text-black dark:text-white'}>loading...</div>
@@ -40,7 +146,7 @@ const LandingPageInner = () => {
       ))}
     </InfiniteScroll>
   )
-}
+}*/
 
 // // Fetch data at build time
 // export async function getStaticProps() {

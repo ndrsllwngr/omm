@@ -76,7 +76,7 @@ export const FabricProvider = ({ children }) => {
     (meme) => {
       console.log({ src: 'loadFromJSON.updateTemplate', template: meme.template })
       setTemplate(meme.template)
-      const json = meme.json
+      const json = JSON.parse(meme.json)
       let c = new fabric.Canvas(canvasRef.current)
       const jsonStr = JSON.stringify(json)
       c.loadFromJSON(

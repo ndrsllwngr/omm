@@ -18,11 +18,12 @@ export const SingleMeme = ({ meme, enableLink, updateMemes, updateMeme }) => {
   return (
     <div className="flex-col max-w-md">
       <p className={'uppercase text-xs text-gray-600 dark:text-gray-300 font-medium'}>
-        {typeof meme.createdAt !== 'object'
+        {/*{typeof meme.createdAt !== 'object'
           ? formatDistance(new Date(meme.createdAt), new Date(), { addSuffix: true })
           : formatDistance(new Date(meme.createdAt.toMillis()), new Date(), {
               addSuffix: true,
-            })}
+            })}*/}
+        {formatDistance(new Date(meme.createdAt), new Date(), { addSuffix: true })}
         {meme.visibility && meme.visibility !== VISIBILITY.PUBLIC && (
           <span> - {meme.visibility}</span>
         )}

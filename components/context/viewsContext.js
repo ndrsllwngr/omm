@@ -6,7 +6,7 @@ export const SortContext = createContext({})
 export const ReloadContext = createContext({})
 
 export const ViewsProvider = ({ children }) => {
-  const [sort, setSort] = useState(SORT.LATEST)
+  const [sort, setSort] = useState(SORT.MOST_VIEWED)
   const [reload, setReload] = useState(false)
   return (
     <SortContext.Provider value={{ sort, setSort }}>
