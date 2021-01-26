@@ -100,15 +100,13 @@ export const AutoplaySortButton = () => {
   }
 
   return (
-    <ToggleIconBtn type="button" onClick={changeAutoplayOrder} addClass={'rounded-l'}>
-      <IoShuffle
-        size={28}
-        className={
-          order === AUTOPLAY_ORDER.RANDOM
-            ? `fill-current text-custom-green`
-            : `fill-current text-white dark:text-black`
-        }
-      />
+    <ToggleIconBtn
+      type="button"
+      onClick={changeAutoplayOrder}
+      addClass={'rounded-l'}
+      toggleState={order === AUTOPLAY_ORDER.RANDOM}
+    >
+      <IoShuffle size={28} className={`fill-current`} />
     </ToggleIconBtn>
   )
 }
@@ -130,18 +128,12 @@ export const AutoplayActionButton = () => {
       onClick={
         !nextMeme && order !== AUTOPLAY_ORDER.RANDOM && state.bool ? stopAutoplay : switchAutoplay
       }
+      toggleState={state.bool}
     >
       {state.bool ? (
-        <IoPause size={28} className="fill-current text-custom-green py-1" />
+        <IoPause size={28} className="py-1 fill-current" />
       ) : (
-        <IoPlay
-          size={28}
-          className={`py-1 fill-current  ${
-            order === AUTOPLAY_ORDER.ORDERED && !(nextMeme && nextMeme.id)
-              ? 'dark:text-gray-400 text-gray-300'
-              : 'text-white dark:text-black'
-          } `}
-        />
+        <IoPlay size={28} className="py-1 fill-current" />
       )}
     </TogglePlayIconBtn>
   )
