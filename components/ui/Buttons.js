@@ -12,11 +12,14 @@ const iconBase = 'p-2 rounded focus:outline-none'
 
 //Used by Buttons
 const btnBg = bgColors
-const btnBase = 'rounded-lg py-2 px-6 inline-flex self-center'
+const btnBase = 'rounded-lg py-2 px-6 mx-1 inline-flex self-center'
 const btnPrimText = textColors
 const btnSecTerText = 'text-black hover:text-gray-700 dark:text-white dark:hover:text-gray-300'
 const btnSecBorder =
   'border border-solid border-black hover:border-gray-700 dark:border-white dark:hover:border-gray-300'
+const btnSecTerTextInv = 'dark:text-black dark:hover:text-gray-700 text-white hover:text-gray-300'
+const btnSecBorderInv =
+  'border border-solid dark:border-black dark:hover:border-gray-700 border-white hover:border-gray-300'
 
 export const VoteBtn = () => {
   return <button></button>
@@ -24,7 +27,7 @@ export const VoteBtn = () => {
 
 export const BaseBtn = ({ children, onClick, className: parentClass }) => {
   return (
-    <button onClick={onClick} className={`${btnBase} ${parentClass}`}>
+    <button onClick={onClick} className={` ${btnBase} ${parentClass}`}>
       {children}
     </button>
   )
@@ -36,35 +39,36 @@ export const PrimaryBtn = ({ children, onClick, className: parentClass }) => {
     </BaseBtn>
   )
 }
-export const SecondaryBtn = ({ children, onClick, className: parentClass }) => {
+export const SecondaryBtn = ({ children, onClick, className: parentClass, inverted = false }) => {
   return (
-    <BaseBtn onClick={onClick} className={`${btnSecTerText} ${btnSecBorder} ${parentClass}`}>
+    <BaseBtn
+      onClick={onClick}
+      className={`${
+        inverted ? `${btnSecTerTextInv} ${btnSecBorderInv}` : `${btnSecTerText} ${btnSecBorder}`
+      }  ${parentClass}`}
+    >
       {children}
     </BaseBtn>
   )
 }
-export const TertiaryBtn = ({ children, onClick, className: parentClass }) => {
+export const TertiaryBtn = ({ children, onClick, className: parentClass, inverted = false }) => {
   return (
-    <BaseBtn onClick={onClick} className={`${btnSecTerText} ${parentClass}`}>
+    <BaseBtn
+      onClick={onClick}
+      className={`${inverted ? `${btnSecTerTextInv}` : `${btnSecTerText} `}`}
+    >
       {children}
     </BaseBtn>
   )
 }
 
-export const BaseIcon = ({
-  children,
-  onClick,
-  disabled = false,
-  toggleState = false,
-  className: parentClass,
-}) => {
+export const BaseIcon = ({ children, onClick, disabled = false, className: parentClass }) => {
   return (
     <button
       type="button"
       className={`${iconBase} ${bgColors} ${parentClass}`}
       disabled={disabled}
       onClick={onClick}
-      toggleState={toggleState}
     >
       {children}
     </button>
@@ -124,7 +128,6 @@ BaseIcon.propTypes = {
   onClick: PropTypes.string,
   children: PropTypes.any,
   disabled: PropTypes.bool,
-  toggleState: PropTypes.bool,
   className: PropTypes.string,
 }
 IconBtn.propTypes = {
@@ -156,11 +159,13 @@ TertiaryBtn.propTypes = {
   onClick: PropTypes.string,
   children: PropTypes.any,
   className: PropTypes.string,
+  inverted: PropTypes.bool,
 }
 SecondaryBtn.propTypes = {
   onClick: PropTypes.string,
   children: PropTypes.any,
   className: PropTypes.string,
+  inverted: PropTypes.bool,
 }
 PrimaryBtn.propTypes = {
   onClick: PropTypes.string,

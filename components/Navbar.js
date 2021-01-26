@@ -81,7 +81,7 @@ const NavButtons = ({ className }) => {
       {auth && auth.user ? (
         <div className="flex">
           <Link href={'/template'}>
-            <TertiaryBtn>Template</TertiaryBtn>
+            <TertiaryBtn inverted={true}>Template</TertiaryBtn>
           </Link>
           <Link href={'/create'}>
             <PrimaryBtn>
@@ -89,7 +89,7 @@ const NavButtons = ({ className }) => {
             </PrimaryBtn>
           </Link>
           <Link href={'/profile'}>
-            <TertiaryBtn>
+            <TertiaryBtn inverted={true}>
               <IoPerson size={18} className={'fill-current inline-flex self-center mr-2'} /> Profile
             </TertiaryBtn>
           </Link>
@@ -97,7 +97,7 @@ const NavButtons = ({ className }) => {
       ) : (
         <div className={'flex'}>
           <Link href={'/login'}>
-            <TertiaryBtn>
+            <TertiaryBtn inverted={true}>
               <IoLogIn size={18} className={'fill-current inline-flex self-center mr-2'} /> Log in
             </TertiaryBtn>
           </Link>
