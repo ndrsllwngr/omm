@@ -6,7 +6,7 @@ const textColors = 'text-white dark:text-black'
 const highlightTextColors = 'text-custom-green'
 const disabledTextColors = 'text-gray-300 dark:text-gray-400 cursor-not-allowed'
 
-export const PrimaryIconBtn = ({ disabled = false, children, onClick, addClass = '' }) => {
+export const IconBtn = ({ disabled = false, children, onClick, addClass = '' }) => {
   return (
     <button
       type="button"
@@ -33,7 +33,7 @@ export const ToggleIconBtn = ({ children, onClick, addClass = '', toggleState = 
     </button>
   )
 }
-export const TogglePlayIconBtn = ({
+export const ToggleStateIconBtn = ({
   children,
   onClick,
   addClass = '',
@@ -56,7 +56,7 @@ export const TogglePlayIconBtn = ({
   )
 }
 
-PrimaryIconBtn.propTypes = {
+IconBtn.propTypes = {
   onClick: PropTypes.string,
   children: PropTypes.any,
   disabled: PropTypes.bool,
@@ -69,7 +69,7 @@ ToggleIconBtn.propTypes = {
   toggleState: PropTypes.bool,
   addClass: PropTypes.string,
 }
-TogglePlayIconBtn.propTypes = {
+ToggleStateIconBtn.propTypes = {
   onClick: PropTypes.string,
   children: PropTypes.any,
   disabled: PropTypes.bool,

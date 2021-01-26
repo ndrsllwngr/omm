@@ -9,7 +9,7 @@ import {
 } from '@/components/context/autoplayContext'
 import { useSingleMemeContext } from '@/components/context/singlememeContext'
 import { useRandomMeme } from '@/components/hooks/useRandomMeme'
-import { PrimaryIconBtn, ToggleIconBtn, TogglePlayIconBtn } from '@/components/ui/Buttons'
+import { IconBtn, ToggleIconBtn, ToggleStateIconBtn } from '@/components/ui/Buttons'
 import { SingleMeme } from '@/components/SingleMeme'
 import { AUTOPLAY_ORDER, VISIBILITY } from '@/lib/constants'
 import { IoHelp, IoPlay, IoPause, IoArrowForward, IoArrowBack, IoShuffle } from 'react-icons/io5'
@@ -56,7 +56,7 @@ export const SlideshowButton = ({ name, changeSlide, disabled }) => {
   const router = useRouter()
   const dispatch = useAutoPlayDispatch()
   return (
-    <PrimaryIconBtn
+    <IconBtn
       disabled={disabled}
       onClick={(e) => {
         e.preventDefault()
@@ -69,7 +69,7 @@ export const SlideshowButton = ({ name, changeSlide, disabled }) => {
       ) : (
         <IoArrowForward size={28} className={`fill-current`} />
       )}
-    </PrimaryIconBtn>
+    </IconBtn>
   )
 }
 
@@ -83,9 +83,9 @@ export const AutoplayRandomButton = () => {
   }
   return (
     <Link href={`/meme/${id}`}>
-      <PrimaryIconBtn onClick={stopAutoplay} addClass={'mr-2'}>
+      <IconBtn onClick={stopAutoplay} addClass={'mr-2'}>
         <IoHelp size={28} className="fill-current" />
-      </PrimaryIconBtn>
+      </IconBtn>
     </Link>
   )
 }
@@ -122,7 +122,7 @@ export const AutoplayActionButton = () => {
   }
 
   return (
-    <TogglePlayIconBtn
+    <ToggleStateIconBtn
       disabled={order === AUTOPLAY_ORDER.ORDERED && !(nextMeme && nextMeme.id)}
       addClass={'rounded-r'}
       onClick={
@@ -135,7 +135,7 @@ export const AutoplayActionButton = () => {
       ) : (
         <IoPlay size={28} className="py-1 fill-current" />
       )}
-    </TogglePlayIconBtn>
+    </ToggleStateIconBtn>
   )
 }
 
