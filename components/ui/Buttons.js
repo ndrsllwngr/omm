@@ -5,29 +5,28 @@ import PropTypes from 'prop-types'
 const bgColors = 'bg-black dark:bg-white hover:bg-gray-700 dark:hover:bg-gray-300'
 
 //Used by Icon Buttons
+const iconBase = 'p-2 rounded focus:outline-none font-semibold'
 const highlightTextColors = 'text-custom-green'
 const disabledTextColors = 'text-gray-300 dark:text-gray-400 cursor-not-allowed'
-const textColors = 'text-white dark:text-black font-semibold'
-const iconBase = 'p-2 rounded focus:outline-none'
+const textColors = 'text-white dark:text-black'
 
 //Used by Buttons
+const btnBase = 'rounded-lg py-2 px-6 mx-1 inline-flex self-center font-semibold'
 const btnBg = bgColors
-const btnBase = 'rounded-lg py-2 px-6 mx-1 inline-flex self-center'
 const btnPrimText = textColors
-const btnSecTerText = 'text-black hover:text-gray-700 dark:text-white dark:hover:text-gray-300'
-const btnSecBorder =
-  'border border-solid border-black hover:border-gray-700 dark:border-white dark:hover:border-gray-300'
-const btnSecTerTextInv = 'dark:text-black dark:hover:text-gray-700 text-white hover:text-gray-300'
-const btnSecBorderInv =
-  'border border-solid dark:border-black dark:hover:border-gray-700 border-white hover:border-gray-300'
 
+const btnSecTerText = 'text-black hover:text-gray-700 dark:text-white dark:hover:text-gray-300 '
+const btnSecBorder =
+  'border border-solid border-black hover:border-gray-700 dark:border-black dark:hover:border-gray-700'
+const btnSecTerTextMono = 'text-white hover:text-gray-300'
+const btnSecBorderMono = 'border border-solid border-white hover:border-gray-300'
 export const VoteBtn = () => {
   return <button></button>
 }
 
 export const BaseBtn = ({ children, onClick, className: parentClass }) => {
   return (
-    <button onClick={onClick} className={` ${btnBase} ${parentClass}`}>
+    <button type="button" onClick={onClick} className={` ${btnBase} ${parentClass}`}>
       {children}
     </button>
   )
@@ -39,24 +38,21 @@ export const PrimaryBtn = ({ children, onClick, className: parentClass }) => {
     </BaseBtn>
   )
 }
-export const SecondaryBtn = ({ children, onClick, className: parentClass, inverted = false }) => {
+export const SecondaryBtn = ({ children, onClick, className: parentClass, mono = false }) => {
   return (
     <BaseBtn
       onClick={onClick}
       className={`${
-        inverted ? `${btnSecTerTextInv} ${btnSecBorderInv}` : `${btnSecTerText} ${btnSecBorder}`
+        mono ? `${btnSecTerTextMono} ${btnSecBorderMono}` : `${btnSecTerText} ${btnSecBorder}`
       }  ${parentClass}`}
     >
       {children}
     </BaseBtn>
   )
 }
-export const TertiaryBtn = ({ children, onClick, className: parentClass, inverted = false }) => {
+export const TertiaryBtn = ({ children, onClick, className: parentClass, mono = false }) => {
   return (
-    <BaseBtn
-      onClick={onClick}
-      className={`${inverted ? `${btnSecTerTextInv}` : `${btnSecTerText} `}`}
-    >
+    <BaseBtn onClick={onClick} className={`${mono ? `${btnSecTerTextMono}` : `${btnSecTerText} `}`}>
       {children}
     </BaseBtn>
   )
@@ -125,50 +121,50 @@ export const ToggleStateIconBtn = ({
 }
 
 BaseIcon.propTypes = {
-  onClick: PropTypes.string,
+  onClick: PropTypes.func,
   children: PropTypes.any,
   disabled: PropTypes.bool,
   className: PropTypes.string,
 }
 IconBtn.propTypes = {
-  onClick: PropTypes.string,
+  onClick: PropTypes.func,
   children: PropTypes.any,
   disabled: PropTypes.bool,
   className: PropTypes.string,
 }
 ToggleIconBtn.propTypes = {
-  onClick: PropTypes.string,
+  onClick: PropTypes.func,
   children: PropTypes.any,
   toggleState: PropTypes.bool,
   className: PropTypes.string,
 }
 ToggleStateIconBtn.propTypes = {
-  onClick: PropTypes.string,
+  onClick: PropTypes.func,
   children: PropTypes.any,
   disabled: PropTypes.bool,
   toggleState: PropTypes.bool,
   className: PropTypes.string,
 }
 BaseBtn.propTypes = {
-  onClick: PropTypes.string,
+  onClick: PropTypes.func,
   children: PropTypes.any,
   className: PropTypes.string,
 }
 
 TertiaryBtn.propTypes = {
-  onClick: PropTypes.string,
+  onClick: PropTypes.func,
   children: PropTypes.any,
   className: PropTypes.string,
-  inverted: PropTypes.bool,
+  mono: PropTypes.bool,
 }
 SecondaryBtn.propTypes = {
-  onClick: PropTypes.string,
+  onClick: PropTypes.func,
   children: PropTypes.any,
   className: PropTypes.string,
-  inverted: PropTypes.bool,
+  mono: PropTypes.bool,
 }
 PrimaryBtn.propTypes = {
-  onClick: PropTypes.string,
+  onClick: PropTypes.func,
   children: PropTypes.any,
   className: PropTypes.string,
 }
