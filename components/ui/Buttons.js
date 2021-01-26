@@ -18,7 +18,7 @@ const btnPrimText = textColors
 
 const btnSecTerText = 'text-black hover:text-gray-700 dark:text-white dark:hover:text-gray-300 '
 const btnSecBorder =
-  'border border-solid border-black hover:border-gray-700 dark:border-black dark:hover:border-gray-700'
+  'border border-solid border-black hover:border-gray-700 dark:border-white dark:hover:border-gray-300'
 const btnSecTerTextMono = 'text-white hover:text-gray-300'
 const btnSecBorderMono = 'border border-solid border-white hover:border-gray-300'
 
