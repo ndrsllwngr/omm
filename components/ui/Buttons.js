@@ -8,6 +8,7 @@ const bgColors = 'bg-black dark:bg-white hover:bg-gray-700 dark:hover:bg-gray-30
 const highlightTextColors = 'text-custom-green'
 const disabledTextColors = 'text-gray-300 dark:text-gray-400 cursor-not-allowed'
 const textColors = 'text-white dark:text-black'
+const iconBase = 'p-2 rounded focus:outline-none'
 
 //Used by Buttons
 const btnBg = bgColors
@@ -21,81 +22,47 @@ export const VoteBtn = () => {
   return <button></button>
 }
 
-export const PrimaryBtn = ({ children, onClick }) => {
-  const bg = btnBg
-  const text = btnPrimText
-  const base = btnBase
+export const BaseBtn = ({ children, onClick, className: parentClass }) => {
   return (
-    <button onClick={onClick} className={`${base} ${bg} ${text}`}>
+    <button onClick={onClick} className={`${btnBase} ${parentClass}`}>
       {children}
     </button>
+  )
+}
+export const PrimaryBtn = ({ children, onClick, className: parentClass }) => {
+  return (
+    <BaseBtn onClick={onClick} className={`${btnBg} ${btnPrimText} ${parentClass}`}>
+      {children}
+    </BaseBtn>
+  )
+}
+export const SecondaryBtn = ({ children, onClick, className: parentClass }) => {
+  return (
+    <BaseBtn onClick={onClick} className={`${btnSecTerText} ${btnSecBorder} ${parentClass}`}>
+      {children}
+    </BaseBtn>
+  )
+}
+export const TertiaryBtn = ({ children, onClick, className: parentClass }) => {
+  return (
+    <BaseBtn onClick={onClick} className={`${btnSecTerText} ${parentClass}`}>
+      {children}
+    </BaseBtn>
   )
 }
 
-export const SecondaryBtn = ({ children, onClick }) => {
-  const text = btnSecTerText
-  const border = btnSecBorder
-  const base = btnBase
-  return (
-    <button onClick={onClick} className={`${base} ${text} ${border}`}>
-      {children}
-    </button>
-  )
-}
-
-export const TertiaryBtn = ({ children, onClick }) => {
-  const text = btnSecTerText
-  const base = btnBase
-  return (
-    <button onClick={onClick} className={`${base} ${text}`}>
-      {children}
-    </button>
-  )
-}
-
-export const IconBtn = ({ disabled = false, children, onClick, addClass = '' }) => {
-  return (
-    <button
-      type="button"
-      className={` p-2 rounded ${bgColors}  ${
-        disabled ? `${disabledTextColors}` : `${textColors}`
-      } ${addClass}`}
-      disabled={disabled}
-      onClick={onClick}
-    >
-      {children}
-    </button>
-  )
-}
-export const ToggleIconBtn = ({ children, onClick, addClass = '', toggleState = false }) => {
-  return (
-    <button
-      type="button"
-      className={`p-2 focus:outline-none ${bgColors}  ${
-        toggleState ? `${highlightTextColors}` : `${textColors}`
-      } ${addClass}`}
-      onClick={onClick}
-    >
-      {children}
-    </button>
-  )
-}
-export const ToggleStateIconBtn = ({
+export const BaseIcon = ({
   children,
   onClick,
-  addClass = '',
   disabled = false,
   toggleState = false,
+  className: parentClass,
 }) => {
   return (
     <button
       type="button"
+      className={`${iconBase} ${bgColors} ${parentClass}`}
       disabled={disabled}
-      className={`p-2 focus:outline-none ${bgColors} ${
-        disabled
-          ? `${disabledTextColors}`
-          : `${toggleState ? `${highlightTextColors}` : `${textColors}`}`
-      }  ${addClass}`}
       onClick={onClick}
     >
       {children}
@@ -103,35 +70,99 @@ export const ToggleStateIconBtn = ({
   )
 }
 
-IconBtn.propTypes = {
-  onClick: PropTypes.string,
-  children: PropTypes.any,
-  disabled: PropTypes.bool,
-  addClass: PropTypes.string,
+export const IconBtn = ({ disabled = false, children, onClick, className: parentClass }) => {
+  return (
+    <BaseIcon
+      className={`${disabled ? `${disabledTextColors}` : `${textColors}`} ${parentClass}`}
+      disabled={disabled}
+      onClick={onClick}
+    >
+      {children}
+    </BaseIcon>
+  )
 }
-ToggleIconBtn.propTypes = {
+export const ToggleIconBtn = ({
+  children,
+  onClick,
+  className: parentClass,
+  toggleState = false,
+}) => {
+  return (
+    <BaseIcon
+      className={` ${toggleState ? `${highlightTextColors}` : `${textColors}`} ${parentClass}`}
+      onClick={onClick}
+    >
+      {children}
+    </BaseIcon>
+  )
+}
+
+export const ToggleStateIconBtn = ({
+  children,
+  onClick,
+  className: parentClass,
+  disabled = false,
+  toggleState = false,
+}) => {
+  return (
+    <BaseIcon
+      disabled={disabled}
+      className={`${
+        disabled
+          ? `${disabledTextColors}`
+          : `${toggleState ? `${highlightTextColors}` : `${textColors}`}`
+      }  ${parentClass}`}
+      onClick={onClick}
+    >
+      {children}
+    </BaseIcon>
+  )
+}
+
+BaseIcon.propTypes = {
   onClick: PropTypes.string,
   children: PropTypes.any,
   disabled: PropTypes.bool,
   toggleState: PropTypes.bool,
-  addClass: PropTypes.string,
+  className: PropTypes.string,
+}
+IconBtn.propTypes = {
+  onClick: PropTypes.string,
+  children: PropTypes.any,
+  disabled: PropTypes.bool,
+  className: PropTypes.string,
+}
+ToggleIconBtn.propTypes = {
+  onClick: PropTypes.string,
+  children: PropTypes.any,
+  toggleState: PropTypes.bool,
+  className: PropTypes.string,
 }
 ToggleStateIconBtn.propTypes = {
   onClick: PropTypes.string,
   children: PropTypes.any,
   disabled: PropTypes.bool,
   toggleState: PropTypes.bool,
-  addClass: PropTypes.string,
+  className: PropTypes.string,
 }
+BaseBtn.propTypes = {
+  onClick: PropTypes.string,
+  children: PropTypes.any,
+  className: PropTypes.string,
+}
+
 TertiaryBtn.propTypes = {
   onClick: PropTypes.string,
   children: PropTypes.any,
+  className: PropTypes.string,
 }
 SecondaryBtn.propTypes = {
   onClick: PropTypes.string,
   children: PropTypes.any,
+  className: PropTypes.string,
 }
 PrimaryBtn.propTypes = {
   onClick: PropTypes.string,
   children: PropTypes.any,
+  className: PropTypes.string,
 }

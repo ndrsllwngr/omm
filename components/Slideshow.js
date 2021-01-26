@@ -83,7 +83,7 @@ export const AutoplayRandomButton = () => {
   }
   return (
     <Link href={`/meme/${id}`}>
-      <IconBtn onClick={stopAutoplay} addClass={'mr-2'}>
+      <IconBtn onClick={stopAutoplay} className={'mr-2'}>
         <IoHelp size={28} className="fill-current" />
       </IconBtn>
     </Link>
@@ -103,7 +103,7 @@ export const AutoplaySortButton = () => {
     <ToggleIconBtn
       type="button"
       onClick={changeAutoplayOrder}
-      addClass={'rounded-l'}
+      className={'rounded-r-none'}
       toggleState={order === AUTOPLAY_ORDER.RANDOM}
     >
       <IoShuffle size={28} className={`fill-current`} />
@@ -124,7 +124,7 @@ export const AutoplayActionButton = () => {
   return (
     <ToggleStateIconBtn
       disabled={order === AUTOPLAY_ORDER.ORDERED && !(nextMeme && nextMeme.id)}
-      addClass={'rounded-r'}
+      className={'rounded-l-none'}
       onClick={
         !nextMeme && order !== AUTOPLAY_ORDER.RANDOM && state.bool ? stopAutoplay : switchAutoplay
       }
