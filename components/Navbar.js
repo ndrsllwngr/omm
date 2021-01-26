@@ -3,7 +3,7 @@ import Link from 'next/link'
 import { useAuth } from '@/components/context/authContext'
 import { IoCreate, IoLogIn, IoPerson } from 'react-icons/io5'
 import PropTypes from 'prop-types'
-import { PrimaryBtn, SecondaryBtn, TertiaryBtn } from '@/components/ui/Buttons'
+import { PrimaryBtn, TertiaryBtn } from '@/components/ui/Buttons'
 
 //https://tailwindcomponents.com/component/responsive-navbar-2
 export const Navbar = () => {
@@ -89,15 +89,15 @@ const NavButtons = ({ className }) => {
             </PrimaryBtn>
           </Link>
           <Link href={'/profile'}>
-            <SecondaryBtn mono={true}>
+            <TertiaryBtn mono={true}>
               <IoPerson size={18} className={'fill-current inline-flex self-center mr-2'} /> Profile
-            </SecondaryBtn>
+            </TertiaryBtn>
           </Link>
         </div>
       ) : (
         <div className={'flex'}>
           <Link href={'/login'}>
-            <TertiaryBtn inverted={true}>
+            <TertiaryBtn mono={true}>
               <IoLogIn size={18} className={'fill-current inline-flex self-center mr-2'} /> Log in
             </TertiaryBtn>
           </Link>

@@ -2,9 +2,10 @@ import React from 'react'
 import PropTypes from 'prop-types'
 
 //Usable by all UI Elements
-const bgColors = 'bg-black dark:bg-white hover:bg-gray-700 dark:hover:bg-gray-300'
+const globalColors = 'bg-black dark:bg-white hover:bg-gray-700 dark:hover:bg-gray-300'
 
 //Used by Icon Buttons
+const bgColors = globalColors
 const iconBase = 'p-2 rounded focus:outline-none font-semibold'
 const highlightTextColors = 'text-custom-green'
 const disabledTextColors = 'text-gray-300 dark:text-gray-400 cursor-not-allowed'
@@ -12,7 +13,7 @@ const textColors = 'text-white dark:text-black'
 
 //Used by Buttons
 const btnBase = 'rounded-lg py-2 px-6 mx-1 inline-flex self-center font-semibold'
-const btnBg = bgColors
+const btnBg = globalColors
 const btnPrimText = textColors
 
 const btnSecTerText = 'text-black hover:text-gray-700 dark:text-white dark:hover:text-gray-300 '
@@ -20,9 +21,10 @@ const btnSecBorder =
   'border border-solid border-black hover:border-gray-700 dark:border-black dark:hover:border-gray-700'
 const btnSecTerTextMono = 'text-white hover:text-gray-300'
 const btnSecBorderMono = 'border border-solid border-white hover:border-gray-300'
-export const VoteBtn = () => {
+
+/*export const VoteBtn = () => {
   return <button></button>
-}
+}*/
 
 export const BaseBtn = ({ children, onClick, className: parentClass }) => {
   return (
@@ -57,7 +59,6 @@ export const TertiaryBtn = ({ children, onClick, className: parentClass, mono = 
     </BaseBtn>
   )
 }
-
 export const BaseIcon = ({ children, onClick, disabled = false, className: parentClass }) => {
   return (
     <button
@@ -70,7 +71,6 @@ export const BaseIcon = ({ children, onClick, disabled = false, className: paren
     </button>
   )
 }
-
 export const IconBtn = ({ disabled = false, children, onClick, className: parentClass }) => {
   return (
     <BaseIcon
@@ -150,7 +150,6 @@ BaseBtn.propTypes = {
   children: PropTypes.any,
   className: PropTypes.string,
 }
-
 TertiaryBtn.propTypes = {
   onClick: PropTypes.func,
   children: PropTypes.any,

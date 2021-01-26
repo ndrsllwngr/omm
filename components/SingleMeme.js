@@ -10,7 +10,7 @@ import formatDistance from 'date-fns/formatDistance'
 import { IoCaretDownOutline, IoCaretUpOutline } from 'react-icons/io5'
 import { memeType } from '@/components/types/types'
 import { ShareButtons } from '@/components/ui/ShareButtons'
-import { PrimaryBtn, SecondaryBtn, TertiaryBtn } from '@/components/ui/Buttons'
+import { TertiaryBtn } from '@/components/ui/Buttons'
 
 export const SingleMeme = ({ meme, enableLink, updateMemes, updateMeme }) => {
   const { setJson } = useFabricJson()
