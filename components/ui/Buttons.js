@@ -7,12 +7,12 @@ const bgColors = 'bg-black dark:bg-white hover:bg-gray-700 dark:hover:bg-gray-30
 //Used by Icon Buttons
 const highlightTextColors = 'text-custom-green'
 const disabledTextColors = 'text-gray-300 dark:text-gray-400 cursor-not-allowed'
-const textColors = 'text-white dark:text-black'
+const textColors = 'text-white dark:text-black font-semibold'
 const iconBase = 'p-2 rounded focus:outline-none'
 
 //Used by Buttons
 const btnBg = bgColors
-const btnBase = 'rounded py-2 px-6'
+const btnBase = 'rounded-lg py-2 px-6 inline-flex self-center'
 const btnPrimText = textColors
 const btnSecTerText = 'text-black hover:text-gray-700 dark:text-white dark:hover:text-gray-300'
 const btnSecBorder =
@@ -64,6 +64,7 @@ export const BaseIcon = ({
       className={`${iconBase} ${bgColors} ${parentClass}`}
       disabled={disabled}
       onClick={onClick}
+      toggleState={toggleState}
     >
       {children}
     </button>

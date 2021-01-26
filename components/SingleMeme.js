@@ -56,14 +56,14 @@ export const SingleMeme = ({ meme, enableLink, updateMemes, updateMeme }) => {
 
       <ShareButtons id={meme.id} />
       <div className={'flex justify-between items-center'}>
-        <PrimaryBtn
+        <TertiaryBtn
           onClick={() => {
             setJson(meme)
             router.push('/create')
           }}
         >
           Copy Meme
-        </PrimaryBtn>
+        </TertiaryBtn>
         <div className={'flex space-x-1 justify-center items-center mt-1'}>
           <p className={'text-black dark:text-white text-center text-sm'}>
             {getTotalPoints(meme)} point{Math.abs(getTotalPoints(meme)) !== 1 && 's'} · {meme.views}{' '}
