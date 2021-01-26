@@ -103,7 +103,7 @@ const NavButtons = ({ className }) => {
             </TertiaryBtn>
           </Link>
           <Link href={'/create'}>
-            <PrimaryBtn className={'w-full md:w-max justify-center my-2'}>
+            <PrimaryBtn className={'w-full md:w-max justify-center my-2'} mono={true}>
               <IoCreate size={18} className={'fill-current inline-flex self-center mr-2'} /> Meme
             </PrimaryBtn>
           </Link>
