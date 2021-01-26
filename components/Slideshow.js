@@ -106,7 +106,7 @@ export const AutoplaySortButton = () => {
         className={
           order === AUTOPLAY_ORDER.RANDOM
             ? `fill-current text-custom-green`
-            : `fill-current text-gray-400`
+            : `fill-current text-white dark:text-black`
         }
       />
     </ToggleIconBtn>
@@ -138,8 +138,8 @@ export const AutoplayActionButton = () => {
           size={28}
           className={`py-1 fill-current  ${
             order === AUTOPLAY_ORDER.ORDERED && !(nextMeme && nextMeme.id)
-              ? 'text-gray-400'
-              : 'text-white'
+              ? 'dark:text-gray-400 text-gray-300'
+              : 'text-white dark:text-black'
           } `}
         />
       )}
