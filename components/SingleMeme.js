@@ -9,7 +9,7 @@ import Link from 'next/link'
 import formatDistance from 'date-fns/formatDistance'
 import { IoCaretDownOutline, IoCaretUpOutline } from 'react-icons/io5'
 import { memeType } from '@/components/types/types'
-import { SocialShareButtons } from '@/components/SocialShareButtons'
+import { ShareButtons } from '@/components/ui/ShareButtons'
 
 export const SingleMeme = ({ meme, enableLink, updateMemes, updateMeme }) => {
   const { setJson } = useFabricJson()
@@ -53,7 +53,7 @@ export const SingleMeme = ({ meme, enableLink, updateMemes, updateMeme }) => {
         <MemeRenderer meme={meme} />
       )}
 
-      <SocialShareButtons id={meme.id} />
+      <ShareButtons id={meme.id} />
       <div className={'flex justify-between items-center'}>
         <button
           className={'text-black dark:text-white'}

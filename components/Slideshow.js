@@ -9,6 +9,7 @@ import {
 } from '@/components/context/autoplayContext'
 import { useSingleMemeContext } from '@/components/context/singlememeContext'
 import { useRandomMeme } from '@/components/hooks/useRandomMeme'
+import { PrimaryIconBtn, ToogleIconBtn } from '@/components/ui/Buttons'
 import { SingleMeme } from '@/components/SingleMeme'
 import { AUTOPLAY_ORDER, VISIBILITY } from '@/lib/constants'
 import { IoHelp, IoPlay, IoPause, IoArrowForward, IoArrowBack, IoShuffle } from 'react-icons/io5'
@@ -88,14 +89,16 @@ export const AutoplayActionButton = () => {
 export const AutoplayRandomButton = () => {
   const router = useRouter()
   const { id } = useRandomMeme(router)
+  const dispatch = useAutoPlayDispatch()
+
+  const stopAutoplay = () => {
+    dispatch({ type: 'falseBool' })
+  }
   return (
     <Link href={`/meme/${id}`}>
-      <a
-        className="flex flex-col p-2 mr-2 justify-center rounded-md bg-custom-gray  "
-        onClick={() => dispatch({ type: 'falseBool' })}
-      >
-        <IoHelp size={28} className="fill-current text-custom-green" />
-      </a>
+      <PrimaryIconBtn onClick={stopAutoplay} addClass={'mr-2'}>
+        <IoHelp size={28} className="fill-current" />
+      </PrimaryIconBtn>
     </Link>
   )
 }
@@ -110,14 +113,7 @@ export const AutoplaySortButton = () => {
   }
 
   return (
-    <button
-      type="button"
-      className="px-4 items-center bg-custom-gray rounded-l"
-      id="options-menu"
-      aria-haspopup="true"
-      aria-expanded="true"
-      onClick={changeAutoplayOrder}
-    >
+    <ToogleIconBtn type="button" onClick={changeAutoplayOrder} addClass={'rounded-l'}>
       <IoShuffle
         size={28}
         className={
@@ -126,7 +122,7 @@ export const AutoplaySortButton = () => {
             : `fill-current text-gray-400`
         }
       />
-    </button>
+    </ToogleIconBtn>
   )
 }
 
@@ -134,11 +130,8 @@ export const SlideshowButton = ({ name, changeSlide, disabled }) => {
   const router = useRouter()
   const dispatch = useAutoPlayDispatch()
   return (
-    <button
+    <PrimaryIconBtn
       disabled={disabled}
-      className={`p-2 rounded bg-custom-gray ${
-        disabled ? 'text-gray-400 cursor-not-allowed' : 'text-custom-green'
-      }`}
       onClick={(e) => {
         e.preventDefault()
         router.push(changeSlide)
@@ -150,9 +143,10 @@ export const SlideshowButton = ({ name, changeSlide, disabled }) => {
       ) : (
         <IoArrowForward size={28} className={`fill-current`} />
       )}
-    </button>
+    </PrimaryIconBtn>
   )
 }
+
 SlideshowButton.propTypes = {
   name: PropTypes.string,
   changeSlide: PropTypes.string,
