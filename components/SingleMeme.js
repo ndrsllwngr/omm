@@ -10,7 +10,7 @@ import formatDistance from 'date-fns/formatDistance'
 import { IoCaretDownOutline, IoCaretUpOutline } from 'react-icons/io5'
 import { memeType } from '@/components/types/types'
 import { ShareButtons } from '@/components/ui/ShareButtons'
-import { TertiaryBtn } from '@/components/ui/Buttons'
+import { TertiaryBtn, VoteDownBtn, VoteUpBtn } from '@/components/ui/Buttons'
 
 export const SingleMeme = ({ meme, enableLink, updateMemes, updateMeme }) => {
   const { setJson } = useFabricJson()
@@ -69,28 +69,12 @@ export const SingleMeme = ({ meme, enableLink, updateMemes, updateMeme }) => {
             {getTotalPoints(meme)} point{Math.abs(getTotalPoints(meme)) !== 1 && 's'} · {meme.views}{' '}
             view{Math.abs(meme.views) !== 1 && 's'}
           </p>
-          <button
-            className={`inline-flex self-center block rounded px-1 py-1 ${
-              getVoteState(meme) === VOTE.up
-                ? 'text-custom-green border-custom-green'
-                : 'text-black dark:text-white dark:border-white'
-            }`}
-            disabled={getVoteState(meme) === VOTE.up}
-            onClick={() => upVote(meme)}
-          >
-            <IoCaretUpOutline className={'fill-current inline-flex self-center'} />
-          </button>
-          <button
-            className={`inline-flex self-center block rounded px-1 py-1 ${
-              getVoteState(meme) === VOTE.down
-                ? 'text-red-500 border-red-500'
-                : 'text-black dark:text-white dark:border-white'
-            }`}
-            disabled={getVoteState(meme) === VOTE.down}
-            onClick={() => downVote(meme)}
-          >
-            <IoCaretDownOutline className={'fill-current inline-flex self-center'} />
-          </button>
+          <VoteUpBtn disabled={getVoteState(meme) === VOTE.up} onClick={() => upVote(meme)}>
+            <IoCaretUpOutline size={22} className={'fill-current inline-flex self-center'} />
+          </VoteUpBtn>
+          <VoteDownBtn disabled={getVoteState(meme) === VOTE.down} onClick={() => downVote(meme)}>
+            <IoCaretDownOutline size={22} className={'fill-current inline-flex self-center'} />
+          </VoteDownBtn>
         </div>
       </div>
     </div>

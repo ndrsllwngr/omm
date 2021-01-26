@@ -22,9 +22,50 @@ const btnSecBorder =
 const btnSecTerTextMono = 'text-white hover:text-gray-300'
 const btnSecBorderMono = 'border border-solid border-white hover:border-gray-300'
 
-/*export const VoteBtn = () => {
-  return <button></button>
-}*/
+//VoteBtn
+const voteBtnText = 'text-black dark:text-white'
+
+export const VoteBaseBtn = ({ disabled = false, onClick, className: parentClass, children }) => {
+  return (
+    <button
+      className={`inline-flex rounded p-2 self-center focus:outline-none  ${parentClass}`}
+      disabled={disabled}
+      onClick={onClick}
+    >
+      {children}
+    </button>
+  )
+}
+export const VoteDownBtn = ({ disabled = false, onClick, className: parentClass, children }) => {
+  return (
+    <VoteBaseBtn
+      className={`${
+        disabled
+          ? 'text-red-500 border-red-500'
+          : `${voteBtnText} hover:text-red-200 dark:hover:text-red-200`
+      } ${parentClass}`}
+      disabled={disabled}
+      onClick={onClick}
+    >
+      {children}
+    </VoteBaseBtn>
+  )
+}
+export const VoteUpBtn = ({ disabled = false, onClick, className: parentClass, children }) => {
+  return (
+    <VoteBaseBtn
+      className={`${
+        disabled
+          ? 'text-custom-green border-custom-green'
+          : `${voteBtnText} hover:text-green-200 dark:hover:text-green-200`
+      } ${parentClass}`}
+      disabled={disabled}
+      onClick={onClick}
+    >
+      {children}
+    </VoteBaseBtn>
+  )
+}
 
 export const BaseBtn = ({ children, onClick, className: parentClass }) => {
   return (
@@ -166,4 +207,22 @@ PrimaryBtn.propTypes = {
   onClick: PropTypes.func,
   children: PropTypes.any,
   className: PropTypes.string,
+}
+VoteDownBtn.propTypes = {
+  onClick: PropTypes.func,
+  children: PropTypes.any,
+  className: PropTypes.string,
+  disabled: PropTypes.bool,
+}
+VoteUpBtn.propTypes = {
+  onClick: PropTypes.func,
+  children: PropTypes.any,
+  className: PropTypes.string,
+  disabled: PropTypes.bool,
+}
+VoteBaseBtn.propTypes = {
+  onClick: PropTypes.func,
+  children: PropTypes.any,
+  className: PropTypes.string,
+  disabled: PropTypes.bool,
 }
