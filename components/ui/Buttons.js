@@ -1,41 +1,51 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 
+//Usable by all UI Elements
 const bgColors = 'bg-black dark:bg-white hover:bg-gray-700 dark:hover:bg-gray-300'
-const textColors = 'text-white dark:text-black'
+
+//Used by Icon Buttons
 const highlightTextColors = 'text-custom-green'
 const disabledTextColors = 'text-gray-300 dark:text-gray-400 cursor-not-allowed'
+const textColors = 'text-white dark:text-black'
+
+//Used by Buttons
+const btnBg = bgColors
+const btnBase = 'rounded py-2 px-6'
+const btnPrimText = textColors
+const btnSecTerText = 'text-black hover:text-gray-700 dark:text-white dark:hover:text-gray-300'
+const btnSecBorder =
+  'border border-solid border-black hover:border-gray-700 dark:border-white dark:hover:border-gray-300'
 
 export const VoteBtn = () => {
   return <button></button>
 }
 
 export const PrimaryBtn = ({ children, onClick }) => {
-  const bg = bgColors
-  const text = textColors
-  const base = 'rounded py-2 px-6'
+  const bg = btnBg
+  const text = btnPrimText
+  const base = btnBase
   return (
-    <button onClick={onClick} className={`${text} ${base} ${bg}`}>
+    <button onClick={onClick} className={`${base} ${bg} ${text}`}>
       {children}
     </button>
   )
 }
 
 export const SecondaryBtn = ({ children, onClick }) => {
-  const text = 'text-black hover:text-gray-700 dark:text-white dark:hover:text-gray-300'
-  const border =
-    'border border-solid border-black hover:border-gray-700 dark:border-white dark:hover:border-gray-300'
-  const base = 'rounded p-2'
+  const text = btnSecTerText
+  const border = btnSecBorder
+  const base = btnBase
   return (
-    <button onClick={onClick} className={`${text} ${base} ${border}`}>
+    <button onClick={onClick} className={`${base} ${text} ${border}`}>
       {children}
     </button>
   )
 }
 
 export const TertiaryBtn = ({ children, onClick }) => {
-  const text = 'dark:text-white text-black hover:text-gray-700 dark:hover:text-gray-400'
-  const base = 'p-2'
+  const text = btnSecTerText
+  const base = btnBase
   return (
     <button onClick={onClick} className={`${base} ${text}`}>
       {children}
@@ -81,7 +91,7 @@ export const ToggleStateIconBtn = ({
     <button
       type="button"
       disabled={disabled}
-      className={`p-2 focus:outline-none  ${bgColors} ${
+      className={`p-2 focus:outline-none ${bgColors} ${
         disabled
           ? `${disabledTextColors}`
           : `${toggleState ? `${highlightTextColors}` : `${textColors}`}`
