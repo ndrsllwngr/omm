@@ -15,7 +15,7 @@ const textColors = 'text-white dark:text-black'
 const btnBase = 'rounded-lg py-2 px-6 mx-1 inline-flex self-center font-semibold'
 const btnBg = globalColors
 const btnPrimText = textColors
-
+const btnPrimMono = 'text-black bg-white dark:hover:bg-gray-300'
 const btnSecTerText = 'text-black hover:text-gray-700 dark:text-white dark:hover:text-gray-300 '
 const btnSecBorder =
   'border border-solid border-black hover:border-gray-700 dark:border-white dark:hover:border-gray-300'
@@ -74,14 +74,19 @@ export const BaseBtn = ({ children, onClick, className: parentClass }) => {
     </button>
   )
 }
-export const PrimaryBtn = ({ children, onClick, className: parentClass }) => {
+export const PrimaryBtn = ({ children, onClick, className: parentClass, mono = false }) => {
   return (
-    <BaseBtn onClick={onClick} className={`${btnBg} ${btnPrimText} ${parentClass}`}>
+    <BaseBtn
+      onClick={onClick}
+      className={`
+    ${mono ? `${btnPrimMono}` : `${btnBg} ${btnPrimText} `}
+    ${parentClass}`}
+    >
       {children}
     </BaseBtn>
   )
 }
-export const SecondaryBtn = ({ children, onClick, className: parentClass, mono = false }) => {
+export const SecondaryBtn = ({ children, onClick, mono = false, className: parentClass }) => {
   return (
     <BaseBtn
       onClick={onClick}
@@ -95,7 +100,10 @@ export const SecondaryBtn = ({ children, onClick, className: parentClass, mono =
 }
 export const TertiaryBtn = ({ children, onClick, className: parentClass, mono = false }) => {
   return (
-    <BaseBtn onClick={onClick} className={`${mono ? `${btnSecTerTextMono}` : `${btnSecTerText} `}`}>
+    <BaseBtn
+      onClick={onClick}
+      className={`${mono ? `${btnSecTerTextMono}` : `${btnSecTerText} `} ${parentClass}`}
+    >
       {children}
     </BaseBtn>
   )
@@ -207,6 +215,7 @@ PrimaryBtn.propTypes = {
   onClick: PropTypes.func,
   children: PropTypes.any,
   className: PropTypes.string,
+  mono: PropTypes.bool,
 }
 VoteDownBtn.propTypes = {
   onClick: PropTypes.func,
