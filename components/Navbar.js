@@ -10,8 +10,6 @@ import { useDetectOutsideClick } from '@/components/hooks/useDetectOutsideClick'
 export const Navbar = () => {
   const toggleRef = useRef(null)
   const [isOpen, setIsOpen] = useDetectOutsideClick(toggleRef, false)
-
-  /*const [isOpen, setIsOpen] = useState(false)*/
   const handleToggle = () => {
     setIsOpen(!isOpen)
   }
@@ -22,7 +20,7 @@ export const Navbar = () => {
         {/*Logo */}
         <div className="flex flex-shrink-0 items-center justify-between mb-4 md:mb-0">
           <Link href={'/'} className="cursor-pointer ">
-            <a className={'h-8'}>
+            <a className={'h-8 mr-2'}>
               <svg
                 height={'h-auto'}
                 viewBox="0 0 1498 280"
@@ -65,7 +63,7 @@ export const Navbar = () => {
         {/*EndLogo */}
 
         {/*Search */}
-        <form className="mb-4 w-full md:mb-0 md:w-1/4">
+        <form className={'mb-4 w-full md:mx-2 md:mb-0 md:w-1/4'}>
           <label className="hidden" htmlFor="search-form">
             Search
           </label>
@@ -79,11 +77,9 @@ export const Navbar = () => {
         {/*End Search */}
 
         {/*Nav*/}
-        {isOpen && (
-          <div ref={toggleRef}>
-            <NavButtons className={`${isOpen ? 'block' : 'hidden'} md:flex`} />
-          </div>
-        )}
+        <div ref={toggleRef}>
+          <NavButtons className={`${isOpen ? 'block' : 'hidden'} md:flex`} />
+        </div>
       </div>
     </header>
   )
