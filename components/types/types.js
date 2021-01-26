@@ -27,10 +27,10 @@ export const userType = shape({
 
 // TODO add views count
 export const memeType = shape({
-  id: string.isRequired,
+  _id: string.isRequired,
   title: string.isRequired,
   createdAt: any.isRequired,
-  createdBy: string.isRequired,
+  createdBy: any.isRequired,
   upVotes: arrayOf(string).isRequired,
   downVotes: arrayOf(string).isRequired,
   forkedBy: arrayOf(string).isRequired,
@@ -43,15 +43,7 @@ export const memeType = shape({
   }).isRequired,
   url: string, // if a real png was created (requirement)
   svg: string.isRequired,
-  json: shape({
-    background: string,
-    height: number,
-    width: number,
-    preserveObjectStacking: bool,
-    enableRetinaScaling: bool,
-    version: string,
-    objects: arrayOf(any),
-  }).isRequired,
+  json: string.isRequired,
 })
 
 // TODO atm these are identical

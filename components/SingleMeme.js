@@ -18,18 +18,13 @@ export const SingleMeme = ({ meme, enableLink, updateMemes, updateMeme }) => {
   return (
     <div className="flex-col max-w-md">
       <p className={'uppercase text-xs text-gray-600 dark:text-gray-300 font-medium'}>
-        {/*{typeof meme.createdAt !== 'object'
-          ? formatDistance(new Date(meme.createdAt), new Date(), { addSuffix: true })
-          : formatDistance(new Date(meme.createdAt.toMillis()), new Date(), {
-              addSuffix: true,
-            })}*/}
         {formatDistance(new Date(meme.createdAt), new Date(), { addSuffix: true })}
         {meme.visibility && meme.visibility !== VISIBILITY.PUBLIC && (
           <span> - {meme.visibility}</span>
         )}
       </p>
       {enableLink ? (
-        <Link href={`/meme/${meme.id}`}>
+        <Link href={`/meme/${meme._id}`}>
           <a>
             <h1 className={'text-lg font-bold text-black dark:text-white truncate'}>
               {meme.title ? meme.title : 'Untitled'}
@@ -45,7 +40,7 @@ export const SingleMeme = ({ meme, enableLink, updateMemes, updateMeme }) => {
       )}
 
       {enableLink ? (
-        <Link href={`/meme/${meme.id}`}>
+        <Link href={`/meme/${meme._id}`}>
           <a>
             <MemeRenderer meme={meme} />
           </a>
@@ -54,7 +49,7 @@ export const SingleMeme = ({ meme, enableLink, updateMemes, updateMeme }) => {
         <MemeRenderer meme={meme} />
       )}
 
-      <SocialShareButtons id={meme.id} />
+      <SocialShareButtons id={meme._id} />
       <div className={'flex justify-between items-center'}>
         <button
           className={'text-black dark:text-white'}
