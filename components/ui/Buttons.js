@@ -95,7 +95,10 @@ export const SecondaryBtn = ({ children, onClick, className: parentClass, mono =
 }
 export const TertiaryBtn = ({ children, onClick, className: parentClass, mono = false }) => {
   return (
-    <BaseBtn onClick={onClick} className={`${mono ? `${btnSecTerTextMono}` : `${btnSecTerText} `}`}>
+    <BaseBtn
+      onClick={onClick}
+      className={`${mono ? `${btnSecTerTextMono}` : `${btnSecTerText} `} ${parentClass}`}
+    >
       {children}
     </BaseBtn>
   )
