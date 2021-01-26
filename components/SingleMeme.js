@@ -10,6 +10,7 @@ import formatDistance from 'date-fns/formatDistance'
 import { IoCaretDownOutline, IoCaretUpOutline } from 'react-icons/io5'
 import { memeType } from '@/components/types/types'
 import { ShareButtons } from '@/components/ui/ShareButtons'
+import { PrimaryBtn, Secondary, Tertiary } from '@/components/ui/Buttons'
 
 export const SingleMeme = ({ meme, enableLink, updateMemes, updateMeme }) => {
   const { setJson } = useFabricJson()
@@ -55,7 +56,7 @@ export const SingleMeme = ({ meme, enableLink, updateMemes, updateMeme }) => {
 
       <ShareButtons id={meme.id} />
       <div className={'flex justify-between items-center'}>
-        <button
+        <PrimaryBtn
           className={'text-black dark:text-white'}
           onClick={() => {
             setJson(meme)
@@ -63,7 +64,7 @@ export const SingleMeme = ({ meme, enableLink, updateMemes, updateMeme }) => {
           }}
         >
           Copy Meme
-        </button>
+        </PrimaryBtn>
         <div className={'flex space-x-1 justify-center items-center mt-1'}>
           <p className={'text-black dark:text-white text-center text-sm'}>
             {getTotalPoints(meme)} point{Math.abs(getTotalPoints(meme)) !== 1 && 's'} · {meme.views}{' '}
