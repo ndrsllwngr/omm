@@ -9,7 +9,7 @@ import {
 } from '@/components/context/autoplayContext'
 import { useSingleMemeContext } from '@/components/context/singlememeContext'
 import { useRandomMeme } from '@/components/hooks/useRandomMeme'
-import { PrimaryIconBtn, ToogleIconBtn } from '@/components/ui/Buttons'
+import { PrimaryIconBtn, ToggleIconBtn, TogglePlayIconBtn } from '@/components/ui/Buttons'
 import { SingleMeme } from '@/components/SingleMeme'
 import { AUTOPLAY_ORDER, VISIBILITY } from '@/lib/constants'
 import { IoHelp, IoPlay, IoPause, IoArrowForward, IoArrowBack, IoShuffle } from 'react-icons/io5'
@@ -52,37 +52,24 @@ export const Slideshow = () => {
     </div>
   )
 }
-
-export const AutoplayActionButton = () => {
-  const [state, dispatch] = useAutoPlayContext()
-  const { order } = useAutoPlayOrder()
-  const { nextMeme } = useSingleMemeContext()
-
+export const SlideshowButton = ({ name, changeSlide, disabled }) => {
+  const router = useRouter()
+  const dispatch = useAutoPlayDispatch()
   return (
-    <button
-      disabled={order === AUTOPLAY_ORDER.ORDERED && !(nextMeme && nextMeme.id)}
-      className={`p-2 rounded-r bg-custom-gray ${
-        order === AUTOPLAY_ORDER.ORDERED && !(nextMeme && nextMeme.id) ? 'cursor-not-allowed' : ''
-      }`}
-      onClick={
-        !nextMeme && order !== AUTOPLAY_ORDER.RANDOM && state.bool
-          ? () => dispatch({ type: 'falseBool' })
-          : () => dispatch({ type: 'toggleBool' })
-      }
+    <PrimaryIconBtn
+      disabled={disabled}
+      onClick={(e) => {
+        e.preventDefault()
+        router.push(changeSlide)
+        dispatch({ type: 'falseBool' })
+      }}
     >
-      {state.bool ? (
-        <IoPause size={28} className="fill-current text-custom-green py-1" />
+      {name === 'prev' ? (
+        <IoArrowBack size={28} className={`fill-current`} />
       ) : (
-        <IoPlay
-          size={28}
-          className={`py-1 fill-current ${
-            order === AUTOPLAY_ORDER.ORDERED && !(nextMeme && nextMeme.id)
-              ? 'text-gray-400'
-              : 'text-custom-green'
-          } `}
-        />
+        <IoArrowForward size={28} className={`fill-current`} />
       )}
-    </button>
+    </PrimaryIconBtn>
   )
 }
 
@@ -113,7 +100,7 @@ export const AutoplaySortButton = () => {
   }
 
   return (
-    <ToogleIconBtn type="button" onClick={changeAutoplayOrder} addClass={'rounded-l'}>
+    <ToggleIconBtn type="button" onClick={changeAutoplayOrder} addClass={'rounded-l'}>
       <IoShuffle
         size={28}
         className={
@@ -122,28 +109,41 @@ export const AutoplaySortButton = () => {
             : `fill-current text-gray-400`
         }
       />
-    </ToogleIconBtn>
+    </ToggleIconBtn>
   )
 }
+export const AutoplayActionButton = () => {
+  const [state, dispatch] = useAutoPlayContext()
+  const { order } = useAutoPlayOrder()
+  const { nextMeme } = useSingleMemeContext()
+  const stopAutoplay = () => {
+    dispatch({ type: 'falseBool' })
+  }
+  const switchAutoplay = () => {
+    dispatch({ type: 'toggleBool' })
+  }
 
-export const SlideshowButton = ({ name, changeSlide, disabled }) => {
-  const router = useRouter()
-  const dispatch = useAutoPlayDispatch()
   return (
-    <PrimaryIconBtn
-      disabled={disabled}
-      onClick={(e) => {
-        e.preventDefault()
-        router.push(changeSlide)
-        dispatch({ type: 'falseBool' })
-      }}
+    <TogglePlayIconBtn
+      disabled={order === AUTOPLAY_ORDER.ORDERED && !(nextMeme && nextMeme.id)}
+      addClass={'rounded-r'}
+      onClick={
+        !nextMeme && order !== AUTOPLAY_ORDER.RANDOM && state.bool ? stopAutoplay : switchAutoplay
+      }
     >
-      {name === 'prev' ? (
-        <IoArrowBack size={28} className={`fill-current`} />
+      {state.bool ? (
+        <IoPause size={28} className="fill-current text-custom-green py-1" />
       ) : (
-        <IoArrowForward size={28} className={`fill-current`} />
+        <IoPlay
+          size={28}
+          className={`py-1 fill-current  ${
+            order === AUTOPLAY_ORDER.ORDERED && !(nextMeme && nextMeme.id)
+              ? 'text-gray-400'
+              : 'text-white'
+          } `}
+        />
       )}
-    </PrimaryIconBtn>
+    </TogglePlayIconBtn>
   )
 }
 

@@ -19,11 +19,25 @@ export const PrimaryIconBtn = ({ disabled = false, children, onClick, addClass =
     </button>
   )
 }
-export const ToogleIconBtn = ({ children, onClick, addClass = '' }) => {
+export const ToggleIconBtn = ({ children, onClick, addClass = '' }) => {
   return (
     <button
       type="button"
-      className={` ${addClass} px-4 items-center focus:outline-none bg-black hover:bg-gray-700 dark:hover:bg-gray-300 dark:bg-white`}
+      className={` ${addClass} p-2 focus:outline-none bg-black hover:bg-gray-700 dark:hover:bg-gray-300 dark:bg-white`}
+      onClick={onClick}
+    >
+      {children}
+    </button>
+  )
+}
+export const TogglePlayIconBtn = ({ children, onClick, addClass = '', disabled = false }) => {
+  return (
+    <button
+      type="button"
+      disabled={disabled}
+      className={` ${addClass} ${
+        disabled ? 'cursor-not-allowed' : ''
+      } p-2 focus:outline-none bg-black hover:bg-gray-700 dark:hover:bg-gray-300 dark:bg-white`}
       onClick={onClick}
     >
       {children}
@@ -37,8 +51,15 @@ PrimaryIconBtn.propTypes = {
   disabled: PropTypes.bool,
   addClass: PropTypes.string,
 }
-ToogleIconBtn.propTypes = {
+ToggleIconBtn.propTypes = {
   onClick: PropTypes.string,
   children: PropTypes.any,
+  disabled: PropTypes.bool,
+  addClass: PropTypes.string,
+}
+TogglePlayIconBtn.propTypes = {
+  onClick: PropTypes.string,
+  children: PropTypes.any,
+  disabled: PropTypes.bool,
   addClass: PropTypes.string,
 }
