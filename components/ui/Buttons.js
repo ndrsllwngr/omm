@@ -15,7 +15,7 @@ const textColors = 'text-white dark:text-black'
 const btnBase = 'rounded-lg py-2 px-6 mx-1 inline-flex self-center font-semibold'
 const btnBg = globalColors
 const btnPrimText = textColors
-const btnPrimMono = 'text-black bg-white dark:hover:bg-gray-300'
+const btnPrimMono = 'text-black bg-white hover:bg-gray-300'
 const btnSecTerText = 'text-black hover:text-gray-700 dark:text-white dark:hover:text-gray-300 '
 const btnSecBorder =
   'border border-solid border-black hover:border-gray-700 dark:border-white dark:hover:border-gray-300'
