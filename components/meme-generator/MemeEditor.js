@@ -4,12 +4,10 @@ import SVG from 'react-inlinesvg'
 import { FabricCanvas } from '@/components/meme-generator/FabricCanvas'
 import { TextToolbar } from '@/components/meme-generator/TextToolbar'
 import { useFabricCanvas, useTemplate } from '@/components/context/fabricContext'
-import { useMemeUpload } from '@/components/hooks/useMemeUpload'
 import { ImageToolbar } from '@/components/meme-generator/ImageToolbar'
 import { useRouter } from 'next/router'
 import { useAuth } from '@/components/context/authContext'
 import { SORT, VISIBILITY } from '@/lib/constants'
-import { useDraftUpload } from '@/components/hooks/useDraftUpload'
 import PropTypes from 'prop-types'
 import { useSortContext } from '@/components/context/viewsContext'
 import { gql, useMutation } from '@apollo/client'
@@ -103,8 +101,8 @@ mutation($todo: todos_insert_input!){
 // uses http://fabricjs.com/
 export const MemeEditor = () => {
   const router = useRouter()
-  const [insertOneMeme, { dataMeme }] = useMutation(ADD_MEME)
-  const [insertOneDraft, { dataDraft }] = useMutation(ADD_DRAFT)
+  const [insertOneMeme] = useMutation(ADD_MEME)
+  const [insertOneDraft] = useMutation(ADD_DRAFT)
   const { canvas, isCopy } = useFabricCanvas()
   const [imgURL, setImgURL] = useState('')
   const { template } = useTemplate()
@@ -113,8 +111,6 @@ export const MemeEditor = () => {
   const [svgExport, setSvgExport] = useState('')
   const [jsonExport, setJsonExport] = useState({})
   const [previewMode, setPreviewMode] = useState(false)
-  const [loading, success, error, setData] = useMemeUpload()
-  const [loadingDraft, successDraft, errorDraft, setDataDraft] = useDraftUpload()
   const { setSort } = useSortContext()
   const auth = useAuth()
 
