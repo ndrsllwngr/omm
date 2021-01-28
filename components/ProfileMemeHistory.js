@@ -69,7 +69,7 @@ export const ProfileMemeHistory = ({ className }) => {
                 <span> - {meme.visibility}</span>
               )}
             </p>
-            <Link href={`/meme/${meme.id}`}>
+            <Link href={`/meme/${meme._id}`}>
               <a className={'flex flex-col justify-center items-start'}>
                 <h1 className={'text-lg font-bold text-black dark:text-white truncate'}>
                   {meme.title ? meme.title : 'Untitled'}
