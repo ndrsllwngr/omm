@@ -46,10 +46,8 @@ export const ProfileMemeHistory = ({ className }) => {
   const auth = useAuth()
   const { loading, error, data, networkStatus } = useQuery(ALL_PERSONAL_MEMES_QUERY, {
     variables: { user: { _id: auth.user.id } },
-    // Setting this value to true will make the component rerender when
-    // the "networkStatus" changes, so we are able to know if it is fetching
-    // more data
     notifyOnNetworkStatusChange: true,
+    fetchPolicy: 'cache-and-network',
   })
   const loadingMoreDrafts = networkStatus === NetworkStatus.fetchMore
 
@@ -57,7 +55,7 @@ export const ProfileMemeHistory = ({ className }) => {
     console.log({ src: 'ProfileMemeHistory', data, error, loading })
   }, [data, error, loading])
 
-  if (error) return <div>Error loading drafts.</div>
+  if (error) return <div>Error loading memes.</div>
   if (loading && !loadingMoreDrafts) return <div>Loading</div>
   return (
     <div className={className}>

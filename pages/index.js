@@ -81,12 +81,10 @@ const translateSort = (sortEnum) => {
 
 // eslint-disable-next-line react/prop-types
 const LandingPageInner = ({ sort }) => {
-  const { loading, error, data, fetchMore, networkStatus } = useQuery(ALL_PUBLIC_MEMES_QUERY, {
+  const { loading, error, data, networkStatus } = useQuery(ALL_PUBLIC_MEMES_QUERY, {
     variables: { sortBy: translateSort(sort) },
-    // Setting this value to true will make the component rerender when
-    // the "networkStatus" changes, so we are able to know if it is fetching
-    // more data
     notifyOnNetworkStatusChange: true,
+    fetchPolicy: 'cache-and-network',
   })
   const loadingMoreMemes = networkStatus === NetworkStatus.fetchMore
 

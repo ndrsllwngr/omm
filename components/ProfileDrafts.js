@@ -4,7 +4,7 @@ import { MemeRenderer } from '@/components/MemeRenderer'
 import { useFabricJson } from '@/components/context/fabricContext'
 import { useRouter } from 'next/router'
 import formatDistance from 'date-fns/formatDistance'
-import { gql, NetworkStatus, useQuery } from '@apollo/client'
+import { gql, NetworkStatus, useMutation, useQuery } from '@apollo/client'
 import { useAuth } from '@/components/context/authContext'
 
 export const ALL_PERSONAL_DRAFTS_QUERY = gql`
@@ -42,15 +42,22 @@ export const ALL_PERSONAL_DRAFTS_QUERY = gql`
   }
 `
 
+const DELETE_DRAFT = gql`
+  mutation DeleteDraft($draft: DraftQueryInput!) {
+    deleteOneDraft(query: $draft) {
+      _id
+    }
+  }
+`
+
 export const ProfileDrafts = ({ className }) => {
   const auth = useAuth()
   const { loading, error, data, networkStatus } = useQuery(ALL_PERSONAL_DRAFTS_QUERY, {
     variables: { user: { _id: auth.user.id } },
-    // Setting this value to true will make the component rerender when
-    // the "networkStatus" changes, so we are able to know if it is fetching
-    // more data
     notifyOnNetworkStatusChange: true,
+    fetchPolicy: 'cache-and-network',
   })
+  const [deleteOneDraft, { dataDraft }] = useMutation(DELETE_DRAFT)
   const loadingMoreDrafts = networkStatus === NetworkStatus.fetchMore
   const router = useRouter()
   const { setJson } = useFabricJson()
@@ -70,9 +77,9 @@ export const ProfileDrafts = ({ className }) => {
             className="flex flex-col max-w-md"
             onClick={() => {
               setJson(draft)
-              deleteDoc(draft.id)
-                .then((doc) => {
-                  console.log('Document successfully deleted!')
+              deleteOneDraft({ variables: { draft: { _id: draft._id } } })
+                .then((res) => {
+                  console.log('Document successfully deleted!', res)
                   router.push('/create')
                 })
                 .catch((e) => console.error('Error removing document: ', e))
