@@ -2,13 +2,50 @@ import firebase from '@/lib/firebase'
 import { useAuth } from '@/components/context/authContext'
 import { FIRESTORE_COLLECTION, VOTE } from '@/lib/constants'
 
+import { gql, useMutation } from '@apollo/client'
+
+// TODO createdBy should be User
+// TODO remove width, height
+const UP_VOTE = gql`
+  mutation UpVoteMeme($meme_id: ObjectId!, $user_id: ObjectId!) {
+    upVoteMeme(input: { meme_id: $meme_id, user_id: $user_id }) {
+      _id
+      upVotes {
+        _id
+      }
+      downVotes {
+        _id
+      }
+      points
+    }
+  }
+`
+
+const DOWN_VOTE = gql`
+  mutation DownVoteMeme($meme_id: ObjectId!, $user_id: ObjectId!) {
+    downVoteMeme(input: { meme_id: $meme_id, user_id: $user_id }) {
+      _id
+      upVotes {
+        _id
+      }
+      downVotes {
+        _id
+      }
+      points
+    }
+  }
+`
+
 export const useVoting = ({ updateMemes = null, updateMeme = null }) => {
+  const [upVoteMutation] = useMutation(UP_VOTE)
+  const [downVoteMutation] = useMutation(DOWN_VOTE)
+
   const auth = useAuth()
 
   const getVoteState = (meme) => {
     if (auth.getUser() && meme && meme.upVotes.includes(auth.getUser().id)) {
       return VOTE.up
-    } else if (auth.user && meme && meme.downVotes.includes(auth.getUser().id)) {
+    } else if (auth.getUser() && meme && meme.downVotes.includes(auth.getUser().id)) {
       return VOTE.down
     } else {
       return VOTE.none
@@ -16,29 +53,19 @@ export const useVoting = ({ updateMemes = null, updateMeme = null }) => {
   }
 
   const getTotalPoints = (meme) => {
-    return meme.upVotes.length - meme.downVotes.length
+    return meme.points
   }
 
   const upVote = (meme) => {
-    if (getVoteState(meme) !== VOTE.up) {
-      const db = firebase.firestore()
-      const memeRef = db.collection(FIRESTORE_COLLECTION.MEMES).doc(meme.id)
-      db.runTransaction((transaction) => {
-        return transaction.get(memeRef).then((doc) => {
-          if (!doc.exists) {
-            console.error('DOC NOT FOUND')
-          }
-          transaction.update(memeRef, {
-            downVotes: firebase.firestore.FieldValue.arrayRemove(auth.getUser().id),
+    if (auth.isAuthenticated()) {
+      console.log({ meme_id: meme._id, user_id: auth.getUser().id })
+      upVoteMutation({ variables: { meme_id: meme._id, user_id: auth.getUser().id } }).then(
+        (res) => {
+          console.log({
+            msg: 'Upvoted',
+            response: res,
           })
-          transaction.update(memeRef, {
-            upVotes: firebase.firestore.FieldValue.arrayUnion(auth.getUser().id),
-          })
-        })
-      })
-        .then(() => {
-          console.debug(`FIRESTORE_COLLECTION.MEMES`, 'WRITE', 'useVoting', 'upVote')
-          console.log('(UP) Transaction successfully committed!')
+          // TODO unsure how this works exactly
           if (updateMemes) {
             updateMemes((draft) => {
               const index = draft.findIndex((el) => el.id === meme.id)
@@ -54,34 +81,20 @@ export const useVoting = ({ updateMemes = null, updateMeme = null }) => {
               draft.upVotes.push(auth.getUser().id)
             })
           }
-        })
-        .catch((e) => {
-          console.error('(UP) Transaction failed: ', e)
-        })
+        }
+      )
     }
   }
 
   const downVote = (meme) => {
-    if (getVoteState(meme) !== VOTE.down) {
-      const db = firebase.firestore()
-      const memeRef = db.collection(FIRESTORE_COLLECTION.MEMES).doc(meme.id)
-      // Remove any possible upVotes first
-      db.runTransaction((transaction) => {
-        return transaction.get(memeRef).then((doc) => {
-          if (!doc.exists) {
-            console.error('DOC NOT FOUND')
-          }
-          transaction.update(memeRef, {
-            upVotes: firebase.firestore.FieldValue.arrayRemove(auth.getUser().id),
+    if (auth.isAuthenticated()) {
+      downVoteMutation({ variables: { meme_id: meme._id, user_id: auth.getUser().id } }).then(
+        (res) => {
+          console.log({
+            msg: 'Dowvoted',
+            response: res,
           })
-          transaction.update(memeRef, {
-            downVotes: firebase.firestore.FieldValue.arrayUnion(auth.getUser().id),
-          })
-        })
-      })
-        .then(() => {
-          console.debug(`FIRESTORE_COLLECTION.MEMES`, 'WRITE', 'useVoting', 'downVote')
-          console.log('(DOWN) Transaction successfully committed!')
+          // TODO unsure how this works exactly
           if (updateMemes) {
             updateMemes((draft) => {
               const index = draft.findIndex((el) => el.id === meme.id)
@@ -95,10 +108,8 @@ export const useVoting = ({ updateMemes = null, updateMeme = null }) => {
               draft.downVotes.push(auth.getUser().id)
             })
           }
-        })
-        .catch((e) => {
-          console.error('(DOWN) Transaction failed: ', e)
-        })
+        }
+      )
     }
   }
 
