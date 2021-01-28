@@ -53,11 +53,11 @@ const DELETE_DRAFT = gql`
 export const ProfileDrafts = ({ className }) => {
   const auth = useAuth()
   const { loading, error, data, networkStatus } = useQuery(ALL_PERSONAL_DRAFTS_QUERY, {
-    variables: { user: { _id: auth.getUser.id } },
+    variables: { user: { _id: auth.getUser().id } },
     notifyOnNetworkStatusChange: true,
     fetchPolicy: 'cache-and-network',
   })
-  const [deleteOneDraft, { dataDraft }] = useMutation(DELETE_DRAFT)
+  const [deleteOneDraft] = useMutation(DELETE_DRAFT)
   const loadingMoreDrafts = networkStatus === NetworkStatus.fetchMore
   const router = useRouter()
   const { setJson } = useFabricJson()
