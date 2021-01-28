@@ -3,12 +3,8 @@ import { Slideshow } from '@/components/Slideshow'
 import { Navbar } from '@/components/Navbar'
 import { Sort } from '@/components/Sort'
 import { HtmlHead } from '@/components/HtmlHead'
-import { useSingleMeme } from '@/components/hooks/useSingleMeme'
-import { useSingleMemeContext } from '@/components/context/singlememeContext'
 import { useSortContext } from '@/components/context/viewsContext'
 import { gql, NetworkStatus, useQuery } from '@apollo/client'
-import { ALL_PUBLIC_MEMES_QUERY } from '@/pages/index'
-import { translateSort } from '@/lib/utils'
 import { useRouter } from 'next/router'
 
 export default function SingleView() {

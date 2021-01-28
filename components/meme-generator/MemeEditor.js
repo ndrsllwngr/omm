@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import { fabric } from 'fabric'
 import SVG from 'react-inlinesvg'
 import { FabricCanvas } from '@/components/meme-generator/FabricCanvas'
