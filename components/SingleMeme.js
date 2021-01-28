@@ -62,8 +62,8 @@ export const SingleMeme = ({ meme, enableLink, updateMemes, updateMeme }) => {
         </TertiaryBtn>
         <div className={'flex space-x-1 justify-center items-center mt-1'}>
           <p className={'text-black dark:text-white text-center text-sm'}>
-            {getTotalPoints(meme)} point{Math.abs(getTotalPoints(meme)) !== 1 && 's'} · {meme.views}{' '}
-            view{Math.abs(meme.views) !== 1 && 's'}
+            {meme.points} point{Math.abs(meme.points) !== 1 && 's'} · {meme.views} view
+            {Math.abs(meme.views) !== 1 && 's'}
           </p>
           <VoteUpBtn disabled={getVoteState(meme) === VOTE.up} onClick={() => upVote(meme)}>
             <IoCaretUpOutline size={22} className={'fill-current inline-flex self-center'} />
