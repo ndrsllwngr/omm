@@ -20,6 +20,7 @@ const ADD_DRAFT = gql`
       url
       json
       views
+      points
       createdBy {
         _id
       }
@@ -56,6 +57,7 @@ const ADD_MEME = gql`
       url
       json
       views
+      points
       createdBy {
         _id
       }
@@ -181,6 +183,8 @@ export const MemeEditor = () => {
       upVotes: { link: [] },
       downVotes: { link: [] },
       forkedBy: { link: [] },
+      points: 0,
+      views: 0,
       forkedFrom: isCopy ? { link: isCopy } : null,
       template: {
         id: template.id ? template.id : null,
@@ -214,6 +218,7 @@ export const MemeEditor = () => {
       downVotes: { link: [] },
       forkedBy: { link: [] },
       forkedFrom: isCopy ? { link: isCopy } : null,
+      points: 0,
       views: 0,
       template: {
         id: template.id ? template.id : null,

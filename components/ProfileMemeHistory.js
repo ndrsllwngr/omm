@@ -25,6 +25,7 @@ export const ALL_PERSONAL_MEMES_QUERY = gql`
         _id
       }
       json
+      points
       svg
       template {
         id {

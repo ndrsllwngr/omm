@@ -51,6 +51,7 @@ export const ALL_PUBLIC_MEMES_QUERY = gql`
       upVotes {
         _id
       }
+      points
       url
       views
       visibility

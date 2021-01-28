@@ -37,6 +37,7 @@ export const ALL_PERSONAL_DRAFTS_QUERY = gql`
       }
       url
       views
+      points
       visibility
     }
   }
