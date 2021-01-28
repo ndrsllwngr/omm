@@ -9,6 +9,7 @@ import {
 } from '@/components/context/autoplayContext'
 import { useSingleMemeContext } from '@/components/context/singlememeContext'
 import { useRandomMeme } from '@/components/hooks/useRandomMeme'
+import { IconBtn, ToggleIconBtn, ToggleStateIconBtn } from '@/components/ui/Buttons'
 import { SingleMeme } from '@/components/SingleMeme'
 import { AUTOPLAY_ORDER, VISIBILITY } from '@/lib/constants'
 import { IoHelp, IoPlay, IoPause, IoArrowForward, IoArrowBack, IoShuffle } from 'react-icons/io5'
@@ -51,51 +52,40 @@ export const Slideshow = () => {
     </div>
   )
 }
-
-export const AutoplayActionButton = () => {
-  const [state, dispatch] = useAutoPlayContext()
-  const { order } = useAutoPlayOrder()
-  const { nextMeme } = useSingleMemeContext()
-
+export const SlideshowButton = ({ name, changeSlide, disabled }) => {
+  const router = useRouter()
+  const dispatch = useAutoPlayDispatch()
   return (
-    <button
-      disabled={order === AUTOPLAY_ORDER.ORDERED && !(nextMeme && nextMeme.id)}
-      className={`p-2 rounded-r bg-custom-gray ${
-        order === AUTOPLAY_ORDER.ORDERED && !(nextMeme && nextMeme.id) ? 'cursor-not-allowed' : ''
-      }`}
-      onClick={
-        !nextMeme && order !== AUTOPLAY_ORDER.RANDOM && state.bool
-          ? () => dispatch({ type: 'falseBool' })
-          : () => dispatch({ type: 'toggleBool' })
-      }
+    <IconBtn
+      disabled={disabled}
+      onClick={(e) => {
+        e.preventDefault()
+        router.push(changeSlide)
+        dispatch({ type: 'falseBool' })
+      }}
     >
-      {state.bool ? (
-        <IoPause size={28} className="fill-current text-custom-green py-1" />
+      {name === 'prev' ? (
+        <IoArrowBack size={28} className={`fill-current`} />
       ) : (
-        <IoPlay
-          size={28}
-          className={`py-1 fill-current ${
-            order === AUTOPLAY_ORDER.ORDERED && !(nextMeme && nextMeme.id)
-              ? 'text-gray-400'
-              : 'text-custom-green'
-          } `}
-        />
+        <IoArrowForward size={28} className={`fill-current`} />
       )}
-    </button>
+    </IconBtn>
   )
 }
 
 export const AutoplayRandomButton = () => {
   const router = useRouter()
   const { id } = useRandomMeme(router)
+  const dispatch = useAutoPlayDispatch()
+
+  const stopAutoplay = () => {
+    dispatch({ type: 'falseBool' })
+  }
   return (
     <Link href={`/meme/${id}`}>
-      <a
-        className="flex flex-col p-2 mr-2 justify-center rounded-md bg-custom-gray  "
-        onClick={() => dispatch({ type: 'falseBool' })}
-      >
-        <IoHelp size={28} className="fill-current text-custom-green" />
-      </a>
+      <IconBtn onClick={stopAutoplay} className={'mr-2'}>
+        <IoHelp size={28} className="fill-current" />
+      </IconBtn>
     </Link>
   )
 }
@@ -110,49 +100,45 @@ export const AutoplaySortButton = () => {
   }
 
   return (
-    <button
+    <ToggleIconBtn
       type="button"
-      className="px-4 items-center bg-custom-gray rounded-l"
-      id="options-menu"
-      aria-haspopup="true"
-      aria-expanded="true"
       onClick={changeAutoplayOrder}
+      className={'rounded-r-none'}
+      toggleState={order === AUTOPLAY_ORDER.RANDOM}
     >
-      <IoShuffle
-        size={28}
-        className={
-          order === AUTOPLAY_ORDER.RANDOM
-            ? `fill-current text-custom-green`
-            : `fill-current text-gray-400`
-        }
-      />
-    </button>
+      <IoShuffle size={28} className={`fill-current`} />
+    </ToggleIconBtn>
+  )
+}
+export const AutoplayActionButton = () => {
+  const [state, dispatch] = useAutoPlayContext()
+  const { order } = useAutoPlayOrder()
+  const { nextMeme } = useSingleMemeContext()
+  const stopAutoplay = () => {
+    dispatch({ type: 'falseBool' })
+  }
+  const switchAutoplay = () => {
+    dispatch({ type: 'toggleBool' })
+  }
+
+  return (
+    <ToggleStateIconBtn
+      disabled={order === AUTOPLAY_ORDER.ORDERED && !(nextMeme && nextMeme.id)}
+      className={'rounded-l-none'}
+      onClick={
+        !nextMeme && order !== AUTOPLAY_ORDER.RANDOM && state.bool ? stopAutoplay : switchAutoplay
+      }
+      toggleState={state.bool}
+    >
+      {state.bool ? (
+        <IoPause size={28} className="py-1 fill-current" />
+      ) : (
+        <IoPlay size={28} className="py-1 fill-current" />
+      )}
+    </ToggleStateIconBtn>
   )
 }
 
-export const SlideshowButton = ({ name, changeSlide, disabled }) => {
-  const router = useRouter()
-  const dispatch = useAutoPlayDispatch()
-  return (
-    <button
-      disabled={disabled}
-      className={`p-2 rounded bg-custom-gray ${
-        disabled ? 'text-gray-400 cursor-not-allowed' : 'text-custom-green'
-      }`}
-      onClick={(e) => {
-        e.preventDefault()
-        router.push(changeSlide)
-        dispatch({ type: 'falseBool' })
-      }}
-    >
-      {name === 'prev' ? (
-        <IoArrowBack size={28} className={`fill-current`} />
-      ) : (
-        <IoArrowForward size={28} className={`fill-current`} />
-      )}
-    </button>
-  )
-}
 SlideshowButton.propTypes = {
   name: PropTypes.string,
   changeSlide: PropTypes.string,

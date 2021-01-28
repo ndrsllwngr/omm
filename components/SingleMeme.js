@@ -9,7 +9,8 @@ import Link from 'next/link'
 import formatDistance from 'date-fns/formatDistance'
 import { IoCaretDownOutline, IoCaretUpOutline } from 'react-icons/io5'
 import { memeType } from '@/components/types/types'
-import { SocialShareButtons } from '@/components/SocialShareButtons'
+import { ShareButtons } from '@/components/ui/ShareButtons'
+import { TertiaryBtn, VoteDownBtn, VoteUpBtn } from '@/components/ui/Buttons'
 
 export const SingleMeme = ({ meme, enableLink, updateMemes, updateMeme }) => {
   const { setJson } = useFabricJson()
@@ -49,44 +50,27 @@ export const SingleMeme = ({ meme, enableLink, updateMemes, updateMeme }) => {
         <MemeRenderer meme={meme} />
       )}
 
-      <SocialShareButtons id={meme._id} />
+      <ShareButtons id={meme._id} />
       <div className={'flex justify-between items-center'}>
-        <button
-          className={'text-black dark:text-white'}
+        <TertiaryBtn
           onClick={() => {
             setJson(meme)
             router.push('/create')
           }}
         >
           Copy Meme
-        </button>
+        </TertiaryBtn>
         <div className={'flex space-x-1 justify-center items-center mt-1'}>
           <p className={'text-black dark:text-white text-center text-sm'}>
             {getTotalPoints(meme)} point{Math.abs(getTotalPoints(meme)) !== 1 && 's'} · {meme.views}{' '}
             view{Math.abs(meme.views) !== 1 && 's'}
           </p>
-          <button
-            className={`inline-flex self-center block rounded px-1 py-1 ${
-              getVoteState(meme) === VOTE.up
-                ? 'text-custom-green border-custom-green'
-                : 'text-black dark:text-white dark:border-white'
-            }`}
-            disabled={getVoteState(meme) === VOTE.up}
-            onClick={() => upVote(meme)}
-          >
-            <IoCaretUpOutline className={'fill-current inline-flex self-center'} />
-          </button>
-          <button
-            className={`inline-flex self-center block rounded px-1 py-1 ${
-              getVoteState(meme) === VOTE.down
-                ? 'text-red-500 border-red-500'
-                : 'text-black dark:text-white dark:border-white'
-            }`}
-            disabled={getVoteState(meme) === VOTE.down}
-            onClick={() => downVote(meme)}
-          >
-            <IoCaretDownOutline className={'fill-current inline-flex self-center'} />
-          </button>
+          <VoteUpBtn disabled={getVoteState(meme) === VOTE.up} onClick={() => upVote(meme)}>
+            <IoCaretUpOutline size={22} className={'fill-current inline-flex self-center'} />
+          </VoteUpBtn>
+          <VoteDownBtn disabled={getVoteState(meme) === VOTE.down} onClick={() => downVote(meme)}>
+            <IoCaretDownOutline size={22} className={'fill-current inline-flex self-center'} />
+          </VoteDownBtn>
         </div>
       </div>
     </div>
