@@ -1,25 +1,69 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import PropTypes from 'prop-types'
-import { FIRESTORE_COLLECTION, VISIBILITY } from '@/lib/constants'
+import { VISIBILITY } from '@/lib/constants'
 import { MemeRenderer } from '@/components/MemeRenderer'
-import { useFirestoreProfile } from '@/components/hooks/useFirestoreProfile'
 import Link from 'next/link'
 import formatDistance from 'date-fns/formatDistance'
+import { useAuth } from '@/components/context/authContext'
+import { gql, NetworkStatus, useQuery } from '@apollo/client'
+
+export const ALL_PERSONAL_MEMES_QUERY = gql`
+  query getAllPersonalMemes($user: UserQueryInput) {
+    memes(query: { createdBy: $user }, sortBy: CREATEDAT_DESC) {
+      _id
+      createdAt
+      createdBy {
+        _id
+      }
+      downVotes {
+        _id
+      }
+      forkedBy {
+        _id
+      }
+      forkedFrom {
+        _id
+      }
+      json
+      svg
+      template {
+        id {
+          _id
+        }
+      }
+      title
+      upVotes {
+        _id
+      }
+      url
+      views
+      visibility
+    }
+  }
+`
 
 export const ProfileMemeHistory = ({ className }) => {
-  const { docs: memes } = useFirestoreProfile(FIRESTORE_COLLECTION.MEMES)
+  const auth = useAuth()
+  const { loading, error, data, networkStatus } = useQuery(ALL_PERSONAL_MEMES_QUERY, {
+    variables: { user: { _id: auth.user.id } },
+    notifyOnNetworkStatusChange: true,
+    fetchPolicy: 'cache-and-network',
+  })
+  const loadingMoreDrafts = networkStatus === NetworkStatus.fetchMore
 
+  useEffect(() => {
+    console.log({ src: 'ProfileMemeHistory', data, error, loading })
+  }, [data, error, loading])
+
+  if (error) return <div>Error loading memes.</div>
+  if (loading && !loadingMoreDrafts) return <div>Loading</div>
   return (
     <div className={className}>
-      {memes &&
-        memes.map((meme, i) => (
+      {data &&
+        data.memes.map((meme, i) => (
           <button key={i} className="flex flex-col max-w-md">
             <p className={'uppercase text-xs text-gray-600 dark:text-gray-300 font-medium'}>
-              {typeof meme.createdAt !== 'object'
-                ? formatDistance(new Date(meme.createdAt), new Date(), { addSuffix: true })
-                : formatDistance(new Date(meme.createdAt.toMillis()), new Date(), {
-                    addSuffix: true,
-                  })}
+              {formatDistance(new Date(meme.createdAt), new Date(), { addSuffix: true })}
               {meme.visibility && meme.visibility !== VISIBILITY.PUBLIC && (
                 <span> - {meme.visibility}</span>
               )}
