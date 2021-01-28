@@ -37,7 +37,7 @@ const useStorage = () => {
             .add({
               //name: file.name,
               createdAt: firebase.firestore.Timestamp.now(),
-              createdBy: auth.user.uid,
+              createdBy: auth.getUser().id,
               img: STORAGE_COLLECTION.TEMPLATES + '/' + id,
               type: 'STORAGE',
               url: await storageRef.getDownloadURL(),
@@ -68,7 +68,7 @@ const useStorage = () => {
         .add({
           name: 'external source',
           createdAt: firebase.firestore.Timestamp.now(),
-          createdBy: auth.user.uid,
+          createdBy: auth.getUser().id,
           type: 'EXTERNAL',
           img: 'templates/' + id,
           url: externalUrl,

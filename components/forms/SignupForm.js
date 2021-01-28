@@ -11,7 +11,7 @@ export default function SignupForm() {
 
   const onSubmit = (data) => {
     auth
-      .createLogin(data)
+      .register(data)
       .then((user) => {
         console.log({ user })
         router.push('/login')

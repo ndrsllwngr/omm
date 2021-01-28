@@ -77,7 +77,7 @@ const NavButtons = ({ className }) => {
 
   return (
     <div className={className}>
-      {auth && auth.user ? (
+      {auth && auth.isAuthenticated() ? (
         <div className="flex">
           <Link href={'/template'}>
             <a className="block font-semibold lg:mt-0 rounded-lg hover:shadow-md text-md px-4 ml-2 py-2 text-custom-green hover:text-black hover:bg-custom-green">

@@ -3,51 +3,54 @@ import PropTypes from 'prop-types'
 import UnauthorizedPage from '@/pages/403'
 import * as Realm from 'realm-web'
 import { useRouter } from 'next/router'
+import { AUTH_PROVIDER } from 'lib/constants'
+import { useRealm } from '@/lib/realm'
 
 export const AuthContext = createContext({ user: null })
 
 export default function AuthContextComp({ children }) {
-  const [user, setUser] = useState(null)
   const router = useRouter()
-  const APP_ID = process.env.NEXT_PUBLIC_MONGODB_REALM_ID
-  const app = new Realm.App(APP_ID)
 
-  const createLogin = ({ email, password }) => {
+  const app = useRealm()
+
+  const getUser = () => {
+    return isAuthenticated() ? app.currentUser : null
+  }
+
+  const register = ({ email, password }) => {
     return app.emailPasswordAuth.registerUser(email, password)
   }
 
   // TODO maybe get custom data (refreshCustomData)
   const loginEmailPassword = ({ email, password }) => {
-    // Create an anonymous credential
+    // Create a user password credential
     const credentials = Realm.Credentials.emailPassword(email, password)
-    return app.logIn(credentials).then((user) => {
-      setUser(user)
-      return user
-    })
+    return app.logIn(credentials)
   }
 
-  // TODO use anon creds if logged out
+  const isAuthenticated = () => {
+    return app.currentUser != null && app.currentUser.providerType !== AUTH_PROVIDER.anon
+  }
+
   const signOut = () => {
-    return app.currentUser
-      .logOut()
+    return (
+      app.currentUser
+        .logOut()
+        /* TODO not necessary (probably)
       .then((_user) => {
-        setUser('ANON')
-        return app.logIn(Realm.Credentials.anonymous())
-      })
-      .then(() => {
-        router.push('/')
-      })
-  }
 
-  //Handle auth state changes
-  useEffect(() => {
-    if (!user) {
-      setUser(app.currentUser)
-    }
-  }, [setUser, user])
+        return loginAnon()
+      })*/
+        .then(() => {
+          router.push('/')
+        })
+    )
+  }
 
   return (
-    <AuthContext.Provider value={{ user, signOut, loginEmailPassword, createLogin }}>
+    <AuthContext.Provider
+      value={{ getUser, signOut, loginEmailPassword, register, isAuthenticated }}
+    >
       {children}
     </AuthContext.Provider>
   )
@@ -61,7 +64,7 @@ export const useAuth = () => useContext(AuthContext)
 
 export const ProtectedRoute = ({ children }) => {
   const auth = useAuth()
-  if (!auth.user) {
+  if (!auth.isAuthenticated()) {
     return <UnauthorizedPage />
   }
   return children

@@ -45,7 +45,7 @@ export const ALL_PERSONAL_MEMES_QUERY = gql`
 export const ProfileMemeHistory = ({ className }) => {
   const auth = useAuth()
   const { loading, error, data, networkStatus } = useQuery(ALL_PERSONAL_MEMES_QUERY, {
-    variables: { user: { _id: auth.user.id } },
+    variables: { user: { _id: auth.getUser().id } },
     notifyOnNetworkStatusChange: true,
     fetchPolicy: 'cache-and-network',
   })

@@ -172,11 +172,11 @@ export const MemeEditor = () => {
       'enableRetinaScaling',
     ])
     const svg = canvas.toSVG()
-    console.log('generateMeme', auth.user)
+    console.log('generateMeme', auth.getUser())
     const newObj = {
       title,
       createdAt: new Date(),
-      createdBy: { link: auth.user.id },
+      createdBy: { link: auth.getUser().id },
       visibility: visibility,
       upVotes: { link: [] },
       downVotes: { link: [] },
@@ -208,7 +208,7 @@ export const MemeEditor = () => {
     const newObj = {
       title,
       createdAt: new Date(),
-      createdBy: { link: auth.user.id },
+      createdBy: { link: auth.getUser().id },
       visibility: visibility,
       upVotes: { link: [] },
       downVotes: { link: [] },

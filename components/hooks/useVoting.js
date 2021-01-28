@@ -6,9 +6,9 @@ export const useVoting = ({ updateMemes = null, updateMeme = null }) => {
   const auth = useAuth()
 
   const getVoteState = (meme) => {
-    if (auth.user && meme && meme.upVotes.includes(auth.user.uid)) {
+    if (auth.getUser() && meme && meme.upVotes.includes(auth.getUser().id)) {
       return VOTE.up
-    } else if (auth.user && meme && meme.downVotes.includes(auth.user.uid)) {
+    } else if (auth.user && meme && meme.downVotes.includes(auth.getUser().id)) {
       return VOTE.down
     } else {
       return VOTE.none
@@ -29,10 +29,10 @@ export const useVoting = ({ updateMemes = null, updateMeme = null }) => {
             console.error('DOC NOT FOUND')
           }
           transaction.update(memeRef, {
-            downVotes: firebase.firestore.FieldValue.arrayRemove(auth.user.uid),
+            downVotes: firebase.firestore.FieldValue.arrayRemove(auth.getUser().id),
           })
           transaction.update(memeRef, {
-            upVotes: firebase.firestore.FieldValue.arrayUnion(auth.user.uid),
+            upVotes: firebase.firestore.FieldValue.arrayUnion(auth.getUser().id),
           })
         })
       })
@@ -42,14 +42,16 @@ export const useVoting = ({ updateMemes = null, updateMeme = null }) => {
           if (updateMemes) {
             updateMemes((draft) => {
               const index = draft.findIndex((el) => el.id === meme.id)
-              draft[index].downVotes = draft[index].downVotes.filter((el) => el !== auth.user.uid)
-              draft[index].upVotes.push(auth.user.uid)
+              draft[index].downVotes = draft[index].downVotes.filter(
+                (el) => el !== auth.getUser().id
+              )
+              draft[index].upVotes.push(auth.getUser().id)
             })
           }
           if (updateMeme) {
             updateMeme((draft) => {
-              draft.downVotes = draft.downVotes.filter((el) => el !== auth.user.uid)
-              draft.upVotes.push(auth.user.uid)
+              draft.downVotes = draft.downVotes.filter((el) => el !== auth.getUser().id)
+              draft.upVotes.push(auth.getUser().id)
             })
           }
         })
@@ -70,10 +72,10 @@ export const useVoting = ({ updateMemes = null, updateMeme = null }) => {
             console.error('DOC NOT FOUND')
           }
           transaction.update(memeRef, {
-            upVotes: firebase.firestore.FieldValue.arrayRemove(auth.user.uid),
+            upVotes: firebase.firestore.FieldValue.arrayRemove(auth.getUser().id),
           })
           transaction.update(memeRef, {
-            downVotes: firebase.firestore.FieldValue.arrayUnion(auth.user.uid),
+            downVotes: firebase.firestore.FieldValue.arrayUnion(auth.getUser().id),
           })
         })
       })
@@ -83,14 +85,14 @@ export const useVoting = ({ updateMemes = null, updateMeme = null }) => {
           if (updateMemes) {
             updateMemes((draft) => {
               const index = draft.findIndex((el) => el.id === meme.id)
-              draft[index].upVotes = draft[index].upVotes.filter((el) => el !== auth.user.uid)
-              draft[index].downVotes.push(auth.user.uid)
+              draft[index].upVotes = draft[index].upVotes.filter((el) => el !== auth.getUser().id)
+              draft[index].downVotes.push(auth.getUser().id)
             })
           }
           if (updateMeme) {
             updateMeme((draft) => {
-              draft.upVotes = draft.upVotes.filter((el) => el !== auth.user.uid)
-              draft.downVotes.push(auth.user.uid)
+              draft.upVotes = draft.upVotes.filter((el) => el !== auth.getUser().id)
+              draft.downVotes.push(auth.getUser().id)
             })
           }
         })

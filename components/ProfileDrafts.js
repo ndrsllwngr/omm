@@ -53,7 +53,7 @@ const DELETE_DRAFT = gql`
 export const ProfileDrafts = ({ className }) => {
   const auth = useAuth()
   const { loading, error, data, networkStatus } = useQuery(ALL_PERSONAL_DRAFTS_QUERY, {
-    variables: { user: { _id: auth.user.id } },
+    variables: { user: { _id: auth.getUser.id } },
     notifyOnNetworkStatusChange: true,
     fetchPolicy: 'cache-and-network',
   })
