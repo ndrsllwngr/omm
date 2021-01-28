@@ -6,7 +6,7 @@ import { SingleMeme } from '@/components/SingleMeme'
 // import InfiniteScroll from 'react-infinite-scroller'
 import { gql, NetworkStatus, useQuery } from '@apollo/client'
 import { useSortContext } from '@/components/context/viewsContext'
-import { SORT } from '@/lib/constants'
+import { translateSort } from '@/lib/utils'
 
 // https://github.com/danbovey/react-infinite-scroller
 const LandingPage = () => {
@@ -58,27 +58,6 @@ export const ALL_PUBLIC_MEMES_QUERY = gql`
     }
   }
 `
-
-const translateSort = (sortEnum) => {
-  switch (sortEnum) {
-    case SORT.LATEST:
-      return 'CREATEDAT_DESC'
-    case SORT.OLDEST:
-      return 'CREATEDAT_ASC'
-    case SORT.MOST_VIEWED:
-      return 'VIEWS_DESC'
-    case SORT.LEAST_VIEWED:
-      return 'VIEWS_ASC'
-    case SORT.LEAST_POINTS:
-      // TODO
-      return 'CREATEDAT_DESC'
-    case SORT.MOST_POINTS:
-      // TODO
-      return 'CREATEDAT_DESC'
-    default:
-      console.error('sortEnum not supported', sortEnum)
-  }
-}
 
 // eslint-disable-next-line react/prop-types
 const LandingPageInner = ({ sort }) => {

@@ -101,8 +101,8 @@ mutation($todo: todos_insert_input!){
 // uses http://fabricjs.com/
 export const MemeEditor = () => {
   const router = useRouter()
-  const [insertOneMeme] = useMutation(ADD_MEME)
-  const [insertOneDraft] = useMutation(ADD_DRAFT)
+  const [insertOneMeme, { dataMeme }] = useMutation(ADD_MEME)
+  const [insertOneDraft, { dataDraft }] = useMutation(ADD_DRAFT)
   const { canvas, isCopy } = useFabricCanvas()
   const [imgURL, setImgURL] = useState('')
   const { template } = useTemplate()
@@ -192,7 +192,11 @@ export const MemeEditor = () => {
     }
     console.log({ src: 'MemeEditor.generateMeme', newObj, svg })
     insertOneMeme({ variables: { meme: newObj } })
-      .then((r) => console.log(r))
+      .then((result) => {
+        console.log({ result })
+        setSort(SORT.LATEST)
+        router.push(`/meme/${result.data.insertOneMeme._id}`)
+      })
       .catch((e) => console.error(e))
   }
 
@@ -226,7 +230,10 @@ export const MemeEditor = () => {
     }
     console.log({ src: 'MemeEditor.generateDraft', newObj, svg })
     insertOneDraft({ variables: { draft: newObj } })
-      .then((r) => console.log(r))
+      .then((result) => {
+        console.log(result)
+        router.push(`/profile`)
+      })
       .catch((e) => console.error(e))
   }
 
@@ -246,19 +253,6 @@ export const MemeEditor = () => {
       transparentCorners: false,
     })
   }
-
-  useEffect(() => {
-    if (success) {
-      setSort(SORT.LATEST)
-      router.push(`/meme/${success}`)
-    }
-  }, [success, router, setSort])
-
-  useEffect(() => {
-    if (successDraft) {
-      router.push(`/profile`)
-    }
-  }, [successDraft, router])
 
   return (
     <div className="p-8 grid grid-cols-3 gap-6">
@@ -299,13 +293,8 @@ export const MemeEditor = () => {
           <option value={VISIBILITY.UNLISTED}>Unlisted</option>
           <option value={VISIBILITY.PRIVATE}>Private</option>
         </select>
-        <Button onClick={generateDraft} disabled={loadingDraft}>
-          Save as Draft {!loadingDraft && successDraft && 'success'}{' '}
-          {!loadingDraft && errorDraft && 'error'}
-        </Button>
-        <Button onClick={generateMeme} disabled={loading}>
-          Generate {!loading && success && 'success'} {!loading && error && 'error'}
-        </Button>
+        <Button onClick={generateDraft}>Save as Draft</Button>
+        <Button onClick={generateMeme}>Generate</Button>
       </div>
       {previewMode && (
         <>

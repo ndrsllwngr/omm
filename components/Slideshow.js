@@ -1,3 +1,4 @@
+/* eslint-disable  react/prop-types */
 import React from 'react'
 import PropTypes from 'prop-types'
 import Link from 'next/link'
@@ -14,13 +15,13 @@ import { SingleMeme } from '@/components/SingleMeme'
 import { AUTOPLAY_ORDER, VISIBILITY } from '@/lib/constants'
 import { IoHelp, IoPlay, IoPause, IoArrowForward, IoArrowBack, IoShuffle } from 'react-icons/io5'
 
-export const Slideshow = () => {
-  const {
+export const Slideshow = ({ meme, nextMeme, prevMeme }) => {
+  /*const {
     currentMeme: meme,
     nextMeme,
     prevMeme,
     updateCurrent: updateMeme,
-  } = useSingleMemeContext()
+  } = useSingleMemeContext()*/
 
   if (!meme) return <div className="flex flex-row justify-center">loading..</div>
   return (
@@ -28,7 +29,7 @@ export const Slideshow = () => {
       <div className="flex flex-row justify-between my-2">
         {meme.visibility === VISIBILITY.PUBLIC && (
           <>
-            <SlideshowButton
+            {/* <SlideshowButton
               name="prev"
               disabled={!(prevMeme && prevMeme.id)}
               changeSlide={prevMeme && prevMeme.id}
@@ -44,11 +45,11 @@ export const Slideshow = () => {
               name="next"
               disabled={!(nextMeme && nextMeme.id)}
               changeSlide={nextMeme && nextMeme.id}
-            />
+            />*/}
           </>
         )}
       </div>
-      <SingleMeme meme={meme} updateMeme={updateMeme} />
+      <SingleMeme meme={meme} />
     </div>
   )
 }
