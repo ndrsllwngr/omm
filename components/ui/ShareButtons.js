@@ -15,9 +15,10 @@ import {
 } from 'react-share'
 import PropTypes from 'prop-types'
 //https://www.npmjs.com/package/react-share
-export const SocialShareButtons = ({ id }) => {
+export const ShareButtons = ({ id }) => {
   const url = `${window.location.origin}` + '/meme/' + `${id}`
-  const style = 'w-8 h-8 mx-1 rounded-full bg-custom-gray fill-current text-custom-green'
+  const style =
+    'w-8 h-8 mx-1 rounded-full bg-black hover:bg-gray-700 text-white dark:bg-white dark:text-black dark:hover:bg-gray-300 fill-current '
   return (
     <div className="flex flex-row justify-end my-2">
       <FacebookShareButton url={url}>
@@ -58,6 +59,6 @@ export const SocialShareButtons = ({ id }) => {
     </div>
   )
 }
-SocialShareButtons.propTypes = {
+ShareButtons.propTypes = {
   id: PropTypes.string,
 }
