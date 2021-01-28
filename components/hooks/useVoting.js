@@ -58,7 +58,6 @@ export const useVoting = ({ updateMemes = null, updateMeme = null }) => {
 
   const upVote = (meme) => {
     if (auth.isAuthenticated()) {
-      console.log({ meme_id: meme._id, user_id: auth.getUser().id })
       upVoteMutation({ variables: { meme_id: meme._id, user_id: auth.getUser().id } }).then(
         (res) => {
           console.log({
