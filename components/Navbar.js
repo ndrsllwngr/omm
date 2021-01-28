@@ -121,7 +121,9 @@ const NavButtons = ({ className }) => {
             </TertiaryBtn>
           </Link>
           <Link href={'/signup'}>
-            <PrimaryBtn className={'w-full md:w-max justify-center my-2'}>Sign up</PrimaryBtn>
+            <PrimaryBtn mono={true} className={'w-full md:w-max justify-center my-2'}>
+              Sign up
+            </PrimaryBtn>
           </Link>
         </nav>
       )}
