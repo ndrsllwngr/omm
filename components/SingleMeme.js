@@ -15,7 +15,7 @@ import { TertiaryBtn, VoteDownBtn, VoteUpBtn } from '@/components/ui/Buttons'
 export const SingleMeme = ({ meme, enableLink, updateMemes, updateMeme }) => {
   const { setJson } = useFabricJson()
   const router = useRouter()
-  const { upVote, downVote, getVoteState, getTotalPoints } = useVoting({ updateMemes, updateMeme })
+  const { upVote, downVote, getVoteState } = useVoting({ updateMemes, updateMeme })
   return (
     <div className="flex-col max-w-md">
       <p className={'uppercase text-xs text-gray-600 dark:text-gray-300 font-medium'}>

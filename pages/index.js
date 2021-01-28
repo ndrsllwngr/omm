@@ -64,7 +64,6 @@ const LandingPageInner = ({ sort }) => {
   const { loading, error, data, networkStatus } = useQuery(ALL_PUBLIC_MEMES_QUERY, {
     variables: { sortBy: translateSort(sort) },
     notifyOnNetworkStatusChange: true,
-    fetchPolicy: 'cache-and-network',
   })
   const loadingMoreMemes = networkStatus === NetworkStatus.fetchMore
 

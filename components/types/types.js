@@ -37,6 +37,7 @@ export const memeType = shape({
   forkedFrom: string,
   views: number.isRequired,
   visibility: string.isRequired,
+  points: number.isRequired,
   template: shape({
     id: string,
     url: string.isRequired,

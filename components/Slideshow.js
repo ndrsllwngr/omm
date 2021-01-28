@@ -14,43 +14,70 @@ import { IconBtn, ToggleIconBtn, ToggleStateIconBtn } from '@/components/ui/Butt
 import { SingleMeme } from '@/components/SingleMeme'
 import { AUTOPLAY_ORDER, VISIBILITY } from '@/lib/constants'
 import { IoHelp, IoPlay, IoPause, IoArrowForward, IoArrowBack, IoShuffle } from 'react-icons/io5'
-import { gql, NetworkStatus, useQuery } from '@apollo/client'
-import { CURRENT_MEME } from '@/pages/meme/[id]'
+import { gql, useQuery } from '@apollo/client'
+import { translateSortNextMeme, translateSortPrevMeme } from '@/lib/utils'
 
 export const NEXT_MEME = gql`
-  query getNextMeme($currentMemeId: ObjectId) {
-    memes(query: { _id: $currentMemeId }, limit: 1) {
+  query getNextMeme(
+    $currentMemeCreatedAt: DateTime
+    $visibility: String
+    $sortBy: MemeSortByInput
+  ) {
+    memes(
+      query: { visibility: $visibility, createdAt_gt: $currentMemeCreatedAt }
+      sortBy: $sortBy
+      limit: 1
+    ) {
       _id
     }
   }
 `
 
 export const PREV_MEME = gql`
-  query getPreviousMeme($currentMemeId: ObjectId) {
-    memes(query: { _id: $currentMemeId }, limit: 1) {
+  query getPreviousMeme(
+    $currentMemeCreatedAt: DateTime
+    $visibility: String
+    $sortBy: MemeSortByInput
+  ) {
+    memes(
+      query: { visibility: $visibility, createdAt_lt: $currentMemeCreatedAt }
+      sortBy: $sortBy
+      limit: 1
+    ) {
       _id
     }
   }
 `
 
 export const Slideshow = ({ meme, sort }) => {
-  const { loadingPrev, errorPrev, dataPrev, networkStatusPrev } = useQuery(PREV_MEME, {
-    variables: { currentMemeId: meme._id },
+  useEffect(() => {
+    console.log({ src: 'Slideshow / PROPS', meme, sort })
+  }, [meme, sort])
+  const { loading: loadingPrev, error: errorPrev, data: dataPrev } = useQuery(PREV_MEME, {
+    variables: {
+      currentMemeCreatedAt: meme.createdAt,
+      visibility: VISIBILITY.PUBLIC,
+      sortBy: translateSortPrevMeme(sort),
+    },
     notifyOnNetworkStatusChange: true,
     fetchPolicy: 'cache-and-network',
   })
-  const { loadingNext, errorNext, dataNext, networkStatusNext } = useQuery(NEXT_MEME, {
-    variables: { currentMemeId: meme._id },
-    notifyOnNetworkStatusChange: true,
-    fetchPolicy: 'cache-and-network',
-  })
-
   useEffect(() => {
-    console.log({ src: 'Slideshow', dataNext, errorNext, loadingNext })
-  }, [dataNext, errorNext, loadingNext])
-  useEffect(() => {
-    console.log({ src: 'Slideshow', dataPrev, errorPrev, loadingPrev })
+    console.log({ src: 'Slideshow / PREV', dataPrev, errorPrev, loadingPrev })
   }, [dataPrev, errorPrev, loadingPrev])
+
+  const { loading: loadingNext, error: errorNext, data: dataNext } = useQuery(NEXT_MEME, {
+    variables: {
+      currentMemeCreatedAt: meme.createdAt,
+      visibility: VISIBILITY.PUBLIC,
+      sortBy: translateSortNextMeme(sort),
+    },
+    notifyOnNetworkStatusChange: true,
+    fetchPolicy: 'cache-and-network',
+  })
+  useEffect(() => {
+    console.log({ src: 'Slideshow / NEXT', dataNext, errorNext, loadingNext })
+  }, [dataNext, errorNext, loadingNext])
 
   if (!meme) return <div className="flex flex-row justify-center">loading..</div>
   return (
@@ -60,8 +87,8 @@ export const Slideshow = ({ meme, sort }) => {
           <>
             <SlideshowButton
               name="prev"
-              disabled={!(dataPrev && dataPrev.id)}
-              changeSlide={dataPrev && dataPrev.id}
+              disabled={dataPrev && dataPrev.memes.length <= 0}
+              changeSlide={dataPrev && dataPrev.memes[0]?._id}
             />
 
             {/* <div className="flex flex-row">
@@ -71,8 +98,8 @@ export const Slideshow = ({ meme, sort }) => {
             </div>*/}
             <SlideshowButton
               name="next"
-              disabled={!(dataNext && dataNext.memes[0]._id)}
-              changeSlide={dataNext && dataNext.memes[0]._id}
+              disabled={dataNext && dataNext.memes.length <= 0}
+              changeSlide={dataNext && dataNext.memes[0]?._id}
             />
           </>
         )}
@@ -84,6 +111,9 @@ export const Slideshow = ({ meme, sort }) => {
 export const SlideshowButton = ({ name, changeSlide, disabled }) => {
   const router = useRouter()
   const dispatch = useAutoPlayDispatch()
+  useEffect(() => {
+    console.log({ src: 'SlideshowButton / PROPS', name, changeSlide, disabled })
+  }, [name, changeSlide, disabled])
   return (
     <IconBtn
       disabled={disabled}

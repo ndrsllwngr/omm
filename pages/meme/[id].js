@@ -7,7 +7,7 @@ import { useSortContext } from '@/components/context/viewsContext'
 import { gql, NetworkStatus, useQuery } from '@apollo/client'
 import { useRouter } from 'next/router'
 import { VISIBILITY } from '@/lib/constants'
-import { ProtectedRoute, useAuth } from '@/components/context/authContext'
+import { useAuth } from '@/components/context/authContext'
 
 export default function SingleView() {
   return (
@@ -69,13 +69,11 @@ const SingleViewInner = () => {
   const auth = useAuth()
   const router = useRouter()
   const { sort } = useSortContext()
-  // TODO verify that user has permission to view this meme
-  // TODO increment viewCount
+  // TODO increment viewCount @Andy
   // TODO set next and prev null? is this still needed?
   const { loading, error, data, networkStatus } = useQuery(CURRENT_MEME, {
     variables: { meme: router.query.id },
     notifyOnNetworkStatusChange: true,
-    fetchPolicy: 'cache-and-network',
   })
 
   const loadingMoreMemes = networkStatus === NetworkStatus.fetchMore
@@ -92,6 +90,7 @@ const SingleViewInner = () => {
         <div>Loading...</div>
       </>
     )
+  // Check permissions
   if (data && !error && !loading && data.memes.length > 0) {
     if (
       (data.memes[0].visibility === VISIBILITY.PRIVATE &&
