@@ -15,35 +15,19 @@ import { SingleMeme } from '@/components/SingleMeme'
 import { AUTOPLAY_ORDER, VISIBILITY } from '@/lib/constants'
 import { IoHelp, IoPlay, IoPause, IoArrowForward, IoArrowBack, IoShuffle } from 'react-icons/io5'
 import { gql, useQuery } from '@apollo/client'
-import { translateSortNextMeme, translateSortPrevMeme } from '@/lib/utils'
+import { DIRECTION, getNavigationQueryVariables } from '@/lib/utils'
 
 export const NEXT_MEME = gql`
-  query getNextMeme(
-    $currentMemeCreatedAt: DateTime
-    $visibility: String
-    $sortBy: MemeSortByInput
-  ) {
-    memes(
-      query: { visibility: $visibility, createdAt_gt: $currentMemeCreatedAt }
-      sortBy: $sortBy
-      limit: 1
-    ) {
+  query getNextMeme($query: MemeQueryInput, $sortBy: MemeSortByInput) {
+    memes(query: $query, sortBy: $sortBy, limit: 1) {
       _id
     }
   }
 `
 
 export const PREV_MEME = gql`
-  query getPreviousMeme(
-    $currentMemeCreatedAt: DateTime
-    $visibility: String
-    $sortBy: MemeSortByInput
-  ) {
-    memes(
-      query: { visibility: $visibility, createdAt_lt: $currentMemeCreatedAt }
-      sortBy: $sortBy
-      limit: 1
-    ) {
+  query getPreviousMeme($query: MemeQueryInput, $sortBy: MemeSortByInput) {
+    memes(query: $query, sortBy: $sortBy, limit: 1) {
       _id
     }
   }
@@ -54,26 +38,18 @@ export const Slideshow = ({ meme, sort }) => {
     console.log({ src: 'Slideshow / PROPS', meme, sort })
   }, [meme, sort])
   const { loading: loadingPrev, error: errorPrev, data: dataPrev } = useQuery(PREV_MEME, {
-    variables: {
-      currentMemeCreatedAt: meme.createdAt,
-      visibility: VISIBILITY.PUBLIC,
-      sortBy: translateSortPrevMeme(sort),
-    },
+    variables: getNavigationQueryVariables({ direction: DIRECTION.PREV, meme, sortEnum: sort }),
     notifyOnNetworkStatusChange: true,
-    fetchPolicy: 'cache-and-network',
+    fetchPolicy: 'no-cache',
   })
   useEffect(() => {
     console.log({ src: 'Slideshow / PREV', dataPrev, errorPrev, loadingPrev })
   }, [dataPrev, errorPrev, loadingPrev])
 
   const { loading: loadingNext, error: errorNext, data: dataNext } = useQuery(NEXT_MEME, {
-    variables: {
-      currentMemeCreatedAt: meme.createdAt,
-      visibility: VISIBILITY.PUBLIC,
-      sortBy: translateSortNextMeme(sort),
-    },
+    variables: getNavigationQueryVariables({ direction: DIRECTION.NEXT, meme, sortEnum: sort }),
     notifyOnNetworkStatusChange: true,
-    fetchPolicy: 'cache-and-network',
+    fetchPolicy: 'no-cache',
   })
   useEffect(() => {
     console.log({ src: 'Slideshow / NEXT', dataNext, errorNext, loadingNext })
@@ -87,8 +63,8 @@ export const Slideshow = ({ meme, sort }) => {
           <>
             <SlideshowButton
               name="prev"
-              disabled={dataPrev && dataPrev.memes.length <= 0}
-              changeSlide={dataPrev && dataPrev.memes[0]?._id}
+              disabled={dataPrev && dataPrev.memes?.length <= 0}
+              changeSlide={dataPrev && dataPrev.memes?.length > 0 && dataPrev.memes[0]?._id}
             />
 
             {/* <div className="flex flex-row">
@@ -98,8 +74,8 @@ export const Slideshow = ({ meme, sort }) => {
             </div>*/}
             <SlideshowButton
               name="next"
-              disabled={dataNext && dataNext.memes.length <= 0}
-              changeSlide={dataNext && dataNext.memes[0]?._id}
+              disabled={dataNext && dataNext.memes?.length <= 0}
+              changeSlide={dataNext && dataNext.memes?.length > 0 && dataNext.memes[0]?._id}
             />
           </>
         )}
