@@ -1,21 +1,70 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import PropTypes from 'prop-types'
-import { FIRESTORE_COLLECTION } from '@/lib/constants'
 import { MemeRenderer } from '@/components/MemeRenderer'
-import { useFirestoreProfile } from '@/components/hooks/useFirestoreProfile'
 import { useFabricJson } from '@/components/context/fabricContext'
 import { useRouter } from 'next/router'
 import formatDistance from 'date-fns/formatDistance'
+import { gql, NetworkStatus, useQuery } from '@apollo/client'
+import { useAuth } from '@/components/context/authContext'
+
+export const ALL_PERSONAL_DRAFTS_QUERY = gql`
+  query getAllPersonalDrafts($user: UserQueryInput) {
+    drafts(query: { createdBy: $user }, sortBy: CREATEDAT_DESC) {
+      _id
+      createdAt
+      createdBy {
+        _id
+      }
+      downVotes {
+        _id
+      }
+      forkedBy {
+        _id
+      }
+      forkedFrom {
+        _id
+      }
+      json
+      svg
+      template {
+        id {
+          _id
+        }
+      }
+      title
+      upVotes {
+        _id
+      }
+      url
+      views
+      visibility
+    }
+  }
+`
 
 export const ProfileDrafts = ({ className }) => {
-  const { docs: drafts, deleteDoc } = useFirestoreProfile(FIRESTORE_COLLECTION.DRAFTS)
+  const auth = useAuth()
+  const { loading, error, data, networkStatus } = useQuery(ALL_PERSONAL_DRAFTS_QUERY, {
+    variables: { user: { _id: auth.user.id } },
+    // Setting this value to true will make the component rerender when
+    // the "networkStatus" changes, so we are able to know if it is fetching
+    // more data
+    notifyOnNetworkStatusChange: true,
+  })
+  const loadingMoreDrafts = networkStatus === NetworkStatus.fetchMore
   const router = useRouter()
   const { setJson } = useFabricJson()
 
+  useEffect(() => {
+    console.log({ src: 'ProfileDrafts', data, error, loading })
+  }, [data, error, loading])
+
+  if (error) return <div>Error loading drafts.</div>
+  if (loading && !loadingMoreDrafts) return <div>Loading</div>
   return (
     <div className={className}>
-      {drafts &&
-        drafts.map((draft, i) => (
+      {data &&
+        data.drafts.map((draft, i) => (
           <button
             key={i}
             className="flex flex-col max-w-md"
@@ -30,11 +79,7 @@ export const ProfileDrafts = ({ className }) => {
             }}
           >
             <p className={'uppercase text-xs text-gray-600 dark:text-gray-300 font-medium'}>
-              {typeof draft.createdAt !== 'object'
-                ? formatDistance(new Date(draft.createdAt), new Date(), { addSuffix: true })
-                : formatDistance(new Date(draft.createdAt.toMillis()), new Date(), {
-                    addSuffix: true,
-                  })}
+              {formatDistance(new Date(draft.createdAt), new Date(), { addSuffix: true })}
             </p>
             <h1 className={'text-lg font-bold text-black dark:text-white truncate'}>
               {draft.title ? draft.title : 'Untitled'}

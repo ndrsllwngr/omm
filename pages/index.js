@@ -88,14 +88,14 @@ const LandingPageInner = ({ sort }) => {
     // more data
     notifyOnNetworkStatusChange: true,
   })
-  const loadingMorePosts = networkStatus === NetworkStatus.fetchMore
+  const loadingMoreMemes = networkStatus === NetworkStatus.fetchMore
 
   useEffect(() => {
-    console.log({ data, error, loading })
+    console.log({ src: 'LandingPageInner', data, error, loading })
   }, [data, error, loading])
 
-  if (error) return <div>Error loading posts.</div>
-  if (loading && !loadingMorePosts) return <div>Loading</div>
+  if (error) return <div>Error loading memes.</div>
+  if (loading && !loadingMoreMemes) return <div>Loading</div>
 
   // TODO add InfiniteScroll or pagination
   return (
