@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import firebase from '@/lib/firebase'
-import { FIRESTORE_COLLECTION, STORAGE_COLLECTION } from '@/lib/constants'
+import { STORAGE_COLLECTION } from '@/lib/constants'
 import { useAuth } from '@/components/context/authContext'
 import { gql, useMutation } from '@apollo/client'
 import ObjectID from 'bson-objectid'
@@ -73,9 +73,6 @@ const useStorage = () => {
       )
     }
     if (externalUrl !== '') {
-      const memeFirestore = firebase.firestore()
-      const collectionRef = memeFirestore.collection(FIRESTORE_COLLECTION.TEMPLATES)
-      const id = collectionRef.doc().id
       insertOneTemplate({
         variables: {
           template: {
