@@ -6,9 +6,10 @@ import { HtmlHead } from '@/components/HtmlHead'
 import { useSortContext } from '@/components/context/viewsContext'
 import { gql, NetworkStatus, useQuery } from '@apollo/client'
 import { useRouter } from 'next/router'
+import { VISIBILITY } from '@/lib/constants'
+import { ProtectedRoute, useAuth } from '@/components/context/authContext'
 
 export default function SingleView() {
-  const { sort } = useSortContext()
   return (
     <>
       <Navbar />
@@ -19,7 +20,7 @@ export default function SingleView() {
             setNext(null)
           }}*/
         />
-        <SingleViewInner sort={sort} />
+        <SingleViewInner />
       </div>
     </>
   )
@@ -62,10 +63,15 @@ export const CURRENT_MEME = gql`
 `
 
 // eslint-disable-next-line react/prop-types
-const SingleViewInner = ({ sort }) => {
+const SingleViewInner = () => {
   /*const { currentMeme, setNext, setPrev } = useSingleMemeContext()
   useSingleMeme()*/
+  const auth = useAuth()
   const router = useRouter()
+  const { sort } = useSortContext()
+  // TODO verify that user has permission to view this meme
+  // TODO increment viewCount
+  // TODO set next and prev null? is this still needed?
   const { loading, error, data, networkStatus } = useQuery(CURRENT_MEME, {
     variables: { meme: router.query.id },
     notifyOnNetworkStatusChange: true,
@@ -86,12 +92,23 @@ const SingleViewInner = ({ sort }) => {
         <div>Loading...</div>
       </>
     )
+  if (data && !error && !loading && data.memes.length > 0) {
+    if (
+      (data.memes[0].visibility === VISIBILITY.PRIVATE &&
+        auth.isAuthenticated() &&
+        data.memes[0].createdBy._id !== auth.getUser().id) ||
+      (data.memes[0].visibility === VISIBILITY.PRIVATE && !auth.isAuthenticated())
+    ) {
+      router.push('/403')
+      return null
+    }
+  }
   return (
     <>
       <HtmlHead
         title={`Meme · ${data && data.memes[0].title ? data.memes[0].title : 'Untitled'}`}
       />
-      <Slideshow meme={data.memes[0]} />
+      <Slideshow meme={data.memes[0]} sort={sort} />
     </>
   )
 }

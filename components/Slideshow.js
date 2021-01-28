@@ -1,5 +1,5 @@
 /* eslint-disable  react/prop-types */
-import React from 'react'
+import React, { useEffect } from 'react'
 import PropTypes from 'prop-types'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
@@ -14,14 +14,43 @@ import { IconBtn, ToggleIconBtn, ToggleStateIconBtn } from '@/components/ui/Butt
 import { SingleMeme } from '@/components/SingleMeme'
 import { AUTOPLAY_ORDER, VISIBILITY } from '@/lib/constants'
 import { IoHelp, IoPlay, IoPause, IoArrowForward, IoArrowBack, IoShuffle } from 'react-icons/io5'
+import { gql, NetworkStatus, useQuery } from '@apollo/client'
+import { CURRENT_MEME } from '@/pages/meme/[id]'
 
-export const Slideshow = ({ meme, nextMeme, prevMeme }) => {
-  /*const {
-    currentMeme: meme,
-    nextMeme,
-    prevMeme,
-    updateCurrent: updateMeme,
-  } = useSingleMemeContext()*/
+export const NEXT_MEME = gql`
+  query getNextMeme($currentMemeId: ObjectId) {
+    memes(query: { _id: $currentMemeId }, limit: 1) {
+      _id
+    }
+  }
+`
+
+export const PREV_MEME = gql`
+  query getPreviousMeme($currentMemeId: ObjectId) {
+    memes(query: { _id: $currentMemeId }, limit: 1) {
+      _id
+    }
+  }
+`
+
+export const Slideshow = ({ meme, sort }) => {
+  const { loadingPrev, errorPrev, dataPrev, networkStatusPrev } = useQuery(PREV_MEME, {
+    variables: { currentMemeId: meme._id },
+    notifyOnNetworkStatusChange: true,
+    fetchPolicy: 'cache-and-network',
+  })
+  const { loadingNext, errorNext, dataNext, networkStatusNext } = useQuery(NEXT_MEME, {
+    variables: { currentMemeId: meme._id },
+    notifyOnNetworkStatusChange: true,
+    fetchPolicy: 'cache-and-network',
+  })
+
+  useEffect(() => {
+    console.log({ src: 'Slideshow', dataNext, errorNext, loadingNext })
+  }, [dataNext, errorNext, loadingNext])
+  useEffect(() => {
+    console.log({ src: 'Slideshow', dataPrev, errorPrev, loadingPrev })
+  }, [dataPrev, errorPrev, loadingPrev])
 
   if (!meme) return <div className="flex flex-row justify-center">loading..</div>
   return (
@@ -29,23 +58,22 @@ export const Slideshow = ({ meme, nextMeme, prevMeme }) => {
       <div className="flex flex-row justify-between my-2">
         {meme.visibility === VISIBILITY.PUBLIC && (
           <>
-            {/* <SlideshowButton
+            <SlideshowButton
               name="prev"
-              disabled={!(prevMeme && prevMeme.id)}
-              changeSlide={prevMeme && prevMeme.id}
+              disabled={!(dataPrev && dataPrev.id)}
+              changeSlide={dataPrev && dataPrev.id}
             />
 
-            <div className="flex flex-row">
+            {/* <div className="flex flex-row">
               <AutoplayRandomButton />
               <AutoplaySortButton />
               <AutoplayActionButton />
-            </div>
-
+            </div>*/}
             <SlideshowButton
               name="next"
-              disabled={!(nextMeme && nextMeme.id)}
-              changeSlide={nextMeme && nextMeme.id}
-            />*/}
+              disabled={!(dataNext && dataNext.memes[0]._id)}
+              changeSlide={dataNext && dataNext.memes[0]._id}
+            />
           </>
         )}
       </div>
