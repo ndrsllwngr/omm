@@ -39,9 +39,13 @@
     ]
   },
   "dependencies": {
+    "@chartiful/react-chart-builder": "^0.1.6",
+    "@chartiful/react-line-graph": "^0.1.5",
+    "@chartiful/react-vertical-bar-graph": "^0.1.6",
     "archiver": "5.2.0",
     "cookie-cutter": "0.2.0",
     "cors": "2.8.5",
+    "d3": "6.5.0",
     "date-fns": "2.16.1",
     "dom-to-image": "2.6.0",
     "fabric": "4.3.0",
