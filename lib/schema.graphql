@@ -26,8 +26,8 @@ type Draft {
 }
 
 input DraftCreatedByRelationInput {
-  create: UserInsertInput
   link: ObjectId
+  create: UserInsertInput
 }
 
 input DraftDownVotesRelationInput {
@@ -41,155 +41,155 @@ input DraftForkedByRelationInput {
 }
 
 input DraftForkedFromRelationInput {
-  create: MemeInsertInput
   link: ObjectId
+  create: MemeInsertInput
 }
 
 input DraftInsertInput {
-  url: String
-  forkedBy: DraftForkedByRelationInput
-  forkedFrom: DraftForkedFromRelationInput
   downVotes: DraftDownVotesRelationInput
-  views: Int
   svg: String
-  json: String
-  visibility: String
-  upVotes: DraftUpVotesRelationInput
-  _id: ObjectId
-  points: Int
   title: String
-  template: DraftTemplateInsertInput
-  createdBy: DraftCreatedByRelationInput
+  visibility: String
+  views: Int
+  forkedFrom: DraftForkedFromRelationInput
   createdAt: DateTime
+  points: Int
+  _id: ObjectId
+  forkedBy: DraftForkedByRelationInput
+  url: String
+  template: DraftTemplateInsertInput
+  upVotes: DraftUpVotesRelationInput
+  json: String
+  createdBy: DraftCreatedByRelationInput
 }
 
 input DraftQueryInput {
-  _id_nin: [ObjectId]
-  visibility_ne: String
+  title_nin: [String]
   json_nin: [String]
-  url: String
+  svg_gt: String
+  visibility: String
+  views: Int
+  visibility_exists: Boolean
+  json: String
+  svg: String
+  views_ne: Int
+  json_gt: String
+  forkedBy: [MemeQueryInput]
+  createdAt_ne: DateTime
+  _id_ne: ObjectId
+  downVotes: [UserQueryInput]
+  views_lte: Int
+  forkedBy_nin: [MemeQueryInput]
+  url_in: [String]
+  createdAt_gte: DateTime
+  createdAt_in: [DateTime]
   title_ne: String
-  points_gte: Int
+  createdAt_exists: Boolean
+  points: Int
+  title_gt: String
+  points_in: [Int]
+  title_exists: Boolean
+  visibility_ne: String
+  visibility_lte: String
+  OR: [DraftQueryInput!]
+  json_exists: Boolean
+  url_lt: String
+  _id_gt: ObjectId
+  views_gte: Int
+  _id_exists: Boolean
+  forkedBy_exists: Boolean
+  title_lt: String
+  title_gte: String
+  AND: [DraftQueryInput!]
+  url_gt: String
+  upVotes_nin: [UserQueryInput]
+  createdAt: DateTime
+  points_lt: Int
+  svg_ne: String
+  title_lte: String
+  createdAt_gt: DateTime
+  _id: ObjectId
+  json_ne: String
+  title: String
   createdBy: UserQueryInput
+  _id_nin: [ObjectId]
+  _id_gte: ObjectId
+  downVotes_nin: [UserQueryInput]
+  _id_in: [ObjectId]
+  template_exists: Boolean
+  svg_lte: String
+  visibility_lt: String
+  views_exists: Boolean
+  visibility_nin: [String]
+  upVotes: [UserQueryInput]
+  downVotes_exists: Boolean
+  json_lte: String
+  views_nin: [Int]
+  svg_gte: String
+  svg_exists: Boolean
+  _id_lt: ObjectId
+  views_in: [Int]
+  svg_nin: [String]
+  upVotes_in: [UserQueryInput]
+  downVotes_in: [UserQueryInput]
+  createdAt_lt: DateTime
+  points_gt: Int
+  url_gte: String
+  template: DraftTemplateQueryInput
   json_gte: String
-  points_exists: Boolean
+  svg_in: [String]
+  url_ne: String
+  views_gt: Int
+  points_nin: [Int]
+  points_gte: Int
+  createdBy_exists: Boolean
+  url: String
+  forkedFrom_exists: Boolean
+  visibility_gte: String
+  views_lt: Int
+  title_in: [String]
+  url_exists: Boolean
+  points_ne: Int
+  url_lte: String
   createdAt_nin: [DateTime]
   createdAt_lte: DateTime
-  _id_gte: ObjectId
-  createdAt_ne: DateTime
-  OR: [DraftQueryInput!]
-  downVotes_in: [UserQueryInput]
-  title_exists: Boolean
-  forkedBy: [MemeQueryInput]
-  visibility_nin: [String]
-  views: Int
-  url_gte: String
-  _id_ne: ObjectId
-  views_lt: Int
-  url_lte: String
-  points_ne: Int
-  _id_gt: ObjectId
+  forkedBy_in: [MemeQueryInput]
+  _id_lte: ObjectId
+  points_exists: Boolean
+  json_lt: String
+  points_lte: Int
+  forkedFrom: MemeQueryInput
+  upVotes_exists: Boolean
+  json_in: [String]
   visibility_in: [String]
   visibility_gt: String
-  svg_gte: String
-  json_in: [String]
-  svg_lte: String
-  json_lte: String
-  views_lte: Int
-  _id_exists: Boolean
-  createdAt_in: [DateTime]
-  views_ne: Int
-  title_in: [String]
-  forkedBy_nin: [MemeQueryInput]
-  createdBy_exists: Boolean
-  forkedBy_in: [MemeQueryInput]
-  json_lt: String
-  upVotes_exists: Boolean
-  visibility_gte: String
-  visibility_lt: String
-  svg_in: [String]
-  views_gt: Int
-  upVotes_in: [UserQueryInput]
   url_nin: [String]
-  url_exists: Boolean
-  title_gte: String
-  visibility_exists: Boolean
-  views_in: [Int]
-  createdAt_gt: DateTime
-  svg: String
-  points_nin: [Int]
-  _id: ObjectId
-  title_lte: String
-  title: String
-  createdAt: DateTime
-  points_lte: Int
-  title_gt: String
-  downVotes: [UserQueryInput]
-  template: DraftTemplateQueryInput
-  json_exists: Boolean
-  visibility: String
-  _id_in: [ObjectId]
-  forkedFrom_exists: Boolean
-  title_lt: String
-  upVotes_nin: [UserQueryInput]
-  AND: [DraftQueryInput!]
-  forkedFrom: MemeQueryInput
   svg_lt: String
-  url_in: [String]
-  _id_lt: ObjectId
-  url_gt: String
-  url_ne: String
-  createdAt_exists: Boolean
-  svg_nin: [String]
-  forkedBy_exists: Boolean
-  createdAt_lt: DateTime
-  json_ne: String
-  points_in: [Int]
-  svg_gt: String
-  svg_exists: Boolean
-  points_gt: Int
-  json: String
-  views_nin: [Int]
-  url_lt: String
-  downVotes_nin: [UserQueryInput]
-  _id_lte: ObjectId
-  json_gt: String
-  template_exists: Boolean
-  upVotes: [UserQueryInput]
-  svg_ne: String
-  downVotes_exists: Boolean
-  createdAt_gte: DateTime
-  views_gte: Int
-  points: Int
-  title_nin: [String]
-  points_lt: Int
-  views_exists: Boolean
-  visibility_lte: String
 }
 
 enum DraftSortByInput {
-  CREATEDBY_DESC
-  JSON_ASC
-  JSON_DESC
-  _ID_ASC
   CREATEDAT_ASC
-  CREATEDAT_DESC
+  VISIBILITY_ASC
+  VISIBILITY_DESC
+  _ID_DESC
+  URL_DESC
+  JSON_ASC
+  FORKEDFROM_DESC
+  VIEWS_ASC
   POINTS_ASC
   SVG_DESC
-  TITLE_DESC
-  CREATEDBY_ASC
-  _ID_DESC
-  VISIBILITY_ASC
+  CREATEDBY_DESC
   FORKEDFROM_ASC
-  FORKEDFROM_DESC
   POINTS_DESC
-  URL_DESC
-  SVG_ASC
+  CREATEDAT_DESC
+  _ID_ASC
   TITLE_ASC
-  VIEWS_ASC
-  VIEWS_DESC
+  TITLE_DESC
   URL_ASC
-  VISIBILITY_DESC
+  VIEWS_DESC
+  JSON_DESC
+  CREATEDBY_ASC
+  SVG_ASC
 }
 
 type DraftTemplate {
@@ -203,66 +203,66 @@ input DraftTemplateIdRelationInput {
 }
 
 input DraftTemplateInsertInput {
-  url: String
   id: DraftTemplateIdRelationInput
+  url: String
 }
 
 input DraftTemplateQueryInput {
-  url_ne: String
-  url_gt: String
-  url_lt: String
+  url_lte: String
+  AND: [DraftTemplateQueryInput!]
+  url_in: [String]
   url_nin: [String]
+  url_ne: String
+  url_gte: String
   OR: [DraftTemplateQueryInput!]
   id_exists: Boolean
-  AND: [DraftTemplateQueryInput!]
-  id: TemplateQueryInput
   url: String
-  url_gte: String
-  url_lte: String
   url_exists: Boolean
-  url_in: [String]
+  id: TemplateQueryInput
+  url_lt: String
+  url_gt: String
 }
 
 input DraftTemplateUpdateInput {
+  url: String
   url_unset: Boolean
   id: DraftTemplateIdRelationInput
   id_unset: Boolean
-  url: String
 }
 
 input DraftUpdateInput {
-  _id: ObjectId
-  downVotes: DraftDownVotesRelationInput
-  svg: String
-  _id_unset: Boolean
-  points: Int
-  points_unset: Boolean
-  json: String
-  createdBy_unset: Boolean
   json_unset: Boolean
-  upVotes_unset: Boolean
-  forkedBy_unset: Boolean
-  createdAt_unset: Boolean
-  views: Int
-  forkedFrom: DraftForkedFromRelationInput
-  visibility: String
-  forkedFrom_unset: Boolean
-  createdAt: DateTime
-  url_unset: Boolean
-  template: DraftTemplateUpdateInput
-  downVotes_unset: Boolean
-  views_unset: Boolean
-  svg_unset: Boolean
-  upVotes: DraftUpVotesRelationInput
-  forkedBy: DraftForkedByRelationInput
-  points_inc: Int
-  views_inc: Int
   title: String
   createdBy: DraftCreatedByRelationInput
-  title_unset: Boolean
+  _id_unset: Boolean
+  views: Int
   visibility_unset: Boolean
-  template_unset: Boolean
+  downVotes: DraftDownVotesRelationInput
+  createdAt: DateTime
+  forkedFrom_unset: Boolean
   url: String
+  downVotes_unset: Boolean
+  upVotes: DraftUpVotesRelationInput
+  points_unset: Boolean
+  template_unset: Boolean
+  points: Int
+  createdAt_unset: Boolean
+  forkedFrom: DraftForkedFromRelationInput
+  forkedBy_unset: Boolean
+  views_unset: Boolean
+  svg_unset: Boolean
+  points_inc: Int
+  createdBy_unset: Boolean
+  _id: ObjectId
+  title_unset: Boolean
+  url_unset: Boolean
+  json: String
+  visibility: String
+  svg: String
+  views_inc: Int
+  upVotes_unset: Boolean
+  forkedBy: DraftForkedByRelationInput
+  template: DraftTemplateUpdateInput
 }
 
 input DraftUpVotesRelationInput {
@@ -313,150 +313,150 @@ input MemeForkedFromRelationInput {
 }
 
 input MemeInsertInput {
-  visibility: String
-  json: String
+  forkedBy: MemeForkedByRelationInput
+  createdAt: DateTime
   url: String
   svg: String
-  views: Int
+  points: Int
   template: MemeTemplateInsertInput
-  _id: ObjectId
-  createdBy: MemeCreatedByRelationInput
-  downVotes: MemeDownVotesRelationInput
   forkedFrom: MemeForkedFromRelationInput
+  views: Int
   title: String
   upVotes: MemeUpVotesRelationInput
-  createdAt: DateTime
-  forkedBy: MemeForkedByRelationInput
-  points: Int
+  downVotes: MemeDownVotesRelationInput
+  json: String
+  _id: ObjectId
+  visibility: String
+  createdBy: MemeCreatedByRelationInput
 }
 
 input MemeQueryInput {
-  points_gt: Int
-  views_nin: [Int]
-  createdBy: UserQueryInput
-  title_ne: String
-  url_lte: String
-  json_gte: String
-  createdAt: DateTime
-  createdBy_exists: Boolean
-  json_gt: String
-  views_lt: Int
-  url: String
-  views_gt: Int
-  svg_exists: Boolean
-  createdAt_ne: DateTime
-  json_ne: String
-  json_lt: String
-  visibility: String
-  svg_gte: String
-  svg_ne: String
-  downVotes_exists: Boolean
-  svg_nin: [String]
-  title_gt: String
-  url_ne: String
-  url_gt: String
-  points_lte: Int
-  visibility_lte: String
-  createdAt_lte: DateTime
-  points_nin: [Int]
-  createdAt_gt: DateTime
-  createdAt_lt: DateTime
-  url_in: [String]
-  svg_lte: String
-  views_in: [Int]
-  upVotes_exists: Boolean
-  points_lt: Int
-  visibility_gte: String
-  svg_in: [String]
-  downVotes_nin: [UserQueryInput]
-  createdAt_in: [DateTime]
-  forkedBy: [MemeQueryInput]
-  _id_gt: ObjectId
-  forkedFrom_exists: Boolean
-  url_gte: String
-  title_in: [String]
-  title_gte: String
-  _id_lt: ObjectId
-  points: Int
-  _id_ne: ObjectId
-  _id_in: [ObjectId]
-  upVotes: [UserQueryInput]
-  visibility_gt: String
-  title_lt: String
-  json_exists: Boolean
-  template_exists: Boolean
-  points_ne: Int
-  json: String
   json_lte: String
-  views: Int
-  createdAt_gte: DateTime
-  svg: String
-  json_nin: [String]
-  downVotes: [UserQueryInput]
-  upVotes_nin: [UserQueryInput]
-  url_nin: [String]
+  svg_ne: String
   _id_exists: Boolean
-  points_exists: Boolean
+  createdAt_ne: DateTime
+  forkedFrom_exists: Boolean
+  views_lte: Int
+  json_exists: Boolean
+  json_gt: String
+  downVotes_nin: [UserQueryInput]
+  views_gt: Int
+  title_gt: String
+  url_nin: [String]
+  createdAt_in: [DateTime]
+  url_lte: String
+  title_in: [String]
   template: MemeTemplateQueryInput
   forkedFrom: MemeQueryInput
-  forkedBy_nin: [MemeQueryInput]
-  svg_lt: String
-  upVotes_in: [UserQueryInput]
-  visibility_lt: String
-  AND: [MemeQueryInput!]
-  forkedBy_exists: Boolean
-  url_lt: String
-  downVotes_in: [UserQueryInput]
-  views_ne: Int
-  title_nin: [String]
+  createdAt: DateTime
+  title_lt: String
+  svg_in: [String]
   _id_nin: [ObjectId]
-  forkedBy_in: [MemeQueryInput]
-  visibility_nin: [String]
-  createdAt_exists: Boolean
-  title_lte: String
-  visibility_ne: String
-  views_lte: Int
-  visibility_exists: Boolean
-  _id: ObjectId
-  points_gte: Int
+  AND: [MemeQueryInput!]
+  json_gte: String
+  views: Int
   json_in: [String]
-  svg_gt: String
-  _id_gte: ObjectId
-  visibility_in: [String]
-  points_in: [Int]
+  svg_lte: String
+  createdAt_exists: Boolean
+  points_lt: Int
+  url_lt: String
   OR: [MemeQueryInput!]
-  title_exists: Boolean
-  url_exists: Boolean
-  views_exists: Boolean
-  _id_lte: ObjectId
-  title: String
-  views_gte: Int
+  points_ne: Int
+  createdAt_lt: DateTime
+  visibility_lte: String
+  points: Int
+  views_ne: Int
+  url_ne: String
+  svg_exists: Boolean
+  visibility: String
+  createdBy: UserQueryInput
+  template_exists: Boolean
+  forkedBy_exists: Boolean
+  json_ne: String
+  points_lte: Int
+  forkedBy: [MemeQueryInput]
+  svg: String
+  createdBy_exists: Boolean
   createdAt_nin: [DateTime]
+  title_lte: String
+  visibility_exists: Boolean
+  svg_gt: String
+  url_in: [String]
+  _id_ne: ObjectId
+  title_nin: [String]
+  title_exists: Boolean
+  title_gte: String
+  url_gt: String
+  downVotes_in: [UserQueryInput]
+  json_lt: String
+  views_exists: Boolean
+  views_nin: [Int]
+  upVotes: [UserQueryInput]
+  url: String
+  createdAt_gte: DateTime
+  visibility_nin: [String]
+  json: String
+  visibility_in: [String]
+  upVotes_nin: [UserQueryInput]
+  upVotes_exists: Boolean
+  downVotes: [UserQueryInput]
+  visibility_gt: String
+  createdAt_lte: DateTime
+  points_exists: Boolean
+  forkedBy_in: [MemeQueryInput]
+  points_gte: Int
+  visibility_gte: String
+  views_gte: Int
+  points_in: [Int]
+  url_gte: String
+  views_lt: Int
+  downVotes_exists: Boolean
+  title_ne: String
+  json_nin: [String]
+  _id_gte: ObjectId
+  svg_nin: [String]
+  _id_lt: ObjectId
+  createdAt_gt: DateTime
+  points_gt: Int
+  views_in: [Int]
+  visibility_ne: String
+  forkedBy_nin: [MemeQueryInput]
+  title: String
+  _id_gt: ObjectId
+  _id: ObjectId
+  url_exists: Boolean
+  visibility_lt: String
+  _id_in: [ObjectId]
+  upVotes_in: [UserQueryInput]
+  points_nin: [Int]
+  svg_gte: String
+  _id_lte: ObjectId
+  svg_lt: String
 }
 
 enum MemeSortByInput {
-  SVG_DESC
-  TITLE_DESC
-  VIEWS_DESC
-  CREATEDBY_DESC
-  JSON_DESC
-  CREATEDAT_ASC
-  POINTS_DESC
-  URL_DESC
-  _ID_DESC
-  CREATEDBY_ASC
-  JSON_ASC
-  CREATEDAT_DESC
-  VISIBILITY_ASC
   FORKEDFROM_ASC
-  URL_ASC
-  _ID_ASC
-  POINTS_ASC
-  SVG_ASC
-  TITLE_ASC
-  VISIBILITY_DESC
-  FORKEDFROM_DESC
+  CREATEDAT_DESC
+  JSON_DESC
   VIEWS_ASC
+  SVG_DESC
+  SVG_ASC
+  TITLE_DESC
+  VISIBILITY_ASC
+  VISIBILITY_DESC
+  CREATEDBY_ASC
+  VIEWS_DESC
+  POINTS_ASC
+  POINTS_DESC
+  CREATEDAT_ASC
+  TITLE_ASC
+  _ID_ASC
+  _ID_DESC
+  CREATEDBY_DESC
+  FORKEDFROM_DESC
+  URL_ASC
+  URL_DESC
+  JSON_ASC
 }
 
 type MemeTemplate {
@@ -470,24 +470,24 @@ input MemeTemplateIdRelationInput {
 }
 
 input MemeTemplateInsertInput {
-  url: String
   id: MemeTemplateIdRelationInput
+  url: String
 }
 
 input MemeTemplateQueryInput {
-  url: String
-  url_lte: String
-  url_gt: String
-  url_gte: String
   url_nin: [String]
-  url_exists: Boolean
+  url_gt: String
   url_lt: String
-  OR: [MemeTemplateQueryInput!]
+  url_gte: String
   AND: [MemeTemplateQueryInput!]
+  url: String
+  id_exists: Boolean
+  url_lte: String
   url_in: [String]
+  OR: [MemeTemplateQueryInput!]
+  url_exists: Boolean
   url_ne: String
   id: TemplateQueryInput
-  id_exists: Boolean
 }
 
 input MemeTemplateUpdateInput {
@@ -498,46 +498,47 @@ input MemeTemplateUpdateInput {
 }
 
 input MemeUpdateInput {
-  visibility: String
+  json_unset: Boolean
+  points_unset: Boolean
+  svg: String
   _id_unset: Boolean
   downVotes: MemeDownVotesRelationInput
-  title: String
-  svg: String
-  views_unset: Boolean
-  upVotes_unset: Boolean
-  json: String
-  json_unset: Boolean
-  template_unset: Boolean
-  points: Int
-  createdBy_unset: Boolean
-  points_unset: Boolean
-  views_inc: Int
   svg_unset: Boolean
-  createdAt: DateTime
-  forkedBy_unset: Boolean
+  views_unset: Boolean
+  title: String
   title_unset: Boolean
   points_inc: Int
-  forkedFrom: MemeForkedFromRelationInput
-  createdAt_unset: Boolean
-  downVotes_unset: Boolean
-  createdBy: MemeCreatedByRelationInput
-  visibility_unset: Boolean
-  views: Int
-  url: String
-  upVotes: MemeUpVotesRelationInput
   template: MemeTemplateUpdateInput
   _id: ObjectId
-  url_unset: Boolean
-  forkedFrom_unset: Boolean
+  template_unset: Boolean
+  upVotes_unset: Boolean
+  createdBy: MemeCreatedByRelationInput
   forkedBy: MemeForkedByRelationInput
+  createdAt: DateTime
+  downVotes_unset: Boolean
+  forkedFrom_unset: Boolean
+  upVotes: MemeUpVotesRelationInput
+  views: Int
+  points: Int
+  visibility_unset: Boolean
+  url: String
+  createdBy_unset: Boolean
+  forkedFrom: MemeForkedFromRelationInput
+  views_inc: Int
+  visibility: String
+  json: String
+  createdAt_unset: Boolean
+  forkedBy_unset: Boolean
+  url_unset: Boolean
 }
 
 input MemeUpVotesRelationInput {
-  create: [UserInsertInput]
   link: [ObjectId]
+  create: [UserInsertInput]
 }
 
 type Mutation {
+  addView(input: ObjectId): Meme
   deleteManyDrafts(query: DraftQueryInput): DeleteManyPayload
   deleteManyMemes(query: MemeQueryInput): DeleteManyPayload
   deleteManyTemplates(query: TemplateQueryInput): DeleteManyPayload
@@ -571,7 +572,7 @@ type Mutation {
   upsertOneDraft(query: DraftQueryInput, data: DraftInsertInput!): Draft
   upsertOneMeme(query: MemeQueryInput, data: MemeInsertInput!): Meme
   upsertOneTemplate(query: TemplateQueryInput, data: TemplateInsertInput!): Template
-  upsertOneUser(data: UserInsertInput!, query: UserQueryInput): User
+  upsertOneUser(query: UserQueryInput, data: UserInsertInput!): User
 }
 
 scalar ObjectId
@@ -582,7 +583,7 @@ type Query {
   meme(query: MemeQueryInput): Meme
   memes(query: MemeQueryInput, limit: Int = 100, sortBy: MemeSortByInput): [Meme]!
   template(query: TemplateQueryInput): Template
-  templates(sortBy: TemplateSortByInput, query: TemplateQueryInput, limit: Int = 100): [Template]!
+  templates(query: TemplateQueryInput, limit: Int = 100, sortBy: TemplateSortByInput): [Template]!
   user(query: UserQueryInput): User
   users(query: UserQueryInput, limit: Int = 100, sortBy: UserSortByInput): [User]!
 }
@@ -599,131 +600,131 @@ type Template {
 }
 
 input TemplateInsertInput {
-  _id: ObjectId
-  createdAt: DateTime
-  createdBy: String
   height: Int
   img: String
   type: String
   url: String
   width: Int
+  _id: ObjectId
+  createdAt: DateTime
+  createdBy: String
 }
 
 input TemplateQueryInput {
-  img_in: [String]
-  _id_gt: ObjectId
-  AND: [TemplateQueryInput!]
-  img_exists: Boolean
-  height_lte: Int
-  width_gt: Int
-  width_lt: Int
-  _id_nin: [ObjectId]
-  img_gte: String
-  img: String
-  img_lt: String
-  url_exists: Boolean
-  height_in: [Int]
-  url_in: [String]
-  createdAt_gt: DateTime
-  createdBy_nin: [String]
-  url: String
-  url_lt: String
-  createdAt_lt: DateTime
-  _id_exists: Boolean
-  height_exists: Boolean
-  type_lt: String
-  createdBy: String
-  url_gt: String
-  createdAt_lte: DateTime
-  height_nin: [Int]
   _id: ObjectId
-  height: Int
-  createdBy_gte: String
-  width_exists: Boolean
-  createdAt: DateTime
-  createdBy_exists: Boolean
-  createdBy_gt: String
-  width_ne: Int
-  _id_ne: ObjectId
-  createdBy_ne: String
-  createdAt_nin: [DateTime]
   createdBy_lt: String
-  type_gt: String
-  OR: [TemplateQueryInput!]
-  height_gte: Int
-  type_ne: String
-  type_gte: String
-  img_nin: [String]
-  type_in: [String]
-  img_lte: String
-  _id_in: [ObjectId]
-  createdAt_ne: DateTime
-  height_gt: Int
-  _id_lt: ObjectId
-  width_nin: [Int]
-  url_nin: [String]
-  width_gte: Int
-  createdAt_in: [DateTime]
-  _id_lte: ObjectId
-  type_lte: String
-  img_ne: String
-  height_ne: Int
-  type_nin: [String]
-  width_lte: Int
-  _id_gte: ObjectId
-  url_lte: String
-  url_gte: String
-  img_gt: String
-  createdAt_gte: DateTime
+  url_exists: Boolean
   createdBy_lte: String
-  createdBy_in: [String]
-  width_in: [Int]
-  url_ne: String
+  createdAt_lte: DateTime
+  createdAt: DateTime
+  createdAt_gte: DateTime
+  img_lt: String
+  createdAt_nin: [DateTime]
+  img_in: [String]
+  height_lte: Int
+  img_exists: Boolean
   type: String
+  _id_gte: ObjectId
   height_lt: Int
+  _id_gt: ObjectId
+  width_gte: Int
+  url: String
+  width_nin: [Int]
+  createdBy_gte: String
+  img_ne: String
+  url_ne: String
+  _id_lte: ObjectId
+  width_ne: Int
+  url_gte: String
+  type_gte: String
+  createdBy_in: [String]
+  createdBy_exists: Boolean
+  img_gt: String
+  img_gte: String
+  height_gt: Int
+  height_exists: Boolean
+  url_lt: String
+  height_nin: [Int]
+  createdBy_nin: [String]
+  height: Int
+  width_gt: Int
+  type_in: [String]
+  height_ne: Int
+  type_ne: String
+  type_gt: String
+  _id_lt: ObjectId
+  url_lte: String
+  createdBy: String
+  AND: [TemplateQueryInput!]
+  width_exists: Boolean
+  height_gte: Int
   width: Int
-  createdAt_exists: Boolean
   type_exists: Boolean
+  type_lte: String
+  _id_ne: ObjectId
+  createdAt_in: [DateTime]
+  createdBy_ne: String
+  width_in: [Int]
+  img_lte: String
+  url_gt: String
+  type_lt: String
+  OR: [TemplateQueryInput!]
+  _id_nin: [ObjectId]
+  url_nin: [String]
+  createdBy_gt: String
+  url_in: [String]
+  img_nin: [String]
+  height_in: [Int]
+  createdAt_ne: DateTime
+  createdAt_exists: Boolean
+  _id_exists: Boolean
+  width_lt: Int
+  width_lte: Int
+  createdAt_lt: DateTime
+  createdAt_gt: DateTime
+  img: String
+  _id_in: [ObjectId]
+  type_nin: [String]
 }
 
 enum TemplateSortByInput {
-  CREATEDAT_ASC
-  CREATEDAT_DESC
-  IMG_ASC
-  URL_ASC
-  TYPE_DESC
-  WIDTH_ASC
   WIDTH_DESC
   HEIGHT_ASC
-  _ID_ASC
-  _ID_DESC
-  CREATEDBY_ASC
-  CREATEDBY_DESC
   HEIGHT_DESC
+  IMG_ASC
+  TYPE_DESC
+  URL_ASC
+  WIDTH_ASC
+  CREATEDAT_DESC
+  CREATEDBY_ASC
+  CREATEDAT_ASC
+  CREATEDBY_DESC
   IMG_DESC
   TYPE_ASC
+  _ID_DESC
   URL_DESC
+  _ID_ASC
 }
 
 input TemplateUpdateInput {
-  type: String
-  width: Int
-  width_unset: Boolean
-  createdAt: DateTime
-  height_inc: Int
-  img: String
   url_unset: Boolean
-  width_inc: Int
-  type_unset: Boolean
-  _id_unset: Boolean
-  createdBy: String
+  width: Int
   height_unset: Boolean
   height: Int
   url: String
-  createdBy_unset: Boolean
-  _id: ObjectId
   createdAt_unset: Boolean
   img_unset: Boolean
+  _id_unset: Boolean
+  createdBy_unset: Boolean
+  height_inc: Int
+  createdBy: String
+  width_unset: Boolean
+  width_inc: Int
+  _id: ObjectId
+  type: String
+  type_unset: Boolean
+  img: String
+  createdAt: DateTime
 }
 
 type UpdateManyPayload {
@@ -746,47 +747,48 @@ input UserInsertInput {
 }
 
 input UserQueryInput {
-  name_lt: String
-  uid_ne: ObjectId
-  _id_lte: ObjectId
-  email_nin: [String]
   email_lt: String
-  name_gte: String
-  _id: ObjectId
-  uid_gt: ObjectId
-  _id_in: [ObjectId]
-  _id_lt: ObjectId
-  _id_exists: Boolean
+  _id_lte: ObjectId
+  name_lt: String
   uid: ObjectId
-  email_exists: Boolean
-  uid_lte: ObjectId
-  name_in: [String]
-  email: String
-  AND: [UserQueryInput!]
-  email_gte: String
-  email_gt: String
-  email_lte: String
-  OR: [UserQueryInput!]
-  uid_in: [ObjectId]
-  _id_gt: ObjectId
-  email_ne: String
-  _id_gte: ObjectId
-  uid_exists: Boolean
-  name_lte: String
+  uid_ne: ObjectId
   name_exists: Boolean
-  name_ne: String
-  name_nin: [String]
-  _id_ne: ObjectId
   name: String
+  name_lte: String
+  _id_lt: ObjectId
+  name_ne: String
+  _id_in: [ObjectId]
+  _id_exists: Boolean
+  OR: [UserQueryInput!]
+  _id_gt: ObjectId
+  AND: [UserQueryInput!]
+  _id_ne: ObjectId
+  email: String
+  email_exists: Boolean
   name_gt: String
+  uid_gt: ObjectId
+  uid_in: [ObjectId]
   uid_lt: ObjectId
+  email_ne: String
+  name_in: [String]
   uid_gte: ObjectId
-  uid_nin: [ObjectId]
-  email_in: [String]
   _id_nin: [ObjectId]
+  _id: ObjectId
+  email_in: [String]
+  uid_nin: [ObjectId]
+  uid_exists: Boolean
+  email_gte: String
+  email_nin: [String]
+  email_lte: String
+  email_gt: String
+  _id_gte: ObjectId
+  uid_lte: ObjectId
+  name_gte: String
+  name_nin: [String]
 }
 
 enum UserSortByInput {
+  NAME_ASC
   NAME_DESC
   UID_ASC
   UID_DESC
@@ -794,21 +796,20 @@ enum UserSortByInput {
   _ID_DESC
   EMAIL_ASC
   EMAIL_DESC
-  NAME_ASC
 }
 
 input UserUpdateInput {
+  uid_unset: Boolean
+  _id: ObjectId
   _id_unset: Boolean
   email: String
   email_unset: Boolean
   name: String
   name_unset: Boolean
   uid: ObjectId
-  uid_unset: Boolean
-  _id: ObjectId
 }
 
 input VoteMemeInput {
-  meme_id: ObjectId!
   user_id: ObjectId!
+  meme_id: ObjectId!
 }
