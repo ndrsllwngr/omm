@@ -8,7 +8,10 @@ import {
   useAutoPlayDispatch,
   useAutoPlayOrder,
 } from '@/components/context/autoplayContext'
-import { useSingleMemeContext } from '@/components/context/singlememeContext'
+import {
+  useSingleMemeContext,
+  useSingleMemeLoadingContext,
+} from '@/components/context/singlememeContext'
 import { IconBtn, ToggleIconBtn, ToggleStateIconBtn } from '@/components/ui/Buttons'
 import { SingleMeme } from '@/components/SingleMeme'
 import { AUTOPLAY_ORDER, VISIBILITY } from '@/lib/constants'
@@ -35,9 +38,13 @@ const FETCH_RANDOM_MEME = gql`
 
 export const Slideshow = ({ meme, sort }) => {
   const viewCount = useViewCount()
+  const { setPrev, setNext } = useSingleMemeContext()
+  const { setPrevIsLoading, setNextIsLoading } = useSingleMemeLoadingContext()
 
   useEffect(() => {
     viewCount.addView(meme._id)
+    setPrevIsLoading(true)
+    setNextIsLoading(true)
   }, [])
 
   useEffect(() => {
@@ -52,7 +59,9 @@ export const Slideshow = ({ meme, sort }) => {
 
   useEffect(() => {
     console.log({ src: 'Slideshow / PREV', dataPrev, errorPrev, loadingPrev })
-  }, [dataPrev, errorPrev, loadingPrev])
+    setNext(dataPrev && dataPrev.fetchMeme !== null ? dataPrev.fetchMeme : null)
+    setNextIsLoading(loadingPrev)
+  }, [dataPrev, errorPrev, loadingPrev, setNext, setNextIsLoading])
 
   const { loading: loadingNext, error: errorNext, data: dataNext } = useQuery(FETCH_MEME, {
     variables: { ...getNavigationQueryVariables({ meme, sortEnum: sort }), next: true },
@@ -62,7 +71,9 @@ export const Slideshow = ({ meme, sort }) => {
 
   useEffect(() => {
     console.log({ src: 'Slideshow / NEXT', dataNext, errorNext, loadingNext })
-  }, [dataNext, errorNext, loadingNext])
+    setNext(dataNext && dataNext.fetchMeme !== null ? dataNext.fetchMeme : null)
+    setNextIsLoading(loadingNext)
+  }, [dataNext, errorNext, loadingNext, setPrev, setPrevIsLoading])
 
   if (!meme) return <div className="flex flex-row justify-center">loading..</div>
   return (
@@ -78,8 +89,8 @@ export const Slideshow = ({ meme, sort }) => {
 
             <div className="flex flex-row">
               <AutoplayRandomButton meme={meme} sort={sort} />
-              {/* <AutoplaySortButton />
-              <AutoplayActionButton />*/}
+              <AutoplaySortButton />
+              <AutoplayActionButton />
             </div>
             <SlideshowButton
               name="next"
@@ -118,20 +129,20 @@ export const SlideshowButton = ({ name, changeSlide, disabled }) => {
 }
 
 export const AutoplayRandomButton = ({ meme, sort }) => {
+  const dispatch = useAutoPlayDispatch()
   const { loading, error, data } = useQuery(FETCH_RANDOM_MEME, {
     variables: getNavigationQueryVariables({ meme, sortEnum: sort }),
     notifyOnNetworkStatusChange: true,
     fetchPolicy: 'no-cache',
   })
 
-  // TODO stopAutoplay!
-  // const stopAutoplay = () => {
-  //   dispatch({ type: 'falseBool' })
-  // }
+  const stopAutoplay = () => {
+    dispatch({ type: 'falseBool' })
+  }
   return (
     <Link href={`/meme/${data && data.fetchRandomMeme?._id}`}>
       <a>
-        <IconBtn className={'mr-2'} disabled={!data}>
+        <IconBtn onClick={stopAutoplay} className={'mr-2'} disabled={!data}>
           <IoHelp size={28} className="fill-current" />
         </IconBtn>
       </a>
@@ -172,7 +183,7 @@ export const AutoplayActionButton = () => {
 
   return (
     <ToggleStateIconBtn
-      disabled={order === AUTOPLAY_ORDER.ORDERED && !(nextMeme && nextMeme.id)}
+      disabled={order === AUTOPLAY_ORDER.ORDERED && !(nextMeme && nextMeme._id)}
       className={'rounded-l-none'}
       onClick={
         !nextMeme && order !== AUTOPLAY_ORDER.RANDOM && state.bool ? stopAutoplay : switchAutoplay

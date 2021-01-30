@@ -63,8 +63,8 @@ export const AutoplayProvider = ({ children }) => {
             if (!nextIsLoading) {
               if (nextMeme) {
                 console.log('TRIGGER AUTOPLAY', state.bool)
-                if (nextMeme.id) {
-                  startAutoplay(nextMeme.id)
+                if (nextMeme._id) {
+                  startAutoplay(nextMeme._id)
                 }
               } else {
                 console.log('DISABLE AUTOPLAY, since no next meme was found!')
