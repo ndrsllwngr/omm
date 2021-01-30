@@ -73,7 +73,7 @@ const SingleViewInner = () => {
   // TODO set next and prev null? is this still needed?
   const { loading, error, data, networkStatus } = useQuery(CURRENT_MEME, {
     variables: { meme: router.query.id },
-    notifyOnNetworkStatusChange: true,
+    notifyOnNetworkStatusChange: false,
   })
 
   const loadingMoreMemes = networkStatus === NetworkStatus.fetchMore

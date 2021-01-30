@@ -9,48 +9,57 @@ import {
   useAutoPlayOrder,
 } from '@/components/context/autoplayContext'
 import { useSingleMemeContext } from '@/components/context/singlememeContext'
-import { useRandomMeme } from '@/components/hooks/useRandomMeme'
 import { IconBtn, ToggleIconBtn, ToggleStateIconBtn } from '@/components/ui/Buttons'
 import { SingleMeme } from '@/components/SingleMeme'
 import { AUTOPLAY_ORDER, VISIBILITY } from '@/lib/constants'
 import { IoHelp, IoPlay, IoPause, IoArrowForward, IoArrowBack, IoShuffle } from 'react-icons/io5'
 import { gql, useQuery } from '@apollo/client'
-import { DIRECTION, getNavigationQueryVariables } from '@/lib/utils'
+import { getNavigationQueryVariables } from '@/lib/utils'
+import { useViewCount } from '@/components/hooks/useViewCount'
 
-export const NEXT_MEME = gql`
-  query getNextMeme($query: MemeQueryInput, $sortBy: MemeSortByInput) {
-    memes(query: $query, sortBy: $sortBy, limit: 1) {
+const FETCH_MEME = gql`
+  query FetchMeme($memeId: ObjectId!, $conditions: String, $sorts: String, $next: Boolean) {
+    fetchMeme(input: { meme_id: $memeId, sorts: $sorts, conditions: $conditions, next: $next }) {
       _id
     }
   }
 `
 
-export const PREV_MEME = gql`
-  query getPreviousMeme($query: MemeQueryInput, $sortBy: MemeSortByInput) {
-    memes(query: $query, sortBy: $sortBy, limit: 1) {
+const FETCH_RANDOM_MEME = gql`
+  query FetchRandomMeme($memeId: ObjectId!, $conditions: String) {
+    fetchRandomMeme(input: { meme_id: $memeId, conditions: $conditions }) {
       _id
     }
   }
 `
 
 export const Slideshow = ({ meme, sort }) => {
+  const viewCount = useViewCount()
+
+  useEffect(() => {
+    viewCount.addView(meme._id)
+  }, [])
+
   useEffect(() => {
     console.log({ src: 'Slideshow / PROPS', meme, sort })
   }, [meme, sort])
-  const { loading: loadingPrev, error: errorPrev, data: dataPrev } = useQuery(PREV_MEME, {
-    variables: getNavigationQueryVariables({ direction: DIRECTION.PREV, meme, sortEnum: sort }),
+
+  const { loading: loadingPrev, error: errorPrev, data: dataPrev } = useQuery(FETCH_MEME, {
+    variables: { ...getNavigationQueryVariables({ meme, sortEnum: sort }), next: false },
     notifyOnNetworkStatusChange: true,
     fetchPolicy: 'no-cache',
   })
+
   useEffect(() => {
     console.log({ src: 'Slideshow / PREV', dataPrev, errorPrev, loadingPrev })
   }, [dataPrev, errorPrev, loadingPrev])
 
-  const { loading: loadingNext, error: errorNext, data: dataNext } = useQuery(NEXT_MEME, {
-    variables: getNavigationQueryVariables({ direction: DIRECTION.NEXT, meme, sortEnum: sort }),
+  const { loading: loadingNext, error: errorNext, data: dataNext } = useQuery(FETCH_MEME, {
+    variables: { ...getNavigationQueryVariables({ meme, sortEnum: sort }), next: true },
     notifyOnNetworkStatusChange: true,
     fetchPolicy: 'no-cache',
   })
+
   useEffect(() => {
     console.log({ src: 'Slideshow / NEXT', dataNext, errorNext, loadingNext })
   }, [dataNext, errorNext, loadingNext])
@@ -63,19 +72,19 @@ export const Slideshow = ({ meme, sort }) => {
           <>
             <SlideshowButton
               name="prev"
-              disabled={dataPrev && dataPrev.memes?.length <= 0}
-              changeSlide={dataPrev && dataPrev.memes?.length > 0 && dataPrev.memes[0]?._id}
+              disabled={dataPrev && dataPrev.fetchMeme === null}
+              changeSlide={dataPrev && dataPrev.fetchMeme && dataPrev.fetchMeme?._id}
             />
 
-            {/* <div className="flex flex-row">
-              <AutoplayRandomButton />
-              <AutoplaySortButton />
-              <AutoplayActionButton />
-            </div>*/}
+            <div className="flex flex-row">
+              <AutoplayRandomButton meme={meme} sort={sort} />
+              {/* <AutoplaySortButton />
+              <AutoplayActionButton />*/}
+            </div>
             <SlideshowButton
               name="next"
-              disabled={dataNext && dataNext.memes?.length <= 0}
-              changeSlide={dataNext && dataNext.memes?.length > 0 && dataNext.memes[0]?._id}
+              disabled={dataNext && dataNext.fetchMeme === null}
+              changeSlide={dataNext && dataNext.fetchMeme && dataNext.fetchMeme?._id}
             />
           </>
         )}
@@ -108,19 +117,24 @@ export const SlideshowButton = ({ name, changeSlide, disabled }) => {
   )
 }
 
-export const AutoplayRandomButton = () => {
-  const router = useRouter()
-  const { id } = useRandomMeme(router)
-  const dispatch = useAutoPlayDispatch()
+export const AutoplayRandomButton = ({ meme, sort }) => {
+  const { loading, error, data } = useQuery(FETCH_RANDOM_MEME, {
+    variables: getNavigationQueryVariables({ meme, sortEnum: sort }),
+    notifyOnNetworkStatusChange: true,
+    fetchPolicy: 'no-cache',
+  })
 
-  const stopAutoplay = () => {
-    dispatch({ type: 'falseBool' })
-  }
+  // TODO stopAutoplay!
+  // const stopAutoplay = () => {
+  //   dispatch({ type: 'falseBool' })
+  // }
   return (
-    <Link href={`/meme/${id}`}>
-      <IconBtn onClick={stopAutoplay} className={'mr-2'}>
-        <IoHelp size={28} className="fill-current" />
-      </IconBtn>
+    <Link href={`/meme/${data && data.fetchRandomMeme?._id}`}>
+      <a>
+        <IconBtn className={'mr-2'} disabled={!data}>
+          <IoHelp size={28} className="fill-current" />
+        </IconBtn>
+      </a>
     </Link>
   )
 }

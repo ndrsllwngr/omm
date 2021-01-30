@@ -10,7 +10,7 @@ const ADD_VIEW = gql`
   }
 `
 
-export const useViewCount = (updateCurrent = null) => {
+export const useViewCount = () => {
   const [addViewMutation] = useMutation(ADD_VIEW)
 
   const addView = (memeID) => {
@@ -25,12 +25,6 @@ export const useViewCount = (updateCurrent = null) => {
           msg: 'Added view',
           response: res,
         })
-        if (updateCurrent) {
-          updateCurrent((draft) => {
-            console.log({ draft })
-            draft.views = draft.views + 1
-          })
-        }
         cookieCutter.set(memeID, true, { expires: nextWeek })
       })
     }

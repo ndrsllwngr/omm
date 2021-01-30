@@ -30,7 +30,7 @@ export const useSingleMeme = () => {
     setCurrentIsLoading,
   } = useSingleMemeLoadingContext()
   const { sort } = useSortContext()
-  const viewCount = useViewCount(updateCurrent)
+  //const viewCount = useViewCount(updateCurrent)
 
   useEffect(() => {
     //console.info({ currentMeme, prevMeme, nextMeme })
@@ -315,7 +315,7 @@ export const useSingleMeme = () => {
               updateCurrent((_draft) => {
                 return { id: data.id, ...data.data() }
               })
-              viewCount.addView(data.id)
+              //viewCount.addView(data.id)
             }
           }
         })

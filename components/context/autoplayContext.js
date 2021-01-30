@@ -35,7 +35,7 @@ export const AutoplayProvider = ({ children }) => {
   const timeOut = useRef(null)
   const { nextMeme, currentMeme } = useSingleMemeContext()
   const { nextIsLoading, currentIsLoading } = useSingleMemeLoadingContext()
-  const { id } = useRandomMeme(router)
+  //const { id } = useRandomMeme(router)
 
   useEffect(() => {
     clearTimeout(timeOut.current)
@@ -74,7 +74,8 @@ export const AutoplayProvider = ({ children }) => {
           }
           break
         case AUTOPLAY_ORDER.RANDOM:
-          startAutoplay(id)
+          // TODO autoplay!
+          //startAutoplay(id)
           break
         default:
           console.log('Unsupported order', order)
