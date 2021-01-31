@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useEffect } from 'react'
 import { useTemplate } from '@/components/context/fabricContext'
 import { gql, NetworkStatus, useQuery } from '@apollo/client'
 
