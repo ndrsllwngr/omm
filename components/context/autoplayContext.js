@@ -32,8 +32,8 @@ export const AutoplayProvider = ({ children }) => {
   const [order, setOrder] = useState(AUTOPLAY_ORDER.ORDERED)
   const router = useRouter()
   const timeOut = useRef(null)
-  const { nextMeme, currentMeme } = useSingleMemeContext()
-  const { nextIsLoading, currentIsLoading } = useSingleMemeLoadingContext()
+  const { nextMeme, currentMeme, prevMeme } = useSingleMemeContext()
+  const { nextIsLoading, currentIsLoading, prevIsLoading } = useSingleMemeLoadingContext()
 
   useEffect(() => {
     clearTimeout(timeOut.current)
@@ -58,11 +58,11 @@ export const AutoplayProvider = ({ children }) => {
           // check if current meme finished loading
           if (!currentIsLoading && currentMeme) {
             // check if prev and next meme finished loading
-            if (!nextIsLoading) {
-              if (nextMeme) {
+            if (!prevIsLoading) {
+              if (prevMeme) {
                 console.log('TRIGGER AUTOPLAY', state.bool)
-                if (nextMeme._id) {
-                  startAutoplay(nextMeme._id)
+                if (prevMeme._id) {
+                  startAutoplay(prevMeme._id)
                 }
               } else {
                 console.log('DISABLE AUTOPLAY, since no next meme was found!')

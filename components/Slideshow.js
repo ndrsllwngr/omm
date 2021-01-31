@@ -62,9 +62,9 @@ export const Slideshow = ({ meme, sort, filter, yesterday }) => {
 
   useEffect(() => {
     console.log({ src: 'Slideshow / PREV', dataPrev, errorPrev, loadingPrev })
-    setNext(dataPrev && dataPrev.fetchMeme !== null ? dataPrev.fetchMeme : null)
-    setNextIsLoading(loadingPrev)
-  }, [dataPrev, errorPrev, loadingPrev, setNext, setNextIsLoading])
+    setPrev(dataPrev && dataPrev.fetchMeme !== null ? dataPrev.fetchMeme : null)
+    setPrevIsLoading(loadingPrev)
+  }, [dataPrev, errorPrev, loadingPrev, setPrev, setPrevIsLoading])
 
   const { loading: loadingNext, error: errorNext, data: dataNext } = useQuery(FETCH_MEME, {
     variables: {
@@ -79,7 +79,7 @@ export const Slideshow = ({ meme, sort, filter, yesterday }) => {
     console.log({ src: 'Slideshow / NEXT', dataNext, errorNext, loadingNext })
     setNext(dataNext && dataNext.fetchMeme !== null ? dataNext.fetchMeme : null)
     setNextIsLoading(loadingNext)
-  }, [dataNext, errorNext, loadingNext, setPrev, setPrevIsLoading])
+  }, [dataNext, errorNext, loadingNext, setNext, setNextIsLoading])
 
   if (!meme) return <div className="flex flex-row justify-center">loading..</div>
   return (
@@ -89,19 +89,19 @@ export const Slideshow = ({ meme, sort, filter, yesterday }) => {
           <>
             <SlideshowButton
               name="prev"
-              disabled={dataPrev && dataPrev.fetchMeme === null}
-              changeSlide={dataPrev && dataPrev.fetchMeme && dataPrev.fetchMeme?._id}
+              disabled={dataNext && dataNext.fetchMeme === null}
+              changeSlide={dataNext && dataNext.fetchMeme && dataNext.fetchMeme?._id}
             />
 
             <div className="flex flex-row">
-              <AutoplayRandomButton meme={meme} sort={sort} />
+              <AutoplayRandomButton meme={meme} sort={sort} filter={filter} yesterday={yesterday} />
               <AutoplaySortButton />
               <AutoplayActionButton />
             </div>
             <SlideshowButton
               name="next"
-              disabled={dataNext && dataNext.fetchMeme === null}
-              changeSlide={dataNext && dataNext.fetchMeme && dataNext.fetchMeme?._id}
+              disabled={dataPrev && dataPrev.fetchMeme === null}
+              changeSlide={dataPrev && dataPrev.fetchMeme && dataPrev.fetchMeme?._id}
             />
           </>
         )}
@@ -144,10 +144,10 @@ export const SlideshowButton = ({ name, changeSlide, disabled }) => {
   )
 }
 
-export const AutoplayRandomButton = ({ meme, sort }) => {
+export const AutoplayRandomButton = ({ meme, sort, filter, yesterday }) => {
   const dispatch = useAutoPlayDispatch()
   const { loading, error, data } = useQuery(FETCH_RANDOM_MEME, {
-    variables: getNavigationQueryVariables({ meme, sortEnum: sort }),
+    variables: getNavigationQueryVariables({ meme, sortEnum: sort, filterEnum: filter, yesterday }),
     notifyOnNetworkStatusChange: true,
     fetchPolicy: 'no-cache',
   })
@@ -195,7 +195,7 @@ export const AutoplaySortButton = () => {
 export const AutoplayActionButton = () => {
   const [state, dispatch] = useAutoPlayContext()
   const { order } = useAutoPlayOrder()
-  const { nextMeme } = useSingleMemeContext()
+  const { prevMeme } = useSingleMemeContext()
   const stopAutoplay = () => {
     dispatch({ type: 'falseBool' })
   }
@@ -205,10 +205,10 @@ export const AutoplayActionButton = () => {
 
   return (
     <ToggleStateIconBtn
-      disabled={order === AUTOPLAY_ORDER.ORDERED && !(nextMeme && nextMeme._id)}
+      disabled={order === AUTOPLAY_ORDER.ORDERED && !(prevMeme && prevMeme._id)}
       className={'rounded-l-none'}
       onClick={
-        !nextMeme && order !== AUTOPLAY_ORDER.RANDOM && state.bool ? stopAutoplay : switchAutoplay
+        !prevMeme && order !== AUTOPLAY_ORDER.RANDOM && state.bool ? stopAutoplay : switchAutoplay
       }
       toggleState={state.bool}
     >
