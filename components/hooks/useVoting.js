@@ -1,104 +1,88 @@
-import firebase from '@/lib/firebase'
+import { gql, useMutation } from '@apollo/client'
 import { useAuth } from '@/components/context/authContext'
-import { FIRESTORE_COLLECTION, VOTE } from '@/lib/constants'
+import { VOTE } from '@/lib/constants'
 
-export const useVoting = ({ updateMemes = null, updateMeme = null }) => {
+// TODO createdBy should be User
+// TODO remove width, height
+const UP_VOTE = gql`
+  mutation UpVoteMeme($meme_id: ObjectId!, $user_id: ObjectId!) {
+    upVoteMeme(input: { meme_id: $meme_id, user_id: $user_id }) {
+      _id
+      upVotes {
+        _id
+      }
+      downVotes {
+        _id
+      }
+      points
+    }
+  }
+`
+
+const DOWN_VOTE = gql`
+  mutation DownVoteMeme($meme_id: ObjectId!, $user_id: ObjectId!) {
+    downVoteMeme(input: { meme_id: $meme_id, user_id: $user_id }) {
+      _id
+      upVotes {
+        _id
+      }
+      downVotes {
+        _id
+      }
+      points
+    }
+  }
+`
+
+export const useVoting = () => {
+  const [upVoteMutation] = useMutation(UP_VOTE)
+  const [downVoteMutation] = useMutation(DOWN_VOTE)
+
   const auth = useAuth()
 
   const getVoteState = (meme) => {
-    if (auth.user && meme && meme.upVotes.includes(auth.user.uid)) {
+    if (
+      auth.getUser() &&
+      meme &&
+      meme.upVotes.some((user) => user._id.toString() === auth.getUser().id.toString())
+    ) {
       return VOTE.up
-    } else if (auth.user && meme && meme.downVotes.includes(auth.user.uid)) {
+    } else if (
+      auth.getUser() &&
+      meme &&
+      meme.downVotes.some((user) => user._id.toString() === auth.getUser().id.toString())
+    ) {
       return VOTE.down
     } else {
       return VOTE.none
     }
   }
 
-  const getTotalPoints = (meme) => {
-    return meme.upVotes.length - meme.downVotes.length
-  }
-
   const upVote = (meme) => {
-    if (getVoteState(meme) !== VOTE.up) {
-      const db = firebase.firestore()
-      const memeRef = db.collection(FIRESTORE_COLLECTION.MEMES).doc(meme.id)
-      db.runTransaction((transaction) => {
-        return transaction.get(memeRef).then((doc) => {
-          if (!doc.exists) {
-            console.error('DOC NOT FOUND')
-          }
-          transaction.update(memeRef, {
-            downVotes: firebase.firestore.FieldValue.arrayRemove(auth.user.uid),
+    if (auth.isAuthenticated()) {
+      upVoteMutation({ variables: { meme_id: meme._id, user_id: auth.getUser().id } }).then(
+        (res) => {
+          console.log({
+            msg: 'upVote',
+            response: res,
           })
-          transaction.update(memeRef, {
-            upVotes: firebase.firestore.FieldValue.arrayUnion(auth.user.uid),
-          })
-        })
-      })
-        .then(() => {
-          console.debug(`FIRESTORE_COLLECTION.MEMES`, 'WRITE', 'useVoting', 'upVote')
-          console.log('(UP) Transaction successfully committed!')
-          if (updateMemes) {
-            updateMemes((draft) => {
-              const index = draft.findIndex((el) => el.id === meme.id)
-              draft[index].downVotes = draft[index].downVotes.filter((el) => el !== auth.user.uid)
-              draft[index].upVotes.push(auth.user.uid)
-            })
-          }
-          if (updateMeme) {
-            updateMeme((draft) => {
-              draft.downVotes = draft.downVotes.filter((el) => el !== auth.user.uid)
-              draft.upVotes.push(auth.user.uid)
-            })
-          }
-        })
-        .catch((e) => {
-          console.error('(UP) Transaction failed: ', e)
-        })
+        }
+      )
     }
   }
 
   const downVote = (meme) => {
-    if (getVoteState(meme) !== VOTE.down) {
-      const db = firebase.firestore()
-      const memeRef = db.collection(FIRESTORE_COLLECTION.MEMES).doc(meme.id)
-      // Remove any possible upVotes first
-      db.runTransaction((transaction) => {
-        return transaction.get(memeRef).then((doc) => {
-          if (!doc.exists) {
-            console.error('DOC NOT FOUND')
-          }
-          transaction.update(memeRef, {
-            upVotes: firebase.firestore.FieldValue.arrayRemove(auth.user.uid),
+    if (auth.isAuthenticated()) {
+      downVoteMutation({ variables: { meme_id: meme._id, user_id: auth.getUser().id } }).then(
+        (res) => {
+          console.log({
+            msg: 'downVote',
+            response: res,
           })
-          transaction.update(memeRef, {
-            downVotes: firebase.firestore.FieldValue.arrayUnion(auth.user.uid),
-          })
-        })
-      })
-        .then(() => {
-          console.debug(`FIRESTORE_COLLECTION.MEMES`, 'WRITE', 'useVoting', 'downVote')
-          console.log('(DOWN) Transaction successfully committed!')
-          if (updateMemes) {
-            updateMemes((draft) => {
-              const index = draft.findIndex((el) => el.id === meme.id)
-              draft[index].upVotes = draft[index].upVotes.filter((el) => el !== auth.user.uid)
-              draft[index].downVotes.push(auth.user.uid)
-            })
-          }
-          if (updateMeme) {
-            updateMeme((draft) => {
-              draft.upVotes = draft.upVotes.filter((el) => el !== auth.user.uid)
-              draft.downVotes.push(auth.user.uid)
-            })
-          }
-        })
-        .catch((e) => {
-          console.error('(DOWN) Transaction failed: ', e)
-        })
+        }
+      )
     }
   }
 
-  return { upVote, downVote, getVoteState, getTotalPoints }
+  return { upVote, downVote, getVoteState }
 }

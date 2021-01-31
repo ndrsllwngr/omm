@@ -12,24 +12,20 @@ import { memeType } from '@/components/types/types'
 import { ShareButtons } from '@/components/ui/ShareButtons'
 import { TertiaryBtn, VoteDownBtn, VoteUpBtn } from '@/components/ui/Buttons'
 
-export const SingleMeme = ({ meme, enableLink, updateMemes, updateMeme }) => {
+export const SingleMeme = ({ meme, enableLink }) => {
   const { setJson } = useFabricJson()
   const router = useRouter()
-  const { upVote, downVote, getVoteState, getTotalPoints } = useVoting({ updateMemes, updateMeme })
+  const { upVote, downVote, getVoteState } = useVoting()
   return (
     <div className="flex-col max-w-md">
       <p className={'uppercase text-xs text-gray-600 dark:text-gray-300 font-medium'}>
-        {typeof meme.createdAt !== 'object'
-          ? formatDistance(new Date(meme.createdAt), new Date(), { addSuffix: true })
-          : formatDistance(new Date(meme.createdAt.toMillis()), new Date(), {
-              addSuffix: true,
-            })}
+        {formatDistance(new Date(meme.createdAt), new Date(), { addSuffix: true })}
         {meme.visibility && meme.visibility !== VISIBILITY.PUBLIC && (
           <span> - {meme.visibility}</span>
         )}
       </p>
       {enableLink ? (
-        <Link href={`/meme/${meme.id}`}>
+        <Link href={`/meme/${meme._id}`}>
           <a>
             <h1 className={'text-lg font-bold text-black dark:text-white truncate'}>
               {meme.title ? meme.title : 'Untitled'}
@@ -45,7 +41,7 @@ export const SingleMeme = ({ meme, enableLink, updateMemes, updateMeme }) => {
       )}
 
       {enableLink ? (
-        <Link href={`/meme/${meme.id}`}>
+        <Link href={`/meme/${meme._id}`}>
           <a>
             <MemeRenderer meme={meme} />
           </a>
@@ -54,7 +50,7 @@ export const SingleMeme = ({ meme, enableLink, updateMemes, updateMeme }) => {
         <MemeRenderer meme={meme} />
       )}
 
-      <ShareButtons id={meme.id} />
+      <ShareButtons id={meme._id} />
       <div className={'flex justify-between items-center'}>
         <TertiaryBtn
           onClick={() => {
@@ -66,8 +62,8 @@ export const SingleMeme = ({ meme, enableLink, updateMemes, updateMeme }) => {
         </TertiaryBtn>
         <div className={'flex space-x-1 justify-center items-center mt-1'}>
           <p className={'text-black dark:text-white text-center text-sm'}>
-            {getTotalPoints(meme)} point{Math.abs(getTotalPoints(meme)) !== 1 && 's'} · {meme.views}{' '}
-            view{Math.abs(meme.views) !== 1 && 's'}
+            {meme.points} point{Math.abs(meme.points) !== 1 && 's'} · {meme.views} view
+            {Math.abs(meme.views) !== 1 && 's'}
           </p>
           <VoteUpBtn disabled={getVoteState(meme) === VOTE.up} onClick={() => upVote(meme)}>
             <IoCaretUpOutline size={22} className={'fill-current inline-flex self-center'} />

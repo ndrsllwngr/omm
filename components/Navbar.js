@@ -95,35 +95,46 @@ const NavButtons = ({ className }) => {
 
   return (
     <>
-      {auth && auth.user ? (
+      {auth && auth.isAuthenticated() ? (
         <nav className={`flex flex-col md:flex-row md:items-center ${className}`}>
           <Link href={'/template'}>
-            <TertiaryBtn className={'w-full md:w-max justify-center my-2'} mono={true}>
-              Template
-            </TertiaryBtn>
+            <a>
+              <TertiaryBtn className={'w-full md:w-max justify-center my-2'} mono={true}>
+                Template
+              </TertiaryBtn>
+            </a>
           </Link>
           <Link href={'/create'}>
-            <PrimaryBtn className={'w-full md:w-max justify-center my-2'} mono={true}>
-              <IoCreate size={18} className={'fill-current inline-flex self-center mr-2'} /> Meme
-            </PrimaryBtn>
+            <a>
+              <PrimaryBtn className={'w-full md:w-max justify-center my-2'} mono={true}>
+                <IoCreate size={18} className={'fill-current inline-flex self-center mr-2'} /> Meme
+              </PrimaryBtn>
+            </a>
           </Link>
           <Link href={'/profile'}>
-            <TertiaryBtn className={'w-full md:w-max justify-center my-2'} mono={true}>
-              <IoPerson size={18} className={'fill-current inline-flex self-center mr-2'} /> Profile
-            </TertiaryBtn>
+            <a>
+              <TertiaryBtn className={'w-full md:w-max justify-center my-2'} mono={true}>
+                <IoPerson size={18} className={'fill-current inline-flex self-center mr-2'} />{' '}
+                Profile
+              </TertiaryBtn>
+            </a>
           </Link>
         </nav>
       ) : (
         <nav className={`flex flex-col md:flex-row md:items-center ${className}`}>
           <Link href={'/login'}>
-            <TertiaryBtn className={'w-full md:w-max justify-center my-2'} mono={true}>
-              <IoLogIn size={18} className={'fill-current inline-flex self-center mr-2'} /> Log in
-            </TertiaryBtn>
+            <a>
+              <TertiaryBtn className={'w-full md:w-max justify-center my-2'} mono={true}>
+                <IoLogIn size={18} className={'fill-current inline-flex self-center mr-2'} /> Log in
+              </TertiaryBtn>
+            </a>
           </Link>
           <Link href={'/signup'}>
-            <PrimaryBtn mono={true} className={'w-full md:w-max justify-center my-2'}>
-              Sign up
-            </PrimaryBtn>
+            <a>
+              <PrimaryBtn mono={true} className={'w-full md:w-max justify-center my-2'}>
+                Sign up
+              </PrimaryBtn>
+            </a>
           </Link>
         </nav>
       )}

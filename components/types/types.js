@@ -1,4 +1,4 @@
-import { shape, string, arrayOf, any, bool, number } from 'prop-types'
+import { shape, string, arrayOf, any, number } from 'prop-types'
 
 export const templateType = shape({
   id: string.isRequired,
@@ -27,31 +27,24 @@ export const userType = shape({
 
 // TODO add views count
 export const memeType = shape({
-  id: string.isRequired,
+  _id: string.isRequired,
   title: string.isRequired,
   createdAt: any.isRequired,
-  createdBy: string.isRequired,
+  createdBy: any.isRequired,
   upVotes: arrayOf(string).isRequired,
   downVotes: arrayOf(string).isRequired,
   forkedBy: arrayOf(string).isRequired,
   forkedFrom: string,
   views: number.isRequired,
   visibility: string.isRequired,
+  points: number.isRequired,
   template: shape({
     id: string,
     url: string.isRequired,
   }).isRequired,
   url: string, // if a real png was created (requirement)
   svg: string.isRequired,
-  json: shape({
-    background: string,
-    height: number,
-    width: number,
-    preserveObjectStacking: bool,
-    enableRetinaScaling: bool,
-    version: string,
-    objects: arrayOf(any),
-  }).isRequired,
+  json: string.isRequired,
 })
 
 // TODO atm these are identical

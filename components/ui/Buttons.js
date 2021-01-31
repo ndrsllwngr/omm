@@ -41,7 +41,7 @@ export const VoteDownBtn = ({ disabled = false, onClick, className: parentClass,
     <VoteBaseBtn
       className={`${
         disabled
-          ? 'text-red-500 border-red-500'
+          ? 'text-red-500 border-red-500 cursor-not-allowed'
           : `${voteBtnText} hover:text-red-200 dark:hover:text-red-200`
       } ${parentClass}`}
       disabled={disabled}
@@ -56,7 +56,7 @@ export const VoteUpBtn = ({ disabled = false, onClick, className: parentClass, c
     <VoteBaseBtn
       className={`${
         disabled
-          ? 'text-custom-green border-custom-green'
+          ? 'text-custom-green border-custom-green cursor-not-allowed'
           : `${voteBtnText} hover:text-green-200 dark:hover:text-green-200`
       } ${parentClass}`}
       disabled={disabled}

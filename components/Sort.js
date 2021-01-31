@@ -2,9 +2,8 @@ import React, { useRef } from 'react'
 import { useDetectOutsideClick } from '@/components/hooks/useDetectOutsideClick'
 import { useSortContext } from '@/components/context/viewsContext'
 import PropTypes from 'prop-types'
-import { useMemeReload } from '@/components/hooks/useMemeReload'
-import firebase from '@/lib/firebase'
-import { IoCloud } from 'react-icons/io5'
+// import firebase from '@/lib/firebase'
+// import { IoCloud } from 'react-icons/io5'
 import { SORT } from '@/lib/constants'
 //https://tailwindui.com/components/application-ui/elements/dropdowns
 //https://letsbuildui.dev/articles/building-a-dropdown-menu-component-with-react-hooks
@@ -25,7 +24,7 @@ export const Sort = ({ callback = null, enableNotification = false }) => {
   }
   return (
     <div className="flex justify-end items-center">
-      {enableNotification && <NewMemeNotification setSort={setSort} />}
+      {/*{enableNotification && <NewMemeNotification setSort={setSort} />}*/}
       <div className="flex relative">
         <button
           type="button"
@@ -117,34 +116,34 @@ Sort.propTypes = {
   enableNotification: PropTypes.bool,
 }
 
-const NewMemeNotification = ({ setSort }) => {
-  const {
-    showNewMemes,
-    setShowNewMemes,
-    setCounter,
-    setDate,
-    counter,
-    setReload,
-    reload,
-  } = useMemeReload()
-  if (!showNewMemes) return null
-  return (
-    <button
-      onClick={() => {
-        setReload(!reload)
-        setShowNewMemes(false)
-        setCounter(0)
-        setDate(firebase.firestore.Timestamp.now())
-        setSort(SORT.LATEST)
-      }}
-      className="text-custom-green uppercase font-semibold flex items-center mr-4"
-    >
-      <IoCloud size={18} className={'fill-current mr-2'} /> {counter} New Meme
-      {counter > 1 && 's'}
-    </button>
-  )
-}
-
-NewMemeNotification.propTypes = {
-  setSort: PropTypes.func,
-}
+// const NewMemeNotification = ({ setSort }) => {
+//   const {
+//     showNewMemes,
+//     setShowNewMemes,
+//     setCounter,
+//     setDate,
+//     counter,
+//     setReload,
+//     reload,
+//   } = useMemeReload()
+//   if (!showNewMemes) return null
+//   return (
+//     <button
+//       onClick={() => {
+//         setReload(!reload)
+//         setShowNewMemes(false)
+//         setCounter(0)
+//         setDate(firebase.firestore.Timestamp.now())
+//         setSort(SORT.LATEST)
+//       }}
+//       className="text-custom-green uppercase font-semibold flex items-center mr-4"
+//     >
+//       <IoCloud size={18} className={'fill-current mr-2'} /> {counter} New Meme
+//       {counter > 1 && 's'}
+//     </button>
+//   )
+// }
+//
+// NewMemeNotification.propTypes = {
+//   setSort: PropTypes.func,
+// }

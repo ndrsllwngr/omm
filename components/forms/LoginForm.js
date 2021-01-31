@@ -9,9 +9,14 @@ export default function LoginForm() {
   const router = useRouter()
 
   const onSubmit = (data) => {
-    return auth.signIn(data).then(() => {
-      router.push('/')
-    })
+    return auth
+      .loginEmailPassword(data)
+      .then((user) => {
+        console.log({ user })
+        router.push('/')
+      })
+      .catch((e) => console.error(e))
+      .finally(() => console.log('LOGIN'))
   }
   return (
     <form onSubmit={handleSubmit(onSubmit)}>

@@ -13,13 +13,13 @@ module.exports = {
     browser: true,
   },
   parserOptions: {
-    ecmaVersion: 2018,
+    ecmaVersion: 2020,
     sourceType: 'module',
     ecmaFeatures: {
       jsx: true,
     },
   },
-  ignorePatterns: ['/node_modules/**', '/build/**', '/out/**', '/.next/**'],
+  ignorePatterns: ['/node_modules/**', '/build/**', '/out/**', '/.next/**', '/lib/schema.graphql'],
   rules: {
     'no-unused-vars': ['warn', { args: 'none', argsIgnorePattern: 'req|res|next|val' }],
     'prettier/prettier': ['error'],

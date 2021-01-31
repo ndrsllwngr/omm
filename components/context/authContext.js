@@ -1,131 +1,56 @@
-import React, { useState, useEffect, createContext, useContext } from 'react'
+import React, { createContext, useContext } from 'react'
 import PropTypes from 'prop-types'
-import firebase from '@/lib/firebase'
-import { FIRESTORE_COLLECTION } from '@/lib/constants'
-import { useRouter } from 'next/router'
 import UnauthorizedPage from '@/pages/403'
+import * as Realm from 'realm-web'
+import { useRouter } from 'next/router'
+import { AUTH_PROVIDER } from 'lib/constants'
+import { useRealm } from '@/lib/realm'
 
 export const AuthContext = createContext({ user: null })
 
 export default function AuthContextComp({ children }) {
-  const [user, setUser] = useState(null)
-
   const router = useRouter()
 
-  const createUser = (user) => {
-    return firebase
-      .firestore()
-      .collection(FIRESTORE_COLLECTION.USERS)
-      .doc(user.uid)
-      .set(user)
-      .then(() => {
-        setUser(user)
-        return user
-      })
-      .catch((error) => {
-        return { error }
-      })
+  const app = useRealm()
+
+  const getUser = () => {
+    return isAuthenticated() ? app.currentUser : null
   }
-  const signUp = ({ name, email, password }) => {
-    return firebase
-      .auth()
-      .createUserWithEmailAndPassword(email, password)
-      .then((response) => {
-        //TODO do we want email verification?
-        firebase.auth().currentUser.sendEmailVerification()
-        return createUser({ uid: response.user.uid, email, name })
-      })
-      .catch((error) => {
-        return { error }
-      })
+
+  const register = ({ email, password }) => {
+    return app.emailPasswordAuth.registerUser(email, password)
   }
-  const signIn = ({ email, password }) => {
-    return firebase
-      .auth()
-      .setPersistence(firebase.auth.Auth.Persistence.LOCAL)
-      .then(() => {
-        firebase
-          .auth()
-          .signInWithEmailAndPassword(email, password)
-          .then((response) => {
-            getUserAdditionalData(response.user)
-            return response.user
-          })
-          .catch((error) => {
-            return { error }
-          })
-      })
-      .catch((error) => {
-        return { error }
-      })
+
+  // TODO maybe get custom data (refreshCustomData)
+  const loginEmailPassword = ({ email, password }) => {
+    // Create a user password credential
+    const credentials = Realm.Credentials.emailPassword(email, password)
+    return app.logIn(credentials)
+  }
+
+  const isAuthenticated = () => {
+    return app.currentUser != null && app.currentUser.providerType !== AUTH_PROVIDER.anon
   }
 
   const signOut = () => {
-    return firebase
-      .auth()
-      .signOut()
-      .then(() => {
-        setUser(null)
-        console.log('Signed out!')
-        router.push('/')
-      })
-  }
+    return (
+      app.currentUser
+        .logOut()
+        /* TODO not necessary (probably)
+      .then((_user) => {
 
-  const getUserAdditionalData = (user) => {
-    return firebase
-      .firestore()
-      .collection(FIRESTORE_COLLECTION.USERS)
-      .doc(user.uid)
-      .get()
-      .then((userData) => {
-        console.debug(
-          'FIRESTORE_COLLECTION.USERS',
-          'READ',
-          'AuthContextComp',
-          'getUserAdditionalData'
-        )
-        if (userData.data()) {
-          setUser(userData.data())
-        }
-      })
-  }
-
-  //Handle auth state changes
-  useEffect(() => {
-    const handleAuthStateChanged = (user) => {
-      console.log('handleAuthStateChanged: ' + user)
-      //setUser(user)
-      if (user) {
-        getUserAdditionalData(user)
-      } else {
-        setUser(null)
-      }
-    }
-
-    const unsub = firebase.auth().onAuthStateChanged(handleAuthStateChanged)
-
-    return () => unsub()
-  }, [])
-
-  // Handle updates of the user document
-  useEffect(() => {
-    if (user && user.uid) {
-      // Subscribe to user document on mount
-      const unsubscribe = db
-        .collection(FIRESTORE_COLLECTION.USERS)
-        .doc(user.uid)
-        .onSnapshot((doc) => {
-          console.debug(`FIRESTORE_COLLECTION.USERS`, 'READ', 'AuthContextComp', 'useEffect')
-          setUser(doc.data())
+        return loginAnon()
+      })*/
+        .then(() => {
+          router.push('/')
         })
-      return () => unsubscribe()
-    }
-    // TODO Evaluate the dependencies of this useEffect.
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
+    )
+  }
 
   return (
-    <AuthContext.Provider value={{ user, signUp, signIn, signOut }}>
+    <AuthContext.Provider
+      value={{ getUser, signOut, loginEmailPassword, register, isAuthenticated }}
+    >
       {children}
     </AuthContext.Provider>
   )
@@ -139,7 +64,7 @@ export const useAuth = () => useContext(AuthContext)
 
 export const ProtectedRoute = ({ children }) => {
   const auth = useAuth()
-  if (!auth.user) {
+  if (!auth.isAuthenticated()) {
     return <UnauthorizedPage />
   }
   return children

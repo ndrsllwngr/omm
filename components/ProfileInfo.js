@@ -9,7 +9,7 @@ export const ProfileInfo = () => {
   return (
     <div className={'flex justify-between justify-center items-center'}>
       <p className={'text-md dark:text-white text-black'}>
-        {auth.user.name} ({auth.user.email})
+        {auth.getUser().id} ({auth.getUser().profile.email})
       </p>
       <div className={'flex'}>
         <ThemeToggle className="inline-flex self-center mr-4 rounded-lg shadow-md hover:text-custom-green text-black dark:text-white" />

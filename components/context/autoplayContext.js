@@ -5,7 +5,6 @@ import {
   useSingleMemeContext,
   useSingleMemeLoadingContext,
 } from '@/components/context/singlememeContext'
-import { useRandomMeme } from '@/components/hooks/useRandomMeme'
 import { AUTOPLAY_ORDER } from '@/lib/constants'
 // https://kentcdodds.com/blog/how-to-use-react-context-effectively
 
@@ -33,9 +32,8 @@ export const AutoplayProvider = ({ children }) => {
   const [order, setOrder] = useState(AUTOPLAY_ORDER.ORDERED)
   const router = useRouter()
   const timeOut = useRef(null)
-  const { nextMeme, currentMeme } = useSingleMemeContext()
-  const { nextIsLoading, currentIsLoading } = useSingleMemeLoadingContext()
-  const { id } = useRandomMeme(router)
+  const { nextMeme, currentMeme, prevMeme } = useSingleMemeContext()
+  const { nextIsLoading, currentIsLoading, prevIsLoading } = useSingleMemeLoadingContext()
 
   useEffect(() => {
     clearTimeout(timeOut.current)
@@ -60,11 +58,11 @@ export const AutoplayProvider = ({ children }) => {
           // check if current meme finished loading
           if (!currentIsLoading && currentMeme) {
             // check if prev and next meme finished loading
-            if (!nextIsLoading) {
-              if (nextMeme) {
+            if (!prevIsLoading) {
+              if (prevMeme) {
                 console.log('TRIGGER AUTOPLAY', state.bool)
-                if (nextMeme.id) {
-                  startAutoplay(nextMeme.id)
+                if (prevMeme._id) {
+                  startAutoplay(prevMeme._id)
                 }
               } else {
                 console.log('DISABLE AUTOPLAY, since no next meme was found!')
@@ -74,7 +72,8 @@ export const AutoplayProvider = ({ children }) => {
           }
           break
         case AUTOPLAY_ORDER.RANDOM:
-          startAutoplay(id)
+          // TODO autoplay!
+          //startAutoplay(id)
           break
         default:
           console.log('Unsupported order', order)
