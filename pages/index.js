@@ -7,6 +7,7 @@ import { SingleMeme } from '@/components/SingleMeme'
 import { gql, NetworkStatus, useQuery } from '@apollo/client'
 import { useSortContext } from '@/components/context/viewsContext'
 import { translateSort } from '@/lib/utils'
+import { Filter } from '@/components/Filter'
 
 // https://github.com/danbovey/react-infinite-scroller
 // https://dzone.com/articles/fast-paging-with-mongodb
@@ -17,6 +18,7 @@ const LandingPage = () => {
       <HtmlHead />
       <Navbar />
       <div className={'max-w-7xl mx-auto mt-4'}>
+        <Filter />
         <Sort enableNotification={false} />
         <LandingPageInner sort={sort} />
       </div>

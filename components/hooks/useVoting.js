@@ -41,9 +41,17 @@ export const useVoting = () => {
   const auth = useAuth()
 
   const getVoteState = (meme) => {
-    if (auth.getUser() && meme && meme.upVotes.includes(auth.getUser().id)) {
+    if (
+      auth.getUser() &&
+      meme &&
+      meme.upVotes.some((user) => user._id.toString() === auth.getUser().id.toString())
+    ) {
       return VOTE.up
-    } else if (auth.getUser() && meme && meme.downVotes.includes(auth.getUser().id)) {
+    } else if (
+      auth.getUser() &&
+      meme &&
+      meme.downVotes.some((user) => user._id.toString() === auth.getUser().id.toString())
+    ) {
       return VOTE.down
     } else {
       return VOTE.none
