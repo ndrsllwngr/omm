@@ -18,8 +18,11 @@ const LandingPage = () => {
       <HtmlHead />
       <Navbar />
       <div className={'max-w-7xl mx-auto mt-4'}>
-        <Filter />
-        <Sort enableNotification={false} />
+        <div className={'flex flex-row justify-end'}>
+          <Filter />
+          <Sort enableNotification={false} />
+        </div>
+
         <LandingPageInner sort={sort} />
       </div>
     </>

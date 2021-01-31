@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import { FILTER } from '@/lib/constants'
 import { useFilterContext } from '@/components/context/viewsContext'
+import { SecondaryBtn, TertiaryBtn } from '@/components/ui/Buttons'
 
 //http://react.tips/radio-buttons-in-reactjs/
 export const Filter = () => {
@@ -12,7 +13,7 @@ export const Filter = () => {
 
   return (
     <div className="flex flex-row justify-end items-center">
-      <div className="radio">
+      <SecondaryBtn>
         <label>
           <input
             type="radio"
@@ -22,8 +23,9 @@ export const Filter = () => {
           />
           Hot
         </label>
-      </div>
-      <div className="radio">
+      </SecondaryBtn>
+
+      <SecondaryBtn>
         <label>
           <input
             type="radio"
@@ -33,8 +35,9 @@ export const Filter = () => {
           />
           Trending
         </label>
-      </div>
-      <div className="radio">
+      </SecondaryBtn>
+
+      <SecondaryBtn>
         <label>
           <input
             type="radio"
@@ -44,8 +47,9 @@ export const Filter = () => {
           />
           Fresh
         </label>
-      </div>
-      <div className="radio">
+      </SecondaryBtn>
+
+      <SecondaryBtn>
         <label>
           <input
             type="radio"
@@ -55,7 +59,7 @@ export const Filter = () => {
           />
           None
         </label>
-      </div>
+      </SecondaryBtn>
     </div>
   )
 }

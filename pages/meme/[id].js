@@ -12,13 +12,17 @@ import {
   useSingleMemeContext,
   useSingleMemeLoadingContext,
 } from '@/components/context/singlememeContext'
+import { Filter } from '@/components/Filter'
 
 export default function SingleView() {
   return (
     <>
       <Navbar />
       <div className={'max-w-7xl mx-auto mt-4'}>
-        <Sort />
+        <div className={'flex flex-row justify-end'}>
+          <Filter />
+          <Sort enableNotification={false} />
+        </div>
         <SingleViewInner />
       </div>
     </>
