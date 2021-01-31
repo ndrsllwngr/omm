@@ -7,7 +7,9 @@ export const ALL_TEMPLATES = gql`
     templates(query: {}, sortBy: CREATEDAT_DESC) {
       _id
       createdAt
-      createdBy
+      createdBy {
+        _id
+      }
       type
       img
       url
@@ -18,7 +20,6 @@ export const ALL_TEMPLATES = gql`
 `
 
 export const TemplateCollection = () => {
-  // TODO @NDRS
   const { loading, error, data, networkStatus } = useQuery(ALL_TEMPLATES, {
     variables: {},
     notifyOnNetworkStatusChange: true,
