@@ -36,7 +36,7 @@ const FETCH_RANDOM_MEME = gql`
   }
 `
 
-export const Slideshow = ({ meme, sort }) => {
+export const Slideshow = ({ meme, sort, filter, yesterday }) => {
   const viewCount = useViewCount()
   const { setPrev, setNext } = useSingleMemeContext()
   const { setPrevIsLoading, setNextIsLoading } = useSingleMemeLoadingContext()
@@ -52,7 +52,10 @@ export const Slideshow = ({ meme, sort }) => {
   }, [meme, sort])
 
   const { loading: loadingPrev, error: errorPrev, data: dataPrev } = useQuery(FETCH_MEME, {
-    variables: { ...getNavigationQueryVariables({ meme, sortEnum: sort }), next: false },
+    variables: {
+      ...getNavigationQueryVariables({ meme, sortEnum: sort, filterEnum: filter, yesterday }),
+      next: false,
+    },
     notifyOnNetworkStatusChange: true,
     fetchPolicy: 'no-cache',
   })
@@ -64,7 +67,10 @@ export const Slideshow = ({ meme, sort }) => {
   }, [dataPrev, errorPrev, loadingPrev, setNext, setNextIsLoading])
 
   const { loading: loadingNext, error: errorNext, data: dataNext } = useQuery(FETCH_MEME, {
-    variables: { ...getNavigationQueryVariables({ meme, sortEnum: sort }), next: true },
+    variables: {
+      ...getNavigationQueryVariables({ meme, sortEnum: sort, filterEnum: filter, yesterday }),
+      next: true,
+    },
     notifyOnNetworkStatusChange: true,
     fetchPolicy: 'no-cache',
   })

@@ -3,7 +3,7 @@ import { Slideshow } from '@/components/Slideshow'
 import { Navbar } from '@/components/Navbar'
 import { Sort } from '@/components/Sort'
 import { HtmlHead } from '@/components/HtmlHead'
-import { useSortContext } from '@/components/context/viewsContext'
+import { useFilterContext, useSortContext } from '@/components/context/viewsContext'
 import { gql, NetworkStatus, useQuery } from '@apollo/client'
 import { useRouter } from 'next/router'
 import { VISIBILITY } from '@/lib/constants'
@@ -70,6 +70,7 @@ const SingleViewInner = () => {
   const auth = useAuth()
   const router = useRouter()
   const { sort } = useSortContext()
+  const { filter, yesterday } = useFilterContext()
   const { updateCurrent } = useSingleMemeContext()
   const { setCurrentIsLoading } = useSingleMemeLoadingContext()
   // TODO increment viewCount @Andy
@@ -116,7 +117,7 @@ const SingleViewInner = () => {
       <HtmlHead
         title={`Meme · ${data && data.memes[0].title ? data.memes[0].title : 'Untitled'}`}
       />
-      <Slideshow meme={data.memes[0]} sort={sort} />
+      <Slideshow meme={data.memes[0]} sort={sort} filter={filter} yesterday={yesterday} />
     </>
   )
 }
