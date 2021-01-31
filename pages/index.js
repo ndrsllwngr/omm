@@ -5,14 +5,15 @@ import { Sort } from '@/components/Sort'
 import { SingleMeme } from '@/components/SingleMeme'
 // import InfiniteScroll from 'react-infinite-scroller'
 import { gql, NetworkStatus, useQuery } from '@apollo/client'
-import { useSortContext } from '@/components/context/viewsContext'
-import { translateSort } from '@/lib/utils'
+import { useFilterContext, useSortContext } from '@/components/context/viewsContext'
+import { translateFilter, translateSort } from '@/lib/utils'
 import { Filter } from '@/components/Filter'
 
 // https://github.com/danbovey/react-infinite-scroller
 // https://dzone.com/articles/fast-paging-with-mongodb
 const LandingPage = () => {
   const { sort } = useSortContext()
+  const { filter, yesterday } = useFilterContext()
   return (
     <>
       <HtmlHead />
@@ -23,15 +24,15 @@ const LandingPage = () => {
           <Sort enableNotification={false} />
         </div>
 
-        <LandingPageInner sort={sort} />
+        <LandingPageInner sort={sort} filter={filter} yesterday={yesterday} />
       </div>
     </>
   )
 }
 
 export const ALL_PUBLIC_MEMES_QUERY = gql`
-  query getAllPublicMemes($sortBy: MemeSortByInput) {
-    memes(query: { visibility: "PUBLIC" }, sortBy: $sortBy) {
+  query getAllPublicMemes($query: MemeQueryInput, $sortBy: MemeSortByInput) {
+    memes(query: $query, sortBy: $sortBy) {
       _id
       createdAt
       createdBy {
@@ -66,9 +67,9 @@ export const ALL_PUBLIC_MEMES_QUERY = gql`
 `
 
 // eslint-disable-next-line react/prop-types
-const LandingPageInner = ({ sort }) => {
+const LandingPageInner = ({ sort, filter, yesterday }) => {
   const { loading, error, data, networkStatus } = useQuery(ALL_PUBLIC_MEMES_QUERY, {
-    variables: { sortBy: translateSort(sort) },
+    variables: { query: translateFilter(filter, yesterday), sortBy: translateSort(sort) },
     notifyOnNetworkStatusChange: true,
   })
   const loadingMoreMemes = networkStatus === NetworkStatus.fetchMore
