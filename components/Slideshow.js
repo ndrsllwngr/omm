@@ -110,6 +110,16 @@ export const SlideshowButton = ({ name, changeSlide, disabled }) => {
   useEffect(() => {
     console.log({ src: 'SlideshowButton / PROPS', name, changeSlide, disabled })
   }, [name, changeSlide, disabled])
+  if (changeSlide === null || disabled)
+    return (
+      <IconBtn disabled={true}>
+        {name === 'prev' ? (
+          <IoArrowBack size={28} className={`fill-current`} />
+        ) : (
+          <IoArrowForward size={28} className={`fill-current`} />
+        )}
+      </IconBtn>
+    )
   return (
     <IconBtn
       disabled={disabled}
@@ -139,10 +149,16 @@ export const AutoplayRandomButton = ({ meme, sort }) => {
   const stopAutoplay = () => {
     dispatch({ type: 'falseBool' })
   }
+  if (data === null || (data && data.fetchRandomMeme?._id === undefined))
+    return (
+      <IconBtn className={'mr-2'} disabled={true}>
+        <IoHelp size={28} className="fill-current" />
+      </IconBtn>
+    )
   return (
     <Link href={`/meme/${data && data.fetchRandomMeme?._id}`}>
       <a>
-        <IconBtn onClick={stopAutoplay} className={'mr-2'} disabled={!data}>
+        <IconBtn onClick={stopAutoplay} className={'mr-2'}>
           <IoHelp size={28} className="fill-current" />
         </IconBtn>
       </a>
