@@ -65,7 +65,6 @@ export const CURRENT_MEME = gql`
   }
 `
 
-// eslint-disable-next-line react/prop-types
 const SingleViewInner = () => {
   const auth = useAuth()
   const router = useRouter()
@@ -82,7 +81,7 @@ const SingleViewInner = () => {
 
   useEffect(() => {
     setCurrentIsLoading(true)
-  }, [])
+  }, [setCurrentIsLoading])
 
   const loadingMoreMemes = networkStatus === NetworkStatus.fetchMore
 

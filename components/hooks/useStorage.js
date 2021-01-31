@@ -97,7 +97,7 @@ const useStorage = () => {
         .catch((e) => console.error(e))
         .finally(() => console.log('ADD TEMPLATE / EXTERNAL'))
     }
-  }, [file, auth, externalUrl])
+  }, [file, auth, externalUrl, insertOneTemplate])
 
   return { progress, error, setFile, setExternalUrl }
 }

@@ -1,4 +1,4 @@
-import React, { useState, useEffect, createContext, useContext } from 'react'
+import React, { createContext, useContext } from 'react'
 import PropTypes from 'prop-types'
 import UnauthorizedPage from '@/pages/403'
 import * as Realm from 'realm-web'

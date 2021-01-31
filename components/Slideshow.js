@@ -45,6 +45,8 @@ export const Slideshow = ({ meme, sort, filter, yesterday }) => {
     viewCount.addView(meme._id)
     setPrevIsLoading(true)
     setNextIsLoading(true)
+    // Only run once per meme
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   useEffect(() => {
@@ -146,7 +148,7 @@ export const SlideshowButton = ({ name, changeSlide, disabled }) => {
 
 export const AutoplayRandomButton = ({ meme, sort, filter, yesterday }) => {
   const dispatch = useAutoPlayDispatch()
-  const { loading, error, data } = useQuery(FETCH_RANDOM_MEME, {
+  const { data } = useQuery(FETCH_RANDOM_MEME, {
     variables: getNavigationQueryVariables({ meme, sortEnum: sort, filterEnum: filter, yesterday }),
     notifyOnNetworkStatusChange: true,
     fetchPolicy: 'no-cache',

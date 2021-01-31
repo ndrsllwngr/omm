@@ -19,7 +19,7 @@ module.exports = {
       jsx: true,
     },
   },
-  ignorePatterns: ['/node_modules/**', '/build/**', '/out/**', '/.next/**'],
+  ignorePatterns: ['/node_modules/**', '/build/**', '/out/**', '/.next/**', '/lib/schema.graphql'],
   rules: {
     'no-unused-vars': ['warn', { args: 'none', argsIgnorePattern: 'req|res|next|val' }],
     'prettier/prettier': ['error'],

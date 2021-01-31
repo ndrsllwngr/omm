@@ -101,8 +101,8 @@ mutation($todo: todos_insert_input!){
 // uses http://fabricjs.com/
 export const MemeEditor = () => {
   const router = useRouter()
-  const [insertOneMeme, { dataMeme }] = useMutation(ADD_MEME)
-  const [insertOneDraft, { dataDraft }] = useMutation(ADD_DRAFT)
+  const [insertOneMeme] = useMutation(ADD_MEME)
+  const [insertOneDraft] = useMutation(ADD_DRAFT)
   const { canvas, isCopy } = useFabricCanvas()
   const [imgURL, setImgURL] = useState('')
   const { template } = useTemplate()

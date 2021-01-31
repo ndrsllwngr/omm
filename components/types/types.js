@@ -1,4 +1,4 @@
-import { shape, string, arrayOf, any, bool, number } from 'prop-types'
+import { shape, string, arrayOf, any, number } from 'prop-types'
 
 export const templateType = shape({
   id: string.isRequired,
