@@ -5,7 +5,6 @@ import {
   useSingleMemeContext,
   useSingleMemeLoadingContext,
 } from '@/components/context/singlememeContext'
-import { useRandomMeme } from '@/components/hooks/useRandomMeme'
 import { AUTOPLAY_ORDER } from '@/lib/constants'
 // https://kentcdodds.com/blog/how-to-use-react-context-effectively
 
@@ -35,7 +34,6 @@ export const AutoplayProvider = ({ children }) => {
   const timeOut = useRef(null)
   const { nextMeme, currentMeme } = useSingleMemeContext()
   const { nextIsLoading, currentIsLoading } = useSingleMemeLoadingContext()
-  //const { id } = useRandomMeme(router)
 
   useEffect(() => {
     clearTimeout(timeOut.current)

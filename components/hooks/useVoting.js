@@ -1,8 +1,6 @@
-import firebase from '@/lib/firebase'
-import { useAuth } from '@/components/context/authContext'
-import { FIRESTORE_COLLECTION, VOTE } from '@/lib/constants'
-
 import { gql, useMutation } from '@apollo/client'
+import { useAuth } from '@/components/context/authContext'
+import { VOTE } from '@/lib/constants'
 
 // TODO createdBy should be User
 // TODO remove width, height
@@ -36,7 +34,7 @@ const DOWN_VOTE = gql`
   }
 `
 
-export const useVoting = ({ updateMemes = null, updateMeme = null }) => {
+export const useVoting = () => {
   const [upVoteMutation] = useMutation(UP_VOTE)
   const [downVoteMutation] = useMutation(DOWN_VOTE)
 
@@ -52,34 +50,14 @@ export const useVoting = ({ updateMemes = null, updateMeme = null }) => {
     }
   }
 
-  const getTotalPoints = (meme) => {
-    return meme.points
-  }
-
   const upVote = (meme) => {
     if (auth.isAuthenticated()) {
       upVoteMutation({ variables: { meme_id: meme._id, user_id: auth.getUser().id } }).then(
         (res) => {
           console.log({
-            msg: 'Upvoted',
+            msg: 'upVote',
             response: res,
           })
-          // TODO unsure how this works exactly
-          if (updateMemes) {
-            updateMemes((draft) => {
-              const index = draft.findIndex((el) => el.id === meme.id)
-              draft[index].downVotes = draft[index].downVotes.filter(
-                (el) => el !== auth.getUser().id
-              )
-              draft[index].upVotes.push(auth.getUser().id)
-            })
-          }
-          if (updateMeme) {
-            updateMeme((draft) => {
-              draft.downVotes = draft.downVotes.filter((el) => el !== auth.getUser().id)
-              draft.upVotes.push(auth.getUser().id)
-            })
-          }
         }
       )
     }
@@ -90,27 +68,13 @@ export const useVoting = ({ updateMemes = null, updateMeme = null }) => {
       downVoteMutation({ variables: { meme_id: meme._id, user_id: auth.getUser().id } }).then(
         (res) => {
           console.log({
-            msg: 'Dowvoted',
+            msg: 'downVote',
             response: res,
           })
-          // TODO unsure how this works exactly
-          if (updateMemes) {
-            updateMemes((draft) => {
-              const index = draft.findIndex((el) => el.id === meme.id)
-              draft[index].upVotes = draft[index].upVotes.filter((el) => el !== auth.getUser().id)
-              draft[index].downVotes.push(auth.getUser().id)
-            })
-          }
-          if (updateMeme) {
-            updateMeme((draft) => {
-              draft.upVotes = draft.upVotes.filter((el) => el !== auth.getUser().id)
-              draft.downVotes.push(auth.getUser().id)
-            })
-          }
         }
       )
     }
   }
 
-  return { upVote, downVote, getVoteState, getTotalPoints }
+  return { upVote, downVote, getVoteState }
 }

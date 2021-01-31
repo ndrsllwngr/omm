@@ -18,12 +18,7 @@ export default function SingleView() {
     <>
       <Navbar />
       <div className={'max-w-7xl mx-auto mt-4'}>
-        <Sort
-        /*callback={() => {
-            setPrev(null)
-            setNext(null)
-          }}*/
-        />
+        <Sort />
         <SingleViewInner />
       </div>
     </>
@@ -68,8 +63,6 @@ export const CURRENT_MEME = gql`
 
 // eslint-disable-next-line react/prop-types
 const SingleViewInner = () => {
-  /*const { currentMeme, setNext, setPrev } = useSingleMemeContext()
-  useSingleMeme()*/
   const auth = useAuth()
   const router = useRouter()
   const { sort } = useSortContext()

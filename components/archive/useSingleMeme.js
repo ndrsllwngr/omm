@@ -2,7 +2,7 @@ import { useEffect } from 'react'
 import firebase from '@/lib/firebase'
 import { SORT, FIRESTORE_COLLECTION, VISIBILITY } from '@/lib/constants'
 import { useSortContext } from '@/components/context/viewsContext'
-import { useViewCount } from '@/components/hooks/useViewCount'
+
 import {
   useSingleMemeContext,
   useSingleMemeLoadingContext,

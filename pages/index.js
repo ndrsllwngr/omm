@@ -9,6 +9,7 @@ import { useSortContext } from '@/components/context/viewsContext'
 import { translateSort } from '@/lib/utils'
 
 // https://github.com/danbovey/react-infinite-scroller
+// https://dzone.com/articles/fast-paging-with-mongodb
 const LandingPage = () => {
   const { sort } = useSortContext()
   return (

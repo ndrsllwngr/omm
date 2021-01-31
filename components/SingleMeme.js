@@ -12,10 +12,10 @@ import { memeType } from '@/components/types/types'
 import { ShareButtons } from '@/components/ui/ShareButtons'
 import { TertiaryBtn, VoteDownBtn, VoteUpBtn } from '@/components/ui/Buttons'
 
-export const SingleMeme = ({ meme, enableLink, updateMemes, updateMeme }) => {
+export const SingleMeme = ({ meme, enableLink }) => {
   const { setJson } = useFabricJson()
   const router = useRouter()
-  const { upVote, downVote, getVoteState } = useVoting({ updateMemes, updateMeme })
+  const { upVote, downVote, getVoteState } = useVoting()
   return (
     <div className="flex-col max-w-md">
       <p className={'uppercase text-xs text-gray-600 dark:text-gray-300 font-medium'}>
