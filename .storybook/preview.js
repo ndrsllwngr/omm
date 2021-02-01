@@ -13,7 +13,7 @@ import { ApolloWrapper } from "./apolloWrapper";
 addDecorator((story) => (
   <ApolloWrapper>
     <AuthProvider>
-      <ThemeProvider attribute="class" defaultTheme="system">
+      <ThemeProvider attribute="class">
         <SingleMemeProvider>
           <AutoplayProvider>
             <ViewsProvider>
