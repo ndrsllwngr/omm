@@ -22,7 +22,7 @@ export const Navbar = () => {
           <Link href={'/'} className="cursor-pointer ">
             <a className={'h-8 mr-2'}>
               <svg
-                height={'h-auto'}
+                className={'h-full'}
                 viewBox="0 0 1498 280"
                 fill="none"
                 xmlns="http://www.w3.org/2000/svg"
@@ -55,9 +55,8 @@ export const Navbar = () => {
           <div
             onClick={handleToggle}
             className="text-black hover:text-orange md:hidden text-white cursor-pointer"
-            href="#"
           >
-            <IoReorderThree size={48}></IoReorderThree>
+            <IoReorderThree size={48} />
           </div>
         </div>
         {/*EndLogo */}
