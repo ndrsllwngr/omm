@@ -1,136 +1,88 @@
-import React, { createContext, useContext, useEffect, useRef, useState } from 'react'
+import React, { createContext, useContext, useEffect, useRef, useState, useCallback } from 'react'
 import Proptypes from 'prop-types'
 import { useRouter } from 'next/router'
-import {
-  useSingleMemeContext,
-  useSingleMemeLoadingContext,
-} from '@/components/context/singlememeContext'
 import { AUTOPLAY_ORDER } from '@/lib/constants'
+
 // https://kentcdodds.com/blog/how-to-use-react-context-effectively
 
-export const AutoplayStateContext = createContext({})
-export const AutoplayDispatchContext = createContext({})
-export const AutoplayOrderContext = createContext({})
+const TIMEOUT_IN_MS = 3000
+export const AutoplayContext = createContext({})
 
-function boolReducer(state, action) {
-  switch (action.type) {
-    case 'toggleBool': {
-      return { bool: !state.bool }
-    }
-    case 'falseBool': {
-      return { bool: false }
-    }
-    default: {
-      throw new Error(`Unhandled action type: ${action.type}`)
-    }
-  }
-}
-
-//Exports the Provider himself
 export const AutoplayProvider = ({ children }) => {
-  const [state, dispatch] = React.useReducer(boolReducer, { bool: false })
+  const [isPlaying, setIsPlaying] = useState(false)
   const [order, setOrder] = useState(AUTOPLAY_ORDER.ORDERED)
   const router = useRouter()
   const timeOut = useRef(null)
-  const { nextMeme, currentMeme, prevMeme } = useSingleMemeContext()
-  const { nextIsLoading, currentIsLoading, prevIsLoading } = useSingleMemeLoadingContext()
+  const queuedNextId = useRef(null)
 
-  useEffect(() => {
+  const clearTimer = useCallback(() => {
     clearTimeout(timeOut.current)
-    if (state.bool) {
-      // console.log({
-      //   src: 'AUTOPLAY.useEffect',
-      //   prevMeme: prevMeme ? prevMeme.id : null,
-      //   currentMeme: currentMeme ? currentMeme.id : null,
-      //   nextMeme: nextMeme ? nextMeme.id : null,
-      //   prevIsLoading,
-      //   nextIsLoading,
-      //   currentIsLoading,
-      //   autoPlay: state.bool,
-      // })
-      const startAutoplay = (target) => {
+    queuedNextId.current = null
+  }, [timeOut])
+
+  const triggerNextSlide = useCallback(
+    (nextId) => {
+      if (!queuedNextId.current) {
+        console.log('triggerNextSlide', nextId)
+        queuedNextId.current = nextId
         timeOut.current = setTimeout(function () {
-          router.push(`/meme/${target}`)
-        }, 3000)
+          router
+            .push(`/meme/${nextId}`)
+            .then((r) => console.log('AUTOPLAY - NAVIGATE TO NEXT MEME', r))
+            .finally(() => (queuedNextId.current = null))
+        }, TIMEOUT_IN_MS)
       }
-      switch (order) {
-        case AUTOPLAY_ORDER.ORDERED:
-          // check if current meme finished loading
-          if (!currentIsLoading && currentMeme) {
-            // check if prev and next meme finished loading
-            if (!prevIsLoading) {
-              if (prevMeme) {
-                console.log('TRIGGER AUTOPLAY', state.bool)
-                if (prevMeme._id) {
-                  startAutoplay(prevMeme._id)
-                }
-              } else {
-                console.log('DISABLE AUTOPLAY, since no next meme was found!')
-                dispatch({ type: 'falseBool' })
-              }
-            }
-          }
-          break
-        case AUTOPLAY_ORDER.RANDOM:
-          // TODO autoplay!
-          //startAutoplay(id)
-          break
-        default:
-          console.log('Unsupported order', order)
-      }
+    },
+    [timeOut, router, queuedNextId]
+  )
+
+  const disableAutoplay = useCallback(() => {
+    setIsPlaying(false)
+    clearTimer()
+  }, [setIsPlaying, clearTimer])
+
+  const toggleAutoplay = useCallback(() => {
+    if (isPlaying) {
+      disableAutoplay()
+    } else {
+      setIsPlaying(true)
     }
-    // Intentionally, we were leaving 'router' out of the dependency array. Otherwise autoplay would executed even-though the route changed
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [nextMeme, state.bool, order, nextIsLoading])
+  }, [setIsPlaying, isPlaying, disableAutoplay])
 
   useEffect(() => {
     if (router.pathname !== '/meme/[id]') {
-      if (state.bool) {
+      if (isPlaying) {
         console.log('ROUTE CHANGED - DISABLE AUTOPLAY!')
-        dispatch({ type: 'falseBool' })
-        clearTimeout(timeOut.current)
+        disableAutoplay()
       }
     }
-  }, [router, state.bool])
+  }, [router, isPlaying, disableAutoplay])
 
   return (
-    <AutoplayOrderContext.Provider value={{ order, setOrder }}>
-      <AutoplayStateContext.Provider value={state}>
-        <AutoplayDispatchContext.Provider value={dispatch}>
-          {children}
-        </AutoplayDispatchContext.Provider>
-      </AutoplayStateContext.Provider>
-    </AutoplayOrderContext.Provider>
+    <AutoplayContext.Provider
+      value={{
+        order,
+        setOrder,
+        isPlaying,
+        toggleAutoplay,
+        disableAutoplay,
+        clearTimer,
+        triggerNextSlide,
+      }}
+    >
+      {children}
+    </AutoplayContext.Provider>
   )
 }
 
-//Exports Context as Alias with Error handling
-export const useAutoPlayOrder = () => {
-  const context = useContext(AutoplayOrderContext)
+export const useAutoplay = () => {
+  const context = useContext(AutoplayContext)
   if (!context) {
-    throw new Error(`useAutoPlayOrder must be used within a AutoplayProvider`)
+    throw new Error(`useAutoplay must be used within a AutoplayContext`)
   }
   return context
-}
-export const useAutoPlayState = () => {
-  const context = useContext(AutoplayStateContext)
-  if (!context) {
-    throw new Error(`useAutoPlayState must be used within a AutoplayProvider`)
-  }
-  return context
-}
-export const useAutoPlayDispatch = () => {
-  const context = useContext(AutoplayDispatchContext)
-  if (!context) {
-    throw new Error(`useAutoPlayDispatch must be used within a AutoplayProvider`)
-  }
-  return context
-}
-
-export function useAutoPlayContext() {
-  return [useAutoPlayState(), useAutoPlayDispatch()]
 }
 
 AutoplayProvider.propTypes = {
-  children: Proptypes.any,
+  children: Proptypes.element,
 }

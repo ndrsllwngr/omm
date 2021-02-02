@@ -8,10 +8,6 @@ import { gql, NetworkStatus, useQuery } from '@apollo/client'
 import { useRouter } from 'next/router'
 import { VISIBILITY } from '@/lib/constants'
 import { useAuth } from '@/components/context/authContext'
-import {
-  useSingleMemeContext,
-  useSingleMemeLoadingContext,
-} from '@/components/context/singlememeContext'
 import { Filter } from '@/components/Filter'
 
 export default function SingleView() {
@@ -70,26 +66,13 @@ const SingleViewInner = () => {
   const router = useRouter()
   const { sort } = useSortContext()
   const { filter, yesterday } = useFilterContext()
-  const { updateCurrent } = useSingleMemeContext()
-  const { setCurrentIsLoading } = useSingleMemeLoadingContext()
-  // TODO increment viewCount @Andy
-  // TODO set next and prev null? is this still needed?
+
   const { loading, error, data, networkStatus } = useQuery(CURRENT_MEME, {
     variables: { meme: router.query.id },
     notifyOnNetworkStatusChange: false,
   })
 
-  useEffect(() => {
-    setCurrentIsLoading(true)
-  }, [setCurrentIsLoading])
-
   const loadingMoreMemes = networkStatus === NetworkStatus.fetchMore
-
-  useEffect(() => {
-    console.log({ src: 'LandingPageInner', data, error, loading })
-    updateCurrent(() => (data && data.memes[0] !== null ? data.memes[0] : null))
-    setCurrentIsLoading(loading)
-  }, [data, error, loading, updateCurrent, setCurrentIsLoading])
 
   if (error) return <div>Error loading memes.</div>
   if (loading && !loadingMoreMemes)
