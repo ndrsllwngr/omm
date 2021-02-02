@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React from 'react'
 import { Slideshow } from '@/components/Slideshow'
 import { Navbar } from '@/components/Navbar'
 import { Sort } from '@/components/Sort'

@@ -19,7 +19,7 @@ import {
   // getActiveStyle,
 } from '@/components/meme-generator/FabricUtils'
 import { useImmer } from 'use-immer'
-import { FONT_FAMILY, SORT } from '@/lib/constants'
+import { FONT_FAMILY } from '@/lib/constants'
 import { useDetectOutsideClick } from '@/components/hooks/useDetectOutsideClick'
 
 const shadows = {
