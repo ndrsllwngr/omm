@@ -49,6 +49,13 @@ export const AutoplayProvider = ({ children }) => {
     }
   }, [setIsPlaying, isPlaying, disableAutoplay])
 
+  const toggleAutoplayOrder = useCallback(() => {
+    order === AUTOPLAY_ORDER.RANDOM
+      ? setOrder(AUTOPLAY_ORDER.ORDERED)
+      : setOrder(AUTOPLAY_ORDER.RANDOM)
+    clearTimer()
+  }, [order, setOrder, clearTimer])
+
   useEffect(() => {
     if (router.pathname !== '/meme/[id]') {
       if (isPlaying) {
@@ -68,6 +75,7 @@ export const AutoplayProvider = ({ children }) => {
         disableAutoplay,
         clearTimer,
         triggerNextSlide,
+        toggleAutoplayOrder,
       }}
     >
       {children}
