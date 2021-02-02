@@ -11,7 +11,6 @@ import { gql, useQuery } from '@apollo/client'
 import { getNavigationQueryVariables } from '@/lib/utils'
 import { useViewCount } from '@/components/hooks/useViewCount'
 import { memeType } from '@/components/types/types'
-import { SingleDraft } from '@/components/SingleDraft'
 
 const FETCH_MEME = gql`
   query FetchMeme($memeId: ObjectId!, $conditions: String, $sorts: String, $next: Boolean) {
@@ -111,9 +110,9 @@ Slideshow.propTypes = {
 }
 
 const MemeNavigation = ({ meme, prevMeme, nextMeme, loadingNext, randomMeme }) => {
-  useEffect(() => {
-    console.log({ src: 'MemeNavigation', meme, prevMeme, nextMeme, randomMeme })
-  }, [meme, prevMeme, nextMeme, randomMeme])
+  // useEffect(() => {
+  //   console.log({ src: 'MemeNavigation', meme, prevMeme, nextMeme, randomMeme })
+  // }, [meme, prevMeme, nextMeme, randomMeme])
   return (
     <>
       <SlideshowButton
