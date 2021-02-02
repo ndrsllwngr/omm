@@ -1,4 +1,3 @@
-/* eslint-disable  react/prop-types */
 import React, { useEffect } from 'react'
 import PropTypes from 'prop-types'
 import Link from 'next/link'
@@ -11,6 +10,8 @@ import { IoHelp, IoPlay, IoPause, IoArrowForward, IoArrowBack, IoShuffle } from 
 import { gql, useQuery } from '@apollo/client'
 import { getNavigationQueryVariables } from '@/lib/utils'
 import { useViewCount } from '@/components/hooks/useViewCount'
+import { memeType } from '@/components/types/types'
+import { SingleDraft } from '@/components/SingleDraft'
 
 const FETCH_MEME = gql`
   query FetchMeme($memeId: ObjectId!, $conditions: String, $sorts: String, $next: Boolean) {
@@ -101,36 +102,12 @@ export const Slideshow = ({ meme, sort, filter, yesterday }) => {
     </div>
   )
 }
-export const SlideshowButton = ({ name, changeSlide, disabled }) => {
-  const router = useRouter()
-  const { disableAutoplay } = useAutoplay()
 
-  if (changeSlide === null || disabled)
-    return (
-      <IconBtn disabled={true}>
-        {name === 'prev' ? (
-          <IoArrowBack size={28} className={`fill-current`} />
-        ) : (
-          <IoArrowForward size={28} className={`fill-current`} />
-        )}
-      </IconBtn>
-    )
-  return (
-    <IconBtn
-      disabled={disabled}
-      onClick={(e) => {
-        e.preventDefault()
-        router.push(changeSlide)
-        disableAutoplay()
-      }}
-    >
-      {name === 'prev' ? (
-        <IoArrowBack size={28} className={`fill-current`} />
-      ) : (
-        <IoArrowForward size={28} className={`fill-current`} />
-      )}
-    </IconBtn>
-  )
+Slideshow.propTypes = {
+  meme: memeType,
+  sort: PropTypes.string,
+  filter: PropTypes.string,
+  yesterday: PropTypes.string,
 }
 
 const MemeNavigation = ({ meme, prevMeme, nextMeme, loadingNext, randomMeme }) => {
@@ -142,7 +119,7 @@ const MemeNavigation = ({ meme, prevMeme, nextMeme, loadingNext, randomMeme }) =
       <SlideshowButton
         name="prev"
         disabled={!prevMeme?._id}
-        changeSlide={prevMeme?._id ? prevMeme._id : null}
+        targetMemeId={prevMeme?._id ? prevMeme._id : null}
       />
 
       <div className="flex flex-row">
@@ -157,10 +134,56 @@ const MemeNavigation = ({ meme, prevMeme, nextMeme, loadingNext, randomMeme }) =
       <SlideshowButton
         name="next"
         disabled={!nextMeme?._id}
-        changeSlide={nextMeme?._id ? nextMeme._id : null}
+        targetMemeId={nextMeme?._id ? nextMeme._id : null}
       />
     </>
   )
+}
+
+MemeNavigation.propTypes = {
+  meme: memeType,
+  prevMeme: memeType,
+  nextMeme: memeType,
+  loadingNext: PropTypes.bool,
+  randomMeme: memeType,
+}
+
+export const SlideshowButton = ({ name, targetMemeId, disabled }) => {
+  const router = useRouter()
+  const { disableAutoplay } = useAutoplay()
+
+  if (targetMemeId === null || disabled)
+    return (
+      <IconBtn disabled={true}>
+        {name === 'prev' ? (
+          <IoArrowBack size={28} className={`fill-current`} />
+        ) : (
+          <IoArrowForward size={28} className={`fill-current`} />
+        )}
+      </IconBtn>
+    )
+  return (
+    <IconBtn
+      disabled={disabled}
+      onClick={(e) => {
+        e.preventDefault()
+        router.push(targetMemeId)
+        disableAutoplay()
+      }}
+    >
+      {name === 'prev' ? (
+        <IoArrowBack size={28} className={`fill-current`} />
+      ) : (
+        <IoArrowForward size={28} className={`fill-current`} />
+      )}
+    </IconBtn>
+  )
+}
+
+SlideshowButton.propTypes = {
+  name: PropTypes.string,
+  targetMemeId: PropTypes.string,
+  disabled: PropTypes.bool,
 }
 
 export const RandomMemeButton = ({ randomMeme }) => {
@@ -184,15 +207,12 @@ export const RandomMemeButton = ({ randomMeme }) => {
   )
 }
 
+RandomMemeButton.propTypes = {
+  randomMeme: memeType,
+}
+
 export const AutoplaySortButton = () => {
-  const { order, setOrder } = useAutoplay()
-
-  const toggleAutoplayOrder = () => {
-    order === AUTOPLAY_ORDER.RANDOM
-      ? setOrder(AUTOPLAY_ORDER.ORDERED)
-      : setOrder(AUTOPLAY_ORDER.RANDOM)
-  }
-
+  const { order, toggleAutoplayOrder } = useAutoplay()
   return (
     <ToggleIconBtn
       type="button"
@@ -266,8 +286,8 @@ export const AutoplayActionButton = ({ nextMeme, randomMeme, loadingNext }) => {
   )
 }
 
-SlideshowButton.propTypes = {
-  name: PropTypes.string,
-  changeSlide: PropTypes.string,
-  disabled: PropTypes.bool,
+AutoplayActionButton.propTypes = {
+  nextMeme: memeType,
+  randomMeme: memeType,
+  loadingNext: PropTypes.bool,
 }
