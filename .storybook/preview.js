@@ -7,20 +7,17 @@ import AuthProvider from "@/components/context/authContext";
 import React from "react";
 import { AutoplayProvider } from "@/components/context/autoplayContext";
 import { ViewsProvider } from "@/components/context/viewsContext";
-import { SingleMemeProvider } from "@/components/context/singlememeContext";
 import { ApolloWrapper } from "./apolloWrapper";
 
 addDecorator((story) => (
   <ApolloWrapper>
     <AuthProvider>
       <ThemeProvider attribute="class">
-        <SingleMemeProvider>
           <AutoplayProvider>
             <ViewsProvider>
               <FabricProvider>{story()}</FabricProvider>
             </ViewsProvider>
           </AutoplayProvider>
-        </SingleMemeProvider>
       </ThemeProvider>
     </AuthProvider>
   </ApolloWrapper>
