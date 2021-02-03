@@ -28,9 +28,37 @@ import { gql, useLazyQuery } from '@apollo/client'
   }
 `*/
 export const FEED_SEARCH_QUERY = gql`
-  query FeedSearchQuery($filter: String!) {
+  query FeedSearchQuery($filter: String) {
     memes(query: { title: $filter }) {
       _id
+      createdAt
+      createdBy {
+        _id
+      }
+      downVotes {
+        _id
+      }
+      forkedBy {
+        _id
+      }
+      forkedFrom {
+        _id
+      }
+      json
+      svg
+      template {
+        id {
+          _id
+        }
+      }
+      title
+      upVotes {
+        _id
+      }
+      points
+      url
+      views
+      visibility
     }
   }
 `
@@ -39,11 +67,9 @@ export const Search = () => {
   const [searchFilter, setSearchFilter] = useState('')
   const [executeSearch, { data }] = useLazyQuery(FEED_SEARCH_QUERY)
 
-  /*  useEffect(() => {
-    console.log(searchFilter)
-    console.log('YEAH')
+  useEffect(() => {
     console.log(data)
-  }, [data, searchFilter])*/
+  }, [data])
 
   return (
     <form className={'mb-4 w-full md:mx-2 md:mb-0 md:w-1/4'}>
@@ -58,9 +84,12 @@ export const Search = () => {
       />
       <button
         className="h-2 w-2"
-        onClick={executeSearch({
-          variables: { filter: searchFilter },
-        })}
+        onClick={(e) => {
+          e.preventDefault()
+          executeSearch({
+            variables: { filter: searchFilter },
+          })
+        }}
       >
         Submit
       </button>
