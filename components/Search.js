@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { gql, useLazyQuery } from '@apollo/client'
+import { PrimaryBtn } from '@/components/ui/Buttons'
+import Link from 'next/link'
 
 /*const ALL_LINKS_SEARCH_QUERY = gql`
   query AllLinksSearchQuery($searchText: String!) {
@@ -62,7 +64,7 @@ export const FEED_SEARCH_QUERY = gql`
     }
   }
 `
-
+//https://github.com/howtographql/react-apollo/blob/master/src/components/Search.js
 export const Search = () => {
   const [searchFilter, setSearchFilter] = useState('')
   const [executeSearch, { data }] = useLazyQuery(FEED_SEARCH_QUERY)
@@ -72,27 +74,42 @@ export const Search = () => {
   }, [data])
 
   return (
-    <form className={'mb-4 w-full md:mx-2 md:mb-0 md:w-1/4'}>
-      <label className="hidden" htmlFor="search-form">
-        Search
-      </label>
-      <input
-        className="text-white border bg-custom-gray border-dotted stroke-dasharray: 6; focus:border-orange p-2 rounded-lg shadow-inner w-full"
-        placeholder="Search"
-        type="text"
-        onChange={(e) => setSearchFilter(e.target.value)}
-      />
-      <button
-        className="h-2 w-2"
-        onClick={(e) => {
-          e.preventDefault()
-          executeSearch({
-            variables: { filter: searchFilter },
-          })
-        }}
-      >
-        Submit
-      </button>
-    </form>
+    <div className={'relative mb-4 w-full md:mx-2 md:mb-0 md:w-1/4'}>
+      <form className={'flex flex-row'}>
+        {/*        <label className="hidden" htmlFor="search-form">
+          Search
+        </label>*/}
+        <input
+          className="flex-grow-2 text-white border bg-custom-gray border-dotted stroke-dasharray: 6; focus:border-orange p-2 rounded-lg shadow-inner w-full"
+          placeholder="Search"
+          type="text"
+          onChange={(e) => setSearchFilter(e.target.value)}
+        />
+        <PrimaryBtn
+          mono={true}
+          onClick={(e) => {
+            e.preventDefault()
+            executeSearch({
+              variables: { filter: searchFilter },
+            })
+          }}
+        >
+          Search
+        </PrimaryBtn>
+      </form>
+      <ul className={'absolute flex flex-col w-full rounded-xl bg-white'}>
+        {data &&
+          data.memes.map((meme, index) => {
+            return (
+              <li key={index} className={'p-2'}>
+                {meme.svg}
+                <Link href={meme._id}>
+                  <a>{meme.title}</a>
+                </Link>
+              </li>
+            )
+          })}
+      </ul>
+    </div>
   )
 }
