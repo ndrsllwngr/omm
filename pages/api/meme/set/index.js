@@ -1,8 +1,8 @@
-import firebase from '@/lib/firebaseNode'
-import tmp from 'tmp'
-import { writeMemeContentToImage } from '@/helpers/imageProcessing'
 import Archiver from 'archiver'
-import { FIRESTORE_COLLECTION } from '@/lib/constants'
+import { MONGODB_COLLECTION } from '@/lib/constants'
+import { getMongoDBClient } from '@/lib/mongoDB'
+import ObjectID from 'bson-objectid'
+import { fabric } from 'fabric'
 
 export default async function memeHandler(req, res) {
   const {
@@ -11,68 +11,60 @@ export default async function memeHandler(req, res) {
     method,
   } = req
 
-  // Initialize firebase variables
-  const db = firebase.firestore()
-  const memeCollection = db.collection(FIRESTORE_COLLECTION.MEMES)
-  const storage = firebase.storage().bucket()
+  // Initialize mongodb variables
+  const db = await getMongoDBClient()
+  const memeCollection = db.collection(MONGODB_COLLECTION.MEMES)
 
   switch (method) {
     case 'POST':
       // Get ids from request body
       const ids = req.body.ids
 
-      // Initialize empty list of meme image files
-      const tmpImgFiles = []
+      const objectIDs = ids.map((id) => {
+        return new ObjectID(id)
+      })
+      //TODO search params
+      const memes = await memeCollection.find({ _id: { $in: objectIDs } }).toArray()
+
+      if (memes.length <= 0) {
+        res.status(404).end('No memes matching the provided criteria found')
+        break
+      }
 
       // Initialize archiver
       let zip = Archiver('zip', {
         zlib: { level: 9 }, // Sets the compression level.
       })
+
       // Set headers for response
       res.setHeader('Content-Type', 'application/zip')
       res.setHeader('Content-disposition', 'attachment; filename=memes.zip')
       // Send the file to the route output.
       zip.pipe(res)
 
-      // Iterate over all ids passed in the route
-      for (let id of ids) {
-        // Get meme from Firestore
-        const meme = await memeCollection.doc(id).get()
-        console.debug(`FIRESTORE_COLLECTION.MEMES`, 'READ', '/set/')
-        // When meme doesn't exist return 404
-        if (!meme.exists) {
-          res.status(404).end(`Meme with id ${id} Not Found`)
-          return
-        }
+      const imageTasks = memes.map((meme) => {
+        return new Promise((resolve, reject) => {
+          const memeJSON = JSON.parse(meme.json)
+          const width = memeJSON.width
+          const height = memeJSON.height
 
-        // Get template from Firestore
-        const template = await meme.data().template.get()
-        const imgFileType = template.data().img.split('.').pop()
+          const canvas = new fabric.StaticCanvas(null, { width: width, height: height })
 
-        // Create temporary file
-        const tmpObj = tmp.fileSync({ postfix: `.${imgFileType}` })
-        // Add object to image files so it can later be removed
-        tmpImgFiles.push({
-          name: `${id}.${imgFileType}`,
-          file: tmpObj,
+          canvas.loadFromJSON(memeJSON, () => {
+            canvas.renderAll()
+
+            const stream = canvas.createPNGStream()
+            stream.on('end', resolve)
+            stream.on('error', reject)
+            zip.append(stream, { name: `${meme._id.toString()}.png` })
+          })
         })
-
-        // Download the file from the Firebase storage
-        await storage.file(template.data().img).download({
-          // Path to download the file to
-          destination: tmpObj.name,
-        })
-
-        // Write content on meme base img
-        await writeMemeContentToImage(tmpObj.name, meme.data().content)
-      }
-      tmpImgFiles.map((img) => zip.file(img.file.name, { name: img.name }))
-
+      })
       // Finalize stream
-      await zip.finalize()
+      Promise.all(imageTasks).then(() => {
+        zip.finalize()
+      })
 
-      // Remove temporary files
-      tmpImgFiles.map((img) => img.file.removeCallback())
       break
     default:
       res.setHeader('Allow', ['POST'])
