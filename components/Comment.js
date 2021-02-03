@@ -21,9 +21,14 @@ export const CommentInput = (meme) => {
           placeholder="Write a comment"
           style={{ fontFamily: FONT_FAMILY.COMIC_NEUE }}
           onChange={(e) => setText(e.target.value)}
-          defaultValue={''}
         />
-        <PrimaryBtn onClick={addComment(meme, text)}>Post</PrimaryBtn>
+        <PrimaryBtn
+          onClick={() => {
+            if (text !== '') addComment(meme, text)
+          }}
+        >
+          Post
+        </PrimaryBtn>
       </div>
     </div>
   )

@@ -31,6 +31,7 @@ export const useComments = () => {
 
   const addComment = (meme, text) => {
     if (auth.isAuthenticated()) {
+      console.log({ meme, text })
       addCommentMutation({
         variables: {
           meme_id: meme._id,

@@ -11,6 +11,7 @@ import { gql, useQuery } from '@apollo/client'
 import { getNavigationQueryVariables } from '@/lib/utils'
 import { useViewCount } from '@/components/hooks/useViewCount'
 import { memeType } from '@/components/types/types'
+import { Comment, CommentInput } from '@/components/Comment'
 
 const FETCH_MEME = gql`
   query FetchMeme($memeId: ObjectId!, $conditions: String, $sorts: String, $next: Boolean) {
@@ -98,6 +99,10 @@ export const Slideshow = ({ meme, sort, filter, yesterday }) => {
         )}
       </div>
       <SingleMeme meme={meme} />
+      <CommentInput meme={meme} />
+      {meme?.comments.map((comment, i) => (
+        <Comment comment={comment} key={i} />
+      ))}
     </div>
   )
 }
