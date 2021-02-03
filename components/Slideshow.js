@@ -89,7 +89,7 @@ export const Slideshow = ({ meme, sort, filter, yesterday }) => {
               prevMeme={dataPrev?.fetchMeme}
               nextMeme={dataNext?.fetchMeme}
               loadingNext={loadingNext}
-              randomMeme={randomMeme}
+              randomMeme={randomMeme?.fetchRandomMeme}
               sort={sort}
               filter={filter}
               yesterday={yesterday}
@@ -109,7 +109,7 @@ Slideshow.propTypes = {
   yesterday: PropTypes.string,
 }
 
-const MemeNavigation = ({ meme, prevMeme, nextMeme, loadingNext, randomMeme }) => {
+const MemeNavigation = ({ prevMeme, nextMeme, loadingNext, randomMeme }) => {
   // useEffect(() => {
   //   console.log({ src: 'MemeNavigation', meme, prevMeme, nextMeme, randomMeme })
   // }, [meme, prevMeme, nextMeme, randomMeme])
@@ -122,12 +122,12 @@ const MemeNavigation = ({ meme, prevMeme, nextMeme, loadingNext, randomMeme }) =
       />
 
       <div className="flex flex-row">
-        <RandomMemeButton randomMeme={randomMeme?.fetchRandomMeme} />
+        <RandomMemeButton randomMeme={randomMeme} />
         <AutoplaySortButton />
         <AutoplayActionButton
           nextMeme={!loadingNext && nextMeme?._id ? nextMeme : null}
           loadingNext={loadingNext}
-          randomMeme={randomMeme?.fetchRandomMeme}
+          randomMeme={randomMeme}
         />
       </div>
       <SlideshowButton
