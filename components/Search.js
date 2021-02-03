@@ -1,34 +1,10 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { gql, useLazyQuery } from '@apollo/client'
 import { PrimaryBtn } from '@/components/ui/Buttons'
 import Link from 'next/link'
+import { useDetectOutsideClick } from '@/components/hooks/useDetectOutsideClick'
+import { MemeRenderer } from '@/components/MemeRenderer'
 
-/*const ALL_LINKS_SEARCH_QUERY = gql`
-  query AllLinksSearchQuery($searchText: String!) {
-    allLinks(filter: {
-      OR: [{
-        url_contains: $searchText
-      }, {
-        description_contains: $searchText
-      }]
-    }) {
-      id
-      url
-      description
-      createdAt
-      postedBy {
-        id
-        name
-      }
-      votes {
-        id
-        user {
-          id
-        }
-      }
-    }
-  }
-`*/
 export const FEED_SEARCH_QUERY = gql`
   query FeedSearchQuery($filter: String) {
     memes(query: { title: $filter }) {
@@ -66,13 +42,11 @@ export const FEED_SEARCH_QUERY = gql`
 `
 //https://github.com/howtographql/react-apollo/blob/master/src/components/Search.js
 export const Search = () => {
+  const dropdownRef = useRef(null)
+  const [isActive, setIsActive] = useDetectOutsideClick(dropdownRef, false)
+
   const [searchFilter, setSearchFilter] = useState('')
   const [executeSearch, { data }] = useLazyQuery(FEED_SEARCH_QUERY)
-
-  useEffect(() => {
-    console.log(data)
-  }, [data])
-
   return (
     <div className={'relative mb-4 w-full md:mx-2 md:mb-0 md:w-1/4'}>
       <form className={'flex flex-row'}>
@@ -89,6 +63,7 @@ export const Search = () => {
           mono={true}
           onClick={(e) => {
             e.preventDefault()
+            setIsActive(true)
             executeSearch({
               variables: { filter: searchFilter },
             })
@@ -97,14 +72,19 @@ export const Search = () => {
           Search
         </PrimaryBtn>
       </form>
-      <ul className={'absolute flex flex-col w-full rounded-xl bg-white'}>
+      <ul ref={dropdownRef} className={'absolute flex flex-col w-full rounded-xl bg-white mt-1'}>
         {data &&
+          isActive &&
           data.memes.map((meme, index) => {
             return (
-              <li key={index} className={'p-2'}>
-                {meme.svg}
-                <Link href={meme._id}>
-                  <a>{meme.title}</a>
+              <li className={'p-2'} key={index}>
+                <Link href={`/meme/${meme._id}`}>
+                  <a className={'flex flex-row items-center'}>
+                    <div className="w-20 h-20 flex items-center">
+                      <MemeRenderer meme={meme} />
+                    </div>
+                    <p className="ml-2">{meme.title}</p>
+                  </a>
                 </Link>
               </li>
             )
