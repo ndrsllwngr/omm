@@ -2,15 +2,14 @@ import React, { useRef, useEffect } from 'react'
 import PropTypes from 'prop-types'
 import { select, axisBottom, axisRight, scaleLinear, scaleBand, scaleOrdinal } from 'd3'
 
-export const TemplateBargraph = ({ up, down, views }) => {
+export const TemplateBargraph = ({ up, down, views, totalViews }) => {
   const svgRef = useRef()
   // will be called initially and on every data change
   useEffect(() => {
     const test = [up, down, views]
     var yMax = Math.max(...test)
     let tickLabels = ['upVotes', 'downVotes', 'views']
-    console.log('max', yMax)
-    console.log('array', test)
+    console.log(totalViews)
 
     const svg = select(svgRef.current)
 
@@ -65,4 +64,5 @@ TemplateBargraph.propTypes = {
   up: PropTypes.number,
   down: PropTypes.number,
   views: PropTypes.number,
+  totalViews: PropTypes.number,
 }

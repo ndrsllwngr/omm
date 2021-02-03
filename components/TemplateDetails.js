@@ -4,23 +4,27 @@ import PropTypes from 'prop-types'
 import useFirestore from '@/components/hooks/useFirestore'
 import { FIRESTORE_COLLECTION } from '@/lib/constants'
 import { TemplateBargraph } from './TemplateBargraph'
+import { TemplateStackedBarChart } from '@/components/TemplateStackedBarChart'
 import Link from 'next/link'
 
 export const TemplateDetails = ({ templateID }) => {
   const [memesFromTemplate, setMemesFromTemplate] = useState([])
   const [upVotes, setUpVotes] = useState(0)
-  const [downVotes, setDownVotes] = useState([0])
-  const [views, setViews] = useState([0])
+  const [downVotes, setDownVotes] = useState(0)
+  const [views, setViews] = useState(0)
+  const [totalViews, setTotalViews] = useState(0)
   const { docs } = useFirestore(FIRESTORE_COLLECTION.MEMES)
 
   useEffect(() => {
     var ups = 0
     var downs = 0
     var vs = 0
+    var total = 0
     async function getMemesFromTemplate() {
       let memesFromTemplateIDs = []
       const datadocs = docs
       for (let i = 0; i < datadocs.length; i++) {
+        total += datadocs[i].views
         if (datadocs[i].template.id == templateID) {
           console.log('enter true templateid')
           memesFromTemplateIDs.push(datadocs[i])
@@ -37,6 +41,7 @@ export const TemplateDetails = ({ templateID }) => {
         setUpVotes(ups)
         setDownVotes(downs)
         setViews(vs)
+        setTotalViews(total)
         console.log('res: ', res)
         console.log('ups, downs, views:', ups, downs, vs)
       })
@@ -46,8 +51,12 @@ export const TemplateDetails = ({ templateID }) => {
   return (
     <div className="template-details">
       <div className="barchart">
-        Bar Chart
-        <TemplateBargraph up={upVotes} down={downVotes} views={views}></TemplateBargraph>
+        <TemplateStackedBarChart
+          ups={upVotes}
+          downs={downVotes}
+          templateViews={views}
+          totalViews={totalViews}
+        ></TemplateStackedBarChart>
       </div>
       <div className="memes-from-templates">
         {memesFromTemplate &&
