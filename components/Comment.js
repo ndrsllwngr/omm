@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import PropTypes from 'prop-types'
-import { PrimaryBtn, TertiaryBtn } from '@/components/ui/Buttons'
+import { PrimaryBtn } from '@/components/ui/Buttons'
 import formatDistance from 'date-fns/formatDistance'
 import { FONT_FAMILY } from '@/lib/constants'
 import { useComments } from '@/components/hooks/useComments'
