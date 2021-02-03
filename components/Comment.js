@@ -1,10 +1,14 @@
-import React from 'react'
+import React, { useState } from 'react'
 import PropTypes from 'prop-types'
-import { PrimaryBtn, TertiaryBtn } from '@/components/ui/Buttons'
+import { PrimaryBtn } from '@/components/ui/Buttons'
 import formatDistance from 'date-fns/formatDistance'
 import { FONT_FAMILY } from '@/lib/constants'
+import { useComments } from '@/components/hooks/useComments'
 
-export const CommentInput = () => {
+export const CommentInput = ({ meme }) => {
+  const [text, setText] = useState('')
+  const { addComment } = useComments()
+
   return (
     <div>
       <div className="flex overflow-visible my-2">
@@ -12,15 +16,26 @@ export const CommentInput = () => {
           id="about"
           name="about"
           rows={1}
+          value={text}
           className="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full p-2 border-gray-300 border rounded-md font-bold"
           placeholder="Write a comment"
           style={{ fontFamily: FONT_FAMILY.COMIC_NEUE }}
-          defaultValue={''}
+          onChange={(e) => setText(e.target.value)}
         />
-        <PrimaryBtn>Post</PrimaryBtn>
+        <PrimaryBtn
+          onClick={() => {
+            console.log({ myMeme: meme })
+            if (text !== '') addComment(meme, text)
+          }}
+        >
+          Post
+        </PrimaryBtn>
       </div>
     </div>
   )
+}
+CommentInput.propTypes = {
+  meme: PropTypes.any,
 }
 
 export const Comment = ({ comment }) => {
@@ -31,7 +46,9 @@ export const Comment = ({ comment }) => {
           'px-2 py-2 flex items-center sm:items-baseline text-gray-500 border-t border-l border-r border-gray-200 rounded-t-lg'
         }
       >
-        <span className={'font-bold mr-1 text-black dark:text-white'}>{comment.name}</span>{' '}
+        <span className={'font-bold mr-1 text-black dark:text-white'}>
+          {comment.createdBy.name}
+        </span>{' '}
         commented {formatDistance(new Date(comment.createdAt), new Date(), { addSuffix: true })}
       </h3>
       <p
@@ -40,7 +57,7 @@ export const Comment = ({ comment }) => {
         }
         style={{ fontFamily: FONT_FAMILY.COMIC_NEUE }}
       >
-        {comment.comment}
+        {comment.text}
       </p>
     </div>
   )
