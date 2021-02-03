@@ -5,7 +5,7 @@ import formatDistance from 'date-fns/formatDistance'
 import { FONT_FAMILY } from '@/lib/constants'
 import { useComments } from '@/components/hooks/useComments'
 
-export const CommentInput = (meme) => {
+export const CommentInput = ({ meme }) => {
   const [text, setText] = useState('')
   const { addComment } = useComments()
 
@@ -24,6 +24,7 @@ export const CommentInput = (meme) => {
         />
         <PrimaryBtn
           onClick={() => {
+            console.log({ myMeme: meme })
             if (text !== '') addComment(meme, text)
           }}
         >
@@ -32,6 +33,9 @@ export const CommentInput = (meme) => {
       </div>
     </div>
   )
+}
+CommentInput.propTypes = {
+  meme: PropTypes.any,
 }
 
 export const Comment = ({ comment }) => {

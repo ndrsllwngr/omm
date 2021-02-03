@@ -99,10 +99,12 @@ export const Slideshow = ({ meme, sort, filter, yesterday }) => {
         )}
       </div>
       <SingleMeme meme={meme} />
-      <CommentInput meme={meme} />
-      {meme?.comments.map((comment, i) => (
-        <Comment comment={comment} key={i} />
-      ))}
+      <div className={'flex flex-col space-y-2'}>
+        <CommentInput meme={meme} />
+        {meme?.comments.map((comment, i) => (
+          <Comment comment={comment} key={i} />
+        ))}
+      </div>
     </div>
   )
 }

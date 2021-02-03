@@ -1,6 +1,5 @@
 import { gql, useMutation } from '@apollo/client'
 import { useAuth } from '@/components/context/authContext'
-import { VOTE } from '@/lib/constants'
 
 const ADD_COMMENT = gql`
   mutation AddComment(
