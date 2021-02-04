@@ -1,11 +1,11 @@
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useCallback, useEffect, useRef, useState } from 'react'
 import ReactDOM from 'react-dom'
 import { gql, useLazyQuery } from '@apollo/client'
 import { PrimaryBtn } from '@/components/ui/Buttons'
 import Link from 'next/link'
 import { useDetectOutsideClick } from '@/components/hooks/useDetectOutsideClick'
 import { MemeRenderer } from '@/components/MemeRenderer'
-
+const TIMEOUT_IN_MS = 1000
 export const FEED_SEARCH_QUERY = gql`
   query FeedSearchQuery($filter: String) {
     memes(query: { title: $filter }) {
@@ -44,10 +44,18 @@ export const FEED_SEARCH_QUERY = gql`
 //https://github.com/howtographql/react-apollo/blob/master/src/components/Search.js
 export const Search = () => {
   const searchContainerRef = useRef(null)
+  const timeOut = useRef(undefined)
   const [isActive, setIsActive] = useDetectOutsideClick(searchContainerRef, false)
   const [executeSearch, { data }] = useLazyQuery(FEED_SEARCH_QUERY)
   const [searchFilter, setSearchFilter] = useState('')
 
+  const clearTimer = useCallback(() => {
+    clearTimeout(timeOut.current)
+  }, [timeOut])
+
+  useEffect(() => {
+    console.log({ SEARCHFILTER: searchFilter })
+  }, [searchFilter])
   useEffect(() => {
     if (isActive) {
       console.log('Searchfield active')
@@ -61,7 +69,7 @@ export const Search = () => {
         console.log({ DATA: data }, 'data available')
       }
     }
-  }, [isActive, data])
+  }, [isActive, data, searchFilter])
 
   return (
     <div ref={searchContainerRef} className={'relative mb-4 w-full md:mx-2 md:mb-0 md:w-1/4'}>
@@ -84,8 +92,20 @@ export const Search = () => {
             /*if (document.activeElement.contains(inputFieldRef.current)) {
 
             }*/
-            setSearchFilter(e.target.value)
+            console.log('here iam')
+            timeOut.current = setTimeout(function () {
+              console.log('but not inside')
+              setSearchFilter(e.target.value)
+            }, TIMEOUT_IN_MS)
           }}
+          onKeyDown={() => {
+            clearTimer()
+            console.log('Cleared')
+          }}
+          /*          onKeyUp={() => {
+            clearTimer()
+            console.log('Cleared')
+          }}*/
           onFocus={() => setIsActive(true)}
         />
         <PrimaryBtn
