@@ -56,6 +56,7 @@ const ADD_MEME = gql`
       json
       views
       points
+      commentCount
       createdBy {
         _id
       }
@@ -173,6 +174,7 @@ export const MemeEditor = () => {
     console.log('generateMeme', auth.getUser())
     const newObj = {
       title,
+      commentCount: 0,
       createdAt: new Date(),
       createdBy: { link: auth.getUser().id },
       visibility: visibility,
@@ -211,6 +213,7 @@ export const MemeEditor = () => {
     const svg = canvas.toSVG()
     const newObj = {
       title,
+      commentCount: 0,
       createdAt: new Date(),
       createdBy: { link: auth.getUser().id },
       visibility: visibility,

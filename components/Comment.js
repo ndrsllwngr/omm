@@ -47,7 +47,7 @@ export const Comment = ({ comment }) => {
         }
       >
         <span className={'font-bold mr-1 text-black dark:text-white'}>
-          {comment.createdBy.name}
+          {comment.createdBy?.name}
         </span>{' '}
         commented {formatDistance(new Date(comment.createdAt), new Date(), { addSuffix: true })}
       </h3>

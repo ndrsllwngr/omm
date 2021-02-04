@@ -8,6 +8,7 @@ export const FEED_SEARCH_QUERY = gql`
   query FeedSearchQuery($filter: String) {
     memes(query: { title: $filter }) {
       _id
+      commentCount
       createdAt
       createdBy {
         _id
