@@ -213,6 +213,7 @@ export const MemeEditor = () => {
     const svg = canvas.toSVG()
     const newObj = {
       title,
+      commentCount: 0,
       createdAt: new Date(),
       createdBy: { link: auth.getUser().id },
       visibility: visibility,
