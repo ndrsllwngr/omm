@@ -12,6 +12,7 @@ import { getNavigationQueryVariables } from '@/lib/utils'
 import { useViewCount } from '@/components/hooks/useViewCount'
 import { memeType } from '@/components/types/types'
 import { Comment, CommentInput } from '@/components/Comment'
+import { useAuth } from '@/components/context/authContext'
 
 const FETCH_MEME = gql`
   query FetchMeme($memeId: ObjectId!, $conditions: String, $sorts: String, $next: Boolean) {
@@ -31,7 +32,7 @@ const FETCH_RANDOM_MEME = gql`
 
 export const Slideshow = ({ meme, sort, filter, yesterday }) => {
   const viewCount = useViewCount()
-
+  const auth = useAuth()
   useEffect(() => {
     viewCount.addView(meme._id)
     // Only run once per meme
@@ -100,7 +101,7 @@ export const Slideshow = ({ meme, sort, filter, yesterday }) => {
       </div>
       <SingleMeme meme={meme} />
       <div className={'flex flex-col space-y-2'}>
-        <CommentInput meme={meme} />
+        {auth.isAuthenticated() && <CommentInput meme={meme} />}
         {meme?.comments.map((comment, i) => (
           <Comment comment={comment} key={i} />
         ))}
