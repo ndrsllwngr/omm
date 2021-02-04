@@ -42,7 +42,7 @@ export const FEED_SEARCH_QUERY = gql`
 //https://github.com/howtographql/react-apollo/blob/master/src/components/Search.js
 export const Search = () => {
   const searchContainerRef = useRef(null)
-  const timeOut = useRef(undefined)
+  const timeOut = useRef(null)
   const [isActive, setIsActive] = useDetectOutsideClick(searchContainerRef, false)
   const [executeSearch, { data }] = useLazyQuery(FEED_SEARCH_QUERY)
 
@@ -61,7 +61,6 @@ export const Search = () => {
           placeholder="Search"
           type="text"
           onChange={(e) => {
-            console.log('here iam')
             timeOut.current = setTimeout(function () {
               executeSearch({
                 variables: { filter: e.target.value },
