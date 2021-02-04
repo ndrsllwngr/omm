@@ -81,17 +81,7 @@ export const Search = () => {
           className="flex-grow-2 text-white border bg-custom-gray border-dotted stroke-dasharray: 6; focus:border-orange p-2 rounded-lg shadow-inner w-full"
           placeholder="Search"
           type="text"
-          /*onChange={(e) => {
-            if (document.activeElement === inputFieldRef.current) {
-              executeSearch({
-                variables: { filter: e.target.value },
-              })
-            }
-          }}*/
           onChange={(e) => {
-            /*if (document.activeElement.contains(inputFieldRef.current)) {
-
-            }*/
             console.log('here iam')
             timeOut.current = setTimeout(function () {
               console.log('but not inside')
@@ -102,10 +92,6 @@ export const Search = () => {
             clearTimer()
             console.log('Cleared')
           }}
-          /*          onKeyUp={() => {
-            clearTimer()
-            console.log('Cleared')
-          }}*/
           onFocus={() => setIsActive(true)}
         />
         <PrimaryBtn
