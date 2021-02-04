@@ -13,14 +13,11 @@ export default function SignupForm() {
     auth
       .register(data)
       .then((user) => {
-        console.log({ user })
-        router.push('/login')
+        console.log({ dbUser: user })
+        return router.push('/')
       })
       .catch((e) => console.error(e))
-      .finally(() => console.log('CREATE LOGIN'))
-    /*return auth.signUp(data).then((user) => {
-      router.push('/login')
-    })*/
+      .finally(() => console.log('Registration Successful'))
   }
 
   return (
