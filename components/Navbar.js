@@ -5,7 +5,6 @@ import { IoCreate, IoLogIn, IoPerson, IoReorderThree } from 'react-icons/io5'
 import PropTypes from 'prop-types'
 import { PrimaryBtn, TertiaryBtn } from '@/components/ui/Buttons'
 import { useDetectOutsideClick } from '@/components/hooks/useDetectOutsideClick'
-import { gql } from '@apollo/client'
 import { Search } from '@/components/Search'
 
 //https://tailwindcomponents.com/component/responsive-navbar-2
@@ -63,9 +62,7 @@ export const Navbar = () => {
         </div>
         {/*EndLogo */}
 
-        {/*Search */}
         <Search />
-        {/*End Search */}
 
         {/*Nav*/}
         <div ref={toggleRef}>
