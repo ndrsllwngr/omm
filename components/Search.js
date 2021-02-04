@@ -1,42 +1,16 @@
-import React, { useCallback, useRef } from 'react'
+import React, { useCallback, useEffect, useState, useRef } from 'react'
 import { gql, useLazyQuery } from '@apollo/client'
 import Link from 'next/link'
 import { useDetectOutsideClick } from '@/components/hooks/useDetectOutsideClick'
 import { MemeRenderer } from '@/components/MemeRenderer'
+import PropTypes from 'prop-types'
 const TIMEOUT_IN_MS = 1000
 export const FEED_SEARCH_QUERY = gql`
-  query FeedSearchQuery($filter: String) {
-    memes(query: { title: $filter }) {
+  query($search: String) {
+    searchMemesByTitle(input: $search) {
       _id
-      commentCount
-      createdAt
-      createdBy {
-        _id
-      }
-      downVotes {
-        _id
-      }
-      forkedBy {
-        _id
-      }
-      forkedFrom {
-        _id
-      }
-      json
-      svg
-      template {
-        id {
-          _id
-        }
-      }
       title
-      upVotes {
-        _id
-      }
-      points
-      url
-      views
-      visibility
+      svg
     }
   }
 `
@@ -52,8 +26,8 @@ export const Search = () => {
   }, [timeOut])
 
   return (
-    <div ref={searchContainerRef} className={'relative mb-4 w-full md:mx-2 md:mb-0 md:w-1/4'}>
-      <div className={'flex flex-row'}>
+    <div className={'relative mb-4 w-full md:mx-2 md:mb-0 md:w-1/4'}>
+      <div ref={searchContainerRef} className={'flex flex-row'}>
         <label className="hidden" htmlFor="search-form">
           Search
         </label>
@@ -62,11 +36,13 @@ export const Search = () => {
           placeholder="Search"
           type="text"
           onChange={(e) => {
-            timeOut.current = setTimeout(function () {
-              executeSearch({
-                variables: { filter: e.target.value },
-              })
-            }, TIMEOUT_IN_MS)
+            if (e.target.value.length > 0) {
+              timeOut.current = setTimeout(function () {
+                executeSearch({
+                  variables: { search: e.target.value },
+                })
+              }, TIMEOUT_IN_MS)
+            }
           }}
           onKeyDown={() => {
             clearTimer()
@@ -74,26 +50,29 @@ export const Search = () => {
           onFocus={() => setIsActive(true)}
         />
       </div>
-      <ul className={'absolute flex flex-col w-full rounded-xl bg-white mt-1'}>
-        {data && isActive && <SearchResultDropdown data={data} />}
-      </ul>
+      {data && isActive && <SearchResultDropdown data={data} />}
     </div>
   )
 }
 
 export const SearchResultDropdown = ({ data }) => {
-  return data.memes.map((meme, index) => {
-    return (
-      <li className={'p-2'} key={index}>
-        <Link href={`/meme/${meme._id}`}>
-          <a className={'flex flex-row items-center'}>
-            <div className="w-20 h-20 flex items-center">
-              <MemeRenderer meme={meme} />
-            </div>
-            <p className="ml-2">{meme.title}</p>
-          </a>
-        </Link>
-      </li>
-    )
-  })
+  return (
+    <ul className={'absolute flex flex-col w-full h-auto  rounded-xl bg-white mt-1'}>
+      {data.searchMemesByTitle.map((meme, index) => (
+        <li className={'p-2'} key={index}>
+          <Link href={`/meme/${meme._id}`}>
+            <a className={'flex flex-row items-center'}>
+              <div className="w-20 h-20 flex items-center">
+                <MemeRenderer meme={meme} />
+              </div>
+              <p className="ml-2">{meme.title}</p>
+            </a>
+          </Link>
+        </li>
+      ))}
+    </ul>
+  )
+}
+SearchResultDropdown.propTypes = {
+  data: PropTypes.any,
 }

@@ -1,9 +1,27 @@
-import React, { useRef } from 'react'
+import React, { useEffect, useRef } from 'react'
 import { useTemplateContext } from '@/components/context/viewsContext'
 import { useDetectOutsideClick } from '@/components/hooks/useDetectOutsideClick'
+import { gql, useQuery } from '@apollo/client'
 
-//http://react.tips/radio-buttons-in-reactjs/
+export const ALL_PUBLIC_TEMPLATES_QUERY = gql`
+  query getAllTemplates($query: MemeQueryInput, $sortBy: MemeSortByInput) {
+    memes(query: $query, sortBy: $sortBy) {
+      template {
+        url
+      }
+    }
+  }
+`
+
 export const TemplateFilter = () => {
+  const { loading, error, data, networkStatus } = useQuery(ALL_PUBLIC_TEMPLATES_QUERY, {
+    notifyOnNetworkStatusChange: true,
+  })
+
+  useEffect(() => {
+    console.log(data)
+  }, [data])
+
   const { template, setTemplate } = useTemplateContext()
 
   const dropdownRef = useRef(null)
@@ -61,6 +79,20 @@ export const TemplateFilter = () => {
               >
                 Test object
               </div>
+
+              {data.memes.map((template, index) => {
+                console.log({ URL: template.url })
+                return (
+                  <div
+                    key={index}
+                    onClick={() => handleTemplateChange(template)}
+                    className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900"
+                    role="menuitem"
+                  >
+                    <img className={'h-2 w-2'} src={template.url} />
+                  </div>
+                )
+              })}
             </div>
           </div>
         )}
