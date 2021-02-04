@@ -7,7 +7,16 @@ import PropTypes from 'prop-types'
 import { SORT } from '@/lib/constants'
 //https://tailwindui.com/components/application-ui/elements/dropdowns
 //https://letsbuildui.dev/articles/building-a-dropdown-menu-component-with-react-hooks
-export const Sort = ({ callback = null, enableNotification = false }) => {
+
+const supportedSorts = [
+  SORT.LATEST,
+  SORT.OLDEST,
+  SORT.MOST_VIEWED,
+  SORT.LEAST_VIEWED,
+  SORT.MOST_POINTS,
+  SORT.LEAST_POINTS,
+]
+export const Sort = ({ enableNotification = false }) => {
   const dropdownRef = useRef(null)
   const [isActive, setIsActive] = useDetectOutsideClick(dropdownRef, false)
   const onClick = () => setIsActive(!isActive)
@@ -16,9 +25,6 @@ export const Sort = ({ callback = null, enableNotification = false }) => {
   const handleClick = (newSort) => {
     setIsActive(false)
     if (newSort !== sort) {
-      if (callback) {
-        callback()
-      }
       setSort(newSort)
     }
   }
@@ -61,48 +67,18 @@ export const Sort = ({ callback = null, enableNotification = false }) => {
               aria-orientation="vertical"
               aria-labelledby="options-menu"
             >
-              <div
-                onClick={() => handleClick(SORT.LATEST)}
-                className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900"
-                role="menuitem"
-              >
-                {SORT.LATEST}
-              </div>
-              <div
-                onClick={() => handleClick(SORT.OLDEST)}
-                className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900"
-                role="menuitem"
-              >
-                {SORT.OLDEST}
-              </div>
-              <div
-                onClick={() => handleClick(SORT.MOST_VIEWED)}
-                className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900"
-                role="menuitem"
-              >
-                {SORT.MOST_VIEWED}
-              </div>
-              <div
-                onClick={() => handleClick(SORT.LEAST_VIEWED)}
-                className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900"
-                role="menuitem"
-              >
-                {SORT.LEAST_VIEWED}
-              </div>
-              <div
-                onClick={() => handleClick(SORT.MOST_POINTS)}
-                className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900"
-                role="menuitem"
-              >
-                {SORT.MOST_POINTS}
-              </div>
-              <div
-                onClick={() => handleClick(SORT.LEAST_POINTS)}
-                className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900"
-                role="menuitem"
-              >
-                {SORT.LEAST_POINTS}
-              </div>
+              {supportedSorts.map((sort, index) => {
+                return (
+                  <div
+                    key={index}
+                    onClick={() => handleClick(sort)}
+                    className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900"
+                    role="menuitem"
+                  >
+                    {sort}
+                  </div>
+                )
+              })}
             </div>
           </div>
         )}

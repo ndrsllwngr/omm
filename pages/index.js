@@ -8,6 +8,7 @@ import { gql, NetworkStatus, useQuery } from '@apollo/client'
 import { useFilterContext, useSortContext } from '@/components/context/viewsContext'
 import { translateFilter, translateSort } from '@/lib/utils'
 import { Filter } from '@/components/Filter'
+import { TemplateFilter } from '@/components/TemplateFilter'
 
 // https://github.com/danbovey/react-infinite-scroller
 // https://dzone.com/articles/fast-paging-with-mongodb
@@ -20,6 +21,7 @@ const LandingPage = () => {
       <Navbar />
       <div className={'max-w-7xl mx-auto mt-4'}>
         <div className={'flex flex-row justify-end'}>
+          <TemplateFilter />
           <Filter />
           <Sort enableNotification={false} />
         </div>
