@@ -25,7 +25,10 @@ export const CommentInput = ({ meme }) => {
         <PrimaryBtn
           onClick={() => {
             console.log({ myMeme: meme })
-            if (text !== '') addComment(meme, text)
+            if (text !== '') {
+              addComment(meme, text)
+              setText('')
+            }
           }}
         >
           Post
