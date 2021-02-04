@@ -1,7 +1,5 @@
-import React, { useCallback, useEffect, useRef, useState } from 'react'
-import ReactDOM from 'react-dom'
+import React, { useCallback, useRef } from 'react'
 import { gql, useLazyQuery } from '@apollo/client'
-import { PrimaryBtn } from '@/components/ui/Buttons'
 import Link from 'next/link'
 import { useDetectOutsideClick } from '@/components/hooks/useDetectOutsideClick'
 import { MemeRenderer } from '@/components/MemeRenderer'
@@ -47,36 +45,17 @@ export const Search = () => {
   const timeOut = useRef(undefined)
   const [isActive, setIsActive] = useDetectOutsideClick(searchContainerRef, false)
   const [executeSearch, { data }] = useLazyQuery(FEED_SEARCH_QUERY)
-  const [searchFilter, setSearchFilter] = useState('')
 
   const clearTimer = useCallback(() => {
     clearTimeout(timeOut.current)
   }, [timeOut])
 
-  useEffect(() => {
-    console.log({ SEARCHFILTER: searchFilter })
-  }, [searchFilter])
-  useEffect(() => {
-    if (isActive) {
-      console.log('Searchfield active')
-    } else {
-      console.log('Searchfield INACTIVE')
-    }
-    if (data) {
-      if (data.memes === undefined || data.memes.length == 0) {
-        console.log('NO DATA')
-      } else {
-        console.log({ DATA: data }, 'data available')
-      }
-    }
-  }, [isActive, data, searchFilter])
-
   return (
     <div ref={searchContainerRef} className={'relative mb-4 w-full md:mx-2 md:mb-0 md:w-1/4'}>
       <div className={'flex flex-row'}>
-        {/*        <label className="hidden" htmlFor="search-form">
+        <label className="hidden" htmlFor="search-form">
           Search
-        </label>*/}
+        </label>
         <input
           className="flex-grow-2 text-white border bg-custom-gray border-dotted stroke-dasharray: 6; focus:border-orange p-2 rounded-lg shadow-inner w-full"
           placeholder="Search"
@@ -84,37 +63,25 @@ export const Search = () => {
           onChange={(e) => {
             console.log('here iam')
             timeOut.current = setTimeout(function () {
-              console.log('but not inside')
-              setSearchFilter(e.target.value)
+              executeSearch({
+                variables: { filter: e.target.value },
+              })
             }, TIMEOUT_IN_MS)
           }}
           onKeyDown={() => {
             clearTimer()
-            console.log('Cleared')
           }}
           onFocus={() => setIsActive(true)}
         />
-        <PrimaryBtn
-          mono={true}
-          onClick={(e) => {
-            e.preventDefault()
-            executeSearch({
-              variables: { filter: searchFilter },
-            })
-            setIsActive(true)
-          }}
-        >
-          Search
-        </PrimaryBtn>
       </div>
       <ul className={'absolute flex flex-col w-full rounded-xl bg-white mt-1'}>
-        {data && isActive && <Dropdown data={data} />}
+        {data && isActive && <SearchResultDropdown data={data} />}
       </ul>
     </div>
   )
 }
 
-export const Dropdown = ({ data }) => {
+export const SearchResultDropdown = ({ data }) => {
   return data.memes.map((meme, index) => {
     return (
       <li className={'p-2'} key={index}>
