@@ -29,6 +29,7 @@ export const CURRENT_MEME = gql`
   query getCurrentMeme($meme: ObjectId) {
     memes(query: { _id: $meme }) {
       _id
+      commentCount
       comments {
         _id
         text
