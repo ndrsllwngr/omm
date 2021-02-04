@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import UnauthorizedPage from '@/pages/403'
 import * as Realm from 'realm-web'
 import { useRouter } from 'next/router'
-import { AUTH_PROVIDER, STORAGE_COLLECTION } from 'lib/constants'
+import { AUTH_PROVIDER } from 'lib/constants'
 import { useRealm } from '@/lib/realm'
 import { gql, useMutation } from '@apollo/client'
 
