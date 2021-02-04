@@ -6,14 +6,15 @@ import { SecondaryBtn } from '@/components/ui/Buttons'
 
 export const ProfileInfo = () => {
   const auth = useAuth()
+
   return (
     <div className={'flex justify-between justify-center items-center'}>
       <p className={'text-md dark:text-white text-black'}>
-        {auth.getUser().id} ({auth.getUser().profile.email})
+        {auth.getUser().customData.name} ({auth.getUser().profile.email})
       </p>
       <div className={'flex'}>
         <ThemeToggle className="inline-flex self-center mr-4 rounded-lg shadow-md hover:text-custom-green text-black dark:text-white" />
-        <SecondaryBtn onClick={auth.signOut}>
+        <SecondaryBtn onClick={() => auth.signOut()}>
           <IoLogOut size={18} className="fill-current inline-flex self-center mr-2" /> Log out
         </SecondaryBtn>
       </div>
