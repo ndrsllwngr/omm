@@ -34,6 +34,7 @@ export const ALL_PUBLIC_MEMES_QUERY = gql`
   query getAllPublicMemes($query: MemeQueryInput, $sortBy: MemeSortByInput) {
     memes(query: $query, sortBy: $sortBy) {
       _id
+      commentCount
       createdAt
       createdBy {
         _id
