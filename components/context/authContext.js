@@ -10,10 +10,10 @@ import { gql, useMutation } from '@apollo/client'
 const ADD_USER = gql`
   mutation AddUser($user: UserInsertInput!) {
     insertOneUser(data: $user) {
-      _id
       createdAt
       name
       email
+      uid
     }
   }
 `
@@ -39,10 +39,10 @@ export default function AuthContextComp({ children }) {
         return insertOneUser({
           variables: {
             user: {
-              _id: authUser.id,
               createdAt: new Date(),
               name: name,
               email: email,
+              uid: authUser.id.toString(),
             },
           },
         }).then((dbUser) => {
