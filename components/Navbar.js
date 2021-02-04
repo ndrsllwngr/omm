@@ -5,6 +5,7 @@ import { IoCreate, IoLogIn, IoPerson, IoReorderThree } from 'react-icons/io5'
 import PropTypes from 'prop-types'
 import { PrimaryBtn, TertiaryBtn } from '@/components/ui/Buttons'
 import { useDetectOutsideClick } from '@/components/hooks/useDetectOutsideClick'
+import { Search } from '@/components/Search'
 
 //https://tailwindcomponents.com/component/responsive-navbar-2
 export const Navbar = () => {
@@ -61,19 +62,7 @@ export const Navbar = () => {
         </div>
         {/*EndLogo */}
 
-        {/*Search */}
-        <form className={'mb-4 w-full md:mx-2 md:mb-0 md:w-1/4'}>
-          <label className="hidden" htmlFor="search-form">
-            Search
-          </label>
-          <input
-            className="text-white border bg-custom-gray border-dotted stroke-dasharray: 6; focus:border-orange p-2 rounded-lg shadow-inner w-full"
-            placeholder="Search"
-            type="text"
-          />
-          <button className="hidden">Submit</button>
-        </form>
-        {/*End Search */}
+        <Search />
 
         {/*Nav*/}
         <div ref={toggleRef}>
