@@ -5,20 +5,50 @@ import * as Realm from 'realm-web'
 import { useRouter } from 'next/router'
 import { AUTH_PROVIDER } from 'lib/constants'
 import { useRealm } from '@/lib/realm'
+import { gql, useMutation } from '@apollo/client'
+
+const ADD_USER = gql`
+  mutation AddUser($user: UserInsertInput!) {
+    insertOneUser(data: $user) {
+      createdAt
+      name
+      email
+      uid
+    }
+  }
+`
 
 export const AuthContext = createContext({ user: null })
 
 export default function AuthContextComp({ children }) {
+  const [insertOneUser] = useMutation(ADD_USER)
   const router = useRouter()
-
   const app = useRealm()
 
   const getUser = () => {
     return isAuthenticated() ? app.currentUser : null
   }
 
-  const register = ({ email, password }) => {
-    return app.emailPasswordAuth.registerUser(email, password)
+  const register = ({ name, email, password }) => {
+    return app.emailPasswordAuth
+      .registerUser(email, password)
+      .then(() => {
+        return loginEmailPassword({ email, password })
+      })
+      .then((authUser) => {
+        return insertOneUser({
+          variables: {
+            user: {
+              createdAt: new Date(),
+              name: name,
+              email: email,
+              uid: authUser.id.toString(),
+            },
+          },
+        }).then((dbUser) => {
+          return dbUser
+        })
+      })
   }
 
   // TODO maybe get custom data (refreshCustomData)
@@ -33,18 +63,9 @@ export default function AuthContextComp({ children }) {
   }
 
   const signOut = () => {
-    return (
-      app.currentUser
-        .logOut()
-        /* TODO not necessary (probably)
-      .then((_user) => {
-
-        return loginAnon()
-      })*/
-        .then(() => {
-          router.push('/')
-        })
-    )
+    return app.currentUser.logOut().then(() => {
+      return router.push('/')
+    })
   }
 
   return (
