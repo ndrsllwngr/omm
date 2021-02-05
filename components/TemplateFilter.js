@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { useTemplateContext } from '@/components/context/viewsContext'
 import { useDetectOutsideClick } from '@/components/hooks/useDetectOutsideClick'
 import { gql, useQuery } from '@apollo/client'
@@ -19,7 +19,7 @@ export const TemplateFilter = () => {
   })
 
   useEffect(() => {
-    console.log(data)
+    console.log({ DATA: data })
   }, [data])
 
   const { template, setTemplate } = useTemplateContext()
@@ -28,15 +28,20 @@ export const TemplateFilter = () => {
   const [isActive, setIsActive] = useDetectOutsideClick(dropdownRef, false)
   const onClick = () => setIsActive(!isActive)
 
+  const [selectedTemplate, setSelectedTemplate] = useState('')
+
   const handleTemplateChange = (newTemplate) => {
     if (template !== newTemplate) {
       setTemplate(newTemplate)
+      /*setSelectedTemplate(newTemplate)*/
+      setIsActive(false)
     }
   }
 
   return (
     <div className="flex flex-row justify-end items-center">
       <div className="flex relative">
+        <img className="h-8" src={template} />
         <button
           type="button"
           className="inline-flex justify-center w-full border-b-2 shadow-sm px-4 py-2 bg-transparent text-sm font-medium text-black dark:text-white focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-200 focus:ring-gray-200"
@@ -45,7 +50,7 @@ export const TemplateFilter = () => {
           aria-expanded="true"
           onClick={onClick}
         >
-          Template
+          Select Template
           {/* <!-- Heroicon name: chevron-down --> */}
           <svg
             className="-mr-1 ml-2 h-5 w-5"
@@ -67,29 +72,31 @@ export const TemplateFilter = () => {
             className="origin-top-right absolute right-0 mt-10 w-56 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 z-50"
           >
             <div
-              className="py-1"
+              className="py-1 h-80 overflow-auto"
               role="menu"
               aria-orientation="vertical"
               aria-labelledby="options-menu"
             >
               <div
-                onClick={() => handleTemplateChange(template)}
+                onClick={() => handleTemplateChange('')}
                 className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900"
                 role="menuitem"
               >
-                Test object
+                Reset
               </div>
 
-              {data.memes.map((template, index) => {
-                console.log({ URL: template.url })
+              {data.memes.map((meme, index) => {
+                console.log({ URL: meme.template?.url })
+
                 return (
                   <div
                     key={index}
-                    onClick={() => handleTemplateChange(template)}
+                    //setzt heir ne id rein
+                    onClick={() => handleTemplateChange(meme.template?.url)}
                     className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900"
                     role="menuitem"
                   >
-                    <img className={'h-2 w-2'} src={template.url} />
+                    <img className={'w-full'} src={meme.template?.url} />
                   </div>
                 )
               })}

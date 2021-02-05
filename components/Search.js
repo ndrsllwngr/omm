@@ -6,7 +6,7 @@ import { MemeRenderer } from '@/components/MemeRenderer'
 import PropTypes from 'prop-types'
 const TIMEOUT_IN_MS = 1000
 export const FEED_SEARCH_QUERY = gql`
-  query($search: String) {
+  query searchQuery($search: String) {
     searchMemesByTitle(input: $search) {
       _id
       title
@@ -36,13 +36,11 @@ export const Search = () => {
           placeholder="Search"
           type="text"
           onChange={(e) => {
-            if (e.target.value.length > 0) {
-              timeOut.current = setTimeout(function () {
-                executeSearch({
-                  variables: { search: e.target.value },
-                })
-              }, TIMEOUT_IN_MS)
-            }
+            timeOut.current = setTimeout(function () {
+              executeSearch({
+                variables: { search: e.target.value },
+              })
+            }, TIMEOUT_IN_MS)
           }}
           onKeyDown={() => {
             clearTimer()
