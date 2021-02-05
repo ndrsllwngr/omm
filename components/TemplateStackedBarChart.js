@@ -1,30 +1,36 @@
 import React, { useRef, useEffect, useState } from 'react'
 import PropTypes from 'prop-types'
 import { select, axisBottom, axisRight, scaleLinear, scaleBand, stack, max } from 'd3'
-import { useResizeObserver } from '@/components/useResizeObserver'
+//import { useResizeObserver } from '@/components/useResizeObserver'//
 
 export const TemplateStackedBarChart = ({ ups, downs, templateViews, totalViews }) => {
   const svgRef = useRef()
-  const wrapperRef = useRef()
-  const dimensions = useResizeObserver(wrapperRef)
-  const allKeys = ['upVotes', 'downVotes', 'templateViews', 'totalViews']
+  //const wrapperRef = useRef()
+  //const dimensions = useResizeObserver(wrapperRef)
+  const allKeys = ['upVotes', 'downVotes', 'templateViews', 'totalViewsWithoutCurrentMeme']
   const colors = {
     upVotes: 'steelblue',
     downVotes: 'rgba(198, 45, 205, 0.8)',
     templateViews: 'rgb(12,240,233)',
-    totalViews: 'rgb(51,102,255)',
+    totalViewsWithoutCurrentMeme: 'rgb(51,102,255)',
   }
   const [keys, setKeys] = useState(allKeys)
 
   useEffect(() => {
     const data = [
-      { type: 'Votes', upVotes: ups, downVotes: downs, templateViews: 0, totalViews: 0 },
+      {
+        type: 'Votes',
+        upVotes: ups,
+        downVotes: downs,
+        templateViews: 0,
+        totalViewsWithoutCurrentMeme: 0,
+      },
       {
         type: 'Views',
         upVotes: 0,
         downVotes: 0,
         templateViews: templateViews,
-        totalViews: totalViews,
+        totalViewsWithoutCurrentMeme: totalViews - templateViews,
       },
     ]
     console.log('votes,', ups)
@@ -32,7 +38,6 @@ export const TemplateStackedBarChart = ({ ups, downs, templateViews, totalViews 
     //const views = [{ templateviews: templateViews, totalViews: totalViews }]
     //const view_keys = ['templateViews', 'totalViews']
 
-    var yMax = totalViews
     const stackVotesGenerator = stack().keys(keys)
     //const stackViewsGenerator = stack().keys(view_keys)
     const layers = stackVotesGenerator(data)
@@ -77,7 +82,7 @@ export const TemplateStackedBarChart = ({ ups, downs, templateViews, totalViews 
 
   return (
     <div>
-      <div ref={wrapperRef} id="stackedBar">
+      <div id="stackedBar">
         <h2>Bar Chart</h2>
         <svg ref={svgRef}>
           <g className="x-axis" />
