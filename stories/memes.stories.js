@@ -9,8 +9,8 @@ export default {
   title: 'Memes',
 }
 
-export const memeSlideshow = () => {
-  return <Slideshow memes={memes} />
+export const overviewSort = () => {
+  return <Sort />
 }
 
 export const memeSlideshowButtons = () => {
@@ -22,6 +22,6 @@ export const memeSlideshowButtons = () => {
   )
 }
 
-export const overviewSort = () => {
-  return <Sort />
+export const memeSlideshow = () => {
+  return <Slideshow memes={memes} />
 }

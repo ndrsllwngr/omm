@@ -10,10 +10,16 @@ export default function SignupForm() {
   const router = useRouter()
 
   const onSubmit = (data) => {
-    return auth.signUp(data).then((user) => {
-      router.push('/login')
-    })
+    auth
+      .register(data)
+      .then((user) => {
+        console.log({ dbUser: user })
+        return router.push('/')
+      })
+      .catch((e) => console.error(e))
+      .finally(() => console.log('Registration Successful'))
   }
+
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
       <div className="rounded-md shadow-sm">

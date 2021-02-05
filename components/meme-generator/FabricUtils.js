@@ -235,5 +235,5 @@ export const getFontFamily = (object, canvas) => {
   return getActiveProp('fontFamily', object, canvas).toLowerCase()
 }
 export const setFontFamily = (value, object, canvas) => {
-  setActiveProp('fontFamily', value.toLowerCase(), canvas)
+  setActiveProp('fontFamily', value, canvas)
 }

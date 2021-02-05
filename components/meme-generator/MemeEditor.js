@@ -1,23 +1,109 @@
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import { fabric } from 'fabric'
 import SVG from 'react-inlinesvg'
 import { FabricCanvas } from '@/components/meme-generator/FabricCanvas'
 import { TextToolbar } from '@/components/meme-generator/TextToolbar'
 import { useFabricCanvas, useTemplate } from '@/components/context/fabricContext'
-import { useMemeUpload } from '@/components/hooks/useMemeUpload'
 import { ImageToolbar } from '@/components/meme-generator/ImageToolbar'
 import { useRouter } from 'next/router'
 import { useAuth } from '@/components/context/authContext'
 import { SORT, VISIBILITY } from '@/lib/constants'
-import { useDraftUpload } from '@/components/hooks/useDraftUpload'
 import PropTypes from 'prop-types'
 import { useSortContext } from '@/components/context/viewsContext'
+import { gql, useMutation } from '@apollo/client'
+
+const ADD_DRAFT = gql`
+  mutation AddMeme($draft: DraftInsertInput!) {
+    insertOneDraft(data: $draft) {
+      url
+      json
+      views
+      points
+      createdBy {
+        _id
+      }
+      downVotes {
+        _id
+      }
+      upVotes {
+        _id
+      }
+      _id
+      createdAt
+      title
+      visibility
+      forkedFrom {
+        _id
+      }
+      forkedBy {
+        _id
+      }
+      template {
+        id {
+          _id
+        }
+        url
+      }
+      svg
+    }
+  }
+`
+
+const ADD_MEME = gql`
+  mutation AddMeme($meme: MemeInsertInput!) {
+    insertOneMeme(data: $meme) {
+      url
+      json
+      views
+      points
+      commentCount
+      createdBy {
+        _id
+      }
+      downVotes {
+        _id
+      }
+      upVotes {
+        _id
+      }
+      _id
+      createdAt
+      title
+      visibility
+      forkedFrom {
+        _id
+      }
+      forkedBy {
+        _id
+      }
+      template {
+        id {
+          _id
+        }
+        url
+      }
+      svg
+    }
+  }
+`
+
+/*
+# The parameterised GraphQL mutation
+mutation($todo: todos_insert_input!){
+  insert_todos(objects: [$todo]) {
+    returning {
+      id
+    }
+  }
+}*/
 
 // inspired by https://github.com/aprilescobar/fabric.js-intro
 // inspired by https://github.com/saninmersion/react-context-fabricjs
 // uses http://fabricjs.com/
 export const MemeEditor = () => {
   const router = useRouter()
+  const [insertOneMeme] = useMutation(ADD_MEME)
+  const [insertOneDraft] = useMutation(ADD_DRAFT)
   const { canvas, isCopy } = useFabricCanvas()
   const [imgURL, setImgURL] = useState('')
   const { template } = useTemplate()
@@ -26,8 +112,6 @@ export const MemeEditor = () => {
   const [svgExport, setSvgExport] = useState('')
   const [jsonExport, setJsonExport] = useState({})
   const [previewMode, setPreviewMode] = useState(false)
-  const [loading, success, error, setData] = useMemeUpload()
-  const [loadingDraft, successDraft, errorDraft, setDataDraft] = useDraftUpload()
   const { setSort } = useSortContext()
   const auth = useAuth()
 
@@ -87,26 +171,35 @@ export const MemeEditor = () => {
       'enableRetinaScaling',
     ])
     const svg = canvas.toSVG()
+    console.log('generateMeme', auth.getUser())
     const newObj = {
       title,
-      // createdAt is added during insert
-      createdBy: auth.user.uid,
+      commentCount: 0,
+      createdAt: new Date(),
+      createdBy: { link: auth.getUser().id },
       visibility: visibility,
-      upVotes: [],
-      downVotes: [],
-      forkedBy: [],
-      forkedFrom: isCopy,
+      upVotes: { link: [] },
+      downVotes: { link: [] },
+      forkedBy: { link: [] },
+      points: 0,
       views: 0,
+      forkedFrom: isCopy ? { link: isCopy } : null,
       template: {
         id: template.id ? template.id : null,
         url: template.url,
       },
       url: '', // TODO if a real png was created (requirement)
       svg,
-      json: canvasAsJson,
+      json: JSON.stringify(canvasAsJson),
     }
     console.log({ src: 'MemeEditor.generateMeme', newObj, svg })
-    setData(newObj)
+    insertOneMeme({ variables: { meme: newObj } })
+      .then((result) => {
+        console.log({ result })
+        setSort(SORT.LATEST)
+        router.push(`/meme/${result.data.insertOneMeme._id}`)
+      })
+      .catch((e) => console.error(e))
   }
 
   const generateDraft = () => {
@@ -120,13 +213,15 @@ export const MemeEditor = () => {
     const svg = canvas.toSVG()
     const newObj = {
       title,
-      // createdAt is added during insert
-      createdBy: auth.user.uid,
+      commentCount: 0,
+      createdAt: new Date(),
+      createdBy: { link: auth.getUser().id },
       visibility: visibility,
-      upVotes: [],
-      downVotes: [],
-      forkedBy: [],
-      forkedFrom: isCopy,
+      upVotes: { link: [] },
+      downVotes: { link: [] },
+      forkedBy: { link: [] },
+      forkedFrom: isCopy ? { link: isCopy } : null,
+      points: 0,
       views: 0,
       template: {
         id: template.id ? template.id : null,
@@ -134,10 +229,15 @@ export const MemeEditor = () => {
       },
       url: '', // TODO if a real png was created (requirement)
       svg,
-      json: canvasAsJson,
+      json: JSON.stringify(canvasAsJson),
     }
     console.log({ src: 'MemeEditor.generateDraft', newObj, svg })
-    setDataDraft(newObj)
+    insertOneDraft({ variables: { draft: newObj } })
+      .then((result) => {
+        console.log(result)
+        router.push(`/profile`)
+      })
+      .catch((e) => console.error(e))
   }
 
   const clearAll = () => canvas.getObjects().forEach((obj) => canvas.remove(obj))
@@ -156,19 +256,6 @@ export const MemeEditor = () => {
       transparentCorners: false,
     })
   }
-
-  useEffect(() => {
-    if (success) {
-      setSort(SORT.LATEST)
-      router.push(`/meme/${success}`)
-    }
-  }, [success, router, setSort])
-
-  useEffect(() => {
-    if (successDraft) {
-      router.push(`/profile`)
-    }
-  }, [successDraft, router])
 
   return (
     <div className="p-8 grid grid-cols-3 gap-6">
@@ -209,13 +296,8 @@ export const MemeEditor = () => {
           <option value={VISIBILITY.UNLISTED}>Unlisted</option>
           <option value={VISIBILITY.PRIVATE}>Private</option>
         </select>
-        <Button onClick={generateDraft} disabled={loadingDraft}>
-          Save as Draft {!loadingDraft && successDraft && 'success'}{' '}
-          {!loadingDraft && errorDraft && 'error'}
-        </Button>
-        <Button onClick={generateMeme} disabled={loading}>
-          Generate {!loading && success && 'success'} {!loading && error && 'error'}
-        </Button>
+        <Button onClick={generateDraft}>Save as Draft</Button>
+        <Button onClick={generateMeme}>Generate</Button>
       </div>
       {previewMode && (
         <>
