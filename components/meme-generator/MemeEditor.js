@@ -185,7 +185,7 @@ export const MemeEditor = () => {
       views: 0,
       forkedFrom: isCopy ? { link: isCopy } : null,
       template: {
-        id: template.id ? template.id : null,
+        id: { link: template._id ? template._id : null },
         url: template.url,
       },
       url: '', // TODO if a real png was created (requirement)
@@ -224,7 +224,7 @@ export const MemeEditor = () => {
       points: 0,
       views: 0,
       template: {
-        id: template.id ? template.id : null,
+        id: { link: template._id ? template._id : null },
         url: template.url,
       },
       url: '', // TODO if a real png was created (requirement)

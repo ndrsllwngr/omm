@@ -46,7 +46,7 @@ const TemplatePage = () => {
           <Canvas />
         </Section>
         <Section title={'GetTemplateDetails'}>
-          <TemplateDetails templateID="MoKJZjJiaZCTB8eGNvqq"></TemplateDetails>
+          <TemplateDetails templateID="601c28dd66e382182031253d" />
         </Section>
       </ProtectedRoute>
     </>

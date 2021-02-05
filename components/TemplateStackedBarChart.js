@@ -1,12 +1,9 @@
 import React, { useRef, useEffect, useState } from 'react'
 import PropTypes from 'prop-types'
 import { select, axisBottom, axisRight, scaleLinear, scaleBand, stack, max } from 'd3'
-//import { useResizeObserver } from '@/components/useResizeObserver'//
 
 export const TemplateStackedBarChart = ({ ups, downs, templateViews, totalViews }) => {
   const svgRef = useRef()
-  //const wrapperRef = useRef()
-  //const dimensions = useResizeObserver(wrapperRef)
   const allKeys = ['upVotes', 'downVotes', 'templateViews', 'totalViewsWithoutCurrentMeme']
   const colors = {
     upVotes: 'steelblue',
