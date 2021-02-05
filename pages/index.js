@@ -1,7 +1,6 @@
 import React, { useEffect } from 'react'
 import { HtmlHead } from '@/components/HtmlHead'
 import { Navbar } from '@/components/Navbar'
-import { Sort } from '@/components/Sort'
 import { SingleMeme } from '@/components/SingleMeme'
 // import InfiniteScroll from 'react-infinite-scroller'
 import { gql, NetworkStatus, useQuery } from '@apollo/client'

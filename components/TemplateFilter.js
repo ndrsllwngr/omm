@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useEffect, useRef } from 'react'
 import { useTemplateContext } from '@/components/context/viewsContext'
 import { useDetectOutsideClick } from '@/components/hooks/useDetectOutsideClick'
 import { gql, useQuery } from '@apollo/client'
@@ -14,7 +14,7 @@ export const ALL_PUBLIC_TEMPLATES_QUERY = gql`
 `
 
 export const TemplateFilter = () => {
-  const { loading, error, data, networkStatus } = useQuery(ALL_PUBLIC_TEMPLATES_QUERY, {
+  const { data } = useQuery(ALL_PUBLIC_TEMPLATES_QUERY, {
     notifyOnNetworkStatusChange: true,
   })
 
@@ -28,7 +28,7 @@ export const TemplateFilter = () => {
   const [isActive, setIsActive] = useDetectOutsideClick(dropdownRef, false)
   const onClick = () => setIsActive(!isActive)
 
-  const [selectedTemplate, setSelectedTemplate] = useState('')
+  /*const [selectedTemplate, setSelectedTemplate] = useState('')*/
 
   const handleTemplateChange = (newTemplate) => {
     if (template !== newTemplate) {

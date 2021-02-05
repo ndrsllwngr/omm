@@ -1,7 +1,7 @@
 import React from 'react'
-import { FILTER, SORT } from '@/lib/constants'
+import { FILTER } from '@/lib/constants'
 import { useFilterContext } from '@/components/context/viewsContext'
-import { Batch, SecondaryBtn } from '@/components/ui/Buttons'
+import { Batch } from '@/components/ui/Buttons'
 
 const supportedFilter = [FILTER.HOT, FILTER.TRENDING, FILTER.FRESH, FILTER.NONE]
 //http://react.tips/radio-buttons-in-reactjs/
