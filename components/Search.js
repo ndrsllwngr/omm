@@ -1,4 +1,4 @@
-import React, { useCallback, useRef } from 'react'
+import React, { useCallback, useRef, useEffect } from 'react'
 import { gql, useLazyQuery } from '@apollo/client'
 import Link from 'next/link'
 import { useDetectOutsideClick } from '@/components/hooks/useDetectOutsideClick'
@@ -20,6 +20,12 @@ export const Search = () => {
   const timeOut = useRef(null)
   const [isActive, setIsActive] = useDetectOutsideClick(searchContainerRef, false)
   const [executeSearch, { data }] = useLazyQuery(FEED_SEARCH_QUERY)
+
+  useEffect(() => {
+    return () => {
+      console.log(data)
+    }
+  }, [data])
 
   const clearTimer = useCallback(() => {
     clearTimeout(timeOut.current)
@@ -49,7 +55,9 @@ export const Search = () => {
           onFocus={() => setIsActive(true)}
         />
       </div>
-      {data && isActive && <SearchResultDropdown data={data} />}
+      {data && data.searchMemesByTitle.length > 0 && isActive && (
+        <SearchResultDropdown data={data} />
+      )}
     </div>
   )
 }
