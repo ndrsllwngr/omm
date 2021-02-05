@@ -5,7 +5,7 @@ import React from 'react'
 
 export const FilterSection = () => {
   return (
-    <div className={'flex flex-col md:flex-row justify-end'}>
+    <div className={'flex flex-col md:flex-row justify-evenly'}>
       <TemplateFilter />
       <Filter />
       <Sort enableNotification={false} />

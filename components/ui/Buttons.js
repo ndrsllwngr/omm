@@ -26,7 +26,7 @@ const btnSecBorderMono = 'border border-solid border-white hover:border-gray-300
 const voteBtnText = 'text-black dark:text-white'
 
 //Batch
-const batchBg = globalColors
+const batchBg = 'bg-custom-gray dark:bg-white hover:bg-gray-700 dark:hover:bg-gray-300'
 const batchBase = 'rounded-3xl p-2 px-4'
 const batchText = 'text-white dark:text-black'
 const batchBorder = 'border-4 border-solid border-custom-green'

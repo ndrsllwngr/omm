@@ -28,10 +28,11 @@ export const Search = () => {
   return (
     <div className={'relative mb-4 w-full md:mx-2 md:mb-0 md:w-1/4'}>
       <div ref={searchContainerRef} className={'flex flex-row'}>
-        <label className="hidden" htmlFor="search-form">
+        <label className="hidden" htmlFor="search">
           Search
         </label>
         <input
+          id="search"
           className="flex-grow-2 text-white border bg-custom-gray border-dotted stroke-dasharray: 6; focus:border-orange p-2 rounded-lg shadow-inner w-full"
           placeholder="Search"
           type="text"
@@ -55,7 +56,9 @@ export const Search = () => {
 
 export const SearchResultDropdown = ({ data }) => {
   return (
-    <ul className={'absolute flex flex-col w-full h-auto  rounded-xl bg-white mt-1 z-10'}>
+    <ul
+      className={'absolute flex flex-col w-full h-80 overflow-auto rounded-xl bg-white mt-1 z-10'}
+    >
       {data.searchMemesByTitle.map((meme, index) => (
         <li className={'p-2'} key={index}>
           <Link href={`/meme/${meme._id}`}>
