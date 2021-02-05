@@ -1,24 +1,20 @@
 import React from 'react'
 import { Slideshow } from '@/components/Slideshow'
 import { Navbar } from '@/components/Navbar'
-import { Sort } from '@/components/Sort'
 import { HtmlHead } from '@/components/HtmlHead'
 import { useFilterContext, useSortContext } from '@/components/context/viewsContext'
 import { gql, NetworkStatus, useQuery } from '@apollo/client'
 import { useRouter } from 'next/router'
 import { VISIBILITY } from '@/lib/constants'
 import { useAuth } from '@/components/context/authContext'
-import { Filter } from '@/components/Filter'
+import { FilterSection } from '@/components/FilterSection'
 
 export default function SingleView() {
   return (
     <>
       <Navbar />
       <div className={'max-w-7xl mx-auto mt-4'}>
-        <div className={'flex flex-row justify-end'}>
-          <Filter />
-          <Sort enableNotification={false} />
-        </div>
+        <FilterSection />
         <SingleViewInner />
       </div>
     </>
