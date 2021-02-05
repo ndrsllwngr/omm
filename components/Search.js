@@ -20,7 +20,7 @@ export const Search = () => {
   const timeOut = useRef(null)
   const [isActive, setIsActive] = useDetectOutsideClick(searchContainerRef, false)
   const [executeSearch, { data }] = useLazyQuery(FEED_SEARCH_QUERY)
-
+  const memes = data?.searchMemesByTitle
   useEffect(() => {
     return () => {
       console.log(data)
@@ -43,31 +43,27 @@ export const Search = () => {
           placeholder="Search"
           type="text"
           onChange={(e) => {
+            clearTimer()
             timeOut.current = setTimeout(function () {
               executeSearch({
                 variables: { search: e.target.value },
               })
             }, TIMEOUT_IN_MS)
           }}
-          onKeyDown={() => {
-            clearTimer()
-          }}
           onFocus={() => setIsActive(true)}
         />
       </div>
-      {data && data.searchMemesByTitle.length > 0 && isActive && (
-        <SearchResultDropdown data={data} />
-      )}
+      {memes?.length > 0 && isActive && <SearchResultDropdown memes={memes} />}
     </div>
   )
 }
 
-export const SearchResultDropdown = ({ data }) => {
+export const SearchResultDropdown = ({ memes = [] }) => {
   return (
     <ul
       className={'absolute flex flex-col w-full h-80 overflow-auto rounded-xl bg-white mt-1 z-10'}
     >
-      {data.searchMemesByTitle.map((meme, index) => (
+      {memes.map((meme, index) => (
         <li className={'p-2'} key={index}>
           <Link href={`/meme/${meme._id}`}>
             <a className={'flex flex-row items-center'}>
@@ -83,5 +79,5 @@ export const SearchResultDropdown = ({ data }) => {
   )
 }
 SearchResultDropdown.propTypes = {
-  data: PropTypes.any,
+  memes: PropTypes.any,
 }

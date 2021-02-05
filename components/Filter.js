@@ -1,7 +1,7 @@
 import React from 'react'
 import { FILTER } from '@/lib/constants'
 import { useFilterContext } from '@/components/context/viewsContext'
-import { Batch } from '@/components/ui/Buttons'
+import { Badge } from '@/components/ui/Buttons'
 
 const supportedFilter = [FILTER.HOT, FILTER.TRENDING, FILTER.FRESH, FILTER.NONE]
 //http://react.tips/radio-buttons-in-reactjs/
@@ -18,14 +18,14 @@ export const Filter = () => {
     <div className="flex flex-row justify-end items-center">
       {supportedFilter.map((supfilter, index) => {
         return (
-          <Batch
+          <Badge
             className={'mx-1'}
             key={index}
             onClick={() => handleFilterChange(supfilter)}
             active={supfilter === filter}
           >
             {supfilter}
-          </Batch>
+          </Badge>
         )
       })}
     </div>
