@@ -55,7 +55,7 @@ export const Search = () => {
 
 export const SearchResultDropdown = ({ data }) => {
   return (
-    <ul className={'absolute flex flex-col w-full h-auto  rounded-xl bg-white mt-1'}>
+    <ul className={'absolute flex flex-col w-full h-auto  rounded-xl bg-white mt-1 z-10'}>
       {data.searchMemesByTitle.map((meme, index) => (
         <li className={'p-2'} key={index}>
           <Link href={`/meme/${meme._id}`}>

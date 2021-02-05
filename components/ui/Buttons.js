@@ -25,6 +25,12 @@ const btnSecBorderMono = 'border border-solid border-white hover:border-gray-300
 //VoteBtn
 const voteBtnText = 'text-black dark:text-white'
 
+//Batch
+const batchBg = globalColors
+const batchBase = 'rounded-3xl p-2 px-4'
+const batchText = 'text-white dark:text-black'
+const batchBorder = 'border-4 border-solid border-custom-green'
+
 export const VoteBaseBtn = ({ disabled = false, onClick, className: parentClass, children }) => {
   return (
     <button
@@ -167,6 +173,25 @@ export const ToggleStateIconBtn = ({
       {children}
     </BaseIcon>
   )
+}
+
+export const Batch = ({ children, onClick, active = false, className: parentClass }) => {
+  return (
+    <button
+      type="button"
+      className={`${batchBase} ${batchBg} ${batchText} ${active ? batchBorder : ''} ${parentClass}`}
+      disabled={active}
+      onClick={onClick}
+    >
+      {children}
+    </button>
+  )
+}
+Batch.propTypes = {
+  onClick: PropTypes.func,
+  children: PropTypes.any,
+  active: PropTypes.bool,
+  className: PropTypes.string,
 }
 
 BaseIcon.propTypes = {
