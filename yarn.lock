@@ -1064,21 +1064,6 @@
   resolved "https://registry.yarnpkg.com/@base2/pretty-print-object/-/pretty-print-object-1.0.0.tgz"
   integrity sha512-4Th98KlMHr5+JkxfcoDT//6vY8vM+iSPrLNpHhRyLx2CFYi8e2RfqPLdpbnpo0Q5lQC5hNB79yes07zb02fvCw==
 
-"@chartiful/react-chart-builder@^0.1.6":
-  version "0.1.6"
-  resolved "https://registry.npmjs.org/@chartiful/react-chart-builder/-/react-chart-builder-0.1.6.tgz"
-  integrity sha512-+1gB3risNtBUFFc0MyMfalbf6sPkUXep6g/HBWdilFgRrBBvlk36TCl+YagRED4msUDnbnO0+CzVr/eVfN1RtA==
-
-"@chartiful/react-line-graph@^0.1.5":
-  version "0.1.5"
-  resolved "https://registry.npmjs.org/@chartiful/react-line-graph/-/react-line-graph-0.1.5.tgz"
-  integrity sha512-Vi1lAdOZPuWvErKkaK0uJ7oFO4d4oc+c7YiAno3DwwG9qPeORuFfPNrKwN6GwNKtjXRZmtjra9JDg56tJ1ku8A==
-
-"@chartiful/react-vertical-bar-graph@^0.1.6":
-  version "0.1.6"
-  resolved "https://registry.npmjs.org/@chartiful/react-vertical-bar-graph/-/react-vertical-bar-graph-0.1.6.tgz"
-  integrity sha512-njbUnIDwq94CaEU1ZNroDLoHNpsiRssC8T7lbob7FKVQvCC97kg79Dh76u2Zgnrde5aiGuJoEAjroIF4VVdf8A==
-
 "@cnakazawa/watch@^1.0.3":
   version "1.0.4"
   resolved "https://registry.yarnpkg.com/@cnakazawa/watch/-/watch-1.0.4.tgz"
@@ -12118,11 +12103,6 @@ require_optional@^1.0.1:
   dependencies:
     resolve-from "^2.0.0"
     semver "^5.1.0"
-
-resize-observer-polyfill@1.5.1:
-  version "1.5.1"
-  resolved "https://registry.yarnpkg.com/resize-observer-polyfill/-/resize-observer-polyfill-1.5.1.tgz#0e9020dd3d21024458d4ebd27e23e40269810464"
-  integrity sha512-LwZrotdHOo12nQuZlHEmtuXdqGoOD0OhaxopaNFxWzInpEgaLWoVuAMbTzixuosCx2nEG58ngzW3vxdWoxIgdg==
 
 resolve-from@^2.0.0:
   version "2.0.0"
