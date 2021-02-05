@@ -1,13 +1,12 @@
 import Archiver from 'archiver'
 import { MONGODB_COLLECTION } from '@/lib/constants'
 import { getMongoDBClient } from '@/lib/mongoDB'
-import ObjectID from 'bson-objectid'
 import { fabric } from 'fabric'
 
 export default async function memeHandler(req, res) {
   const {
     //TODO filter & search
-    query: {},
+    query: { search, limit },
     method,
   } = req
 
@@ -16,15 +15,22 @@ export default async function memeHandler(req, res) {
   const memeCollection = db.collection(MONGODB_COLLECTION.MEMES)
 
   switch (method) {
-    case 'POST':
-      // Get ids from request body
-      const ids = req.body.ids
+    case 'GET':
+      const lim = parseInt(limit)
+      if (lim && lim <= 0) {
+        res.status(400).end('Limit has to be a positive number')
+        break
+      }
 
-      const objectIDs = ids.map((id) => {
-        return new ObjectID(id)
-      })
-      //TODO search params
-      const memes = await memeCollection.find({ _id: { $in: objectIDs } }).toArray()
+      const re = '(?i)' + search
+      const query = { title: { $regex: re } }
+
+      const memes = await (lim
+        ? memeCollection.find(query).limit(lim)
+        : memeCollection.find(query)
+      ).toArray()
+
+      console.log({ memes: memes.map((meme) => meme.title), query })
 
       if (memes.length <= 0) {
         res.status(404).end('No memes matching the provided criteria found')
