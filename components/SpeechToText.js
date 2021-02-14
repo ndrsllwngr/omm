@@ -1,11 +1,22 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 
-const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition
-const mic = new SpeechRecognition()
-mic.continuos = true
-mic.interimResults = true
-mic.lang = 'en-US'
+const SpeechRecognition =
+  typeof window !== 'undefined' &&
+  (window.SpeechRecognition ||
+    window.webkitSpeechRecognition ||
+    window.mozSpeechRecognition ||
+    window.msSpeechRecognition ||
+    window.oSpeechRecognition)
 
+const mic = SpeechRecognition ? new SpeechRecognition() : null
+
+if (mic !== null) {
+  mic.continuos = true
+  mic.interimResults = true
+  mic.lang = 'en-US'
+}
+
+// https://github.com/JamesBrill/react-speech-recognition
 export const SpeechToText = () => {
   const [isListening, setIsListening] = useState(false)
   const [text, setText] = useState(null)
@@ -40,7 +51,9 @@ export const SpeechToText = () => {
         }
       }
     }
-    handleListen()
+    if (mic !== null) {
+      handleListen()
+    }
   }, [isListening])
 
   const handleSaveText = () => {
