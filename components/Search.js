@@ -4,10 +4,11 @@ import Link from 'next/link'
 import { useDetectOutsideClick } from '@/components/hooks/useDetectOutsideClick'
 import { MemeRenderer } from '@/components/MemeRenderer'
 import PropTypes from 'prop-types'
+import { VISIBILITY } from '@/lib/constants'
 const TIMEOUT_IN_MS = 1000
 export const FEED_SEARCH_QUERY = gql`
-  query searchQuery($search: String) {
-    searchMemesByTitle(input: $search) {
+  query searchQuery($search: String!, $conditions: String, $sorts: String) {
+    searchMemesByTitle(input: { sorts: $sorts, searchString: $search, conditions: $conditions }) {
       _id
       title
       svg
@@ -44,9 +45,17 @@ export const Search = () => {
           type="text"
           onChange={(e) => {
             clearTimer()
-            timeOut.current = setTimeout(function () {
+            timeOut.current = setTimeout(() => {
               executeSearch({
-                variables: { search: e.target.value },
+                variables: {
+                  search: e.target.value || '',
+                  conditions: JSON.stringify({
+                    visibility: { $eq: VISIBILITY.PUBLIC },
+                  }),
+                  sorts: JSON.stringify({
+                    createdAt: -1,
+                  }),
+                },
               })
             }, TIMEOUT_IN_MS)
           }}
