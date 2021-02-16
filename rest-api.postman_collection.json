@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "574cbbc3-b0bc-46ac-8104-da0f335b9cc1",
+		"_postman_id": "fdec981e-3ad2-4f74-ac62-0a031f986544",
 		"name": "OMM",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
@@ -41,14 +41,14 @@
 					}
 				},
 				"url": {
-					"raw": "{{url}}/api/meme/DSdKEWTD05S284QtvYGP",
+					"raw": "{{url}}/api/meme/6016ffc241f7b6d403767d40",
 					"host": [
 						"{{url}}"
 					],
 					"path": [
 						"api",
 						"meme",
-						"DSdKEWTD05S284QtvYGP"
+						"6016ffc241f7b6d403767d40"
 					]
 				}
 			},
@@ -60,7 +60,7 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "{{url}}/api/meme/image/DSdKEWTD05S284QtvYGP",
+					"raw": "{{url}}/api/meme/image/6016ffc241f7b6d403767d40",
 					"host": [
 						"{{url}}"
 					],
@@ -68,7 +68,7 @@
 						"api",
 						"meme",
 						"image",
-						"DSdKEWTD05S284QtvYGP"
+						"6016ffc241f7b6d403767d40"
 					]
 				}
 			},
@@ -76,12 +76,15 @@
 		},
 		{
 			"name": "Get a .zip of memes",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
 			"request": {
-				"method": "POST",
+				"method": "GET",
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n    \"ids\": [\"DSdKEWTD05S284QtvYGP\", \"U9aFgUEBaLxh9JtPMydf\"]\n}",
+					"raw": "",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -89,7 +92,7 @@
 					}
 				},
 				"url": {
-					"raw": "{{url}}/api/meme/set",
+					"raw": "{{url}}/api/meme/set?search=MeME&limit=2",
 					"host": [
 						"{{url}}"
 					],
@@ -97,6 +100,16 @@
 						"api",
 						"meme",
 						"set"
+					],
+					"query": [
+						{
+							"key": "search",
+							"value": "MeME"
+						},
+						{
+							"key": "limit",
+							"value": "2"
+						}
 					]
 				}
 			},
@@ -126,7 +139,6 @@
 				{
 					"listen": "test",
 					"script": {
-						"id": "e8637579-f06f-4995-9a03-726daa7e3112",
 						"exec": [
 							"pm.test(\"Status code is 200\", function () {",
 							"    pm.response.to.have.status(200);",
@@ -167,7 +179,6 @@
 				{
 					"listen": "test",
 					"script": {
-						"id": "ff8243d5-c79a-490b-b07c-09dd2e19ebc0",
 						"exec": [
 							"pm.test(\"Status code is 200\", function () {",
 							"    pm.response.to.have.status(200);",
@@ -201,13 +212,46 @@
 				}
 			},
 			"response": []
+		},
+		{
+			"name": "a .zip of memes",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "content",
+							"type": "file",
+							"src": "/Users/agriesbeck/Downloads/memes.zip"
+						}
+					],
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{url}}/api/meme/set",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"api",
+						"meme",
+						"set"
+					]
+				}
+			},
+			"response": []
 		}
 	],
 	"event": [
 		{
 			"listen": "prerequest",
 			"script": {
-				"id": "f870ad01-da54-4bc4-b91b-2a1ad50fc533",
 				"type": "text/javascript",
 				"exec": [
 					""
@@ -217,7 +261,6 @@
 		{
 			"listen": "test",
 			"script": {
-				"id": "0b1f048b-3149-4fdd-9936-2c1cb30bfaf2",
 				"type": "text/javascript",
 				"exec": [
 					""
@@ -227,10 +270,8 @@
 	],
 	"variable": [
 		{
-			"id": "74dc7521-d50c-4506-8329-4c9d7a5605dd",
 			"key": "url",
 			"value": "http://localhost:3000"
 		}
-	],
-	"protocolProfileBehavior": {}
+	]
 }
