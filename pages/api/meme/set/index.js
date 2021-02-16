@@ -3,6 +3,8 @@ import { MONGODB_COLLECTION } from '@/lib/constants'
 import { getMongoDBClient } from '@/lib/mongoDB'
 import { fabric } from 'fabric'
 import IncomingForm from 'formidable-serverless'
+import { createFsFromVolume, Volume } from 'memfs'
+import unzipper from 'unzipper'
 
 export const config = {
   api: {
@@ -80,28 +82,91 @@ export default async function memeHandler(req, res) {
 
       break
     case 'PUT':
+      // Define new form ('form-data' request body type)
       const form = new IncomingForm()
       form.maxFileSize = 100 * 1024 * 1024
       form.keepExtensions = true
       form.multiples = true
+      // Create new in-memory volume
+      const vol = new Volume()
+      // Create filesystem from volume
+      const fs = createFsFromVolume(vol)
+      // Root folder for files
+      const rootFolder = './unzip/'
+      vol.mkdirSync(rootFolder, { recursive: true })
 
+      // Promise for retrieving the zip file
+      let zipPromise = null
+      // Initialize variable for zip file
+      let content = null
+
+      // Overriding the onPart functions in order to be able to parse the file as a stream into the in-memory fs
       form.onPart = function (part) {
         console.log({ part })
-        if (!part.filename) {
-          // let formidable handle all non-file parts
-          //form.handlePart(part)
-          return
+        // Only accept .zip files
+        if (!part.filename.includes('.zip')) {
+          res.status(400).end(`Wrong filetype: ${part.filename}`)
+        }
+        if (part.name === 'content') {
+          console.log(part.filename)
+          let filename = rootFolder + part.filename
+          // Add filename to list of filenames
+          content = filename
+          // Create a new stream for writing to the new file
+          let writeStream = fs.createWriteStream(filename)
+          // Pipe the data from the request into the new in memory zip file
+          part.pipe(writeStream)
+          // Add a promise to the retrieval task list to be able to wait for them
+          zipPromise = new Promise((fulfill) => writeStream.on('finish', fulfill))
         }
       }
-      form.parse(req, function (err, fields, files) {
-        console.log({ err, fields, files })
+
+      // Parse the form
+      await form.parse(req, async (err, fields, files) => {
+        // Wait for the retrieval of all the zips from the request
+        // Hint: All of the calls of the previous function will actually be fullfilled here
+        await zipPromise
+
+        console.log({ content, zipPromise })
+
+        if (!content) {
+          res
+            .status(400)
+            .end(
+              `No 'content' provided, please add a field called 'content' pointing to a .zip file to your 'form-data'`
+            )
+        }
+        // List of promises for processing all the zip files
+        const unzipTasks = []
+        // Create a stream from the zip
+        const zip = fs.createReadStream(content).pipe(unzipper.Parse({ forceStream: true }))
+
+        // Iterate over all the entries in the zip file
+        for await (const entry of zip) {
+          // Ignore
+          if (
+            entry.path.startsWith('_') ||
+            entry.path.startsWith('.') ||
+            !(entry.path.endsWith('.png') || !entry.path.endsWith('.jpg'))
+          ) {
+            console.log(`Ignoring file ${entry.path} - wrong type`)
+            continue
+          }
+          let writeStream = fs.createWriteStream(rootFolder + entry.path)
+          entry.pipe(writeStream)
+          unzipTasks.push(new Promise((fulfill) => writeStream.on('finish', fulfill)))
+        }
+        console.log(unzipTasks)
+        await Promise.all(unzipTasks)
+        fs.readdirSync(rootFolder).forEach((file) => {
+          console.log(file)
+        })
+
+        res.status(200).end('Successfully unzipped')
       })
 
-      if (!req.body) {
-        res.status(400).end('No file uploaded')
-      } else {
-      }
       break
+
     default:
       res.setHeader('Allow', ['GET', 'PUT'])
       res.status(405).end(`Method ${method} Not Allowed`)
