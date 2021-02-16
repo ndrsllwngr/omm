@@ -143,7 +143,7 @@ export default async function memeHandler(req, res) {
 
         // Iterate over all the entries in the zip file
         for await (const entry of zip) {
-          // Ignore
+          // Ignore cache folders, hidden files & files which do not end with do not end with .jpg or .png
           if (
             entry.path.startsWith('_') ||
             entry.path.startsWith('.') ||
@@ -152,16 +152,27 @@ export default async function memeHandler(req, res) {
             console.log(`Ignoring file ${entry.path} - wrong type`)
             continue
           }
+
+          // Create a new stream for writing to the new file created in the memfs
           let writeStream = fs.createWriteStream(rootFolder + entry.path)
+
+          // Pipe the data from inside the .zip into the memfs file
           entry.pipe(writeStream)
+          // Add a new promise to the unzipTasks
           unzipTasks.push(new Promise((fulfill) => writeStream.on('finish', fulfill)))
         }
         console.log(unzipTasks)
+        // Wait for all unzipping promises to fulfill
         await Promise.all(unzipTasks)
+        // Remove .zip file
+        fs.unlinkSync(content)
         fs.readdirSync(rootFolder).forEach((file) => {
           console.log(file)
         })
 
+        // Remove all files from the volume
+        vol.reset()
+        // If it ran until here: It worked! :P
         res.status(200).end('Successfully unzipped')
       })
 
