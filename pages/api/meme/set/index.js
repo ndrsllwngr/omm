@@ -24,6 +24,9 @@ export default async function memeHandler(req, res) {
   const memeCollection = db.collection(MONGODB_COLLECTION.MEMES)
 
   switch (method) {
+    // Using:
+    // https://www.npmjs.com/package/archiver
+    // https://www.npmjs.com/package/fabric
     case 'GET':
       const lim = parseInt(limit)
       if (lim && lim <= 0) {
@@ -81,6 +84,11 @@ export default async function memeHandler(req, res) {
       })
 
       break
+
+    // Using:
+    // https://www.npmjs.com/package/unzipper
+    // https://www.npmjs.com/package/formidable
+    // https://www.npmjs.com/package/memfs
     case 'PUT':
       // Define new form ('form-data' request body type)
       const form = new IncomingForm()
