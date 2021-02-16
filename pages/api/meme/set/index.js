@@ -2,6 +2,13 @@ import Archiver from 'archiver'
 import { MONGODB_COLLECTION } from '@/lib/constants'
 import { getMongoDBClient } from '@/lib/mongoDB'
 import { fabric } from 'fabric'
+import IncomingForm from 'formidable-serverless'
+
+export const config = {
+  api: {
+    bodyParser: false,
+  },
+}
 
 export default async function memeHandler(req, res) {
   const {
@@ -38,7 +45,7 @@ export default async function memeHandler(req, res) {
       }
 
       // Initialize archiver
-      let zip = Archiver('zip', {
+      let archiver = Archiver('zip', {
         zlib: { level: 9 }, // Sets the compression level.
       })
 
@@ -46,7 +53,7 @@ export default async function memeHandler(req, res) {
       res.setHeader('Content-Type', 'application/zip')
       res.setHeader('Content-disposition', 'attachment; filename=memes.zip')
       // Send the file to the route output.
-      zip.pipe(res)
+      archiver.pipe(res)
 
       const imageTasks = memes.map((meme) => {
         return new Promise((resolve, reject) => {
@@ -62,18 +69,41 @@ export default async function memeHandler(req, res) {
             const stream = canvas.createPNGStream()
             stream.on('end', resolve)
             stream.on('error', reject)
-            zip.append(stream, { name: `${meme._id.toString()}.png` })
+            archiver.append(stream, { name: `${meme._id.toString()}.png` })
           })
         })
       })
       // Finalize stream
       Promise.all(imageTasks).then(() => {
-        zip.finalize()
+        archiver.finalize()
       })
 
       break
+    case 'PUT':
+      const form = new IncomingForm()
+      form.maxFileSize = 100 * 1024 * 1024
+      form.keepExtensions = true
+      form.multiples = true
+
+      form.onPart = function (part) {
+        console.log({ part })
+        if (!part.filename) {
+          // let formidable handle all non-file parts
+          //form.handlePart(part)
+          return
+        }
+      }
+      form.parse(req, function (err, fields, files) {
+        console.log({ err, fields, files })
+      })
+
+      if (!req.body) {
+        res.status(400).end('No file uploaded')
+      } else {
+      }
+      break
     default:
-      res.setHeader('Allow', ['POST'])
+      res.setHeader('Allow', ['GET', 'PUT'])
       res.status(405).end(`Method ${method} Not Allowed`)
   }
 }
