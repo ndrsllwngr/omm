@@ -2,8 +2,6 @@ import { fabric } from 'fabric'
 import { MONGODB_COLLECTION } from '@/lib/constants'
 import { getMongoDBClient } from '@/lib/mongoDB'
 import ObjectID from 'bson-objectid'
-import path from 'path'
-import { registerFont } from 'canvas'
 
 export default async function memeHandler(req, res) {
   const {
@@ -30,16 +28,6 @@ export default async function memeHandler(req, res) {
       const height = memeJSON.height
 
       const canvas = new fabric.StaticCanvas(null, { width: width, height: height })
-
-      try {
-        registerFont(path.resolve('./public/assets/fonts/Anton-Regular.ttf'), { family: 'Anton' })
-        registerFont(path.resolve('./public/assets/fonts/Allan-Regular.ttf'), { family: 'Allan' })
-        registerFont(path.resolve('./public/assets/fonts/ComicNeue-Regular.ttf'), {
-          family: 'Comic Neue',
-        })
-      } catch (e) {
-        console.log(e)
-      }
 
       res.setHeader('Content-Type', 'image/png')
       if (download === 'true') {
