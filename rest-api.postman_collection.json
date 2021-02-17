@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "fdec981e-3ad2-4f74-ac62-0a031f986544",
+		"_postman_id": "029172fa-a58d-4350-b2ca-8ec87a737e8f",
 		"name": "OMM",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
@@ -224,7 +224,7 @@
 						{
 							"key": "content",
 							"type": "file",
-							"src": "/Users/agriesbeck/Downloads/memes.zip"
+							"src": "/Users/andy/Projects/Uni/OMM/omm/meme-set-put_sample.zip"
 						}
 					],
 					"options": {
