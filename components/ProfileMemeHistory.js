@@ -9,7 +9,7 @@ import { gql, NetworkStatus, useQuery } from '@apollo/client'
 
 export const ALL_PERSONAL_MEMES_QUERY = gql`
   query getAllPersonalMemes($user: UserQueryInput) {
-    memes(query: { createdBy: $user }, sortBy: CREATEDAT_DESC) {
+    memes(query: { createdBy: $user, isDraft: false }, sortBy: CREATEDAT_DESC) {
       _id
       commentCount
       createdAt
@@ -25,6 +25,7 @@ export const ALL_PERSONAL_MEMES_QUERY = gql`
       forkedFrom {
         _id
       }
+      isDraft
       json
       points
       svg

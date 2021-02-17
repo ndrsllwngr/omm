@@ -51,6 +51,7 @@ export const Search = () => {
                   search: e.target.value || '',
                   conditions: JSON.stringify({
                     visibility: { $eq: VISIBILITY.PUBLIC },
+                    isDraft: { $eq: false },
                   }),
                   sorts: JSON.stringify({
                     createdAt: -1,

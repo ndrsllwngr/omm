@@ -43,6 +43,7 @@ export const ALL_PUBLIC_MEMES_QUERY = gql`
       forkedFrom {
         _id
       }
+      isDraft
       json
       svg
       template {
