@@ -13,6 +13,7 @@ export const ALL_PUBLIC_TEMPLATES_QUERY = gql`
   }
 `
 
+// TODO query templates collection
 export const TemplateFilter = () => {
   const { data } = useQuery(ALL_PUBLIC_TEMPLATES_QUERY, {
     notifyOnNetworkStatusChange: true,
