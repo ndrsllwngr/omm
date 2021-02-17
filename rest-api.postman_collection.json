@@ -1,28 +1,10 @@
 {
 	"info": {
-		"_postman_id": "029172fa-a58d-4350-b2ca-8ec87a737e8f",
+		"_postman_id": "3bb87364-fe13-46cb-afe1-5c9d7882282a",
 		"name": "OMM",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
 	"item": [
-		{
-			"name": "All memes",
-			"request": {
-				"method": "GET",
-				"header": [],
-				"url": {
-					"raw": "{{url}}/api/memes",
-					"host": [
-						"{{url}}"
-					],
-					"path": [
-						"api",
-						"memes"
-					]
-				}
-			},
-			"response": []
-		},
 		{
 			"name": "Meme data by ID",
 			"protocolProfileBehavior": {
@@ -224,7 +206,7 @@
 						{
 							"key": "content",
 							"type": "file",
-							"src": "/Users/andy/Projects/Uni/OMM/omm/meme-set-put_sample.zip"
+							"src": "./meme-set-put_sample.zip"
 						}
 					],
 					"options": {
