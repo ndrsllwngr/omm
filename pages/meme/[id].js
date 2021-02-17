@@ -1,28 +1,20 @@
-import React, { useEffect } from 'react'
+import React from 'react'
 import { Slideshow } from '@/components/Slideshow'
 import { Navbar } from '@/components/Navbar'
-import { Sort } from '@/components/Sort'
 import { HtmlHead } from '@/components/HtmlHead'
 import { useFilterContext, useSortContext } from '@/components/context/viewsContext'
 import { gql, NetworkStatus, useQuery } from '@apollo/client'
 import { useRouter } from 'next/router'
 import { VISIBILITY } from '@/lib/constants'
 import { useAuth } from '@/components/context/authContext'
-import {
-  useSingleMemeContext,
-  useSingleMemeLoadingContext,
-} from '@/components/context/singlememeContext'
-import { Filter } from '@/components/Filter'
+import { FilterSection } from '@/components/FilterSection'
 
 export default function SingleView() {
   return (
     <>
       <Navbar />
       <div className={'max-w-7xl mx-auto mt-4'}>
-        <div className={'flex flex-row justify-end'}>
-          <Filter />
-          <Sort enableNotification={false} />
-        </div>
+        <FilterSection />
         <SingleViewInner />
       </div>
     </>
@@ -33,6 +25,16 @@ export const CURRENT_MEME = gql`
   query getCurrentMeme($meme: ObjectId) {
     memes(query: { _id: $meme }) {
       _id
+      commentCount
+      comments {
+        _id
+        text
+        createdAt
+        createdBy {
+          _id
+          name
+        }
+      }
       createdAt
       createdBy {
         _id
@@ -70,26 +72,13 @@ const SingleViewInner = () => {
   const router = useRouter()
   const { sort } = useSortContext()
   const { filter, yesterday } = useFilterContext()
-  const { updateCurrent } = useSingleMemeContext()
-  const { setCurrentIsLoading } = useSingleMemeLoadingContext()
-  // TODO increment viewCount @Andy
-  // TODO set next and prev null? is this still needed?
+
   const { loading, error, data, networkStatus } = useQuery(CURRENT_MEME, {
     variables: { meme: router.query.id },
     notifyOnNetworkStatusChange: false,
   })
 
-  useEffect(() => {
-    setCurrentIsLoading(true)
-  }, [setCurrentIsLoading])
-
   const loadingMoreMemes = networkStatus === NetworkStatus.fetchMore
-
-  useEffect(() => {
-    console.log({ src: 'LandingPageInner', data, error, loading })
-    updateCurrent(() => (data && data.memes[0] !== null ? data.memes[0] : null))
-    setCurrentIsLoading(loading)
-  }, [data, error, loading, updateCurrent, setCurrentIsLoading])
 
   if (error) return <div>Error loading memes.</div>
   if (loading && !loadingMoreMemes)

@@ -7,7 +7,6 @@ import AuthProvider from '@/components/context/authContext'
 import { FabricProvider } from '@/components/context/fabricContext'
 import { AutoplayProvider } from '@/components/context/autoplayContext'
 import { ViewsProvider } from '@/components/context/viewsContext'
-import { SingleMemeProvider } from '@/components/context/singlememeContext'
 
 // eslint-disable-next-line react/prop-types
 export default function App({ Component, pageProps }) {
@@ -17,15 +16,13 @@ export default function App({ Component, pageProps }) {
       <AuthProvider>
         {/* eslint-disable-next-line react/prop-types */}
         <ThemeProvider forcedTheme={Component.theme || undefined} attribute="class">
-          <SingleMemeProvider>
-            <AutoplayProvider>
-              <ViewsProvider>
-                <FabricProvider>
-                  <Component {...pageProps} />
-                </FabricProvider>
-              </ViewsProvider>
-            </AutoplayProvider>
-          </SingleMemeProvider>
+          <AutoplayProvider>
+            <ViewsProvider>
+              <FabricProvider>
+                <Component {...pageProps} />
+              </FabricProvider>
+            </ViewsProvider>
+          </AutoplayProvider>
         </ThemeProvider>
       </AuthProvider>
     </ApolloProvider>

@@ -1,13 +1,12 @@
 import React, { useEffect } from 'react'
 import { HtmlHead } from '@/components/HtmlHead'
 import { Navbar } from '@/components/Navbar'
-import { Sort } from '@/components/Sort'
 import { SingleMeme } from '@/components/SingleMeme'
 // import InfiniteScroll from 'react-infinite-scroller'
 import { gql, NetworkStatus, useQuery } from '@apollo/client'
 import { useFilterContext, useSortContext } from '@/components/context/viewsContext'
 import { translateFilter, translateSort } from '@/lib/utils'
-import { Filter } from '@/components/Filter'
+import { FilterSection } from '@/components/FilterSection'
 
 // https://github.com/danbovey/react-infinite-scroller
 // https://dzone.com/articles/fast-paging-with-mongodb
@@ -19,11 +18,7 @@ const LandingPage = () => {
       <HtmlHead />
       <Navbar />
       <div className={'max-w-7xl mx-auto mt-4'}>
-        <div className={'flex flex-row justify-end'}>
-          <Filter />
-          <Sort enableNotification={false} />
-        </div>
-
+        <FilterSection />
         <LandingPageInner sort={sort} filter={filter} yesterday={yesterday} />
       </div>
     </>
@@ -34,6 +29,7 @@ export const ALL_PUBLIC_MEMES_QUERY = gql`
   query getAllPublicMemes($query: MemeQueryInput, $sortBy: MemeSortByInput) {
     memes(query: $query, sortBy: $sortBy) {
       _id
+      commentCount
       createdAt
       createdBy {
         _id

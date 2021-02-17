@@ -5,10 +5,12 @@ import { SORT, FILTER } from '@/lib/constants'
 export const SortContext = createContext({})
 export const ReloadContext = createContext({})
 export const FilterContext = createContext({})
+export const TemplateContext = createContext({})
 
 export const ViewsProvider = ({ children }) => {
   const [sort, setSort] = useState(SORT.LATEST)
   const [filter, setFilter] = useState(FILTER.NONE)
+  const [template, setTemplate] = useState('')
   const [reload, setReload] = useState(false)
   const [yesterday, setYesterday] = useState(null)
 
@@ -18,11 +20,13 @@ export const ViewsProvider = ({ children }) => {
   }, [filter, setYesterday])
 
   return (
-    <FilterContext.Provider value={{ filter, setFilter, yesterday }}>
-      <SortContext.Provider value={{ sort, setSort }}>
-        <ReloadContext.Provider value={{ reload, setReload }}>{children}</ReloadContext.Provider>
-      </SortContext.Provider>
-    </FilterContext.Provider>
+    <TemplateContext.Provider value={{ template, setTemplate }}>
+      <FilterContext.Provider value={{ filter, setFilter, yesterday }}>
+        <SortContext.Provider value={{ sort, setSort }}>
+          <ReloadContext.Provider value={{ reload, setReload }}>{children}</ReloadContext.Provider>
+        </SortContext.Provider>
+      </FilterContext.Provider>
+    </TemplateContext.Provider>
   )
 }
 
@@ -44,6 +48,14 @@ export const useReloadContext = () => {
   const context = useContext(ReloadContext)
   if (!context) {
     throw new Error(`useReloadContext must be used within a ViewsProvider`)
+  }
+  return context
+}
+
+export const useTemplateContext = () => {
+  const context = useContext(TemplateContext)
+  if (!context) {
+    throw new Error(`useTemplateContext must be used within a ViewsProvider`)
   }
   return context
 }

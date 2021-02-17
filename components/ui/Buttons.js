@@ -25,6 +25,12 @@ const btnSecBorderMono = 'border border-solid border-white hover:border-gray-300
 //VoteBtn
 const voteBtnText = 'text-black dark:text-white'
 
+//Batch
+const badgeBg = 'bg-custom-gray dark:bg-white hover:bg-gray-700 dark:hover:bg-gray-300'
+const badgeBase = 'rounded-3xl p-2 px-4'
+const badgeText = 'text-white dark:text-black'
+const badgeBorder = 'border-4 border-solid border-custom-green'
+
 export const VoteBaseBtn = ({ disabled = false, onClick, className: parentClass, children }) => {
   return (
     <button
@@ -167,6 +173,25 @@ export const ToggleStateIconBtn = ({
       {children}
     </BaseIcon>
   )
+}
+
+export const Badge = ({ children, onClick, active = false, className: parentClass }) => {
+  return (
+    <button
+      type="button"
+      className={`${badgeBase} ${badgeBg} ${badgeText} ${active ? badgeBorder : ''} ${parentClass}`}
+      disabled={active}
+      onClick={onClick}
+    >
+      {children}
+    </button>
+  )
+}
+Badge.propTypes = {
+  onClick: PropTypes.func,
+  children: PropTypes.any,
+  active: PropTypes.bool,
+  className: PropTypes.string,
 }
 
 BaseIcon.propTypes = {

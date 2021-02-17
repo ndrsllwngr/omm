@@ -7,6 +7,8 @@ import { ScreenshotUrl } from '@/components/template-generator/ScreenshotUrl'
 import { PasteUrlImage } from '@/components/template-generator/PasteUrlImage'
 import { Canvas } from '@/components/template-generator/Canvas'
 import { ProtectedRoute } from '@/components/context/authContext'
+import { TemplateDetails } from '@/components/TemplateDetails'
+import { SpeechToText } from '@/components/SpeechToText'
 import PropTypes from 'prop-types'
 
 const Section = ({ children, title }) => {
@@ -43,6 +45,12 @@ const TemplatePage = () => {
         </Section>
         <Section title={'DrawonCanvas'}>
           <Canvas />
+        </Section>
+        <Section title={'GetTemplateDetails'}>
+          <TemplateDetails templateID="601c28dd66e382182031253d" />
+        </Section>
+        <Section title={'SpeechToText'}>
+          <SpeechToText></SpeechToText>
         </Section>
       </ProtectedRoute>
     </>

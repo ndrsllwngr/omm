@@ -11,6 +11,7 @@ export const ALL_PERSONAL_MEMES_QUERY = gql`
   query getAllPersonalMemes($user: UserQueryInput) {
     memes(query: { createdBy: $user }, sortBy: CREATEDAT_DESC) {
       _id
+      commentCount
       createdAt
       createdBy {
         _id

@@ -5,6 +5,7 @@ import { IoCreate, IoLogIn, IoPerson, IoReorderThree } from 'react-icons/io5'
 import PropTypes from 'prop-types'
 import { PrimaryBtn, TertiaryBtn } from '@/components/ui/Buttons'
 import { useDetectOutsideClick } from '@/components/hooks/useDetectOutsideClick'
+import { Search } from '@/components/Search'
 
 //https://tailwindcomponents.com/component/responsive-navbar-2
 export const Navbar = () => {
@@ -22,7 +23,7 @@ export const Navbar = () => {
           <Link href={'/'} className="cursor-pointer ">
             <a className={'h-8 mr-2'}>
               <svg
-                height={'h-auto'}
+                className={'h-full'}
                 viewBox="0 0 1498 280"
                 fill="none"
                 xmlns="http://www.w3.org/2000/svg"
@@ -55,26 +56,13 @@ export const Navbar = () => {
           <div
             onClick={handleToggle}
             className="text-black hover:text-orange md:hidden text-white cursor-pointer"
-            href="#"
           >
-            <IoReorderThree size={48}></IoReorderThree>
+            <IoReorderThree size={48} />
           </div>
         </div>
         {/*EndLogo */}
 
-        {/*Search */}
-        <form className={'mb-4 w-full md:mx-2 md:mb-0 md:w-1/4'}>
-          <label className="hidden" htmlFor="search-form">
-            Search
-          </label>
-          <input
-            className="text-white border bg-custom-gray border-dotted stroke-dasharray: 6; focus:border-orange p-2 rounded-lg shadow-inner w-full"
-            placeholder="Search"
-            type="text"
-          />
-          <button className="hidden">Submit</button>
-        </form>
-        {/*End Search */}
+        <Search />
 
         {/*Nav*/}
         <div ref={toggleRef}>

@@ -11,8 +11,10 @@ import { IoCaretDownOutline, IoCaretUpOutline } from 'react-icons/io5'
 import { memeType } from '@/components/types/types'
 import { ShareButtons } from '@/components/ui/ShareButtons'
 import { TertiaryBtn, VoteDownBtn, VoteUpBtn } from '@/components/ui/Buttons'
+import { useAuth } from '@/components/context/authContext'
 
 export const SingleMeme = ({ meme, enableLink }) => {
+  const auth = useAuth()
   const { setJson } = useFabricJson()
   const router = useRouter()
   const { upVote, downVote, getVoteState } = useVoting()
@@ -52,25 +54,37 @@ export const SingleMeme = ({ meme, enableLink }) => {
 
       <ShareButtons id={meme._id} />
       <div className={'flex justify-between items-center'}>
-        <TertiaryBtn
-          onClick={() => {
-            setJson(meme)
-            router.push('/create')
-          }}
-        >
-          Copy Meme
-        </TertiaryBtn>
+        {auth.isAuthenticated() && (
+          <TertiaryBtn
+            onClick={() => {
+              setJson(meme)
+              router.push('/create')
+            }}
+          >
+            Copy Meme
+          </TertiaryBtn>
+        )}
         <div className={'flex space-x-1 justify-center items-center mt-1'}>
           <p className={'text-black dark:text-white text-center text-sm'}>
             {meme.points} point{Math.abs(meme.points) !== 1 && 's'} · {meme.views} view
-            {Math.abs(meme.views) !== 1 && 's'}
+            {Math.abs(meme.views) !== 1 && 's'} · {meme.commentCount} comment
+            {Math.abs(meme.commentCount) !== 1 && 's'}
           </p>
-          <VoteUpBtn disabled={getVoteState(meme) === VOTE.up} onClick={() => upVote(meme)}>
-            <IoCaretUpOutline size={22} className={'fill-current inline-flex self-center'} />
-          </VoteUpBtn>
-          <VoteDownBtn disabled={getVoteState(meme) === VOTE.down} onClick={() => downVote(meme)}>
-            <IoCaretDownOutline size={22} className={'fill-current inline-flex self-center'} />
-          </VoteDownBtn>
+          {auth.isAuthenticated() ? (
+            <>
+              <VoteUpBtn disabled={getVoteState(meme) === VOTE.up} onClick={() => upVote(meme)}>
+                <IoCaretUpOutline size={22} className={'fill-current inline-flex self-center'} />
+              </VoteUpBtn>
+              <VoteDownBtn
+                disabled={getVoteState(meme) === VOTE.down}
+                onClick={() => downVote(meme)}
+              >
+                <IoCaretDownOutline size={22} className={'fill-current inline-flex self-center'} />
+              </VoteDownBtn>
+            </>
+          ) : (
+            <div />
+          )}
         </div>
       </div>
     </div>
