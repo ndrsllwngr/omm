@@ -102,8 +102,7 @@ export default async function memeHandler(req, res) {
       const fs = memoryFs()
       console.log(fs.readFileSync('/virtual/.keep', 'utf8'))
       // Root folder for files
-      // TODO create from timestamp
-      const rootFolder = getMemoryFSPath('unzip/')
+      const rootFolder = getMemoryFSPath(Date.now() + '/')
       fs.mkdirSync(rootFolder, { recursive: true })
 
       // Promise for retrieving the zip file
@@ -159,12 +158,7 @@ export default async function memeHandler(req, res) {
 
         // Iterate over all the entries in the zip file
         for await (const entry of zip) {
-          // Ignore cache folders, hidden files & files which do not end with do not end with .jpg or .png
-          console.log({
-            e: entry.path,
-            endsWith: entry.path.endsWith('.jpg'),
-            combo: !(entry.path.endsWith('.png') && !entry.path.endsWith('.jpg')),
-          })
+          // Ignore cache folders, hidden files & files which do not end with do not end with .jpg, .png or .json
           if (
             entry.path.startsWith('_') ||
             entry.path.startsWith('.') ||
