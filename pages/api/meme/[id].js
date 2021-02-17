@@ -1,5 +1,6 @@
-import firebase from '@/lib/firebaseNode'
-import { FIRESTORE_COLLECTION } from '@/lib/constants'
+import { MONGODB_COLLECTION } from '@/lib/constants'
+import { getMongoDBClient } from '@/lib/mongoDB'
+import ObjectID from 'bson-objectid'
 
 export default async function memeHandler(req, res) {
   const {
@@ -7,32 +8,28 @@ export default async function memeHandler(req, res) {
     method,
   } = req
 
-  // Initialize firebase variables
-  const db = firebase.firestore()
-  const memeCollection = db.collection(FIRESTORE_COLLECTION.MEMES)
+  // Initialize mongodb variables
+  const db = await getMongoDBClient()
+  const memeCollection = db.collection(MONGODB_COLLECTION.MEMES)
 
   switch (method) {
     case 'GET':
       // Get meme from Firestore
-      const meme = await memeCollection.doc(id).get()
-      console.debug(`FIRESTORE_COLLECTION.MEMES`, 'READ', '/[id]')
+      const meme = await memeCollection.findOne({ _id: new ObjectID(id) }, {})
       // When meme doesn't exist return 404
-      if (!meme.exists) {
+      if (!meme) {
         res.status(404).end(`Meme with id ${id} Not Found`)
         break
       }
 
-      const memeData = meme.data()
-      // Substitute template document ref with template id
-      memeData.template = memeData.template.id
       // Add download URL to response
       //TODO improve download URL by dynamically adding HOST_NAME
-      memeData.downloadURL = `http://localhost:3000/api/meme/image/${meme.id}?download=true`
+      meme.downloadURL = `http://localhost:3000/api/meme/image/${meme._id}?download=true`
       // Add embed URL to response
       //TODO dynamically add HOST_NAME
-      memeData.embedURL = `http://localhost:3000/api/meme/image/${meme.id}`
+      meme.embedURL = `http://localhost:3000/api/meme/image/${meme._id}`
       // Return meme data
-      res.status(200).json(memeData)
+      res.status(200).json(meme)
       break
     default:
       res.setHeader('Allow', ['GET'])
