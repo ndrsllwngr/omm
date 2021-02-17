@@ -209,8 +209,6 @@ export default async function memeHandler(req, res) {
 
         // Remove the folder and all files
         fs.rmdirSync(rootFolder, { recursive: true })
-        // If it ran until here: It worked! :P
-        res.status(200).end('Successfully unzipped')
       })
 
       break
