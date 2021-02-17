@@ -24,7 +24,7 @@ export default async function memeHandler(req, res) {
   const memeCollection = db.collection(MONGODB_COLLECTION.MEMES)
   const fabric = getFabric()
   // Initialize archiver
-  let archiver = Archiver('zip', {
+  const archiver = Archiver('zip', {
     zlib: { level: 9 }, // Sets the compression level.
   })
 
@@ -79,8 +79,9 @@ export default async function memeHandler(req, res) {
         })
       })
       // Finalize stream
-      await imageTasks
-      await archiver.finalize()
+      Promise.all(imageTasks).then(() => {
+        archiver.finalize()
+      })
 
       break
 
@@ -97,7 +98,6 @@ export default async function memeHandler(req, res) {
 
       // Filesystem needs to be imported like this in order for the fs to be patched
       const fs = memoryFs()
-      console.log(fs.readFileSync('/virtual/.keep', 'utf8'))
       // Root folder for files
       const rootFolder = getMemoryFSPath(Date.now() + '/')
       fs.mkdirSync(rootFolder, { recursive: true })
@@ -114,23 +114,19 @@ export default async function memeHandler(req, res) {
           if (!part.filename.includes('.zip')) {
             res.status(400).end(`Wrong filetype: ${part.filename}`)
           }
-          console.log(part.filename)
           let filename = rootFolder + part.filename
           // Add filename to list of filenames
           content = filename
           // Create a new stream for writing to the new file
-          try {
-            // Create empty file
-            // Necessary due to https://github.com/streamich/unionfs/issues/428
-            const fd = fs.openSync(filename, 'w')
-            let writeStream = fs.createWriteStream(filename)
-            // Pipe the data from the request into the new in memory zip file
-            part.pipe(writeStream)
-            // Add a promise to the retrieval task list to be able to wait for them
-            zipPromise = new Promise((fulfill) => writeStream.on('finish', fulfill))
-          } catch (e) {
-            console.log(e)
-          }
+
+          // Create empty file
+          // Necessary due to https://github.com/streamich/unionfs/issues/428
+          const fd = fs.openSync(filename, 'w')
+          let writeStream = fs.createWriteStream(filename)
+          // Pipe the data from the request into the new in memory zip file
+          part.pipe(writeStream)
+          // Add a promise to the retrieval task list to be able to wait for them
+          zipPromise = new Promise((fulfill) => writeStream.on('finish', fulfill))
         }
       }
 
@@ -258,7 +254,7 @@ export default async function memeHandler(req, res) {
             }
             // Wait for meme creation tasks to finish
             await memeTasks
-            // Finalize the archiver stream
+            // Finalize stream
             await archiver.finalize()
           } catch (e) {
             res.status(400).end('Error when parsing content.json: ' + e.message)
