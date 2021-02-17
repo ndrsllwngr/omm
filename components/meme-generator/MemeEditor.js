@@ -7,47 +7,10 @@ import { useFabricCanvas, useTemplate } from '@/components/context/fabricContext
 import { ImageToolbar } from '@/components/meme-generator/ImageToolbar'
 import { useRouter } from 'next/router'
 import { useAuth } from '@/components/context/authContext'
-import { SORT, VISIBILITY } from '@/lib/constants'
+import { FONT_FAMILY, SORT, VISIBILITY } from '@/lib/constants'
 import PropTypes from 'prop-types'
 import { useSortContext } from '@/components/context/viewsContext'
 import { gql, useMutation } from '@apollo/client'
-
-const ADD_DRAFT = gql`
-  mutation AddMeme($draft: DraftInsertInput!) {
-    insertOneDraft(data: $draft) {
-      url
-      json
-      views
-      points
-      createdBy {
-        _id
-      }
-      downVotes {
-        _id
-      }
-      upVotes {
-        _id
-      }
-      _id
-      createdAt
-      title
-      visibility
-      forkedFrom {
-        _id
-      }
-      forkedBy {
-        _id
-      }
-      template {
-        id {
-          _id
-        }
-        url
-      }
-      svg
-    }
-  }
-`
 
 const ADD_MEME = gql`
   mutation AddMeme($meme: MemeInsertInput!) {
@@ -103,7 +66,6 @@ mutation($todo: todos_insert_input!){
 export const MemeEditor = () => {
   const router = useRouter()
   const [insertOneMeme] = useMutation(ADD_MEME)
-  const [insertOneDraft] = useMutation(ADD_DRAFT)
   const { canvas, isCopy } = useFabricCanvas()
   const [imgURL, setImgURL] = useState('')
   const { template } = useTemplate()
@@ -129,11 +91,17 @@ export const MemeEditor = () => {
 
   const addText = () => {
     const txt = new fabric.Textbox('Add Text', {
-      shadow: 'rgba(0,0,0,0.3) 5px 5px 5px',
-      height: 200,
-      width: 300,
+      //shadow: 'rgba(0,0,0,0.3) 5px 5px 5px',
+      shadow: null,
+      width: 200,
+      fontStyle: 'normal',
+      fontSize: 24,
+      fill: '#000000',
+      textAlign: 'left',
+      fontFamily: FONT_FAMILY.ANTON,
+      fontWeight: 'normal',
     })
-    customSelect(txt)
+    //customSelect(txt)
     canvas.add(txt)
     canvas.renderAll()
     console.log({ src: 'MemeEditor.addText', txt, canvas })
@@ -162,7 +130,7 @@ export const MemeEditor = () => {
     }
   }
 
-  const generateMeme = () => {
+  const generateMeme = ({ isDraft = false }) => {
     const canvasAsJson = canvas.toJSON([
       'width',
       'height',
@@ -181,6 +149,7 @@ export const MemeEditor = () => {
       upVotes: { link: [] },
       downVotes: { link: [] },
       forkedBy: { link: [] },
+      isDraft: isDraft,
       points: 0,
       views: 0,
       forkedFrom: isCopy ? { link: isCopy } : null,
@@ -196,46 +165,13 @@ export const MemeEditor = () => {
     insertOneMeme({ variables: { meme: newObj } })
       .then((result) => {
         console.log({ result })
-        setSort(SORT.LATEST)
-        router.push(`/meme/${result.data.insertOneMeme._id}`)
-      })
-      .catch((e) => console.error(e))
-  }
-
-  const generateDraft = () => {
-    const canvasAsJson = canvas.toJSON([
-      'width',
-      'height',
-      'id',
-      'preserveObjectStacking',
-      'enableRetinaScaling',
-    ])
-    const svg = canvas.toSVG()
-    const newObj = {
-      title,
-      commentCount: 0,
-      createdAt: new Date(),
-      createdBy: { link: auth.getUser().id },
-      visibility: visibility,
-      upVotes: { link: [] },
-      downVotes: { link: [] },
-      forkedBy: { link: [] },
-      forkedFrom: isCopy ? { link: isCopy } : null,
-      points: 0,
-      views: 0,
-      template: {
-        id: { link: template._id ? template._id : null },
-        url: template.url,
-      },
-      url: '', // TODO if a real png was created (requirement)
-      svg,
-      json: JSON.stringify(canvasAsJson),
-    }
-    console.log({ src: 'MemeEditor.generateDraft', newObj, svg })
-    insertOneDraft({ variables: { draft: newObj } })
-      .then((result) => {
-        console.log(result)
-        router.push(`/profile`)
+        if (isDraft) {
+          console.log(result)
+          router.push(`/profile`)
+        } else {
+          setSort(SORT.LATEST)
+          router.push(`/meme/${result.data.insertOneMeme._id}`)
+        }
       })
       .catch((e) => console.error(e))
   }
@@ -296,8 +232,8 @@ export const MemeEditor = () => {
           <option value={VISIBILITY.UNLISTED}>Unlisted</option>
           <option value={VISIBILITY.PRIVATE}>Private</option>
         </select>
-        <Button onClick={generateDraft}>Save as Draft</Button>
-        <Button onClick={generateMeme}>Generate</Button>
+        <Button onClick={() => generateMeme({ isDraft: true })}>Save as Draft</Button>
+        <Button onClick={() => generateMeme({ isDraft: false })}>Generate</Button>
       </div>
       {previewMode && (
         <>

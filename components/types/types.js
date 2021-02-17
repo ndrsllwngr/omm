@@ -1,4 +1,4 @@
-import { shape, string, arrayOf, any, number, object } from 'prop-types'
+import { shape, string, arrayOf, any, number, object, bool } from 'prop-types'
 
 export const templateType = shape({
   id: string,
@@ -19,7 +19,6 @@ export const userType = shape({
   uid: string, // TODO why do we need this?
 })
 
-// TODO add views count
 export const memeType = shape({
   _id: string,
   title: string,
@@ -29,6 +28,7 @@ export const memeType = shape({
   downVotes: arrayOf(object),
   forkedBy: arrayOf(userType),
   forkedFrom: string,
+  isDraft: bool,
   views: number,
   visibility: string,
   points: number,

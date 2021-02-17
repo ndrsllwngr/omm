@@ -83,7 +83,7 @@ export const TemplateDetails = ({ templateID }) => {
         console.log('ups, downs, views:', ups, downs, vs)
       }
     }
-  }, [data, loading, error, calculationIsDone, setCalculationIsDone, memesFromTemplate])
+  }, [data, loading, error, calculationIsDone, setCalculationIsDone, memesFromTemplate, templateID])
 
   // useEffect(() => {
   //   var ups = 0

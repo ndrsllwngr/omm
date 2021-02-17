@@ -48,6 +48,7 @@ export const CURRENT_MEME = gql`
       forkedFrom {
         _id
       }
+      isDraft
       json
       svg
       template {

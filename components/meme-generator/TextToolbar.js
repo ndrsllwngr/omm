@@ -22,6 +22,13 @@ import { useImmer } from 'use-immer'
 import { FONT_FAMILY } from '@/lib/constants'
 import { useDetectOutsideClick } from '@/components/hooks/useDetectOutsideClick'
 
+const allowedFonts = [
+  FONT_FAMILY.ALLAN,
+  FONT_FAMILY.ANTON,
+  FONT_FAMILY.COMIC_NEUE,
+  FONT_FAMILY.ROBOTO_MONO,
+]
+
 const shadows = {
   none: null,
   'shadow-1': {
@@ -39,7 +46,7 @@ const textBoxInitialState = {
   fontSize: 16,
   fill: '#000000',
   textAlign: 'left',
-  fontFamily: 'arial',
+  fontFamily: FONT_FAMILY.ANTON,
   fontWeight: 'normal',
   shadow: null,
 }
@@ -219,54 +226,17 @@ export const TextToolbar = (_props) => {
                     aria-orientation="vertical"
                     aria-labelledby="options-menu"
                   >
-                    <div
-                      onClick={() => handleChange('fontFamily', FONT_FAMILY.ARIAL)}
-                      className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900"
-                      role="menuitem"
-                      style={{ fontFamily: FONT_FAMILY.ARIAL }}
-                    >
-                      {FONT_FAMILY.ARIAL}
-                    </div>
-                    <div
-                      onClick={() => handleChange('fontFamily', FONT_FAMILY.TIMES_NEW_ROMAN)}
-                      className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900"
-                      role="menuitem"
-                      style={{ fontFamily: FONT_FAMILY.TIMES_NEW_ROMAN }}
-                    >
-                      {FONT_FAMILY.TIMES_NEW_ROMAN}
-                    </div>
-                    <div
-                      onClick={() => handleChange('fontFamily', FONT_FAMILY.ANTON)}
-                      className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900"
-                      role="menuitem"
-                      style={{ fontFamily: FONT_FAMILY.ANTON }}
-                    >
-                      {FONT_FAMILY.ANTON}
-                    </div>
-                    <div
-                      onClick={() => handleChange('fontFamily', FONT_FAMILY.ALLAN)}
-                      className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900"
-                      role="menuitem"
-                      style={{ fontFamily: FONT_FAMILY.ALLAN }}
-                    >
-                      {FONT_FAMILY.ALLAN}
-                    </div>
-                    <div
-                      onClick={() => handleChange('fontFamily', FONT_FAMILY.COMIC_NEUE)}
-                      className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900"
-                      role="menuitem"
-                      style={{ fontFamily: FONT_FAMILY.COMIC_NEUE }}
-                    >
-                      {FONT_FAMILY.COMIC_NEUE}
-                    </div>
-                    <div
-                      onClick={() => handleChange('fontFamily', FONT_FAMILY.ROBOTO_MONO)}
-                      className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900"
-                      role="menuitem"
-                      style={{ fontFamily: FONT_FAMILY.ROBOTO_MONO }}
-                    >
-                      {FONT_FAMILY.ROBOTO_MONO}
-                    </div>
+                    {allowedFonts.map((font, i) => (
+                      <div
+                        key={i}
+                        onClick={() => handleChange('fontFamily', font)}
+                        className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900"
+                        role="menuitem"
+                        style={{ fontFamily: font }}
+                      >
+                        {font}
+                      </div>
+                    ))}
                   </div>
                 </div>
               )}

@@ -1,6 +1,7 @@
 import React, { useCallback, createContext, useState, useContext, useRef, useMemo } from 'react'
 import { fabric } from 'fabric'
 import PropTypes from 'prop-types'
+import { FONT_FAMILY } from '@/lib/constants'
 // import { initAligningGuidelines } from '@/components/meme/Guidelines'
 
 const FabricJsonContext = createContext({})
@@ -23,7 +24,7 @@ const textOptions = {
   fontWeight: 'normal',
   fontStyle: 'normal',
   textAlign: 'center',
-  fontFamily: 'arial',
+  fontFamily: FONT_FAMILY.ANTON,
   textDecoration: 'normal',
   fill: '#000000',
 }

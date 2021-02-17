@@ -7,9 +7,9 @@ import formatDistance from 'date-fns/formatDistance'
 import { gql, NetworkStatus, useMutation, useQuery } from '@apollo/client'
 import { useAuth } from '@/components/context/authContext'
 
-export const ALL_PERSONAL_DRAFTS_QUERY = gql`
-  query getAllPersonalDrafts($user: UserQueryInput) {
-    drafts(query: { createdBy: $user }, sortBy: CREATEDAT_DESC) {
+export const ALL_PERSONAL_MEME_DRAFTS_QUERY = gql`
+  query getPersonalMemeDrafts($user: UserQueryInput) {
+    memes(query: { createdBy: $user, isDraft: true }, sortBy: CREATEDAT_DESC) {
       _id
       createdAt
       createdBy {
@@ -25,6 +25,7 @@ export const ALL_PERSONAL_DRAFTS_QUERY = gql`
         _id
       }
       json
+      isDraft
       svg
       template {
         id {
@@ -43,9 +44,9 @@ export const ALL_PERSONAL_DRAFTS_QUERY = gql`
   }
 `
 
-const DELETE_DRAFT = gql`
-  mutation DeleteDraft($draft: DraftQueryInput!) {
-    deleteOneDraft(query: $draft) {
+const DELETE_MEME_DRAFT = gql`
+  mutation deleteMemeDraft($meme: MemeQueryInput!) {
+    deleteOneMeme(query: $meme) {
       _id
     }
   }
@@ -53,12 +54,12 @@ const DELETE_DRAFT = gql`
 
 export const ProfileDrafts = ({ className }) => {
   const auth = useAuth()
-  const { loading, error, data, networkStatus } = useQuery(ALL_PERSONAL_DRAFTS_QUERY, {
+  const { loading, error, data, networkStatus } = useQuery(ALL_PERSONAL_MEME_DRAFTS_QUERY, {
     variables: { user: { _id: auth.getUser().id } },
     notifyOnNetworkStatusChange: true,
     fetchPolicy: 'cache-and-network',
   })
-  const [deleteOneDraft] = useMutation(DELETE_DRAFT)
+  const [deleteOneMeme] = useMutation(DELETE_MEME_DRAFT)
   const loadingMoreDrafts = networkStatus === NetworkStatus.fetchMore
   const router = useRouter()
   const { setJson } = useFabricJson()
@@ -72,13 +73,13 @@ export const ProfileDrafts = ({ className }) => {
   return (
     <div className={className}>
       {data &&
-        data.drafts.map((draft, i) => (
+        data.memes?.map((meme, i) => (
           <button
             key={i}
             className="flex flex-col max-w-md"
             onClick={() => {
-              setJson(draft)
-              deleteOneDraft({ variables: { draft: { _id: draft._id } } })
+              setJson(meme)
+              deleteOneMeme({ variables: { meme: { _id: meme._id } } })
                 .then((res) => {
                   console.log('Document successfully deleted!', res)
                   router.push('/create')
@@ -87,12 +88,12 @@ export const ProfileDrafts = ({ className }) => {
             }}
           >
             <p className={'uppercase text-xs text-gray-600 dark:text-gray-300 font-medium'}>
-              {formatDistance(new Date(draft.createdAt), new Date(), { addSuffix: true })}
+              {formatDistance(new Date(meme.createdAt), new Date(), { addSuffix: true })}
             </p>
             <h1 className={'text-lg font-bold text-black dark:text-white truncate'}>
-              {draft.title ? draft.title : 'Untitled'}
+              {meme.title ? meme.title : 'Untitled'}
             </h1>
-            <MemeRenderer meme={draft} />
+            <MemeRenderer meme={meme} />
           </button>
         ))}
     </div>
