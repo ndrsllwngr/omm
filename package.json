@@ -24,7 +24,8 @@
     "storybook": "start-storybook -s ./public -p 6006",
     "build-storybook": "build-storybook",
     "license:full": "license-checker > ./license-check.txt",
-    "license:summary": "license-checker --summary"
+    "license:summary": "license-checker --summary",
+    "vercel-build": "yum install libuuid-devel libmount-devel && cp /lib64/{libuuid,libmount,libblkid}.so.1 node_modules/canvas/build/Release/ && npm run build"
   },
   "browserslist": {
     "production": [
