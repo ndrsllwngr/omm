@@ -7,7 +7,7 @@ import { useFabricCanvas, useTemplate } from '@/components/context/fabricContext
 import { ImageToolbar } from '@/components/meme-generator/ImageToolbar'
 import { useRouter } from 'next/router'
 import { useAuth } from '@/components/context/authContext'
-import { SORT, VISIBILITY } from '@/lib/constants'
+import { FONT_FAMILY, SORT, VISIBILITY } from '@/lib/constants'
 import PropTypes from 'prop-types'
 import { useSortContext } from '@/components/context/viewsContext'
 import { gql, useMutation } from '@apollo/client'
@@ -129,11 +129,17 @@ export const MemeEditor = () => {
 
   const addText = () => {
     const txt = new fabric.Textbox('Add Text', {
-      shadow: 'rgba(0,0,0,0.3) 5px 5px 5px',
-      height: 200,
-      width: 300,
+      //shadow: 'rgba(0,0,0,0.3) 5px 5px 5px',
+      shadow: null,
+      width: 200,
+      fontStyle: 'normal',
+      fontSize: 24,
+      fill: '#000000',
+      textAlign: 'left',
+      fontFamily: FONT_FAMILY.ANTON,
+      fontWeight: 'normal',
     })
-    customSelect(txt)
+    //customSelect(txt)
     canvas.add(txt)
     canvas.renderAll()
     console.log({ src: 'MemeEditor.addText', txt, canvas })
