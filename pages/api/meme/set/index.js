@@ -3,8 +3,8 @@ import { MONGODB_COLLECTION } from '@/lib/constants'
 import { getMongoDBClient } from '@/lib/mongoDB'
 import { fabric } from 'fabric'
 import IncomingForm from 'formidable-serverless'
-import { createFsFromVolume, Volume } from 'memfs'
 import unzipper from 'unzipper'
+import { getMemoryFSPath, memoryFs } from '@/lib/memfs'
 
 export const config = {
   api: {
@@ -95,13 +95,14 @@ export default async function memeHandler(req, res) {
       form.maxFileSize = 100 * 1024 * 1024
       form.keepExtensions = true
       form.multiples = true
-      // Create new in-memory volume
-      const vol = new Volume()
-      // Create filesystem from volume
-      const fs = createFsFromVolume(vol)
+
+      // Filesystem needs to be imported like this in order for the fs to be patched
+      const fs = memoryFs()
+      console.log(fs.readFileSync('/virtual/.keep', 'utf8'))
       // Root folder for files
-      const rootFolder = './unzip/'
-      vol.mkdirSync(rootFolder, { recursive: true })
+      // TODO create from timestamp
+      const rootFolder = getMemoryFSPath('unzip/')
+      fs.mkdirSync(rootFolder, { recursive: true })
 
       // Promise for retrieving the zip file
       let zipPromise = null
@@ -121,11 +122,18 @@ export default async function memeHandler(req, res) {
           // Add filename to list of filenames
           content = filename
           // Create a new stream for writing to the new file
-          let writeStream = fs.createWriteStream(filename)
-          // Pipe the data from the request into the new in memory zip file
-          part.pipe(writeStream)
-          // Add a promise to the retrieval task list to be able to wait for them
-          zipPromise = new Promise((fulfill) => writeStream.on('finish', fulfill))
+          try {
+            // Create empty file
+            // Necessary due to https://github.com/streamich/unionfs/issues/428
+            const fd = fs.openSync(filename, 'w')
+            let writeStream = fs.createWriteStream(filename)
+            // Pipe the data from the request into the new in memory zip file
+            part.pipe(writeStream)
+            // Add a promise to the retrieval task list to be able to wait for them
+            zipPromise = new Promise((fulfill) => writeStream.on('finish', fulfill))
+          } catch (e) {
+            console.log(e)
+          }
         }
       }
 
@@ -134,9 +142,7 @@ export default async function memeHandler(req, res) {
         // Wait for the retrieval of all the zips from the request
         // Hint: All of the calls of the previous function will actually be fullfilled here
         await zipPromise
-
-        console.log({ content, zipPromise })
-
+        // If no content was provided return 400
         if (!content) {
           res
             .status(400)
@@ -152,14 +158,25 @@ export default async function memeHandler(req, res) {
         // Iterate over all the entries in the zip file
         for await (const entry of zip) {
           // Ignore cache folders, hidden files & files which do not end with do not end with .jpg or .png
+          console.log({
+            e: entry.path,
+            endsWith: entry.path.endsWith('.jpg'),
+            combo: !(entry.path.endsWith('.png') && !entry.path.endsWith('.jpg')),
+          })
           if (
             entry.path.startsWith('_') ||
             entry.path.startsWith('.') ||
-            !(entry.path.endsWith('.png') || !entry.path.endsWith('.jpg'))
+            (!entry.path.endsWith('.png') &&
+              !entry.path.endsWith('.jpg') &&
+              !entry.path.endsWith('.json'))
           ) {
             console.log(`Ignoring file ${entry.path} - wrong type`)
             continue
           }
+
+          // Create empty file
+          // Necessary due to https://github.com/streamich/unionfs/issues/428
+          const fd = fs.openSync(rootFolder + entry.path, 'w')
 
           // Create a new stream for writing to the new file created in the memfs
           let writeStream = fs.createWriteStream(rootFolder + entry.path)
@@ -169,17 +186,30 @@ export default async function memeHandler(req, res) {
           // Add a new promise to the unzipTasks
           unzipTasks.push(new Promise((fulfill) => writeStream.on('finish', fulfill)))
         }
-        console.log(unzipTasks)
         // Wait for all unzipping promises to fulfill
         await Promise.all(unzipTasks)
         // Remove .zip file
         fs.unlinkSync(content)
-        fs.readdirSync(rootFolder).forEach((file) => {
-          console.log(file)
+
+        fs.readFile(rootFolder + 'content.json', (err, data) => {
+          if (err) {
+            res.status(200).end('Error when parsing content.json: ' + err.message)
+            return
+          }
+          try {
+            let content = JSON.parse(data)
+
+            console.log(content)
+          } catch (e) {
+            res.status(200).end('Error when parsing content.json: ' + e.message)
+
+          }
         })
 
-        // Remove all files from the volume
-        vol.reset()
+        //Check this for fabric: https://github.com/streamich/fs-monkey/issues/139
+
+        // Remove the folder and all files
+        fs.rmdirSync(rootFolder, { recursive: true })
         // If it ran until here: It worked! :P
         res.status(200).end('Successfully unzipped')
       })
