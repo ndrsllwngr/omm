@@ -1,10 +1,10 @@
 import Archiver from 'archiver'
 import { MONGODB_COLLECTION } from '@/lib/constants'
 import { getMongoDBClient } from '@/lib/mongoDB'
-import { fabric } from 'fabric'
 import IncomingForm from 'formidable-serverless'
 import unzipper from 'unzipper'
-import { getMemoryFSPath, memoryFs } from '@/lib/memfs'
+import { getMemoryFSPath, memoryFs } from '@/lib/memoryFs'
+import { getFabric } from '@/lib/canvas'
 
 export const config = {
   api: {
@@ -33,6 +33,8 @@ export default async function memeHandler(req, res) {
         res.status(400).end('Limit has to be a positive number')
         break
       }
+
+      const fabric = getFabric()
 
       const re = '(?i)' + search
       const query = { title: { $regex: re } }

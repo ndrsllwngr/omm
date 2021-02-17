@@ -1,7 +1,7 @@
-import { fabric } from 'fabric'
 import { MONGODB_COLLECTION } from '@/lib/constants'
 import { getMongoDBClient } from '@/lib/mongoDB'
 import ObjectID from 'bson-objectid'
+import { getFabric } from '@/lib/canvas'
 
 export default async function memeHandler(req, res) {
   const {
@@ -27,6 +27,7 @@ export default async function memeHandler(req, res) {
       const width = memeJSON.width
       const height = memeJSON.height
 
+      const fabric = getFabric()
       const canvas = new fabric.StaticCanvas(null, { width: width, height: height })
 
       res.setHeader('Content-Type', 'image/png')
