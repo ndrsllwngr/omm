@@ -3,6 +3,7 @@ import { MONGODB_COLLECTION } from '@/lib/constants'
 import { getMongoDBClient } from '@/lib/mongoDB'
 import IncomingForm from 'formidable-serverless'
 import unzipper from 'unzipper'
+import path from 'path'
 import { getMemoryFSPath, memoryFs } from '@/lib/memoryFs'
 import { getFabric } from '@/lib/canvas'
 
@@ -22,6 +23,11 @@ export default async function memeHandler(req, res) {
   // Initialize mongodb variables
   const db = await getMongoDBClient()
   const memeCollection = db.collection(MONGODB_COLLECTION.MEMES)
+  const fabric = getFabric()
+  // Initialize archiver
+  let archiver = Archiver('zip', {
+    zlib: { level: 9 }, // Sets the compression level.
+  })
 
   switch (method) {
     // Using:
@@ -33,8 +39,6 @@ export default async function memeHandler(req, res) {
         res.status(400).end('Limit has to be a positive number')
         break
       }
-
-      const fabric = getFabric()
 
       const re = '(?i)' + search
       const query = { title: { $regex: re } }
@@ -50,11 +54,6 @@ export default async function memeHandler(req, res) {
         res.status(404).end('No memes matching the provided criteria found')
         break
       }
-
-      // Initialize archiver
-      let archiver = Archiver('zip', {
-        zlib: { level: 9 }, // Sets the compression level.
-      })
 
       // Set headers for response
       res.setHeader('Content-Type', 'application/zip')
@@ -81,9 +80,8 @@ export default async function memeHandler(req, res) {
         })
       })
       // Finalize stream
-      Promise.all(imageTasks).then(() => {
-        archiver.finalize()
-      })
+      await imageTasks
+      await archiver.finalize()
 
       break
 
@@ -187,24 +185,69 @@ export default async function memeHandler(req, res) {
         // Remove .zip file
         fs.unlinkSync(content)
 
-        fs.readFile(rootFolder + 'content.json', (err, data) => {
+        fs.readFile(rootFolder + 'content.json', async (err, data) => {
           if (err) {
+            // Remove the folder and all files
+            fs.rmdirSync(rootFolder, { recursive: true })
             res.status(400).end('Error when parsing content.json: ' + err.message)
             return
           }
           try {
             let content = JSON.parse(data)
-            console.log(content)
-            res.status(200).json(content)
+
+            // Set headers for response
+            res.setHeader('Content-Type', 'application/zip')
+            res.setHeader('Content-disposition', 'attachment; filename=memes.zip')
+            // Send the file to the route output.
+            archiver.pipe(res)
+            // List of meme creation promises
+            const memeTasks = []
+
+            let counter = 0
+
+            await content.memes.forEach(async (meme) => {
+              const img = meme.file
+              meme.contents.forEach(async (content) => {
+                content.objects = content.objects.map((object) => {
+                  if (object.type === 'image' && object.src === img) {
+                    object.src = `file://${rootFolder + img}`
+                    console.log(object.src)
+                  }
+                  return object
+                })
+
+                const width = content.width
+                const height = content.height
+
+                let canvas = new fabric.StaticCanvas(null, { width: width, height: height })
+
+                canvas = await canvas.loadFromJSON(content)
+
+                canvas.renderAll()
+
+                const stream = canvas.createPNGStream()
+                archiver.append(stream, { name: `${counter}.png` })
+                memeTasks.push(
+                  new Promise((resolve, reject) => {
+                    stream.on('end', resolve)
+                    stream.on('error', reject)
+                    counter++
+                  })
+                )
+              })
+            })
+            await memeTasks
+            await archiver.finalize()
           } catch (e) {
+            // TODO check if this works
             res.status(400).end('Error when parsing content.json: ' + e.message)
+          } finally {
+            // Remove the folder and all files
+            fs.rmdirSync(rootFolder, { recursive: true })
           }
         })
 
         //Check this for fabric: https://github.com/streamich/fs-monkey/issues/139
-
-        // Remove the folder and all files
-        fs.rmdirSync(rootFolder, { recursive: true })
       })
 
       break
