@@ -193,16 +193,15 @@ export default async function memeHandler(req, res) {
 
         fs.readFile(rootFolder + 'content.json', (err, data) => {
           if (err) {
-            res.status(200).end('Error when parsing content.json: ' + err.message)
+            res.status(400).end('Error when parsing content.json: ' + err.message)
             return
           }
           try {
             let content = JSON.parse(data)
-
             console.log(content)
+            res.status(200).json(content)
           } catch (e) {
-            res.status(200).end('Error when parsing content.json: ' + e.message)
-
+            res.status(400).end('Error when parsing content.json: ' + e.message)
           }
         })
 
