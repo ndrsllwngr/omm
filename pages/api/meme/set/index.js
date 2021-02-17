@@ -3,8 +3,7 @@ import { MONGODB_COLLECTION } from '@/lib/constants'
 import { getMongoDBClient } from '@/lib/mongoDB'
 import IncomingForm from 'formidable-serverless'
 import unzipper from 'unzipper'
-import path from 'path'
-import { getMemoryFSPath, memoryFs } from '@/lib/memoryFs'
+import { clearDirectory, getMemoryFSPath, memoryFs } from '@/lib/memoryFs'
 import { getFabric } from '@/lib/canvas'
 
 export const config = {
@@ -110,12 +109,11 @@ export default async function memeHandler(req, res) {
 
       // Overriding the onPart functions in order to be able to parse the file as a stream into the in-memory fs
       form.onPart = function (part) {
-        console.log({ part })
-        // Only accept .zip files
-        if (!part.filename.includes('.zip')) {
-          res.status(400).end(`Wrong filetype: ${part.filename}`)
-        }
         if (part.name === 'content') {
+          // Only accept .zip files
+          if (!part.filename.includes('.zip')) {
+            res.status(400).end(`Wrong filetype: ${part.filename}`)
+          }
           console.log(part.filename)
           let filename = rootFolder + part.filename
           // Add filename to list of filenames
@@ -148,6 +146,7 @@ export default async function memeHandler(req, res) {
             .end(
               `No 'content' provided, please add a field called 'content' pointing to a .zip file to your 'form-data'`
             )
+          return
         }
         // List of promises for processing all the zip files
         const unzipTasks = []
@@ -187,8 +186,8 @@ export default async function memeHandler(req, res) {
 
         fs.readFile(rootFolder + 'content.json', async (err, data) => {
           if (err) {
-            // Remove the folder and all files
-            fs.rmdirSync(rootFolder, { recursive: true })
+            // Remove the files from the rootFolder
+            clearDirectory(rootFolder)
             res.status(400).end('Error when parsing content.json: ' + err.message)
             return
           }
@@ -198,56 +197,76 @@ export default async function memeHandler(req, res) {
             // Set headers for response
             res.setHeader('Content-Type', 'application/zip')
             res.setHeader('Content-disposition', 'attachment; filename=memes.zip')
-            // Send the file to the route output.
+            // Send the zip file we are about to create to the route output.
             archiver.pipe(res)
             // List of meme creation promises
             const memeTasks = []
 
-            let counter = 0
-
-            await content.memes.forEach(async (meme) => {
+            // UGLY fix
+            // This is an ugly but necessary fix since for some reason the first image rendered will always be blank
+            // So here a file called .empty with the first blank image is created
+            // Images are apparently like pancakes, the first one is always shit
+            let canvas = new fabric.StaticCanvas(null, { width: 0, height: 0 })
+            canvas.renderAll()
+            const stream = canvas.createPNGStream()
+            archiver.append(stream, { name: `.empty` })
+            memeTasks.push(
+              new Promise((resolve, reject) => {
+                stream.on('end', resolve)
+                stream.on('error', reject)
+              })
+            )
+            //UGLY fix end
+            for (const [i, meme] of content.memes.entries()) {
+              // This is the base image we are using for the current meme
               const img = meme.file
-              meme.contents.forEach(async (content) => {
+
+              // Iterate over all the contents we want to create memes from (one meme per content)
+              for (const [j, content] of meme.contents.entries()) {
+                const width = content.width
+                const height = content.height
+
+                // Create a new canvas
+                let canvas = new fabric.StaticCanvas(null, { width: width, height: height })
+
+                // For all content type images which have img as their src => fix the src to work with the memfs
                 content.objects = content.objects.map((object) => {
                   if (object.type === 'image' && object.src === img) {
                     object.src = `file://${rootFolder + img}`
-                    console.log(object.src)
                   }
                   return object
                 })
 
-                const width = content.width
-                const height = content.height
-
-                let canvas = new fabric.StaticCanvas(null, { width: width, height: height })
-
+                // Load the content onto the canvas
                 canvas = await canvas.loadFromJSON(content)
 
+                // Render the canvas
                 canvas.renderAll()
 
+                // Create a stream for creating a png file from the canvas
                 const stream = canvas.createPNGStream()
-                archiver.append(stream, { name: `${counter}.png` })
+                // Append the file stream to the zip
+                archiver.append(stream, { name: `${i}_${j}.png` })
+                // Create a promise in order to be able to wait for the meme creation to finish
                 memeTasks.push(
                   new Promise((resolve, reject) => {
                     stream.on('end', resolve)
                     stream.on('error', reject)
-                    counter++
                   })
                 )
-              })
-            })
+              }
+            }
+            // Wait for meme creation tasks to finish
             await memeTasks
+            // Finalize the archiver stream
             await archiver.finalize()
           } catch (e) {
-            // TODO check if this works
             res.status(400).end('Error when parsing content.json: ' + e.message)
           } finally {
-            // Remove the folder and all files
-            fs.rmdirSync(rootFolder, { recursive: true })
+            // Remove the files from the rootFolder
+            clearDirectory(rootFolder)
           }
         })
-
-        //Check this for fabric: https://github.com/streamich/fs-monkey/issues/139
       })
 
       break
