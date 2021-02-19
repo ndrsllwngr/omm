@@ -83,6 +83,14 @@ const UPDATE_MEME = gql`
   }
 `
 
+const DELETE_MEME = gql`
+  mutation deleteMeme($query: MemeQueryInput!) {
+    deleteOneMeme(query: $query) {
+      _id
+    }
+  }
+`
+
 export const ProfileMemeHistory = ({ className }) => {
   const auth = useAuth()
   const { loading, error, data, networkStatus } = useQuery(ALL_PERSONAL_MEMES_QUERY, {
@@ -91,6 +99,7 @@ export const ProfileMemeHistory = ({ className }) => {
     fetchPolicy: 'cache-and-network',
   })
   const [updateOneMeme] = useMutation(UPDATE_MEME)
+  const [deleteOneMeme] = useMutation(DELETE_MEME)
   const loadingMoreDrafts = networkStatus === NetworkStatus.fetchMore
 
   useEffect(() => {
@@ -140,6 +149,16 @@ export const ProfileMemeHistory = ({ className }) => {
                     <option value={VISIBILITY.PRIVATE}>Private</option>
                   </select>
                 )}
+              <button
+                disabled={meme.createdBy._id.toString() !== auth.getUser().id.toString()}
+                onClick={() => {
+                  deleteOneMeme({ variables: { query: { _id: meme._id } } })
+                    .then((result) => console.log(result))
+                    .catch((e) => console.error(e))
+                }}
+              >
+                Delete
+              </button>
             </div>
           </button>
         ))}
