@@ -7,7 +7,7 @@ import { IconBtn, ToggleIconBtn, ToggleStateIconBtn } from '@/components/ui/Butt
 import { SingleMeme } from '@/components/SingleMeme'
 import { AUTOPLAY_ORDER, VISIBILITY } from '@/lib/constants'
 import { IoHelp, IoPlay, IoPause, IoArrowForward, IoArrowBack, IoShuffle } from 'react-icons/io5'
-import { gql, useQuery } from '@apollo/client'
+import { gql, useMutation, useQuery } from '@apollo/client'
 import { getNavigationQueryVariables } from '@/lib/utils'
 import { useViewCount } from '@/components/hooks/useViewCount'
 import { memeType } from '@/components/types/types'
@@ -30,9 +30,48 @@ const FETCH_RANDOM_MEME = gql`
   }
 `
 
+const UPDATE_MEME = gql`
+  mutation updateMeme($query: MemeQueryInput, $set: MemeUpdateInput!) {
+    updateOneMeme(query: $query, set: $set) {
+      _id
+      commentCount
+      createdAt
+      createdBy {
+        _id
+      }
+      downVotes {
+        _id
+      }
+      forkedBy {
+        _id
+      }
+      forkedFrom {
+        _id
+      }
+      isDraft
+      json
+      points
+      svg
+      template {
+        id {
+          _id
+        }
+      }
+      title
+      upVotes {
+        _id
+      }
+      url
+      views
+      visibility
+    }
+  }
+`
+
 export const Slideshow = ({ meme, sort, filter, yesterday }) => {
   const viewCount = useViewCount()
   const auth = useAuth()
+  const [updateOneMeme] = useMutation(UPDATE_MEME)
   useEffect(() => {
     viewCount.addView(meme._id)
     // Only run once per meme
@@ -100,6 +139,26 @@ export const Slideshow = ({ meme, sort, filter, yesterday }) => {
         )}
       </div>
       <SingleMeme meme={meme} />
+      {meme.visibility !== VISIBILITY.PUBLIC &&
+        meme.createdBy._id.toString() === auth.getUser().id.toString() && (
+          <select
+            value={meme.visibility}
+            onChange={(e) =>
+              updateOneMeme({
+                variables: {
+                  query: { _id: meme._id },
+                  set: { visibility: e.target.value },
+                },
+              })
+                .then((result) => console.log(result))
+                .catch((e) => console.error(e))
+            }
+          >
+            <option value={VISIBILITY.PUBLIC}>Public</option>
+            <option value={VISIBILITY.UNLISTED}>Unlisted</option>
+            <option value={VISIBILITY.PRIVATE}>Private</option>
+          </select>
+        )}
       <div className={'flex flex-col space-y-2'}>
         {auth.isAuthenticated() && <CommentInput meme={meme} />}
         {meme?.comments.map((comment, i) => (
