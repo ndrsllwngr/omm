@@ -253,7 +253,7 @@ export default async function memeHandler(req, res) {
               }
             }
             // Wait for meme creation tasks to finish
-            await memeTasks
+            await Promise.all(memeTasks)
             // Finalize stream
             await archiver.finalize()
           } catch (e) {
