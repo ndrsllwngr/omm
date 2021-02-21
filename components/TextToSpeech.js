@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react'
 const synth = window.speechSynthesis
 
 export const TextToSpeech = () => {
-  const textInput = 'test test 1 2 3'
+  const textInput = 'test test 1 2 3 - O M M group for the win lol'
   const [isSpeaking, setIsSpeaking] = useState(false)
 
   useEffect(() => {
@@ -45,15 +45,6 @@ export const TextToSpeech = () => {
 
   return (
     <div>
-      <div id="rate-value">
-        <input type="range" id="rate" min="0.5" max="2" value="1" step="0.1"></input>
-      </div>
-      <div id="pitch-value">
-        <input type="range" id="rate" min="0.5" max="2" value="1" step="0.1"></input>
-      </div>
-      <div id="language-value">
-        <select id="voice-select"></select>
-      </div>
       <button onClick={() => setIsSpeaking(true)}>Hear Caption</button>
     </div>
   )
