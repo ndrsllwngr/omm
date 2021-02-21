@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 
-const synth = window.speechSynthesis
+const synth = typeof window !== 'undefined' && window.speechSynthesis
 
 export const TextToSpeech = () => {
   const textInput = 'test test 1 2 3 - O M M group for the win lol'
@@ -38,7 +38,7 @@ export const TextToSpeech = () => {
         setIsSpeaking(false)
       }
     }
-    if (isSpeaking) {
+    if (synth && isSpeaking) {
       speak()
     }
   })
