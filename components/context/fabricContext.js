@@ -1,13 +1,15 @@
 import React, { useCallback, createContext, useState, useContext, useRef, useMemo } from 'react'
 import { fabric } from 'fabric'
 import PropTypes from 'prop-types'
-import { FONT_FAMILY } from '@/lib/constants'
+import { FONT_FAMILY, VISIBILITY } from '@/lib/constants'
 // import { initAligningGuidelines } from '@/components/meme/Guidelines'
 
 const FabricJsonContext = createContext({})
 const FabricCanvasContext = createContext({})
 const FabricActiveObjectContext = createContext({})
-const TemplateContext = React.createContext({})
+const TemplateContext = createContext({})
+const TitleContext = createContext({})
+const VisibilityContext = createContext({})
 
 // TODO verify that this is everything we need
 const emptyState = {
@@ -40,6 +42,8 @@ export const FabricProvider = ({ children }) => {
   const [template, setTemplate] = useMemo(() => [templateContext, setTemplateContext], [
     templateContext,
   ])
+  const [title, setTitle] = useState('')
+  const [visibility, setVisibility] = useState(VISIBILITY.PUBLIC)
 
   const initCanvas = useCallback(
     (options = {}) => {
@@ -68,6 +72,8 @@ export const FabricProvider = ({ children }) => {
       c.add(textBoxBottom)
       c.renderAll()
       setCanvas(c)
+      setTitle('')
+      setVisibility(VISIBILITY.PUBLIC)
       console.log({ src: 'FabricProvider.initCanvas', options, canvas, canvasRef })
     },
     [canvasRef, canvas]
@@ -94,6 +100,8 @@ export const FabricProvider = ({ children }) => {
       c.renderAll()
       c.calcOffset()
       setCanvas(c)
+      setTitle(meme.title)
+      setVisibility(meme.visibility)
       console.log({ src: 'FabricProvider.loadFromJSON', json, canvas })
     },
     [canvasRef, canvas, setTemplate]
@@ -191,7 +199,11 @@ export const FabricProvider = ({ children }) => {
       >
         <FabricActiveObjectContext.Provider value={{ activeObject, setActiveObject }}>
           <TemplateContext.Provider value={{ template, updateTemplate }}>
-            {children}
+            <TitleContext.Provider value={{ title, setTitle }}>
+              <VisibilityContext.Provider value={{ visibility, setVisibility }}>
+                {children}
+              </VisibilityContext.Provider>
+            </TitleContext.Provider>
           </TemplateContext.Provider>
         </FabricActiveObjectContext.Provider>
       </FabricCanvasContext.Provider>
@@ -231,6 +243,22 @@ export function useTemplate() {
   const context = useContext(TemplateContext)
   if (!context) {
     throw new Error(`useTemplate must be used within a TemplateProvider`)
+  }
+  return context
+}
+
+export function useTitle() {
+  const context = useContext(TitleContext)
+  if (!context) {
+    throw new Error(`useTitle must be used within a TitleContext`)
+  }
+  return context
+}
+
+export function useVisibility() {
+  const context = useContext(VisibilityContext)
+  if (!context) {
+    throw new Error(`useVisibility must be used within a VisibilityContext`)
   }
   return context
 }

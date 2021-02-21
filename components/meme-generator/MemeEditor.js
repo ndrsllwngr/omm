@@ -3,7 +3,12 @@ import { fabric } from 'fabric'
 import SVG from 'react-inlinesvg'
 import { FabricCanvas } from '@/components/meme-generator/FabricCanvas'
 import { TextToolbar } from '@/components/meme-generator/TextToolbar'
-import { useFabricCanvas, useTemplate } from '@/components/context/fabricContext'
+import {
+  useFabricCanvas,
+  useTemplate,
+  useTitle,
+  useVisibility,
+} from '@/components/context/fabricContext'
 import { ImageToolbar } from '@/components/meme-generator/ImageToolbar'
 import { useRouter } from 'next/router'
 import { useAuth } from '@/components/context/authContext'
@@ -69,8 +74,8 @@ export const MemeEditor = () => {
   const { canvas, isCopy } = useFabricCanvas()
   const [imgURL, setImgURL] = useState('')
   const { template } = useTemplate()
-  const [title, setTitle] = useState('')
-  const [visibility, setVisibility] = useState(VISIBILITY.PUBLIC)
+  const { title, setTitle } = useTitle()
+  const { visibility, setVisibility } = useVisibility()
   const [svgExport, setSvgExport] = useState('')
   const [jsonExport, setJsonExport] = useState({})
   const [previewMode, setPreviewMode] = useState(false)
