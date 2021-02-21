@@ -9,6 +9,8 @@ import { Canvas } from '@/components/template-generator/Canvas'
 import { ProtectedRoute } from '@/components/context/authContext'
 import { TemplateDetails } from '@/components/TemplateDetails'
 import { SpeechToText } from '@/components/SpeechToText'
+import { TextToSpeech } from '@/components/TextToSpeech'
+
 import PropTypes from 'prop-types'
 
 const Section = ({ children, title }) => {
@@ -51,6 +53,9 @@ const TemplatePage = () => {
         </Section>
         <Section title={'SpeechToText'}>
           <SpeechToText></SpeechToText>
+        </Section>
+        <Section title={'TextToSpeech'}>
+          <TextToSpeech></TextToSpeech>
         </Section>
       </ProtectedRoute>
     </>
