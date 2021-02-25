@@ -75,7 +75,7 @@ export const Canvas = ({ showDialog, closeDialog }) => {
   }
 
   const saveImage = () => {
-    const dataUrl = document.getElementById('drawingCanvas').toDataURL('canvas.png')
+    const dataUrl = canvasRef?.current?.toDataURL('canvas.png')
     fetch(dataUrl)
       .then((res) => {
         return res.blob()
