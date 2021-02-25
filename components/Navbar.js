@@ -85,10 +85,10 @@ const NavButtons = ({ className }) => {
     <>
       {auth && auth.isAuthenticated() ? (
         <nav className={`flex flex-col md:flex-row md:items-center ${className}`}>
-          <Link href={'/template'}>
+          <Link href={'/playground'}>
             <a>
               <TertiaryBtn className={'w-full md:w-max justify-center my-2'} mono={true}>
-                Template
+                Playground
               </TertiaryBtn>
             </a>
           </Link>
