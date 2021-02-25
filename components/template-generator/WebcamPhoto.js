@@ -4,13 +4,11 @@ import { PrimaryBtn, SecondaryBtn, TertiaryBtn } from '@/components/ui/Buttons'
 import { Dialog } from '@reach/dialog'
 import VisuallyHidden from '@reach/visually-hidden'
 import { IoClose } from 'react-icons/io5'
+import PropTypes from 'prop-types'
 
-export const WebcamPhoto = () => {
+export const WebcamPhoto = ({ showDialog, closeDialog }) => {
   const [playing, setPlaying] = useState(false)
   const { setFile } = useStorage()
-  const [showDialog, setShowDialog] = useState(false)
-  const open = () => setShowDialog(true)
-  const close = () => setShowDialog(false)
 
   const HEIGHT = 500
   const WIDTH = 500
@@ -58,11 +56,10 @@ export const WebcamPhoto = () => {
 
   return (
     <>
-      <PrimaryBtn onClick={open}>Add WebCam photo</PrimaryBtn>
-      <Dialog isOpen={showDialog} onDismiss={close}>
+      <Dialog isOpen={showDialog} onDismiss={closeDialog}>
         <div className={'flex flex-col'}>
           <div className={'flex flex-row justify-end'}>
-            <TertiaryBtn className="close-button" onClick={close}>
+            <TertiaryBtn className="close-button" onClick={closeDialog}>
               <VisuallyHidden>Close</VisuallyHidden>
               <span aria-hidden>
                 <IoClose />
@@ -98,4 +95,9 @@ export const WebcamPhoto = () => {
       </Dialog>
     </>
   )
+}
+
+WebcamPhoto.propTypes = {
+  showDialog: PropTypes.bool,
+  closeDialog: PropTypes.func,
 }

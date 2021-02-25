@@ -1,17 +1,15 @@
 import useStorage from '@/components/hooks/useStorage'
 import React, { useState } from 'react'
-import { PrimaryBtn, TertiaryBtn } from '@/components/ui/Buttons'
+import { TertiaryBtn } from '@/components/ui/Buttons'
 import { Dialog } from '@reach/dialog'
 import VisuallyHidden from '@reach/visually-hidden'
 import { IoClose } from 'react-icons/io5'
+import PropTypes from 'prop-types'
 
-export const PasteUrlImage = () => {
+export const PasteUrlImage = ({ showDialog, closeDialog }) => {
   const [userImageUrl, setUserImageUrl] = useState('')
   const [temp, setTemp] = useState('')
   const { setExternalUrl } = useStorage()
-  const [showDialog, setShowDialog] = useState(false)
-  const open = () => setShowDialog(true)
-  const close = () => setShowDialog(false)
 
   const handleSubmit = (evt) => {
     setUserImageUrl(temp)
@@ -21,11 +19,10 @@ export const PasteUrlImage = () => {
 
   return (
     <>
-      <PrimaryBtn onClick={open}>Upload Image from URL</PrimaryBtn>
-      <Dialog isOpen={showDialog} onDismiss={close}>
+      <Dialog isOpen={showDialog} onDismiss={closeDialog}>
         <div className={'flex flex-col'}>
           <div className={'flex flex-row justify-end'}>
-            <TertiaryBtn className="close-button" onClick={close}>
+            <TertiaryBtn className="close-button" onClick={closeDialog}>
               <VisuallyHidden>Close</VisuallyHidden>
               <span aria-hidden>
                 <IoClose />
@@ -48,6 +45,11 @@ export const PasteUrlImage = () => {
       </Dialog>
     </>
   )
+}
+
+PasteUrlImage.propTypes = {
+  showDialog: PropTypes.bool,
+  closeDialog: PropTypes.func,
 }
 
 /*const fetchImage = (imageUrl) => {

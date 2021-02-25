@@ -1,11 +1,6 @@
 import React from 'react'
 import { HtmlHead } from '@/components/HtmlHead'
 import { Navbar } from '@/components/Navbar'
-import { UploadImage } from '@/components/template-generator/UploadImage'
-import { WebcamPhoto } from '@/components/template-generator/WebcamPhoto'
-import { ScreenshotUrl } from '@/components/template-generator/ScreenshotUrl'
-import { PasteUrlImage } from '@/components/template-generator/PasteUrlImage'
-import { Canvas } from '@/components/template-generator/Canvas'
 import { ProtectedRoute } from '@/components/context/authContext'
 import { TemplateDetails } from '@/components/TemplateDetails'
 import { SpeechToText } from '@/components/SpeechToText'
@@ -33,11 +28,6 @@ const TemplatePage = () => {
       <ProtectedRoute>
         <HtmlHead title={'Create a New Template'} />
         <Navbar />
-        <UploadImage />
-        <WebcamPhoto />
-        <ScreenshotUrl />
-        <PasteUrlImage />
-        <Canvas />
         <Section title={'GetTemplateDetails'}>
           <TemplateDetails templateID="601c28dd66e382182031253d" />
         </Section>

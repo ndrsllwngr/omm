@@ -4,14 +4,12 @@ import { PrimaryBtn, SecondaryBtn, TertiaryBtn } from '@/components/ui/Buttons'
 import { Dialog } from '@reach/dialog'
 import VisuallyHidden from '@reach/visually-hidden'
 import { IoClose } from 'react-icons/io5'
+import PropTypes from 'prop-types'
 
-export const Canvas = () => {
+export const Canvas = ({ showDialog, closeDialog }) => {
   const { setFile } = useStorage()
   const [isDrawing, setIsDrawing] = useState(false)
   const canvasContextRef = useRef(null)
-  const [showDialog, setShowDialog] = useState(false)
-  const open = () => setShowDialog(true)
-  const close = () => setShowDialog(false)
 
   useLayoutEffect(() => {
     const canvas = document.getElementById('drawingCanvas')
@@ -80,11 +78,10 @@ export const Canvas = () => {
   //if (typeof window === 'undefined') return <div>loading...</div>
   return (
     <>
-      <PrimaryBtn onClick={open}>Draw on Canvas</PrimaryBtn>
-      <Dialog isOpen={showDialog} onDismiss={close}>
+      <Dialog isOpen={showDialog} onDismiss={closeDialog}>
         <div className={'flex flex-col'}>
           <div className={'flex flex-row justify-end'}>
-            <TertiaryBtn className="close-button" onClick={close}>
+            <TertiaryBtn className="close-button" onClick={closeDialog}>
               <VisuallyHidden>Close</VisuallyHidden>
               <span aria-hidden>
                 <IoClose />
@@ -110,4 +107,9 @@ export const Canvas = () => {
       </Dialog>
     </>
   )
+}
+
+Canvas.propTypes = {
+  showDialog: PropTypes.bool,
+  closeDialog: PropTypes.func,
 }
