@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import useStorage from '@/components/hooks/useStorage'
 import { PrimaryBtn, SecondaryBtn, TertiaryBtn } from '@/components/ui/Buttons'
 import { Dialog } from '@reach/dialog'
@@ -12,6 +12,10 @@ export const WebcamPhoto = ({ showDialog, closeDialog }) => {
 
   const HEIGHT = 500
   const WIDTH = 500
+
+  useEffect(() => {
+    return stopVideo()
+  }, [])
 
   const startVideo = () => {
     setPlaying(true)
@@ -31,10 +35,8 @@ export const WebcamPhoto = ({ showDialog, closeDialog }) => {
 
   const stopVideo = () => {
     setPlaying(false)
-    let video = document.getElementsByClassName('app__videoFeed')[0]
-    if (video && video.srcObject) {
-      video.srcObject.getTracks()[0].stop()
-    }
+    const video = document.getElementsByClassName('app__videoFeed')[0]
+    video?.srcObject?.getTracks()[0].stop()
   }
 
   const captureVideo = () => {
@@ -47,7 +49,10 @@ export const WebcamPhoto = ({ showDialog, closeDialog }) => {
       (blob) => {
         // const img = new Image()
         // img.src = window.URL.createObjectURL(blob)
-        createTemplate(blob, closeDialog)
+        createTemplate(blob, () => {
+          stopVideo()
+          closeDialog()
+        })
       },
       'image/png',
       1
