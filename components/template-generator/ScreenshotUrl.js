@@ -7,11 +7,12 @@ import { IoClose } from 'react-icons/io5'
 import PropTypes from 'prop-types'
 
 export const ScreenshotUrl = ({ showDialog, closeDialog }) => {
+  const { createExternalTemplate } = useStorage()
   const [search, setSearch] = useState('')
   const URL = `https://api.apiflash.com/v1/urltoimage?access_key=${process.env.NEXT_PUBLIC_APIFLASH_SCREENSHOT_API_KEY}&url=${search}&response_type=json&fresh=true&width=1920&height=1080`
-  const { setExternalUrl } = useStorage()
 
-  const getScreenshot = () =>
+  const handleSubmit = (e) => {
+    e.preventDefault()
     fetch(URL, {
       method: 'GET',
     })
@@ -19,20 +20,8 @@ export const ScreenshotUrl = ({ showDialog, closeDialog }) => {
         //console.log('res: ', res.json())
         return res.json()
       })
-      .then((json) => setExternalUrl(json.url))
+      .then((json) => createExternalTemplate(json.url, closeDialog))
       .catch((e) => console.error('error:', e))
-
-  const handleSubmit = (e) => {
-    e.preventDefault()
-    const test = getScreenshot()
-    console.log(test)
-    /*{ async () => {
-        console.log('entering async')
-        await memeFirestore.collection(FIRESTORE_COLLECTION.TEMPLATES.add({
-          createdAt: firebase.firestore.Timestamp.now(),
-          url: test,
-        })
-      }}}*/
   }
 
   return (

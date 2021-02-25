@@ -1,26 +1,23 @@
-import React, { useState } from 'react'
+import React from 'react'
 import { MemeProgress } from '@/components/MemeProgress'
 import { Dialog } from '@reach/dialog'
 import VisuallyHidden from '@reach/visually-hidden'
 import { TertiaryBtn } from '@/components/ui/Buttons'
 import { IoClose } from 'react-icons/io5'
 import PropTypes from 'prop-types'
+import useStorage from '@/components/hooks/useStorage'
 
 export const UploadImage = ({ showDialog, closeDialog }) => {
-  const [otherFile, setOtherFile] = useState(null)
-  const [error, setError] = useState(null)
+  const { file, progress, error, createTemplate, resetState } = useStorage()
 
   const types = ['image/png', 'image/jpeg']
 
   const handleChange = (e) => {
-    let selected = e.target.files[0]
-
+    const selected = e.target.files[0]
     if (selected && types.includes(selected.type)) {
-      setOtherFile(selected)
-      setError('')
+      createTemplate(selected, closeDialog)
     } else {
-      setOtherFile(null)
-      setError('Please select an image.')
+      resetState()
     }
   }
 
@@ -44,8 +41,8 @@ export const UploadImage = ({ showDialog, closeDialog }) => {
             <form>
               <div className="output">
                 {error && <div className="error">{error}</div>}
-                {otherFile && <div>{otherFile.name}</div>}
-                {otherFile && <MemeProgress otherFile={otherFile} setOtherFile={setOtherFile} />}
+                {file && <div>{file.name}</div>}
+                {file && <MemeProgress progress={progress} />}
               </div>
             </form>
           </div>

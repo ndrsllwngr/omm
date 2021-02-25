@@ -1,4 +1,4 @@
-import React, { useState, useLayoutEffect, useRef } from 'react'
+import React, { useState, useRef, useEffect } from 'react'
 import useStorage from '@/components/hooks/useStorage'
 import { PrimaryBtn, SecondaryBtn, TertiaryBtn } from '@/components/ui/Buttons'
 import { Dialog } from '@reach/dialog'
@@ -7,62 +7,71 @@ import { IoClose } from 'react-icons/io5'
 import PropTypes from 'prop-types'
 
 export const Canvas = ({ showDialog, closeDialog }) => {
-  const { setFile } = useStorage()
+  const { createTemplate } = useStorage()
   const [isDrawing, setIsDrawing] = useState(false)
-  const canvasContextRef = useRef(null)
+  const canvasRef = useRef(null)
 
-  useLayoutEffect(() => {
-    const canvas = document.getElementById('drawingCanvas')
-    if (canvas) {
-      const canvasContext = canvas.getContext('2d')
-      canvasContext.lineCap = 'round'
-      canvasContext.strokeStyle = 'black'
-      canvasContext.lineWidth = 5
-      canvasContextRef.current = canvasContext
+  useEffect(() => {
+    const canvas = canvasRef.current
+    const ctx = canvas?.getContext('2d')
+    if (ctx) {
+      ctx.lineCap = 'round'
+      ctx.strokeStyle = 'black'
+      ctx.lineWidth = 5
     }
-
-    //canvasContext.clearRect(0, 0, canvas.width, canvas.height)
-    //console.log('rerender canvas')
   })
 
-  function getMousePos(evt) {
-    const canvas = document.getElementById('drawingCanvas')
-    let rect = canvas.getBoundingClientRect()
-    return {
-      clientX: evt.clientX - rect.left,
-      clientY: evt.clientY - rect.top,
+  function getMousePos(e) {
+    const canvas = canvasRef.current
+    if (canvas) {
+      let rect = canvas?.getBoundingClientRect()
+      return {
+        clientX: e.clientX - rect?.left,
+        clientY: e.clientY - rect?.top,
+      }
     }
+    return { clientX: 0, clientY: 0 }
   }
 
   const handleMouseDown = (e) => {
     setIsDrawing(true)
-    const { clientX, clientY } = getMousePos(e)
-    canvasContextRef.current.beginPath()
-    canvasContextRef.current.moveTo(clientX, clientY)
+    const canvas = canvasRef.current
+    const ctx = canvas?.getContext('2d')
+    if (ctx) {
+      const { clientX, clientY } = getMousePos(e)
+      ctx.beginPath()
+      ctx.moveTo(clientX, clientY)
+    }
   }
 
   const handleMouseMove = (e) => {
     if (!isDrawing) return
-    const { clientX, clientY } = getMousePos(e)
-    canvasContextRef.current.lineTo(clientX, clientY)
-    canvasContextRef.current.stroke()
-    console.log('x, y: ', clientX, clientY)
-    setIsDrawing(true)
+    const canvas = canvasRef.current
+    const ctx = canvas?.getContext('2d')
+    if (ctx) {
+      const { clientX, clientY } = getMousePos(e)
+      ctx.lineTo(clientX, clientY)
+      ctx.stroke()
+      setIsDrawing(true)
+    }
   }
 
-  const handleMouseUp = (e) => {
-    canvasContextRef.current.closePath()
+  const handleMouseUp = (_e) => {
+    const canvas = canvasRef.current
+    const ctx = canvas?.getContext('2d')
+    if (ctx) {
+      ctx.closePath()
+    }
     setIsDrawing(false)
   }
 
   const clearCanvas = () => {
-    canvasContextRef.current.clearRect(
-      0,
-      0,
-      document.getElementById('drawingCanvas').width,
-      document.getElementById('drawingCanvas').height
-    )
-    console.log('clear canvas:', canvasContextRef.current)
+    const canvas = canvasRef.current
+    const ctx = canvas?.getContext('2d')
+    if (ctx) {
+      ctx.clearRect(0, 0, canvas?.width, canvas?.height)
+      console.log('clear canvas:', ctx)
+    }
   }
 
   const saveImage = () => {
@@ -72,10 +81,10 @@ export const Canvas = ({ showDialog, closeDialog }) => {
         return res.blob()
       })
       .then((blob) => {
-        setFile(blob)
+        createTemplate(blob, closeDialog)
       })
   }
-  //if (typeof window === 'undefined') return <div>loading...</div>
+
   return (
     <>
       <Dialog isOpen={showDialog} onDismiss={closeDialog}>
@@ -90,8 +99,9 @@ export const Canvas = ({ showDialog, closeDialog }) => {
           </div>
           <div>
             <canvas
-              id="drawingCanvas"
-              style={{ backgroundColor: 'blue' }}
+              ref={canvasRef}
+              className={'bg-white'}
+              style={{ border: '1px solid red' }}
               width={300}
               height={300}
               onMouseDown={handleMouseDown}
