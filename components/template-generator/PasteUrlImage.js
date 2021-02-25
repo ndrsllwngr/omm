@@ -7,14 +7,14 @@ import { IoClose } from 'react-icons/io5'
 import PropTypes from 'prop-types'
 
 export const PasteUrlImage = ({ showDialog, closeDialog }) => {
-  const [userImageUrl, setUserImageUrl] = useState('')
-  const [temp, setTemp] = useState('')
-  const { setExternalUrl } = useStorage()
+  const [url, setUrl] = useState('')
+  const { createExternalTemplate } = useStorage()
 
   const handleSubmit = (evt) => {
-    setUserImageUrl(temp)
-    setExternalUrl(temp)
     evt.preventDefault()
+    if (url !== '') {
+      createExternalTemplate(url, closeDialog)
+    }
   }
 
   return (
@@ -33,13 +33,15 @@ export const PasteUrlImage = ({ showDialog, closeDialog }) => {
             <form onSubmit={handleSubmit}>
               <label>
                 URL
-                <input type="text" name="imageUrl" onChange={(e) => setTemp(e.target.value)} />
+                <input
+                  type="text"
+                  name="imageUrl"
+                  value={url}
+                  onChange={(e) => setUrl(e.target.value)}
+                />
               </label>
               <input type="submit" value="Get image" />
             </form>
-            <div>
-              <img src={userImageUrl} alt="" />
-            </div>
           </div>
         </div>
       </Dialog>

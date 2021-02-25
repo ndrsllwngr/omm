@@ -22,7 +22,7 @@ Section.propTypes = {
   title: PropTypes.string,
 }
 
-const TemplatePage = () => {
+const PlaygroundPage = () => {
   return (
     <>
       <ProtectedRoute>
@@ -42,4 +42,4 @@ const TemplatePage = () => {
   )
 }
 
-export default TemplatePage
+export default PlaygroundPage

@@ -8,7 +8,7 @@ import PropTypes from 'prop-types'
 
 export const WebcamPhoto = ({ showDialog, closeDialog }) => {
   const [playing, setPlaying] = useState(false)
-  const { setFile } = useStorage()
+  const { createTemplate } = useStorage()
 
   const HEIGHT = 500
   const WIDTH = 500
@@ -47,7 +47,7 @@ export const WebcamPhoto = ({ showDialog, closeDialog }) => {
       (blob) => {
         // const img = new Image()
         // img.src = window.URL.createObjectURL(blob)
-        setFile(blob)
+        createTemplate(blob, closeDialog)
       },
       'image/png',
       1

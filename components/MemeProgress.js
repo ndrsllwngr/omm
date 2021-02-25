@@ -1,21 +1,8 @@
 import React, { useEffect } from 'react'
-import useStorage from '@/components/hooks/useStorage'
 import { motion } from 'framer-motion'
 import PropTypes from 'prop-types'
 
-export const MemeProgress = ({ otherFile, setOtherFile }) => {
-  const { progress, url, setFile } = useStorage()
-
-  useEffect(() => {
-    setFile(otherFile)
-  }, [otherFile, setFile])
-
-  useEffect(() => {
-    if (url) {
-      setOtherFile(null)
-    }
-  }, [setOtherFile, url])
-
+export const MemeProgress = ({ progress }) => {
   return (
     <div className="h-5 w-48 bg-purple-400 ">
       <motion.div initial={{ width: 0 }} animate={{ width: progress }} />
@@ -24,6 +11,5 @@ export const MemeProgress = ({ otherFile, setOtherFile }) => {
 }
 
 MemeProgress.propTypes = {
-  otherFile: PropTypes.any,
-  setOtherFile: PropTypes.func,
+  progress: PropTypes.any,
 }
