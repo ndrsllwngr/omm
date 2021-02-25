@@ -1,13 +1,15 @@
-import React, { useState } from 'react'
+import React, { useCallback, useState } from 'react'
 import { HtmlHead } from '@/components/HtmlHead'
 import { Navbar } from '@/components/Navbar'
 import { MemeEditor } from '@/components/meme-generator/MemeEditor'
 import { TemplateCollection } from '@/components/template-generator/TemplateCollection'
 import { ProtectedRoute } from '@/components/context/authContext'
 import { ImgFlipCollection } from '@/components/template-generator/ImgFlipCollection'
+import { AddTemplate } from '@/components/meme-generator/AddTemplate'
 
 const CreatePage = () => {
   const [openTab, setOpenTab] = useState(1)
+
   return (
     <>
       <ProtectedRoute>
@@ -18,6 +20,7 @@ const CreatePage = () => {
             <MemeEditor />
           </div>
           <div className="col-span-3 h-full rounded-lg bg-gray-100 items-start justify-center space-x-2 pl-2">
+            <AddTemplate />
             <ul className="flex mb-0 list-none flex-wrap pt-3 pb-4 flex-row" role="tablist">
               <li className="-mb-px mr-2 last:mr-0 flex-auto text-center">
                 <a

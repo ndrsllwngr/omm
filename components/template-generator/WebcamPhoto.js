@@ -1,7 +1,12 @@
 import React, { useState } from 'react'
 import useStorage from '@/components/hooks/useStorage'
+import { PrimaryBtn, SecondaryBtn, TertiaryBtn } from '@/components/ui/Buttons'
+import { Dialog } from '@reach/dialog'
+import VisuallyHidden from '@reach/visually-hidden'
+import { IoClose } from 'react-icons/io5'
+import PropTypes from 'prop-types'
 
-export const WebcamPhoto = () => {
+export const WebcamPhoto = ({ showDialog, closeDialog }) => {
   const [playing, setPlaying] = useState(false)
   const { setFile } = useStorage()
 
@@ -33,8 +38,8 @@ export const WebcamPhoto = () => {
   }
 
   const captureVideo = () => {
-    var canvas = document.getElementById('canvas')
-    var video = document.getElementById('video')
+    let canvas = document.getElementById('canvas')
+    let video = document.getElementById('video')
     canvas.width = video.videoWidth
     canvas.height = video.videoHeight
     canvas.getContext('2d').drawImage(video, 0, 0, video.videoWidth, video.videoHeight)
@@ -50,19 +55,49 @@ export const WebcamPhoto = () => {
   }
 
   return (
-    <div className="app">
-      <div className="app__container">
-        <video id="video" height={HEIGHT} width={WIDTH} muted autoPlay className="app__videoFeed" />
-      </div>
-      <div className="app__input">
-        {playing ? (
-          <button onClick={stopVideo}>Stop</button>
-        ) : (
-          <button onClick={startVideo}>Start</button>
-        )}
-        <button onClick={captureVideo}>Capture Picture</button>
-      </div>
-      <canvas id="canvas" />
-    </div>
+    <>
+      <Dialog isOpen={showDialog} onDismiss={closeDialog}>
+        <div className={'flex flex-col'}>
+          <div className={'flex flex-row justify-end'}>
+            <TertiaryBtn className="close-button" onClick={closeDialog}>
+              <VisuallyHidden>Close</VisuallyHidden>
+              <span aria-hidden>
+                <IoClose />
+              </span>
+            </TertiaryBtn>
+          </div>
+          <div>
+            <div className="app">
+              <div className="app__container">
+                <video
+                  id="video"
+                  height={HEIGHT}
+                  width={WIDTH}
+                  muted
+                  autoPlay
+                  className="app__videoFeed"
+                />
+                <canvas id="canvas" />
+              </div>
+              <div className="app__input">
+                {playing ? (
+                  <SecondaryBtn onClick={stopVideo}>Stop</SecondaryBtn>
+                ) : (
+                  <SecondaryBtn onClick={startVideo}>Start</SecondaryBtn>
+                )}
+                <PrimaryBtn disabled={!playing} onClick={captureVideo}>
+                  Capture Picture
+                </PrimaryBtn>
+              </div>
+            </div>
+          </div>
+        </div>
+      </Dialog>
+    </>
   )
+}
+
+WebcamPhoto.propTypes = {
+  showDialog: PropTypes.bool,
+  closeDialog: PropTypes.func,
 }

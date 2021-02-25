@@ -35,13 +35,15 @@ export const TemplateCollection = () => {
   if (error) return <div>Error loading templates.</div>
   if (loading && !loadingMoreTemplates) return <div>Loading</div>
   return (
-    <div className="img-selection">
-      {data &&
-        data.templates.map((template, i) => (
-          <button key={i} onClick={() => updateTemplate(template)}>
-            <img src={template.url} alt="uploaded image" width="150" height="150" />
-          </button>
-        ))}
-    </div>
+    <>
+      <div>
+        {data &&
+          data.templates.map((template, i) => (
+            <button key={i} onClick={() => updateTemplate(template)}>
+              <img src={template.url} alt="uploaded image" width="150" height="150" />
+            </button>
+          ))}
+      </div>
+    </>
   )
 }

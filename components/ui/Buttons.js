@@ -73,42 +73,68 @@ export const VoteUpBtn = ({ disabled = false, onClick, className: parentClass, c
   )
 }
 
-export const BaseBtn = ({ children, onClick, className: parentClass }) => {
+export const BaseBtn = ({ children, onClick, disabled = false, className: parentClass }) => {
   return (
-    <button type="button" onClick={onClick} className={` ${btnBase} ${parentClass}`}>
+    <button
+      type="button"
+      onClick={onClick}
+      className={` ${btnBase} ${parentClass}`}
+      disabled={disabled}
+    >
       {children}
     </button>
   )
 }
-export const PrimaryBtn = ({ children, onClick, className: parentClass, mono = false }) => {
+export const PrimaryBtn = ({
+  children,
+  onClick,
+  disabled,
+  className: parentClass,
+  mono = false,
+}) => {
   return (
     <BaseBtn
       onClick={onClick}
       className={`
     ${mono ? `${btnPrimMono}` : `${btnBg} ${btnPrimText} `}
     ${parentClass}`}
+      disabled={disabled}
     >
       {children}
     </BaseBtn>
   )
 }
-export const SecondaryBtn = ({ children, onClick, mono = false, className: parentClass }) => {
+export const SecondaryBtn = ({
+  children,
+  onClick,
+  disabled,
+  mono = false,
+  className: parentClass,
+}) => {
   return (
     <BaseBtn
       onClick={onClick}
       className={`${
         mono ? `${btnSecTerTextMono} ${btnSecBorderMono}` : `${btnSecTerText} ${btnSecBorder}`
       }  ${parentClass}`}
+      disabled={disabled}
     >
       {children}
     </BaseBtn>
   )
 }
-export const TertiaryBtn = ({ children, onClick, className: parentClass, mono = false }) => {
+export const TertiaryBtn = ({
+  children,
+  onClick,
+  disabled,
+  className: parentClass,
+  mono = false,
+}) => {
   return (
     <BaseBtn
       onClick={onClick}
       className={`${mono ? `${btnSecTerTextMono}` : `${btnSecTerText} `} ${parentClass}`}
+      disabled={disabled}
     >
       {children}
     </BaseBtn>
@@ -223,24 +249,28 @@ BaseBtn.propTypes = {
   onClick: PropTypes.func,
   children: PropTypes.any,
   className: PropTypes.string,
+  disabled: PropTypes.bool,
 }
 TertiaryBtn.propTypes = {
   onClick: PropTypes.func,
   children: PropTypes.any,
   className: PropTypes.string,
   mono: PropTypes.bool,
+  disabled: PropTypes.bool,
 }
 SecondaryBtn.propTypes = {
   onClick: PropTypes.func,
   children: PropTypes.any,
   className: PropTypes.string,
   mono: PropTypes.bool,
+  disabled: PropTypes.bool,
 }
 PrimaryBtn.propTypes = {
   onClick: PropTypes.func,
   children: PropTypes.any,
   className: PropTypes.string,
   mono: PropTypes.bool,
+  disabled: PropTypes.bool,
 }
 VoteDownBtn.propTypes = {
   onClick: PropTypes.func,
