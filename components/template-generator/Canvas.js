@@ -1,18 +1,27 @@
 import React, { useState, useLayoutEffect, useRef } from 'react'
 import useStorage from '@/components/hooks/useStorage'
+import { PrimaryBtn, SecondaryBtn, TertiaryBtn } from '@/components/ui/Buttons'
+import { Dialog } from '@reach/dialog'
+import VisuallyHidden from '@reach/visually-hidden'
+import { IoClose } from 'react-icons/io5'
 
 export const Canvas = () => {
   const { setFile } = useStorage()
   const [isDrawing, setIsDrawing] = useState(false)
   const canvasContextRef = useRef(null)
+  const [showDialog, setShowDialog] = useState(false)
+  const open = () => setShowDialog(true)
+  const close = () => setShowDialog(false)
 
   useLayoutEffect(() => {
     const canvas = document.getElementById('drawingCanvas')
-    const canvasContext = canvas.getContext('2d')
-    canvasContext.lineCap = 'round'
-    canvasContext.strokeStyle = 'black'
-    canvasContext.lineWidth = 5
-    canvasContextRef.current = canvasContext
+    if (canvas) {
+      const canvasContext = canvas.getContext('2d')
+      canvasContext.lineCap = 'round'
+      canvasContext.strokeStyle = 'black'
+      canvasContext.lineWidth = 5
+      canvasContextRef.current = canvasContext
+    }
 
     //canvasContext.clearRect(0, 0, canvas.width, canvas.height)
     //console.log('rerender canvas')
@@ -20,7 +29,7 @@ export const Canvas = () => {
 
   function getMousePos(evt) {
     const canvas = document.getElementById('drawingCanvas')
-    var rect = canvas.getBoundingClientRect()
+    let rect = canvas.getBoundingClientRect()
     return {
       clientX: evt.clientX - rect.left,
       clientY: evt.clientY - rect.top,
@@ -70,20 +79,35 @@ export const Canvas = () => {
   }
   //if (typeof window === 'undefined') return <div>loading...</div>
   return (
-    <div>
-      <canvas
-        id="drawingCanvas"
-        style={{ backgroundColor: 'blue' }}
-        width={300}
-        height={300}
-        onMouseDown={handleMouseDown}
-        onMouseMove={handleMouseMove}
-        onMouseUp={handleMouseUp}
-      >
-        Canvas
-      </canvas>
-      <button onClick={clearCanvas}>Clear Canvas</button>
-      <button onClick={saveImage}>Save</button>
-    </div>
+    <>
+      <PrimaryBtn onClick={open}>Draw on Canvas</PrimaryBtn>
+      <Dialog isOpen={showDialog} onDismiss={close}>
+        <div className={'flex flex-col'}>
+          <div className={'flex flex-row justify-end'}>
+            <TertiaryBtn className="close-button" onClick={close}>
+              <VisuallyHidden>Close</VisuallyHidden>
+              <span aria-hidden>
+                <IoClose />
+              </span>
+            </TertiaryBtn>
+          </div>
+          <div>
+            <canvas
+              id="drawingCanvas"
+              style={{ backgroundColor: 'blue' }}
+              width={300}
+              height={300}
+              onMouseDown={handleMouseDown}
+              onMouseMove={handleMouseMove}
+              onMouseUp={handleMouseUp}
+            >
+              Canvas
+            </canvas>
+            <SecondaryBtn onClick={clearCanvas}>Clear Canvas</SecondaryBtn>
+            <PrimaryBtn onClick={saveImage}>Save</PrimaryBtn>
+          </div>
+        </div>
+      </Dialog>
+    </>
   )
 }

@@ -33,29 +33,19 @@ const TemplatePage = () => {
       <ProtectedRoute>
         <HtmlHead title={'Create a New Template'} />
         <Navbar />
-        <Section title={'UploadImage'}>
-          <UploadImage />
-        </Section>
-        <Section title={'WebcamPhoto'}>
-          <WebcamPhoto />
-        </Section>
-        <Section title={'ScreenshotUrl'}>
-          <ScreenshotUrl />
-        </Section>
-        <Section title={'PasteUrlImage'}>
-          <PasteUrlImage />
-        </Section>
-        <Section title={'DrawonCanvas'}>
-          <Canvas />
-        </Section>
+        <UploadImage />
+        <WebcamPhoto />
+        <ScreenshotUrl />
+        <PasteUrlImage />
+        <Canvas />
         <Section title={'GetTemplateDetails'}>
           <TemplateDetails templateID="601c28dd66e382182031253d" />
         </Section>
         <Section title={'SpeechToText'}>
-          <SpeechToText></SpeechToText>
+          <SpeechToText />
         </Section>
         <Section title={'TextToSpeech'}>
-          <TextToSpeech></TextToSpeech>
+          <TextToSpeech />
         </Section>
       </ProtectedRoute>
     </>

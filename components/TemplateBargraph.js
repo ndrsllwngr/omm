@@ -7,7 +7,7 @@ export const TemplateBargraph = ({ up, down, views, totalViews }) => {
   // will be called initially and on every data change
   useEffect(() => {
     const test = [up, down, views]
-    var yMax = Math.max(...test)
+    let yMax = Math.max(...test)
     let tickLabels = ['upVotes', 'downVotes', 'views']
     console.log(totalViews)
 
@@ -21,7 +21,7 @@ export const TemplateBargraph = ({ up, down, views, totalViews }) => {
       .domain([0, yMax])
       .range([yMax * 2.5, 0])
 
-    var myColor = scaleOrdinal()
+    let myColor = scaleOrdinal()
       .domain(test)
       .range(['steelblue', 'rgba(198, 45, 205, 0.8)', 'rgb(12,240,233)'])
 
