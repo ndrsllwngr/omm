@@ -2,10 +2,10 @@ import React, { useCallback, useState } from 'react'
 import { HtmlHead } from '@/components/HtmlHead'
 import { Navbar } from '@/components/Navbar'
 import { MemeEditor } from '@/components/meme-generator/MemeEditor'
-import { TemplateCollection } from '@/components/template-generator/TemplateCollection'
+import { TemplateCollection } from '@/components/meme-generator/TemplateCollection'
 import { ProtectedRoute } from '@/components/context/authContext'
-import { ImgFlipCollection } from '@/components/template-generator/ImgFlipCollection'
-import { AddTemplate } from '@/components/meme-generator/AddTemplate'
+import { ImgFlipCollection } from '@/components/meme-generator/ImgFlipCollection'
+import { AddTemplate } from '@/components/template-generator/AddTemplate'
 
 const CreatePage = () => {
   const [openTab, setOpenTab] = useState(1)

@@ -3,19 +3,19 @@ import { Menu, MenuButton, MenuList, MenuItem } from '@reach/menu-button'
 import { IoChevronDown } from 'react-icons/io5'
 import { useImmer } from 'use-immer'
 import { DIALOG } from '@/lib/constants'
-import { UploadImage } from '@/components/template-generator/UploadImage'
+import { UploadFile } from '@/components/template-generator/UploadFile'
 import { WebcamPhoto } from '@/components/template-generator/WebcamPhoto'
 import { ScreenshotUrl } from '@/components/template-generator/ScreenshotUrl'
-import { PasteUrlImage } from '@/components/template-generator/PasteUrlImage'
-import { Canvas } from '@/components/template-generator/Canvas'
+import { PasteUrl } from '@/components/template-generator/PasteUrl'
+import { DrawOnCanvas } from '@/components/template-generator/DrawOnCanvas'
 
 export const AddTemplate = () => {
   const [showDialog, updateShowDialog] = useImmer({
-    [DIALOG.UPLOAD_IMAGE]: false,
+    [DIALOG.UPLOAD_FILE]: false,
     [DIALOG.PASTE_URL]: false,
-    [DIALOG.TAKE_WEBCAM_PHOTO]: false,
+    [DIALOG.WEBCAM_PHOTO]: false,
     [DIALOG.SCREENSHOT_URL]: false,
-    [DIALOG.DRAW_IMAGE]: false,
+    [DIALOG.DRAW_ON_CANVAS]: false,
   })
   const openDialog = useCallback(
     (dialogName) => {
@@ -45,37 +45,37 @@ export const AddTemplate = () => {
           </div>
         </MenuButton>
         <MenuList>
-          <MenuItem onSelect={() => openDialog(DIALOG.UPLOAD_IMAGE)}>Upload an Image</MenuItem>
+          <MenuItem onSelect={() => openDialog(DIALOG.UPLOAD_FILE)}>Upload an Image</MenuItem>
           <MenuItem onSelect={() => openDialog(DIALOG.PASTE_URL)}>
             Upload an Image from URL
           </MenuItem>
-          <MenuItem onSelect={() => openDialog(DIALOG.TAKE_WEBCAM_PHOTO)}>Take a Photo</MenuItem>
+          <MenuItem onSelect={() => openDialog(DIALOG.WEBCAM_PHOTO)}>Take a Photo</MenuItem>
           <MenuItem onSelect={() => openDialog(DIALOG.SCREENSHOT_URL)}>
             Screenshot a Website
           </MenuItem>
-          <MenuItem onSelect={() => openDialog(DIALOG.DRAW_IMAGE)}>Draw an Image</MenuItem>
+          <MenuItem onSelect={() => openDialog(DIALOG.DRAW_ON_CANVAS)}>Draw an Image</MenuItem>
         </MenuList>
       </Menu>
       <>
-        <UploadImage
-          showDialog={showDialog[DIALOG.UPLOAD_IMAGE]}
-          closeDialog={closeDialog(DIALOG.UPLOAD_IMAGE)}
+        <UploadFile
+          showDialog={showDialog[DIALOG.UPLOAD_FILE]}
+          closeDialog={closeDialog(DIALOG.UPLOAD_FILE)}
         />
-        <PasteUrlImage
+        <PasteUrl
           showDialog={showDialog[DIALOG.PASTE_URL]}
           closeDialog={closeDialog(DIALOG.PASTE_URL)}
         />
         <WebcamPhoto
-          showDialog={showDialog[DIALOG.TAKE_WEBCAM_PHOTO]}
-          closeDialog={closeDialog(DIALOG.TAKE_WEBCAM_PHOTO)}
+          showDialog={showDialog[DIALOG.WEBCAM_PHOTO]}
+          closeDialog={closeDialog(DIALOG.WEBCAM_PHOTO)}
         />
         <ScreenshotUrl
           showDialog={showDialog[DIALOG.SCREENSHOT_URL]}
           closeDialog={closeDialog(DIALOG.SCREENSHOT_URL)}
         />
-        <Canvas
-          showDialog={showDialog[DIALOG.DRAW_IMAGE]}
-          closeDialog={closeDialog(DIALOG.DRAW_IMAGE)}
+        <DrawOnCanvas
+          showDialog={showDialog[DIALOG.DRAW_ON_CANVAS]}
+          closeDialog={closeDialog(DIALOG.DRAW_ON_CANVAS)}
         />
       </>
     </>

@@ -7,7 +7,7 @@ import { IoClose } from 'react-icons/io5'
 import PropTypes from 'prop-types'
 import useStorage from '@/components/hooks/useStorage'
 
-export const UploadImage = ({ showDialog, closeDialog }) => {
+export const UploadFile = ({ showDialog, closeDialog }) => {
   const { file, progress, error, createTemplate, resetState } = useStorage()
 
   const types = ['image/png', 'image/jpeg']
@@ -52,7 +52,7 @@ export const UploadImage = ({ showDialog, closeDialog }) => {
   )
 }
 
-UploadImage.propTypes = {
+UploadFile.propTypes = {
   showDialog: PropTypes.bool,
   closeDialog: PropTypes.func,
 }

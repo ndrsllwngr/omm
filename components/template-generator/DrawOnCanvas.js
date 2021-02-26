@@ -6,7 +6,7 @@ import VisuallyHidden from '@reach/visually-hidden'
 import { IoClose } from 'react-icons/io5'
 import PropTypes from 'prop-types'
 
-export const Canvas = ({ showDialog, closeDialog }) => {
+export const DrawOnCanvas = ({ showDialog, closeDialog }) => {
   const { createTemplate } = useStorage()
   const [isDrawing, setIsDrawing] = useState(false)
   const canvasRef = useRef(null)
@@ -119,7 +119,7 @@ export const Canvas = ({ showDialog, closeDialog }) => {
   )
 }
 
-Canvas.propTypes = {
+DrawOnCanvas.propTypes = {
   showDialog: PropTypes.bool,
   closeDialog: PropTypes.func,
 }

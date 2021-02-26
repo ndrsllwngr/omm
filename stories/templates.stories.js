@@ -1,11 +1,12 @@
 import React from 'react'
-import { TemplateCollection } from '@/components/template-generator/TemplateCollection'
+import { TemplateCollection } from '@/components/meme-generator/TemplateCollection'
 import { ScreenshotUrl } from '@/components/template-generator/ScreenshotUrl'
-import { Canvas } from '@/components/template-generator/Canvas'
-import { UploadImage } from '@/components/template-generator/UploadImage'
-import { PasteUrlImage } from '@/components/template-generator/PasteUrlImage'
+import { DrawOnCanvas } from '@/components/template-generator/DrawOnCanvas'
+import { UploadFile } from '@/components/template-generator/UploadFile'
+import { PasteUrl } from '@/components/template-generator/PasteUrl'
 import { WebcamPhoto } from '@/components/template-generator/WebcamPhoto'
-import { ImgFlipCollection } from '@/components/template-generator/ImgFlipCollection'
+import { ImgFlipCollection } from '@/components/meme-generator/ImgFlipCollection'
+import { noop } from '@/lib/noop'
 
 export default { title: 'Templates' }
 
@@ -13,12 +14,12 @@ export const templateCollection = () => <TemplateCollection />
 
 export const imgFlipCollection = () => <ImgFlipCollection />
 
-export const screenshotUrl = () => <ScreenshotUrl />
+export const screenshotUrl = () => <ScreenshotUrl showDialog={true} closeDialog={noop} />
 
-export const drawingCanvas = () => <Canvas />
+export const drawingCanvas = () => <DrawOnCanvas showDialog={true} closeDialog={noop} />
 
-export const uploadImage = () => <UploadImage />
+export const uploadImage = () => <UploadFile showDialog={true} closeDialog={noop} />
 
-export const pasteUrlImage = () => <PasteUrlImage />
+export const pasteUrlImage = () => <PasteUrl showDialog={true} closeDialog={noop} />
 
-export const webcamPhoto = () => <WebcamPhoto />
+export const webcamPhoto = () => <WebcamPhoto showDialog={true} closeDialog={noop} />

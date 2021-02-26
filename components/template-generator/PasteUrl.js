@@ -6,7 +6,7 @@ import VisuallyHidden from '@reach/visually-hidden'
 import { IoClose } from 'react-icons/io5'
 import PropTypes from 'prop-types'
 
-export const PasteUrlImage = ({ showDialog, closeDialog }) => {
+export const PasteUrl = ({ showDialog, closeDialog }) => {
   const [url, setUrl] = useState('')
   const { createExternalTemplate } = useStorage()
 
@@ -49,7 +49,7 @@ export const PasteUrlImage = ({ showDialog, closeDialog }) => {
   )
 }
 
-PasteUrlImage.propTypes = {
+PasteUrl.propTypes = {
   showDialog: PropTypes.bool,
   closeDialog: PropTypes.func,
 }
