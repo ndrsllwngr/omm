@@ -7,12 +7,11 @@ import { PasteUrl } from '@/components/template-generator/PasteUrl'
 import { WebcamPhoto } from '@/components/template-generator/WebcamPhoto'
 import { ImgFlipCollection } from '@/components/meme-generator/ImgFlipCollection'
 import { noop } from '@/lib/noop'
+import { AddTemplate } from '@/components/template-generator/AddTemplate'
 
 export default { title: 'Templates' }
 
-export const templateCollection = () => <TemplateCollection />
-
-export const imgFlipCollection = () => <ImgFlipCollection />
+export const addTemplateBtn = () => <AddTemplate />
 
 export const screenshotUrl = () => <ScreenshotUrl showDialog={true} closeDialog={noop} />
 

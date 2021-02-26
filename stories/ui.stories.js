@@ -1,6 +1,25 @@
 import React from 'react'
 import { Navbar } from '@/components/Navbar'
 import { Comment, CommentInput } from '@/components/Comment'
+import {
+  IconBtn,
+  PrimaryBtn,
+  SecondaryBtn,
+  TertiaryBtn,
+  VoteDownBtn,
+  VoteUpBtn,
+  ToggleIconBtn,
+  ToggleStateIconBtn,
+  Badge,
+} from '@/components/ui/Buttons'
+import {
+  IoArrowBack,
+  IoCaretDownOutline,
+  IoCaretUpOutline,
+  IoPlay,
+  IoShuffle,
+} from 'react-icons/io5'
+import { ShareButtons } from '@/components/ui/ShareButtons'
 
 export default { title: 'UI' }
 
@@ -23,3 +42,43 @@ export const commentUI = () => (
     <Comment comment={mockComment} />
   </div>
 )
+
+export const primaryBtn = () => <PrimaryBtn>Button</PrimaryBtn>
+
+export const secondaryBtn = () => <SecondaryBtn>Button</SecondaryBtn>
+
+export const tertiaryBtn = () => <TertiaryBtn>Button</TertiaryBtn>
+
+export const voteDownBtn = () => (
+  <VoteDownBtn>
+    <IoCaretDownOutline size={22} className={'fill-current inline-flex self-center'} />
+  </VoteDownBtn>
+)
+
+export const voteUpBtn = () => (
+  <VoteUpBtn>
+    <IoCaretUpOutline size={22} className={'fill-current inline-flex self-center'} />
+  </VoteUpBtn>
+)
+
+export const iconBtn = () => (
+  <IconBtn>
+    <IoArrowBack size={28} className={`fill-current`} />
+  </IconBtn>
+)
+
+export const toggleIconBtn = () => (
+  <ToggleIconBtn>
+    <IoShuffle size={28} className={`fill-current`} />
+  </ToggleIconBtn>
+)
+
+export const toggleStateIconBtn = () => (
+  <ToggleStateIconBtn>
+    <IoPlay size={28} className="py-1 fill-current" />
+  </ToggleStateIconBtn>
+)
+
+export const badge = () => <Badge>Badge</Badge>
+
+export const shareBtns = () => <ShareButtons id={123456} />

@@ -39,9 +39,8 @@ const useStorage = () => {
     console.log('RESET useStorage state')
   }
 
-  const createExternalTemplate = (url, callback = noop) => {
-    setFile(url)
-    insertOneTemplate({
+  const insertExternalTemplate = (url) => {
+    return insertOneTemplate({
       variables: {
         template: {
           createdAt: new Date(),
@@ -54,6 +53,11 @@ const useStorage = () => {
         },
       },
     })
+  }
+
+  const createExternalTemplate = (url, callback = noop) => {
+    setFile(url)
+    insertExternalTemplate(url)
       .then(() => {
         callback()
       })
