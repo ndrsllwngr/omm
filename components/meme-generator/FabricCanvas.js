@@ -1,5 +1,4 @@
 import React, { useEffect, useLayoutEffect, useCallback } from 'react'
-import PropTypes from 'prop-types'
 import {
   useFabricJson,
   useFabricCanvas,
@@ -11,7 +10,7 @@ import { useImmer } from 'use-immer'
 
 // TODO @NDRS add option to set canvas background color
 
-export const FabricCanvas = ({ jsonData = null }) => {
+export const FabricCanvas = () => {
   const { json, setJson } = useFabricJson()
   const {
     canvas,
@@ -24,8 +23,8 @@ export const FabricCanvas = ({ jsonData = null }) => {
   } = useFabricCanvas()
   const { setActiveObject } = useFabricActiveObject()
   const [size, updateSize] = useImmer({
-    width: jsonData ? jsonData.width : 500,
-    height: jsonData ? jsonData.width : 400,
+    width: 500,
+    height: 400,
   })
 
   const onResize = useCallback(
@@ -42,15 +41,11 @@ export const FabricCanvas = ({ jsonData = null }) => {
     [resizeCanvas, updateSize]
   )
   useLayoutEffect(() => {
-    console.log({ src: 'FabricCanvas.useLayoutEffect', jsonData, json, canvas, canvasRef })
+    console.log({ src: 'FabricCanvas.useLayoutEffect', json, canvas, canvasRef })
     if (!canvas && canvasRef.current) {
       if (json) {
         loadFromJSON(json)
-        setIsCopy(json.id)
-        setJson(null)
-      } else if (jsonData) {
-        loadFromJSON(jsonData)
-        setIsCopy(json.id)
+        setIsCopy(json._id)
         setJson(null)
       } else {
         initCanvas({
@@ -60,7 +55,7 @@ export const FabricCanvas = ({ jsonData = null }) => {
         setIsCopy(null)
       }
     }
-  }, [canvasRef, json, canvas, initCanvas, loadFromJSON, setJson, jsonData, setIsCopy])
+  }, [canvasRef, json, canvas, initCanvas, loadFromJSON, setJson, setIsCopy])
 
   const updateActiveObject = useCallback(
     (e) => {
@@ -103,27 +98,25 @@ export const FabricCanvas = ({ jsonData = null }) => {
   }, [canvas, updateActiveObject, onObjectModified, resetCanvas])
 
   return (
-    <div>
-      <ResizableBox
-        className="box"
-        width={size.width}
-        height={size.height}
-        minConstraints={[150, 150]}
-        maxConstraints={[1000, 1000]}
-        onResize={onResize}
-      >
-        <canvas
-          ref={canvasRef}
-          id="fabric-canvas"
-          width={800}
-          height={400}
-          style={{ border: '1px solid red' }}
-        />
-      </ResizableBox>
-    </div>
+    <>
+      <div>
+        <ResizableBox
+          className="box"
+          width={size.width}
+          height={size.height}
+          minConstraints={[150, 150]}
+          maxConstraints={[1000, 1000]}
+          onResize={onResize}
+        >
+          <canvas
+            ref={canvasRef}
+            id="fabric-canvas"
+            width={800}
+            height={400}
+            style={{ border: '1px solid red' }}
+          />
+        </ResizableBox>
+      </div>
+    </>
   )
-}
-
-FabricCanvas.propTypes = {
-  jsonData: PropTypes.any,
 }

@@ -5,17 +5,22 @@ import { Dialog } from '@reach/dialog'
 import VisuallyHidden from '@reach/visually-hidden'
 import { IoClose } from 'react-icons/io5'
 import PropTypes from 'prop-types'
+import { MEDIA_TYPE } from '@/lib/constants'
 
 export const WebcamPhoto = ({ showDialog, closeDialog }) => {
   const [playing, setPlaying] = useState(false)
   const { createTemplate } = useStorage()
-
-  const HEIGHT = 500
-  const WIDTH = 500
+  const [name, setName] = useState(null)
+  const [width] = useState(500)
+  const [height] = useState(500)
 
   useEffect(() => {
     return stopVideo()
   }, [])
+
+  const resetLocalState = () => {
+    setName(null)
+  }
 
   const startVideo = () => {
     setPlaying(true)
@@ -49,9 +54,15 @@ export const WebcamPhoto = ({ showDialog, closeDialog }) => {
       (blob) => {
         // const img = new Image()
         // img.src = window.URL.createObjectURL(blob)
-        createTemplate(blob, () => {
-          stopVideo()
-          closeDialog()
+        createTemplate({
+          file: blob,
+          meta: { name: name, width: width, height: height },
+          callback: () => {
+            stopVideo()
+            resetLocalState()
+            closeDialog()
+          },
+          mediaType: MEDIA_TYPE.IMAGE,
         })
       },
       'image/png',
@@ -71,13 +82,22 @@ export const WebcamPhoto = ({ showDialog, closeDialog }) => {
               </span>
             </TertiaryBtn>
           </div>
+          <input
+            className={
+              'appearance-none border border-transparent w-full py-2 px-4 bg-white text-gray-700 placeholder-gray-400 shadow-md rounded-lg text-base focus:outline-none focus:ring-2 focus:ring-purple-600 focus:border-transparent'
+            }
+            type="text"
+            value={name}
+            placeholder={'Description'}
+            onChange={(e) => setName(e.target.value)}
+          />
           <div>
             <div className="app">
               <div className="app__container">
                 <video
                   id="video"
-                  height={HEIGHT}
-                  width={WIDTH}
+                  height={height}
+                  width={width}
                   muted
                   autoPlay
                   className="app__videoFeed"

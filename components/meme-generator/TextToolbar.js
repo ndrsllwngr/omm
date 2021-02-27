@@ -21,6 +21,8 @@ import {
 import { useImmer } from 'use-immer'
 import { FONT_FAMILY } from '@/lib/constants'
 import { useDetectOutsideClick } from '@/components/hooks/useDetectOutsideClick'
+import { SpeechToText } from '@/components/SpeechToText'
+import { TertiaryBtn } from '@/components/ui/Buttons'
 
 const allowedFonts = [
   FONT_FAMILY.ALLAN,
@@ -166,7 +168,7 @@ export const TextToolbar = (_props) => {
               <option value="normal">Normal</option>
               <option value="italic">Italic</option>
             </select>
-            <button onClick={() => handleChange('fontWeight', canvas)}>Bold</button>
+            <TertiaryBtn onClick={() => handleChange('fontWeight', canvas)}>Bold</TertiaryBtn>
             <input
               type="range"
               id="fontSize"
@@ -248,11 +250,11 @@ export const TextToolbar = (_props) => {
               <option value="none">No shadow</option>
               <option value="shadow-1">Shadow 1</option>
             </select>
-            <button onClick={() => sendBackwards(canvas)}>Send backwards</button>
-            <button onClick={() => sendToBack(canvas)}>Send to back</button>
-            <button onClick={() => bringForward(canvas)}>Bring forwards</button>
-            <button onClick={() => bringToFront(canvas)}>Bring to front</button>
-            <button onClick={() => removeSelected(canvas)}>Remove selected object</button>
+            <TertiaryBtn onClick={() => sendBackwards(canvas)}>Send backwards</TertiaryBtn>
+            <TertiaryBtn onClick={() => sendToBack(canvas)}>Send to back</TertiaryBtn>
+            <TertiaryBtn onClick={() => bringForward(canvas)}>Bring forwards</TertiaryBtn>
+            <TertiaryBtn onClick={() => bringToFront(canvas)}>Bring to front</TertiaryBtn>
+            <TertiaryBtn onClick={() => removeSelected(canvas)}>Remove selected object</TertiaryBtn>
           </div>
           <div className={'flex flex-row'}>
             <div className={'flex flex-row'}>
@@ -263,6 +265,7 @@ export const TextToolbar = (_props) => {
                 value={textBox.text}
                 onChange={(e) => handleChange('text', e.target.value)}
               />
+              <SpeechToText onChange={handleChange} />
             </div>
           </div>
         </div>

@@ -1,478 +1,6 @@
-enum TemplateSortByInput {
-  CREATEDAT_ASC
-  CREATEDAT_DESC
-  CREATEDBY_ASC
-  _ID_ASC
-  HEIGHT_ASC
-  IMG_DESC
-  TYPE_DESC
-  URL_ASC
-  WIDTH_ASC
-  WIDTH_DESC
-  IMG_ASC
-  TYPE_ASC
-  URL_DESC
-  CREATEDBY_DESC
-  HEIGHT_DESC
-  _ID_DESC
-}
-
-input MemeCreatedByRelationInput {
-  create: UserInsertInput
-  link: ObjectId
-}
-
 input MemeForkedFromRelationInput {
   create: MemeInsertInput
   link: ObjectId
-}
-
-input MemeCommentsRelationInput {
-  create: [CommentInsertInput]
-  link: [ObjectId]
-}
-
-input MemeTemplateQueryInput {
-  url_ne: String
-  url_gte: String
-  AND: [MemeTemplateQueryInput!]
-  OR: [MemeTemplateQueryInput!]
-  url: String
-  url_lt: String
-  url_gt: String
-  url_exists: Boolean
-  id: TemplateQueryInput
-  url_nin: [String]
-  url_in: [String]
-  id_exists: Boolean
-  url_lte: String
-}
-
-input MemeTemplateIdRelationInput {
-  link: ObjectId
-  create: TemplateInsertInput
-}
-
-input MemeUpVotesRelationInput {
-  create: [UserInsertInput]
-  link: [ObjectId]
-}
-
-input MemeUpdateInput {
-  forkedFrom_unset: Boolean
-  comments: MemeCommentsRelationInput
-  svg_unset: Boolean
-  visibility: String
-  points_unset: Boolean
-  createdBy: MemeCreatedByRelationInput
-  _id_unset: Boolean
-  commentCount: Int
-  comments_unset: Boolean
-  json: String
-  upVotes_unset: Boolean
-  points_inc: Int
-  title: String
-  svg: String
-  isDraft_unset: Boolean
-  title_unset: Boolean
-  url: String
-  url_unset: Boolean
-  views_inc: Int
-  views: Int
-  createdBy_unset: Boolean
-  visibility_unset: Boolean
-  commentCount_inc: Int
-  downVotes_unset: Boolean
-  forkedBy_unset: Boolean
-  json_unset: Boolean
-  commentCount_unset: Boolean
-  template_unset: Boolean
-  _id: ObjectId
-  points: Int
-  downVotes: MemeDownVotesRelationInput
-  upVotes: MemeUpVotesRelationInput
-  template: MemeTemplateUpdateInput
-  createdAt_unset: Boolean
-  isDraft: Boolean
-  views_unset: Boolean
-  forkedFrom: MemeForkedFromRelationInput
-  forkedBy: MemeForkedByRelationInput
-  createdAt: DateTime
-}
-
-type User {
-  _id: ObjectId
-  createdAt: DateTime
-  email: String
-  name: String
-  uid: String
-}
-
-type Template {
-  _id: ObjectId
-  createdAt: DateTime
-  createdBy: User
-  height: Int
-  img: String
-  type: String
-  url: String
-  width: Int
-}
-
-input FetchMemeInput {
-  meme_id: ObjectId!
-  conditions: String
-  sorts: String
-  next: Boolean
-}
-
-input CommentMeme_idRelationInput {
-  create: MemeInsertInput
-  link: ObjectId
-}
-
-input MemeDownVotesRelationInput {
-  link: [ObjectId]
-  create: [UserInsertInput]
-}
-
-type InsertManyPayload {
-  insertedIds: [ObjectId]!
-}
-
-input UserInsertInput {
-  createdAt: DateTime
-  email: String
-  name: String
-  uid: String
-  _id: ObjectId
-}
-
-input CommentUpdateInput {
-  _id_unset: Boolean
-  text_unset: Boolean
-  _id: ObjectId
-  createdBy: CommentCreatedByRelationInput
-  meme_id: CommentMeme_idRelationInput
-  text: String
-  createdAt_unset: Boolean
-  createdAt: DateTime
-  createdBy_unset: Boolean
-  meme_id_unset: Boolean
-}
-
-input CommentQueryInput {
-  _id_gt: ObjectId
-  _id_exists: Boolean
-  text_lt: String
-  _id_nin: [ObjectId]
-  createdBy: UserQueryInput
-  _id_lt: ObjectId
-  _id_lte: ObjectId
-  meme_id: MemeQueryInput
-  createdAt_lt: DateTime
-  text: String
-  createdBy_exists: Boolean
-  text_nin: [String]
-  _id_ne: ObjectId
-  createdAt: DateTime
-  createdAt_nin: [DateTime]
-  text_exists: Boolean
-  _id_gte: ObjectId
-  OR: [CommentQueryInput!]
-  text_lte: String
-  createdAt_in: [DateTime]
-  AND: [CommentQueryInput!]
-  _id_in: [ObjectId]
-  createdAt_gte: DateTime
-  meme_id_exists: Boolean
-  createdAt_ne: DateTime
-  text_in: [String]
-  text_gt: String
-  createdAt_exists: Boolean
-  _id: ObjectId
-  text_ne: String
-  createdAt_lte: DateTime
-  text_gte: String
-  createdAt_gt: DateTime
-}
-
-input TemplateQueryInput {
-  type_lt: String
-  url_in: [String]
-  _id: ObjectId
-  type: String
-  img_lte: String
-  width_exists: Boolean
-  createdBy_exists: Boolean
-  url_lt: String
-  type_lte: String
-  width_ne: Int
-  height_gte: Int
-  url_exists: Boolean
-  type_nin: [String]
-  width_gt: Int
-  createdAt_gte: DateTime
-  createdAt_nin: [DateTime]
-  _id_gte: ObjectId
-  height_exists: Boolean
-  height_ne: Int
-  img_ne: String
-  height: Int
-  type_gt: String
-  _id_lte: ObjectId
-  _id_ne: ObjectId
-  type_in: [String]
-  createdAt_ne: DateTime
-  height_lt: Int
-  type_ne: String
-  img_gt: String
-  height_lte: Int
-  width_nin: [Int]
-  type_gte: String
-  createdAt_lte: DateTime
-  url: String
-  url_lte: String
-  img: String
-  img_in: [String]
-  OR: [TemplateQueryInput!]
-  width_lt: Int
-  url_nin: [String]
-  img_nin: [String]
-  width_gte: Int
-  _id_lt: ObjectId
-  _id_in: [ObjectId]
-  createdAt: DateTime
-  height_nin: [Int]
-  type_exists: Boolean
-  url_gte: String
-  url_gt: String
-  AND: [TemplateQueryInput!]
-  _id_nin: [ObjectId]
-  width_lte: Int
-  img_gte: String
-  createdAt_in: [DateTime]
-  height_in: [Int]
-  createdAt_exists: Boolean
-  createdAt_gt: DateTime
-  width_in: [Int]
-  createdBy: UserQueryInput
-  img_lt: String
-  height_gt: Int
-  width: Int
-  _id_exists: Boolean
-  _id_gt: ObjectId
-  createdAt_lt: DateTime
-  img_exists: Boolean
-  url_ne: String
-}
-
-input FetchRandomMemeInput {
-  meme_id: ObjectId!
-  conditions: String
-}
-
-enum MemeSortByInput {
-  COMMENTCOUNT_ASC
-  VISIBILITY_ASC
-  VISIBILITY_DESC
-  _ID_ASC
-  _ID_DESC
-  URL_DESC
-  CREATEDBY_ASC
-  JSON_DESC
-  CREATEDBY_DESC
-  SVG_ASC
-  FORKEDFROM_DESC
-  VIEWS_ASC
-  POINTS_ASC
-  POINTS_DESC
-  CREATEDAT_ASC
-  TITLE_DESC
-  TITLE_ASC
-  COMMENTCOUNT_DESC
-  SVG_DESC
-  FORKEDFROM_ASC
-  VIEWS_DESC
-  URL_ASC
-  CREATEDAT_DESC
-  JSON_ASC
-}
-
-type DeleteManyPayload {
-  deletedCount: Int!
-}
-
-input MemeQueryInput {
-  createdAt_exists: Boolean
-  svg_lt: String
-  json_exists: Boolean
-  commentCount_lte: Int
-  upVotes_exists: Boolean
-  points_in: [Int]
-  views_lte: Int
-  title: String
-  forkedFrom_exists: Boolean
-  createdAt_in: [DateTime]
-  createdAt_gt: DateTime
-  visibility_lt: String
-  svg: String
-  json_ne: String
-  points_nin: [Int]
-  points_lte: Int
-  svg_gte: String
-  isDraft_ne: Boolean
-  url_lte: String
-  title_lte: String
-  title_in: [String]
-  commentCount_ne: Int
-  title_lt: String
-  comments_nin: [CommentQueryInput]
-  commentCount_in: [Int]
-  visibility_in: [String]
-  views_lt: Int
-  views_exists: Boolean
-  url_exists: Boolean
-  createdAt_ne: DateTime
-  comments_in: [CommentQueryInput]
-  createdAt_gte: DateTime
-  views: Int
-  title_nin: [String]
-  _id: ObjectId
-  commentCount_exists: Boolean
-  commentCount_lt: Int
-  views_ne: Int
-  createdAt_lt: DateTime
-  json_lt: String
-  points_exists: Boolean
-  forkedBy_in: [MemeQueryInput]
-  points_ne: Int
-  svg_nin: [String]
-  views_nin: [Int]
-  _id_exists: Boolean
-  visibility_lte: String
-  svg_in: [String]
-  json: String
-  template: MemeTemplateQueryInput
-  upVotes_in: [UserQueryInput]
-  downVotes_nin: [UserQueryInput]
-  _id_gt: ObjectId
-  upVotes_nin: [UserQueryInput]
-  url_lt: String
-  upVotes: [UserQueryInput]
-  forkedFrom: MemeQueryInput
-  url_in: [String]
-  json_in: [String]
-  visibility_ne: String
-  points_lt: Int
-  svg_gt: String
-  _id_in: [ObjectId]
-  _id_lt: ObjectId
-  forkedBy: [MemeQueryInput]
-  template_exists: Boolean
-  forkedBy_exists: Boolean
-  title_ne: String
-  isDraft: Boolean
-  createdAt_nin: [DateTime]
-  svg_ne: String
-  points: Int
-  forkedBy_nin: [MemeQueryInput]
-  AND: [MemeQueryInput!]
-  createdBy: UserQueryInput
-  views_in: [Int]
-  visibility_exists: Boolean
-  createdAt: DateTime
-  visibility: String
-  OR: [MemeQueryInput!]
-  createdAt_lte: DateTime
-  url_gt: String
-  commentCount_nin: [Int]
-  commentCount: Int
-  commentCount_gte: Int
-  visibility_gte: String
-  visibility_gt: String
-  comments: [CommentQueryInput]
-  views_gt: Int
-  downVotes: [UserQueryInput]
-  url_ne: String
-  points_gt: Int
-  visibility_nin: [String]
-  createdBy_exists: Boolean
-  json_gt: String
-  _id_lte: ObjectId
-  title_gte: String
-  _id_nin: [ObjectId]
-  url: String
-  svg_lte: String
-  json_lte: String
-  json_nin: [String]
-  comments_exists: Boolean
-  json_gte: String
-  _id_gte: ObjectId
-  views_gte: Int
-  url_nin: [String]
-  title_exists: Boolean
-  svg_exists: Boolean
-  url_gte: String
-  points_gte: Int
-  commentCount_gt: Int
-  _id_ne: ObjectId
-  downVotes_exists: Boolean
-  downVotes_in: [UserQueryInput]
-  title_gt: String
-  isDraft_exists: Boolean
-}
-
-enum UserSortByInput {
-  EMAIL_DESC
-  NAME_ASC
-  UID_DESC
-  _ID_ASC
-  _ID_DESC
-  EMAIL_ASC
-  NAME_DESC
-  UID_ASC
-  CREATEDAT_ASC
-  CREATEDAT_DESC
-}
-
-input TemplateInsertInput {
-  createdAt: DateTime
-  createdBy: TemplateCreatedByRelationInput
-  height: Int
-  img: String
-  type: String
-  url: String
-  width: Int
-  _id: ObjectId
-}
-
-scalar ObjectId
-
-input MemeTemplateInsertInput {
-  id: MemeTemplateIdRelationInput
-  url: String
-}
-
-input TemplateUpdateInput {
-  height: Int
-  img: String
-  _id: ObjectId
-  width_inc: Int
-  width_unset: Boolean
-  img_unset: Boolean
-  createdAt: DateTime
-  _id_unset: Boolean
-  createdAt_unset: Boolean
-  width: Int
-  height_inc: Int
-  type_unset: Boolean
-  createdBy_unset: Boolean
-  createdBy: TemplateCreatedByRelationInput
-  url: String
-  type: String
-  url_unset: Boolean
-  height_unset: Boolean
 }
 
 input AddCommentInput {
@@ -480,20 +8,6 @@ input AddCommentInput {
   createdBy: ObjectId
   text: String
   createdAt: DateTime
-}
-
-type Query {
-  comment(query: CommentQueryInput): Comment
-  comments(query: CommentQueryInput, limit: Int = 100, sortBy: CommentSortByInput): [Comment]!
-  fetchMeme(input: FetchMemeInput): Meme
-  fetchRandomMeme(input: FetchRandomMemeInput): Meme
-  meme(query: MemeQueryInput): Meme
-  memes(query: MemeQueryInput, limit: Int = 100, sortBy: MemeSortByInput): [Meme]!
-  searchMemesByTitle(input: SearchMemeInput): [Meme]
-  template(query: TemplateQueryInput): Template
-  templates(query: TemplateQueryInput, limit: Int = 100, sortBy: TemplateSortByInput): [Template]!
-  user(query: UserQueryInput): User
-  users(limit: Int = 100, sortBy: UserSortByInput, query: UserQueryInput): [User]!
 }
 
 type Meme {
@@ -517,9 +31,287 @@ type Meme {
   visibility: String
 }
 
+input MemeDownVotesRelationInput {
+  create: [UserInsertInput]
+  link: [ObjectId]
+}
+
+scalar ObjectId
+
+enum MemeSortByInput {
+  JSON_ASC
+  VISIBILITY_ASC
+  URL_DESC
+  TITLE_ASC
+  COMMENTCOUNT_ASC
+  CREATEDAT_ASC
+  SVG_ASC
+  SVG_DESC
+  VIEWS_ASC
+  VIEWS_DESC
+  CREATEDBY_ASC
+  CREATEDAT_DESC
+  _ID_DESC
+  POINTS_DESC
+  TITLE_DESC
+  COMMENTCOUNT_DESC
+  FORKEDFROM_ASC
+  FORKEDFROM_DESC
+  JSON_DESC
+  VISIBILITY_DESC
+  _ID_ASC
+  URL_ASC
+  POINTS_ASC
+  CREATEDBY_DESC
+}
+
+enum CommentSortByInput {
+  TEXT_DESC
+  CREATEDAT_DESC
+  CREATEDBY_ASC
+  _ID_ASC
+  MEME_ID_ASC
+  MEME_ID_DESC
+  CREATEDBY_DESC
+  _ID_DESC
+  TEXT_ASC
+  CREATEDAT_ASC
+}
+
+input CommentInsertInput {
+  createdAt: DateTime
+  createdBy: CommentCreatedByRelationInput
+  _id: ObjectId
+  meme_id: CommentMeme_idRelationInput
+  text: String
+}
+
+type MemeTemplate {
+  id: Template
+  url: String
+}
+
+scalar DateTime
+
+input TemplateUpdateInput {
+  img: String
+  height: Int
+  url_unset: Boolean
+  url: String
+  mediaType_unset: Boolean
+  height_unset: Boolean
+  type: String
+  mediaType: String
+  createdBy_unset: Boolean
+  _id_unset: Boolean
+  createdAt: DateTime
+  createdBy: TemplateCreatedByRelationInput
+  createdAt_unset: Boolean
+  height_inc: Int
+  width: Int
+  name: String
+  _id: ObjectId
+  duration_unset: Boolean
+  width_inc: Int
+  duration_inc: Float
+  name_unset: Boolean
+  width_unset: Boolean
+  duration: Float
+  img_unset: Boolean
+  type_unset: Boolean
+}
+
+input MemeUpVotesRelationInput {
+  create: [UserInsertInput]
+  link: [ObjectId]
+}
+
+input MemeTemplateIdRelationInput {
+  create: TemplateInsertInput
+  link: ObjectId
+}
+
+input MemeQueryInput {
+  createdAt_exists: Boolean
+  _id_gt: ObjectId
+  url_exists: Boolean
+  url_lt: String
+  _id_lt: ObjectId
+  views_in: [Int]
+  json_gte: String
+  _id_lte: ObjectId
+  title_exists: Boolean
+  visibility_exists: Boolean
+  downVotes_nin: [UserQueryInput]
+  url_ne: String
+  createdAt_lte: DateTime
+  template: MemeTemplateQueryInput
+  comments_nin: [CommentQueryInput]
+  title_gte: String
+  forkedBy_nin: [MemeQueryInput]
+  visibility_gte: String
+  points: Int
+  comments_in: [CommentQueryInput]
+  views_ne: Int
+  points_lt: Int
+  isDraft: Boolean
+  commentCount: Int
+  json_lte: String
+  visibility_ne: String
+  views: Int
+  points_lte: Int
+  downVotes: [UserQueryInput]
+  title_nin: [String]
+  svg_ne: String
+  createdBy_exists: Boolean
+  views_exists: Boolean
+  visibility_nin: [String]
+  json_gt: String
+  json_lt: String
+  _id_exists: Boolean
+  forkedBy_in: [MemeQueryInput]
+  points_nin: [Int]
+  template_exists: Boolean
+  title: String
+  title_lte: String
+  url_gte: String
+  points_exists: Boolean
+  svg_gte: String
+  url_in: [String]
+  json_ne: String
+  comments_exists: Boolean
+  visibility_lte: String
+  points_ne: Int
+  downVotes_in: [UserQueryInput]
+  json_in: [String]
+  json_exists: Boolean
+  _id_nin: [ObjectId]
+  forkedBy_exists: Boolean
+  _id_ne: ObjectId
+  views_gt: Int
+  title_lt: String
+  points_gt: Int
+  svg_lte: String
+  visibility_in: [String]
+  isDraft_exists: Boolean
+  _id: ObjectId
+  commentCount_gte: Int
+  commentCount_in: [Int]
+  commentCount_nin: [Int]
+  comments: [CommentQueryInput]
+  svg_exists: Boolean
+  title_in: [String]
+  points_in: [Int]
+  forkedBy: [MemeQueryInput]
+  visibility_gt: String
+  visibility: String
+  svg_in: [String]
+  title_ne: String
+  svg_lt: String
+  _id_in: [ObjectId]
+  forkedFrom_exists: Boolean
+  svg_gt: String
+  svg_nin: [String]
+  visibility_lt: String
+  createdAt: DateTime
+  views_gte: Int
+  createdAt_ne: DateTime
+  isDraft_ne: Boolean
+  commentCount_lte: Int
+  createdAt_in: [DateTime]
+  url_lte: String
+  json_nin: [String]
+  svg: String
+  downVotes_exists: Boolean
+  createdAt_lt: DateTime
+  createdAt_nin: [DateTime]
+  points_gte: Int
+  upVotes_nin: [UserQueryInput]
+  json: String
+  upVotes: [UserQueryInput]
+  url: String
+  createdAt_gt: DateTime
+  createdBy: UserQueryInput
+  views_nin: [Int]
+  commentCount_lt: Int
+  upVotes_in: [UserQueryInput]
+  OR: [MemeQueryInput!]
+  _id_gte: ObjectId
+  upVotes_exists: Boolean
+  views_lte: Int
+  commentCount_exists: Boolean
+  AND: [MemeQueryInput!]
+  createdAt_gte: DateTime
+  views_lt: Int
+  title_gt: String
+  forkedFrom: MemeQueryInput
+  commentCount_ne: Int
+  url_nin: [String]
+  commentCount_gt: Int
+  url_gt: String
+}
+
+input TemplateCreatedByRelationInput {
+  create: UserInsertInput
+  link: ObjectId
+}
+
+input MemeCommentsRelationInput {
+  link: [ObjectId]
+  create: [CommentInsertInput]
+}
+
+input FetchRandomMemeInput {
+  conditions: String
+  meme_id: ObjectId!
+}
+
+type InsertManyPayload {
+  insertedIds: [ObjectId]!
+}
+
+input MemeTemplateInsertInput {
+  id: MemeTemplateIdRelationInput
+  url: String
+}
+
+input MemeInsertInput {
+  isDraft: Boolean
+  visibility: String
+  views: Int
+  createdBy: MemeCreatedByRelationInput
+  forkedFrom: MemeForkedFromRelationInput
+  points: Int
+  commentCount: Int
+  comments: MemeCommentsRelationInput
+  downVotes: MemeDownVotesRelationInput
+  createdAt: DateTime
+  template: MemeTemplateInsertInput
+  title: String
+  upVotes: MemeUpVotesRelationInput
+  _id: ObjectId
+  forkedBy: MemeForkedByRelationInput
+  json: String
+  svg: String
+  url: String
+}
+
 input CommentCreatedByRelationInput {
   create: UserInsertInput
   link: ObjectId
+}
+
+type UpdateManyPayload {
+  matchedCount: Int!
+  modifiedCount: Int!
+}
+
+type User {
+  _id: ObjectId
+  createdAt: DateTime
+  email: String
+  name: String
+  uid: String
 }
 
 type Comment {
@@ -530,9 +322,51 @@ type Comment {
   text: String
 }
 
-type UpdateManyPayload {
-  matchedCount: Int!
-  modifiedCount: Int!
+input UserInsertInput {
+  uid: String
+  _id: ObjectId
+  createdAt: DateTime
+  email: String
+  name: String
+}
+
+input CommentMeme_idRelationInput {
+  create: MemeInsertInput
+  link: ObjectId
+}
+
+input MemeTemplateUpdateInput {
+  id: MemeTemplateIdRelationInput
+  id_unset: Boolean
+  url: String
+  url_unset: Boolean
+}
+
+input UserUpdateInput {
+  uid: String
+  _id: ObjectId
+  email: String
+  name_unset: Boolean
+  createdAt: DateTime
+  name: String
+  createdAt_unset: Boolean
+  email_unset: Boolean
+  uid_unset: Boolean
+  _id_unset: Boolean
+}
+
+input TemplateInsertInput {
+  name: String
+  _id: ObjectId
+  url: String
+  mediaType: String
+  width: Int
+  createdAt: DateTime
+  createdBy: TemplateCreatedByRelationInput
+  duration: Float
+  height: Int
+  type: String
+  img: String
 }
 
 input MemeForkedByRelationInput {
@@ -540,88 +374,190 @@ input MemeForkedByRelationInput {
   link: [ObjectId]
 }
 
-input TemplateCreatedByRelationInput {
-  create: UserInsertInput
-  link: ObjectId
+input MemeTemplateQueryInput {
+  id: TemplateQueryInput
+  url_lt: String
+  url_gt: String
+  url_lte: String
+  url_nin: [String]
+  url_ne: String
+  AND: [MemeTemplateQueryInput!]
+  url: String
+  url_gte: String
+  url_in: [String]
+  url_exists: Boolean
+  OR: [MemeTemplateQueryInput!]
+  id_exists: Boolean
 }
 
-input MemeInsertInput {
-  createdAt: DateTime
-  createdBy: MemeCreatedByRelationInput
-  forkedFrom: MemeForkedFromRelationInput
-  forkedBy: MemeForkedByRelationInput
-  views: Int
-  downVotes: MemeDownVotesRelationInput
-  svg: String
-  template: MemeTemplateInsertInput
-  isDraft: Boolean
-  url: String
-  title: String
-  points: Int
-  comments: MemeCommentsRelationInput
-  json: String
-  commentCount: Int
-  upVotes: MemeUpVotesRelationInput
+type Query {
+  comment(query: CommentQueryInput): Comment
+  comments(sortBy: CommentSortByInput, query: CommentQueryInput, limit: Int = 100): [Comment]!
+  fetchMeme(input: FetchMemeInput): Meme
+  fetchRandomMeme(input: FetchRandomMemeInput): Meme
+  meme(query: MemeQueryInput): Meme
+  memes(query: MemeQueryInput, limit: Int = 100, sortBy: MemeSortByInput): [Meme]!
+  searchMemesByTitle(input: SearchMemeInput): [Meme]
+  template(query: TemplateQueryInput): Template
+  templates(query: TemplateQueryInput, limit: Int = 100, sortBy: TemplateSortByInput): [Template]!
+  user(query: UserQueryInput): User
+  users(query: UserQueryInput, limit: Int = 100, sortBy: UserSortByInput): [User]!
+}
+
+input TemplateQueryInput {
+  type_lte: String
+  type_gt: String
+  mediaType_ne: String
+  name_in: [String]
+  img: String
+  name_ne: String
+  _id_gte: ObjectId
+  img_lte: String
+  _id_nin: [ObjectId]
+  height: Int
+  duration_nin: [Float]
+  url_gt: String
+  name: String
+  img_lt: String
+  height_lt: Int
+  mediaType_gte: String
+  width_lte: Int
+  duration: Float
+  type_ne: String
+  url_exists: Boolean
+  width_exists: Boolean
+  type_in: [String]
+  _id_lte: ObjectId
+  createdAt_in: [DateTime]
+  mediaType_exists: Boolean
+  name_gt: String
+  createdAt_lt: DateTime
+  url_lte: String
   _id: ObjectId
-  visibility: String
+  duration_gt: Float
+  url: String
+  type_lt: String
+  url_nin: [String]
+  height_ne: Int
+  mediaType_nin: [String]
+  mediaType_lt: String
+  _id_gt: ObjectId
+  img_in: [String]
+  name_lt: String
+  _id_lt: ObjectId
+  width_nin: [Int]
+  createdAt: DateTime
+  createdBy: UserQueryInput
+  duration_in: [Float]
+  url_gte: String
+  height_nin: [Int]
+  createdAt_nin: [DateTime]
+  width_lt: Int
+  name_nin: [String]
+  AND: [TemplateQueryInput!]
+  duration_lte: Float
+  img_exists: Boolean
+  img_gt: String
+  createdBy_exists: Boolean
+  OR: [TemplateQueryInput!]
+  height_in: [Int]
+  name_exists: Boolean
+  _id_ne: ObjectId
+  createdAt_gte: DateTime
+  duration_lt: Float
+  height_gt: Int
+  _id_in: [ObjectId]
+  type_gte: String
+  url_ne: String
+  img_ne: String
+  type_exists: Boolean
+  height_gte: Int
+  width_gt: Int
+  duration_exists: Boolean
+  createdAt_lte: DateTime
+  width_in: [Int]
+  duration_gte: Float
+  height_lte: Int
+  createdAt_gt: DateTime
+  createdAt_exists: Boolean
+  _id_exists: Boolean
+  mediaType_gt: String
+  duration_ne: Float
+  url_lt: String
+  width_ne: Int
+  img_nin: [String]
+  url_in: [String]
+  mediaType_in: [String]
+  name_gte: String
+  type_nin: [String]
+  createdAt_ne: DateTime
+  name_lte: String
+  mediaType_lte: String
+  width: Int
+  width_gte: Int
+  img_gte: String
+  mediaType: String
+  height_exists: Boolean
+  type: String
+}
+
+type DeleteManyPayload {
+  deletedCount: Int!
 }
 
 input UserQueryInput {
-  uid_gt: String
-  email_exists: Boolean
-  email_ne: String
-  OR: [UserQueryInput!]
-  uid_exists: Boolean
-  uid_ne: String
-  createdAt: DateTime
-  name_lt: String
-  AND: [UserQueryInput!]
-  name: String
-  email_gte: String
-  name_exists: Boolean
-  name_lte: String
-  _id_exists: Boolean
-  createdAt_gte: DateTime
-  createdAt_exists: Boolean
-  email_in: [String]
-  _id_nin: [ObjectId]
-  uid_lt: String
-  name_gt: String
-  _id_gt: ObjectId
-  _id_gte: ObjectId
-  createdAt_gt: DateTime
-  email_gt: String
-  name_gte: String
-  _id_lte: ObjectId
-  name_ne: String
-  email_lte: String
   createdAt_ne: DateTime
-  email: String
-  _id_lt: ObjectId
+  email_gte: String
   uid: String
-  uid_nin: [String]
-  createdAt_in: [DateTime]
-  name_nin: [String]
+  createdAt_gte: DateTime
+  email_ne: String
+  name_gt: String
+  uid_ne: String
+  email: String
   uid_lte: String
-  email_nin: [String]
-  _id_in: [ObjectId]
+  uid_exists: Boolean
   _id: ObjectId
-  createdAt_lte: DateTime
-  uid_in: [String]
-  uid_gte: String
-  name_in: [String]
-  _id_ne: ObjectId
   createdAt_nin: [DateTime]
-  email_lt: String
+  name_lt: String
+  uid_gte: String
+  _id_exists: Boolean
+  createdAt_in: [DateTime]
+  uid_lt: String
+  name_in: [String]
+  _id_in: [ObjectId]
+  createdAt_gt: DateTime
+  email_lte: String
+  email_nin: [String]
+  name_nin: [String]
+  createdAt_exists: Boolean
+  name_ne: String
+  name: String
+  _id_nin: [ObjectId]
+  name_lte: String
+  _id_gt: ObjectId
+  uid_nin: [String]
+  email_in: [String]
+  name_gte: String
   createdAt_lt: DateTime
+  email_exists: Boolean
+  email_lt: String
+  email_gt: String
+  AND: [UserQueryInput!]
+  OR: [UserQueryInput!]
+  uid_in: [String]
+  name_exists: Boolean
+  _id_gte: ObjectId
+  createdAt_lte: DateTime
+  uid_gt: String
+  createdAt: DateTime
+  _id_lte: ObjectId
+  _id_ne: ObjectId
+  _id_lt: ObjectId
 }
 
-input CommentInsertInput {
-  _id: ObjectId
-  meme_id: CommentMeme_idRelationInput
-  text: String
-  createdAt: DateTime
-  createdBy: CommentCreatedByRelationInput
+input MemeCreatedByRelationInput {
+  create: UserInsertInput
+  link: ObjectId
 }
 
 input VoteMemeInput {
@@ -629,37 +565,86 @@ input VoteMemeInput {
   user_id: ObjectId!
 }
 
-scalar DateTime
+input CommentUpdateInput {
+  meme_id_unset: Boolean
+  createdBy_unset: Boolean
+  _id: ObjectId
+  text: String
+  meme_id: CommentMeme_idRelationInput
+  createdAt_unset: Boolean
+  createdBy: CommentCreatedByRelationInput
+  _id_unset: Boolean
+  text_unset: Boolean
+  createdAt: DateTime
+}
 
-input MemeTemplateUpdateInput {
-  id_unset: Boolean
+type Template {
+  _id: ObjectId
+  createdAt: DateTime
+  createdBy: User
+  duration: Float
+  height: Int
+  img: String
+  mediaType: String
+  name: String
+  type: String
   url: String
+  width: Int
+}
+
+input MemeUpdateInput {
+  comments: MemeCommentsRelationInput
+  svg_unset: Boolean
+  views_inc: Int
+  title_unset: Boolean
+  json_unset: Boolean
+  _id: ObjectId
+  forkedBy_unset: Boolean
+  createdAt: DateTime
+  _id_unset: Boolean
+  points: Int
+  createdBy_unset: Boolean
+  commentCount_inc: Int
+  forkedFrom: MemeForkedFromRelationInput
+  template_unset: Boolean
+  upVotes_unset: Boolean
+  createdAt_unset: Boolean
+  json: String
+  forkedFrom_unset: Boolean
+  isDraft_unset: Boolean
+  downVotes_unset: Boolean
+  upVotes: MemeUpVotesRelationInput
+  createdBy: MemeCreatedByRelationInput
+  visibility_unset: Boolean
+  points_unset: Boolean
+  downVotes: MemeDownVotesRelationInput
+  svg: String
+  visibility: String
+  commentCount: Int
+  views_unset: Boolean
+  template: MemeTemplateUpdateInput
+  comments_unset: Boolean
+  views: Int
   url_unset: Boolean
-  id: MemeTemplateIdRelationInput
-}
-
-type MemeTemplate {
-  id: Template
   url: String
+  points_inc: Int
+  isDraft: Boolean
+  forkedBy: MemeForkedByRelationInput
+  commentCount_unset: Boolean
+  title: String
 }
 
-enum CommentSortByInput {
-  CREATEDBY_ASC
-  _ID_DESC
-  MEME_ID_DESC
-  CREATEDAT_ASC
-  CREATEDAT_DESC
-  CREATEDBY_DESC
+enum UserSortByInput {
+  NAME_DESC
+  UID_DESC
   _ID_ASC
-  MEME_ID_ASC
-  TEXT_ASC
-  TEXT_DESC
-}
-
-input SearchMemeInput {
-  conditions: String
-  sorts: String
-  searchString: String!
+  _ID_DESC
+  CREATEDAT_ASC
+  NAME_ASC
+  CREATEDAT_DESC
+  EMAIL_ASC
+  EMAIL_DESC
+  UID_ASC
 }
 
 type Mutation {
@@ -701,15 +686,76 @@ type Mutation {
   upsertOneUser(query: UserQueryInput, data: UserInsertInput!): User
 }
 
-input UserUpdateInput {
-  uid: String
+input SearchMemeInput {
+  sorts: String
+  searchString: String!
+  conditions: String
+}
+
+input CommentQueryInput {
+  text_nin: [String]
+  _id_nin: [ObjectId]
+  AND: [CommentQueryInput!]
+  createdAt_exists: Boolean
+  meme_id: MemeQueryInput
+  createdBy_exists: Boolean
+  text_in: [String]
+  meme_id_exists: Boolean
+  createdAt_ne: DateTime
+  _id_in: [ObjectId]
+  OR: [CommentQueryInput!]
+  _id_lte: ObjectId
   _id: ObjectId
-  name_unset: Boolean
-  uid_unset: Boolean
-  name: String
-  createdAt_unset: Boolean
-  email_unset: Boolean
-  _id_unset: Boolean
+  _id_ne: ObjectId
+  text_ne: String
+  text_gte: String
+  _id_gte: ObjectId
+  createdAt_gte: DateTime
+  createdBy: UserQueryInput
+  text_lte: String
+  text_gt: String
+  _id_gt: ObjectId
+  createdAt_nin: [DateTime]
+  _id_lt: ObjectId
+  createdAt_gt: DateTime
+  _id_exists: Boolean
+  text_lt: String
+  createdAt_lte: DateTime
+  text_exists: Boolean
   createdAt: DateTime
-  email: String
+  createdAt_lt: DateTime
+  text: String
+  createdAt_in: [DateTime]
+}
+
+input FetchMemeInput {
+  meme_id: ObjectId!
+  conditions: String
+  sorts: String
+  next: Boolean
+}
+
+enum TemplateSortByInput {
+  NAME_ASC
+  NAME_DESC
+  _ID_DESC
+  HEIGHT_ASC
+  TYPE_ASC
+  CREATEDBY_ASC
+  DURATION_ASC
+  TYPE_DESC
+  MEDIATYPE_DESC
+  URL_ASC
+  CREATEDAT_ASC
+  CREATEDAT_DESC
+  CREATEDBY_DESC
+  DURATION_DESC
+  HEIGHT_DESC
+  WIDTH_ASC
+  IMG_ASC
+  IMG_DESC
+  _ID_ASC
+  MEDIATYPE_ASC
+  URL_DESC
+  WIDTH_DESC
 }

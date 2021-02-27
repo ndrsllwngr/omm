@@ -15,7 +15,9 @@ addDecorator((story) => (
       <ThemeProvider attribute="class">
           <AutoplayProvider>
             <ViewsProvider>
-              <FabricProvider>{story()}</FabricProvider>
+              <FabricProvider>
+                  {story()}
+              </FabricProvider>
             </ViewsProvider>
           </AutoplayProvider>
       </ThemeProvider>

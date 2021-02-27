@@ -1,9 +1,10 @@
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 import firebase from '@/lib/firebase'
-import { STORAGE_COLLECTION } from '@/lib/constants'
+import { MEDIA_TYPE, STORAGE_COLLECTION } from '@/lib/constants'
 import { useAuth } from '@/components/context/authContext'
 import { gql, useMutation } from '@apollo/client'
 import ObjectID from 'bson-objectid'
+import { noop } from '@/lib/noop'
 
 // TODO createdBy should be User
 // TODO remove width, height
@@ -38,21 +39,33 @@ const useStorage = () => {
     console.log('RESET useStorage state')
   }
 
-  const createExternalTemplate = (url, callback) => {
-    setFile(url)
-    insertOneTemplate({
+  const insertExternalTemplate = ({ url, mediaType = MEDIA_TYPE.IMAGE, meta = {} }) => {
+    return insertOneTemplate({
       variables: {
         template: {
           createdAt: new Date(),
           createdBy: { link: auth.getUser().id },
           type: 'EXTERNAL',
+          mediaType: mediaType,
           img: STORAGE_COLLECTION.TEMPLATES + '/', // TODO, do we even need this one?
           url: url,
-          width: 1024,
-          height: 768,
+          width: null,
+          height: null,
+          name: null,
+          ...meta,
         },
       },
     })
+  }
+
+  const createExternalTemplate = ({
+    url,
+    meta = {},
+    mediaType = MEDIA_TYPE.IMAGE,
+    callback = noop,
+  }) => {
+    setFile(url)
+    insertExternalTemplate({ url, meta, mediaType })
       .then(() => {
         callback()
       })
@@ -63,7 +76,7 @@ const useStorage = () => {
       })
   }
 
-  const createTemplate = (file, callback) => {
+  const createTemplate = ({ file, mediaType = MEDIA_TYPE.IMAGE, meta = {}, callback = noop }) => {
     const memeStorage = firebase.storage()
     const objId = ObjectID.generate()
     const storageRef = memeStorage.ref().child(STORAGE_COLLECTION.TEMPLATES).child(objId.toString())
@@ -89,9 +102,12 @@ const useStorage = () => {
               createdBy: { link: auth.getUser().id },
               img: STORAGE_COLLECTION.TEMPLATES + '/' + objId.toString(), // TODO, do we even need this one?
               type: 'STORAGE',
+              mediaType: mediaType,
               url: await storageRef.getDownloadURL(),
-              width: 1024,
-              height: 768,
+              width: null,
+              height: null,
+              name: null,
+              ...meta,
             },
           },
         })

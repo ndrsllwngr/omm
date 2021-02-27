@@ -5,6 +5,7 @@ import { Dialog } from '@reach/dialog'
 import VisuallyHidden from '@reach/visually-hidden'
 import { IoClose } from 'react-icons/io5'
 import PropTypes from 'prop-types'
+import { MEDIA_TYPE } from '@/lib/constants'
 
 export const ScreenshotUrl = ({ showDialog, closeDialog }) => {
   const { createExternalTemplate } = useStorage()
@@ -20,7 +21,14 @@ export const ScreenshotUrl = ({ showDialog, closeDialog }) => {
         //console.log('res: ', res.json())
         return res.json()
       })
-      .then((json) => createExternalTemplate(json.url, closeDialog))
+      .then((json) =>
+        createExternalTemplate({
+          url: json.url,
+          meta: { name: URL, width: null, height: null },
+          mediaType: MEDIA_TYPE.IMAGE,
+          callback: closeDialog,
+        })
+      )
       .catch((e) => console.error('error:', e))
   }
 

@@ -5,15 +5,29 @@ import { Dialog } from '@reach/dialog'
 import VisuallyHidden from '@reach/visually-hidden'
 import { IoClose } from 'react-icons/io5'
 import PropTypes from 'prop-types'
+import { MEDIA_TYPE } from '@/lib/constants'
 
-export const PasteUrlImage = ({ showDialog, closeDialog }) => {
+export const PasteUrl = ({ showDialog, closeDialog }) => {
   const [url, setUrl] = useState('')
+  const [name, setName] = useState(null)
+  const [width] = useState(null)
+  const [height] = useState(null)
   const { createExternalTemplate } = useStorage()
+
+  const resetLocalState = () => {
+    setName(null)
+  }
 
   const handleSubmit = (evt) => {
     evt.preventDefault()
     if (url !== '') {
-      createExternalTemplate(url, closeDialog)
+      createExternalTemplate({
+        url: url,
+        meta: { name: name, width: width, height: height },
+        callback: closeDialog,
+        mediaType: MEDIA_TYPE.IMAGE,
+      })
+      resetLocalState()
     }
   }
 
@@ -29,6 +43,15 @@ export const PasteUrlImage = ({ showDialog, closeDialog }) => {
               </span>
             </TertiaryBtn>
           </div>
+          <input
+            className={
+              'appearance-none border border-transparent w-full py-2 px-4 bg-white text-gray-700 placeholder-gray-400 shadow-md rounded-lg text-base focus:outline-none focus:ring-2 focus:ring-purple-600 focus:border-transparent'
+            }
+            type="text"
+            value={name}
+            placeholder={'Description'}
+            onChange={(e) => setName(e.target.value)}
+          />
           <div>
             <form onSubmit={handleSubmit}>
               <label>
@@ -49,7 +72,7 @@ export const PasteUrlImage = ({ showDialog, closeDialog }) => {
   )
 }
 
-PasteUrlImage.propTypes = {
+PasteUrl.propTypes = {
   showDialog: PropTypes.bool,
   closeDialog: PropTypes.func,
 }

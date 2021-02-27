@@ -5,11 +5,19 @@ import { Dialog } from '@reach/dialog'
 import VisuallyHidden from '@reach/visually-hidden'
 import { IoClose } from 'react-icons/io5'
 import PropTypes from 'prop-types'
+import { MEDIA_TYPE } from '@/lib/constants'
 
-export const Canvas = ({ showDialog, closeDialog }) => {
+export const DrawOnCanvas = ({ showDialog, closeDialog }) => {
   const { createTemplate } = useStorage()
+  const [name, setName] = useState(null)
+  const [width] = useState(500)
+  const [height] = useState(500)
   const [isDrawing, setIsDrawing] = useState(false)
   const canvasRef = useRef(null)
+
+  const resetLocalState = () => {
+    setName(null)
+  }
 
   useEffect(() => {
     const canvas = canvasRef.current
@@ -81,7 +89,13 @@ export const Canvas = ({ showDialog, closeDialog }) => {
         return res.blob()
       })
       .then((blob) => {
-        createTemplate(blob, closeDialog)
+        createTemplate({
+          file: blob,
+          meta: { name: name, width: width, height: height },
+          callback: closeDialog,
+          mediaType: MEDIA_TYPE.IMAGE,
+        })
+        resetLocalState()
       })
   }
 
@@ -97,13 +111,22 @@ export const Canvas = ({ showDialog, closeDialog }) => {
               </span>
             </TertiaryBtn>
           </div>
+          <input
+            className={
+              'appearance-none border border-transparent w-full py-2 px-4 bg-white text-gray-700 placeholder-gray-400 shadow-md rounded-lg text-base focus:outline-none focus:ring-2 focus:ring-purple-600 focus:border-transparent'
+            }
+            type="text"
+            value={name}
+            placeholder={'Description'}
+            onChange={(e) => setName(e.target.value)}
+          />
           <div>
             <canvas
               ref={canvasRef}
               className={'bg-white'}
               style={{ border: '1px solid red' }}
-              width={300}
-              height={300}
+              width={width}
+              height={height}
               onMouseDown={handleMouseDown}
               onMouseMove={handleMouseMove}
               onMouseUp={handleMouseUp}
@@ -119,7 +142,7 @@ export const Canvas = ({ showDialog, closeDialog }) => {
   )
 }
 
-Canvas.propTypes = {
+DrawOnCanvas.propTypes = {
   showDialog: PropTypes.bool,
   closeDialog: PropTypes.func,
 }

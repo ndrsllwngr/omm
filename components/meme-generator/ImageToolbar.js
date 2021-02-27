@@ -8,6 +8,7 @@ import {
   sendBackwards,
   sendToBack,
 } from '@/components/meme-generator/FabricUtils'
+import { TertiaryBtn } from '@/components/ui/Buttons'
 
 export const ImageToolbar = (_props) => {
   const { canvas } = useFabricCanvas()
@@ -27,11 +28,11 @@ export const ImageToolbar = (_props) => {
     <>
       {enabledTools && (
         <>
-          <button onClick={() => sendBackwards(canvas)}>Send backwards</button>
-          <button onClick={() => sendToBack(canvas)}>Send to back</button>
-          <button onClick={() => bringForward(canvas)}>Bring forwards</button>
-          <button onClick={() => bringToFront(canvas)}>Bring to front</button>
-          <button onClick={() => removeSelected(canvas)}>Remove selected object</button>
+          <TertiaryBtn onClick={() => sendBackwards(canvas)}>Send backwards</TertiaryBtn>
+          <TertiaryBtn onClick={() => sendToBack(canvas)}>Send to back</TertiaryBtn>
+          <TertiaryBtn onClick={() => bringForward(canvas)}>Bring forwards</TertiaryBtn>
+          <TertiaryBtn onClick={() => bringToFront(canvas)}>Bring to front</TertiaryBtn>
+          <TertiaryBtn onClick={() => removeSelected(canvas)}>Remove selected object</TertiaryBtn>
         </>
       )}
     </>

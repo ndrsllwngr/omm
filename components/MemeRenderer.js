@@ -1,16 +1,21 @@
-import React, { useEffect } from 'react'
+import React from 'react'
 import SVG from 'react-inlinesvg'
 import { memeType } from '@/components/types/types'
+import { MEDIA_TYPE } from '@/lib/constants'
+import { ViewOnlyCanvas } from '@/components/meme-generator/ViewOnlyCanvas'
 
 export const MemeRenderer = ({ meme }) => {
-  useEffect(() => {
-    // console.log({ meme })
-  }, [meme])
+  if (meme.template.id.mediaType === MEDIA_TYPE.VIDEO) {
+    return (
+      <>
+        <ViewOnlyCanvas meme={meme} />
+      </>
+    )
+  }
   return (
-    <div>
-      {/*<FabricCanvas jsonData={meme} />*/}
+    <>
       <SVG className={'object-scale-down w-full h-full'} src={meme.svg} />
-    </div>
+    </>
   )
 }
 

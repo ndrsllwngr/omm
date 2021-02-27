@@ -30,7 +30,19 @@ export const ALL_PERSONAL_MEME_DRAFTS_QUERY = gql`
       template {
         id {
           _id
+          createdAt
+          createdBy {
+            _id
+          }
+          height
+          img
+          mediaType
+          type
+          url
+          width
+          name
         }
+        url
       }
       title
       upVotes {

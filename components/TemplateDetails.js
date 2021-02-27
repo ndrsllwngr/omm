@@ -28,7 +28,19 @@ export const ALL_PUBLIC_MEMES_QUERY = gql`
       template {
         id {
           _id
+          createdAt
+          createdBy {
+            _id
+          }
+          height
+          img
+          mediaType
+          type
+          url
+          width
+          name
         }
+        url
       }
       title
       upVotes {
