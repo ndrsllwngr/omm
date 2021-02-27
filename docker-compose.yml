@@ -1,0 +1,12 @@
+version: "3.3"
+
+services:
+  omm:
+    ports:
+      - 80:3000
+    build: .
+    volumes:
+      - .:/usr/src/app
+    env_file:
+      - .env
+      - .env.local
