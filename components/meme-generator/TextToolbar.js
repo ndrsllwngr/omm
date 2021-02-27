@@ -21,6 +21,7 @@ import {
 import { useImmer } from 'use-immer'
 import { FONT_FAMILY } from '@/lib/constants'
 import { useDetectOutsideClick } from '@/components/hooks/useDetectOutsideClick'
+import { SpeechToText } from '@/components/SpeechToText'
 
 const allowedFonts = [
   FONT_FAMILY.ALLAN,
@@ -263,6 +264,7 @@ export const TextToolbar = (_props) => {
                 value={textBox.text}
                 onChange={(e) => handleChange('text', e.target.value)}
               />
+              <SpeechToText onChange={handleChange} />
             </div>
           </div>
         </div>
