@@ -1,0 +1,17 @@
+.github
+.git
+.idea
+.storybook
+*Dockerfile*
+docker-compose.yml
+node_modules
+.env.development
+.env.local.example
+.env.production
+.gitignore
+.prettierignore
+.npmrc
+.nvmrc
+.yarnrc
+meme-set-put_sample.zip
+rest-api.postman_collection.json
