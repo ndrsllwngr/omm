@@ -13,7 +13,7 @@ const VisibilityContext = createContext({})
 
 // TODO verify that this is everything we need
 const emptyState = {
-  id: '',
+  id: null,
   url:
     'https://firebasestorage.googleapis.com/v0/b/online-multimedia.appspot.com/o/templates%2Fv3ZLEFAnGCJr1PMsdaPO?alt=media&token=d53c3291-070a-4064-a9d5-6e17d0f75e93',
 }
