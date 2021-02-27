@@ -3,7 +3,7 @@ import { MONGODB_COLLECTION } from '@/lib/constants'
 import { getMongoDBClient } from '@/lib/mongoDB'
 import IncomingForm from 'formidable-serverless'
 import unzipper from 'unzipper'
-import { clearDirectory, getMemoryFSPath, memoryFs } from '@/lib/memoryFs'
+import { clearDirectory, getCustomFSPath, customFs } from '@/lib/customFs'
 import { getFabric } from '@/lib/canvas'
 
 export const config = {
@@ -97,9 +97,9 @@ export default async function memeHandler(req, res) {
       form.multiples = true
 
       // Filesystem needs to be imported like this in order for the fs to be patched
-      const fs = memoryFs()
+      const fs = customFs()
       // Root folder for files
-      const rootFolder = getMemoryFSPath(Date.now() + '/')
+      const rootFolder = getCustomFSPath(Date.now() + '/')
       fs.mkdirSync(rootFolder, { recursive: true })
 
       // Promise for retrieving the zip file
