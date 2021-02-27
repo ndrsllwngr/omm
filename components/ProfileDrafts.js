@@ -40,6 +40,7 @@ export const ALL_PERSONAL_MEME_DRAFTS_QUERY = gql`
           type
           url
           width
+          name
         }
         url
       }

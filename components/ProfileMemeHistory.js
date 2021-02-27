@@ -42,6 +42,7 @@ export const ALL_PERSONAL_MEMES_QUERY = gql`
           type
           url
           width
+          name
         }
         url
       }

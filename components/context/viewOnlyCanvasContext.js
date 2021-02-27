@@ -30,7 +30,7 @@ export const ViewOnlyCanvasProvider = ({ children }) => {
                     let videoE = document.createElement('video')
                     videoE.width = element.width
                     videoE.height = element.height
-                    videoE.muted = false
+                    videoE.muted = true // TODO @NDRS OMG I NEED TO FIX THAT!
                     videoE.loop = true
                     videoE.controls = true
                     //videoE.crossOrigin = 'anonymous'

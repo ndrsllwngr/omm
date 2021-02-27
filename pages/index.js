@@ -59,6 +59,7 @@ export const ALL_PUBLIC_MEMES_QUERY = gql`
           type
           url
           width
+          name
         }
         url
       }

@@ -12,7 +12,7 @@ import {
 import { ImageToolbar } from '@/components/meme-generator/ImageToolbar'
 import { useRouter } from 'next/router'
 import { useAuth } from '@/components/context/authContext'
-import { FONT_FAMILY, SORT, VISIBILITY } from '@/lib/constants'
+import { FONT_FAMILY, MEDIA_TYPE, SORT, STORAGE_COLLECTION, VISIBILITY } from '@/lib/constants'
 import PropTypes from 'prop-types'
 import { useSortContext } from '@/components/context/viewsContext'
 import { gql, useMutation } from '@apollo/client'
@@ -171,7 +171,21 @@ export const MemeEditor = () => {
       views: 0,
       forkedFrom: isCopy ? { link: isCopy } : null,
       template: {
-        id: { link: template._id ? template._id : null },
+        id: template._id
+          ? { link: template._id }
+          : {
+              create: {
+                createdAt: new Date(),
+                createdBy: { link: auth.getUser().id },
+                type: 'EXTERNAL',
+                mediaType: MEDIA_TYPE.IMAGE,
+                img: STORAGE_COLLECTION.TEMPLATES + '/', // TODO, do we even need this one?
+                url: template.url,
+                width: template.width,
+                height: template.height,
+                name: template.name,
+              },
+            },
         url: template.url,
       },
       url: '', // TODO if a real png was created (requirement)
@@ -220,7 +234,14 @@ export const MemeEditor = () => {
         <FabricCanvas />
       </div>
       <div className="col-span-1 h-full rounded-lg bg-gray-100 flex flex-col justify-start space-y-2">
-        <Button onClick={handlePreview}>{previewMode ? 'Hide Preview' : 'Show Preview'}</Button>
+        <Button
+          onClick={() => {
+            console.log({ template })
+            handlePreview()
+          }}
+        >
+          {previewMode ? 'Hide Preview' : 'Show Preview'}
+        </Button>
         <Button onClick={addText}>Add Textbox</Button>
         {/*<Button onClick={addTemplate}>Add Template</Button>*/}
         <Button onClick={clearAll}>Clear All</Button>

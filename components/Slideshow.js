@@ -65,6 +65,7 @@ const UPDATE_MEME = gql`
           type
           url
           width
+          name
         }
         url
       }

@@ -64,6 +64,7 @@ export const CURRENT_MEME = gql`
           type
           url
           width
+          name
         }
         url
       }
