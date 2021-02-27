@@ -45,7 +45,9 @@ export const AddTemplate = () => {
           </div>
         </MenuButton>
         <MenuList>
-          <MenuItem onSelect={() => openDialog(DIALOG.UPLOAD_FILE)}>Upload an Image</MenuItem>
+          <MenuItem onSelect={() => openDialog(DIALOG.UPLOAD_FILE)}>
+            Upload a File (Image or Video)
+          </MenuItem>
           <MenuItem onSelect={() => openDialog(DIALOG.PASTE_URL)}>
             Upload an Image from URL
           </MenuItem>

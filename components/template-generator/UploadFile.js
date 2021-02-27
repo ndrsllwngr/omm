@@ -6,16 +6,23 @@ import { TertiaryBtn } from '@/components/ui/Buttons'
 import { IoClose } from 'react-icons/io5'
 import PropTypes from 'prop-types'
 import useStorage from '@/components/hooks/useStorage'
+import { MEDIA_TYPE } from '@/lib/constants'
+
+const imageTypes = ['image/png', 'image/jpeg']
+const videoTypes = ['video/mp4', 'video/x-m4v']
+const allTypes = [...imageTypes, ...videoTypes]
 
 export const UploadFile = ({ showDialog, closeDialog }) => {
   const { file, progress, error, createTemplate, resetState } = useStorage()
 
-  const types = ['image/png', 'image/jpeg']
-
   const handleChange = (e) => {
     const selected = e.target.files[0]
-    if (selected && types.includes(selected.type)) {
-      createTemplate(selected, closeDialog)
+    if (selected && allTypes.includes(selected.type)) {
+      if (videoTypes.includes(selected.type)) {
+        createTemplate(selected, MEDIA_TYPE.VIDEO, closeDialog)
+      } else if (imageTypes.includes(selected.type)) {
+        createTemplate(selected, MEDIA_TYPE.IMAGE, closeDialog)
+      }
     } else {
       resetState()
     }
@@ -35,7 +42,7 @@ export const UploadFile = ({ showDialog, closeDialog }) => {
           </div>
           <div>
             <label>
-              <input type="file" onChange={handleChange} />
+              <input type="file" onChange={handleChange} accept={allTypes.join(',')} />
             </label>
 
             <form>
