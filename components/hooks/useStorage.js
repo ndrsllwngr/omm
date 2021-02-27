@@ -39,7 +39,7 @@ const useStorage = () => {
     console.log('RESET useStorage state')
   }
 
-  const insertExternalTemplate = (url, mediaType = MEDIA_TYPE.IMAGE) => {
+  const insertExternalTemplate = ({ url, mediaType = MEDIA_TYPE.IMAGE, meta = {} }) => {
     return insertOneTemplate({
       variables: {
         template: {
@@ -49,14 +49,23 @@ const useStorage = () => {
           mediaType: mediaType,
           img: STORAGE_COLLECTION.TEMPLATES + '/', // TODO, do we even need this one?
           url: url,
+          width: null,
+          height: null,
+          name: null,
+          ...meta,
         },
       },
     })
   }
 
-  const createExternalTemplate = (url, callback = noop) => {
+  const createExternalTemplate = ({
+    url,
+    meta = {},
+    mediaType = MEDIA_TYPE.IMAGE,
+    callback = noop,
+  }) => {
     setFile(url)
-    insertExternalTemplate(url)
+    insertExternalTemplate({ url, meta, mediaType })
       .then(() => {
         callback()
       })
@@ -67,7 +76,7 @@ const useStorage = () => {
       })
   }
 
-  const createTemplate = (file, mediaType = MEDIA_TYPE.IMAGE, meta = {}, callback = noop) => {
+  const createTemplate = ({ file, mediaType = MEDIA_TYPE.IMAGE, meta = {}, callback = noop }) => {
     const memeStorage = firebase.storage()
     const objId = ObjectID.generate()
     const storageRef = memeStorage.ref().child(STORAGE_COLLECTION.TEMPLATES).child(objId.toString())

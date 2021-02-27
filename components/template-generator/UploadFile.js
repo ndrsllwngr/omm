@@ -14,6 +14,7 @@ const allTypes = [...imageTypes, ...videoTypes]
 
 export const UploadFile = ({ showDialog, closeDialog }) => {
   const { file, progress, error, createTemplate, resetState } = useStorage()
+  const [name, setName] = useState(null)
   const [genericFile, setGenericFile] = useState(null)
   const [imageFile, setImageFile] = useState(null)
   const [videoFile, setVideoFile] = useState(null)
@@ -24,6 +25,7 @@ export const UploadFile = ({ showDialog, closeDialog }) => {
   }, [])
 
   const resetLocalState = () => {
+    setName(null)
     setImageFile(null)
     setVideoFile(null)
     setMetadata(null)
@@ -54,19 +56,19 @@ export const UploadFile = ({ showDialog, closeDialog }) => {
     if (selected && allTypes.includes(selected.type)) {
       console.log(selected)
       if (videoTypes.includes(selected.type)) {
-        createTemplate(
-          selected,
-          MEDIA_TYPE.VIDEO,
-          { width: metadata.width, height: metadata.height },
-          closeDialog
-        )
+        createTemplate({
+          file: selected,
+          mediaType: MEDIA_TYPE.VIDEO,
+          meta: { width: metadata.width, height: metadata.height, name: name },
+          callback: closeDialog,
+        })
       } else if (imageTypes.includes(selected.type)) {
-        createTemplate(
-          selected,
-          MEDIA_TYPE.IMAGE,
-          { width: metadata.width, height: metadata.height },
-          closeDialog
-        )
+        createTemplate({
+          file: selected,
+          mediaType: MEDIA_TYPE.IMAGE,
+          meta: { width: metadata.width, height: metadata.height, name: name },
+          callback: closeDialog,
+        })
       }
     } else {
       resetLocalState()
@@ -86,6 +88,15 @@ export const UploadFile = ({ showDialog, closeDialog }) => {
               </span>
             </TertiaryBtn>
           </div>
+          <input
+            className={
+              'appearance-none border border-transparent w-full py-2 px-4 bg-white text-gray-700 placeholder-gray-400 shadow-md rounded-lg text-base focus:outline-none focus:ring-2 focus:ring-purple-600 focus:border-transparent'
+            }
+            type="text"
+            value={name}
+            placeholder={'Description'}
+            onChange={(e) => setName(e.target.value)}
+          />
           <div>
             <label>
               <input type="file" onChange={handleChange} accept={allTypes.join(',')} />

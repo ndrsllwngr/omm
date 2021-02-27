@@ -17,6 +17,7 @@ export const ALL_TEMPLATES = gql`
       url
       width
       height
+      name
     }
   }
 `
