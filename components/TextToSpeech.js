@@ -1,51 +1,20 @@
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
+import { useSpeechSynthesis } from 'react-speech-kit'
+import PropTypes from 'prop-types'
+import { TertiaryBtn } from '@/components/ui/Buttons'
 
-const synth = typeof window !== 'undefined' && window.speechSynthesis
-
-export const TextToSpeech = () => {
-  const textInput = 'test test 1 2 3 - O M M group for the win lol'
-  const [isSpeaking, setIsSpeaking] = useState(false)
-
-  useEffect(() => {
-    const speak = () => {
-      // Check if speaking
-      if (synth.speaking) {
-        console.error('Already speaking...')
-        return
-      }
-      if (textInput !== '') {
-        // Get speak text
-        const speakText = new SpeechSynthesisUtterance(textInput)
-
-        // Speak end
-        speakText.onend = (e) => {
-          console.log('Done speaking...')
-        }
-
-        // Speak error
-        speakText.onerror = (e) => {
-          console.error('Something went wrong')
-        }
-
-        // Selected voice
-
-        // Loop through voices
-
-        // Set pitch and rate
-
-        // Speak
-        synth.speak(speakText)
-        setIsSpeaking(false)
-      }
-    }
-    if (synth && isSpeaking) {
-      speak()
-    }
-  })
+export const TextToSpeech = ({ value = '' }) => {
+  const [pitch] = useState(1)
+  const [rate] = useState(1)
+  const { speak } = useSpeechSynthesis()
 
   return (
     <div>
-      <button onClick={() => setIsSpeaking(true)}>Hear Caption</button>
+      <TertiaryBtn onClick={() => speak({ text: value, rate, pitch })}>🗣</TertiaryBtn>
     </div>
   )
+}
+
+TextToSpeech.propTypes = {
+  value: PropTypes.string,
 }

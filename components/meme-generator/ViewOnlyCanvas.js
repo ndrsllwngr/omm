@@ -6,8 +6,6 @@ import {
   ViewOnlyCanvasProvider,
 } from '@/components/context/viewOnlyCanvasContext'
 import { memeType } from '@/components/types/types'
-import { MemeRenderer } from '@/components/MemeRenderer'
-import { MEDIA_TYPE } from '@/lib/constants'
 
 // TODO @NDRS add option to set canvas background color
 
@@ -25,11 +23,11 @@ const ViewOnlyCanvasInner = ({ meme }) => {
 
   useEffect(() => {
     return () => resetCanvas()
-  }, [])
+  }, [resetCanvas])
 
   useLayoutEffect(() => {
     setJson(meme)
-  }, [])
+  }, [setJson, meme])
 
   useLayoutEffect(() => {
     console.log({ src: 'ViewOnlyCanvas.useLayoutEffect', json, canvas, canvasRef })

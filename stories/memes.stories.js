@@ -4,6 +4,8 @@ import { SlideshowButton } from '@/components/Slideshow'
 import { Sort } from '@/components/Sort'
 import { TemplateCollection } from '@/components/meme-generator/TemplateCollection'
 import { ImgFlipCollection } from '@/components/meme-generator/ImgFlipCollection'
+import { SpeechToText } from '@/components/SpeechToText'
+import { TextToSpeech } from '@/components/TextToSpeech'
 
 // const memes = mockData.data.memes
 
@@ -31,3 +33,7 @@ export const memeSlideshowButtons = () => {
 export const templateCollection = () => <TemplateCollection />
 
 export const imgFlipCollection = () => <ImgFlipCollection />
+
+export const speechToText = () => <SpeechToText showOutput={true} />
+
+export const textToSpeech = () => <TextToSpeech value={'How are you doing?'} />

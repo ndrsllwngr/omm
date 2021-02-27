@@ -12,6 +12,7 @@ import { memeType } from '@/components/types/types'
 import { ShareButtons } from '@/components/ui/ShareButtons'
 import { TertiaryBtn, VoteDownBtn, VoteUpBtn } from '@/components/ui/Buttons'
 import { useAuth } from '@/components/context/authContext'
+import { TextToSpeech } from '@/components/TextToSpeech'
 
 export const SingleMeme = ({ meme, enableLink }) => {
   const auth = useAuth()
@@ -26,21 +27,24 @@ export const SingleMeme = ({ meme, enableLink }) => {
           <span> - {meme.visibility}</span>
         )}
       </p>
-      {enableLink ? (
-        <Link href={`/meme/${meme._id}`}>
+      <div className={'flex flex-row flex-wrap items-start'}>
+        {enableLink ? (
+          <Link href={`/meme/${meme._id}`}>
+            <a>
+              <h1 className={'text-lg font-bold text-black dark:text-white truncate'}>
+                {meme.title}
+              </h1>
+            </a>
+          </Link>
+        ) : (
           <a>
             <h1 className={'text-lg font-bold text-black dark:text-white truncate'}>
-              {meme.title ? meme.title : 'Untitled'}
+              {meme.title}
             </h1>
           </a>
-        </Link>
-      ) : (
-        <a>
-          <h1 className={'text-lg font-bold text-black dark:text-white truncate'}>
-            {meme.title ? meme.title : 'Untitled'}
-          </h1>
-        </a>
-      )}
+        )}
+        <TextToSpeech value={meme.title ? meme.title : ''} />
+      </div>
 
       {enableLink ? (
         <Link href={`/meme/${meme._id}`}>

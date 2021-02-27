@@ -1,4 +1,4 @@
-import React, { useCallback, createContext, useState, useContext, useRef, useMemo } from 'react'
+import React, { useCallback, createContext, useState, useContext, useRef } from 'react'
 import { fabric } from 'fabric'
 import PropTypes from 'prop-types'
 import { MEDIA_TYPE } from '@/lib/constants'

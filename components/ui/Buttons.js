@@ -73,11 +73,20 @@ export const VoteUpBtn = ({ disabled = false, onClick, className: parentClass, c
   )
 }
 
-export const BaseBtn = ({ children, onClick, disabled = false, className: parentClass }) => {
+export const BaseBtn = ({
+  children,
+  onClick,
+  onMouseUp,
+  onMouseDown,
+  disabled = false,
+  className: parentClass,
+}) => {
   return (
     <button
       type="button"
       onClick={onClick}
+      onMouseUp={onMouseUp}
+      onMouseDown={onMouseDown}
       className={` ${btnBase} ${parentClass}`}
       disabled={disabled}
     >
@@ -88,6 +97,8 @@ export const BaseBtn = ({ children, onClick, disabled = false, className: parent
 export const PrimaryBtn = ({
   children,
   onClick,
+  onMouseUp,
+  onMouseDown,
   disabled,
   className: parentClass,
   mono = false,
@@ -95,6 +106,8 @@ export const PrimaryBtn = ({
   return (
     <BaseBtn
       onClick={onClick}
+      onMouseUp={onMouseUp}
+      onMouseDown={onMouseDown}
       className={`
     ${mono ? `${btnPrimMono}` : `${btnBg} ${btnPrimText} `}
     ${parentClass}`}
@@ -107,6 +120,8 @@ export const PrimaryBtn = ({
 export const SecondaryBtn = ({
   children,
   onClick,
+  onMouseUp,
+  onMouseDown,
   disabled,
   mono = false,
   className: parentClass,
@@ -114,6 +129,8 @@ export const SecondaryBtn = ({
   return (
     <BaseBtn
       onClick={onClick}
+      onMouseUp={onMouseUp}
+      onMouseDown={onMouseDown}
       className={`${
         mono ? `${btnSecTerTextMono} ${btnSecBorderMono}` : `${btnSecTerText} ${btnSecBorder}`
       }  ${parentClass}`}
@@ -126,6 +143,8 @@ export const SecondaryBtn = ({
 export const TertiaryBtn = ({
   children,
   onClick,
+  onMouseUp,
+  onMouseDown,
   disabled,
   className: parentClass,
   mono = false,
@@ -133,6 +152,8 @@ export const TertiaryBtn = ({
   return (
     <BaseBtn
       onClick={onClick}
+      onMouseUp={onMouseUp}
+      onMouseDown={onMouseDown}
       className={`${mono ? `${btnSecTerTextMono}` : `${btnSecTerText} `} ${parentClass}`}
       disabled={disabled}
     >
@@ -247,12 +268,16 @@ ToggleStateIconBtn.propTypes = {
 }
 BaseBtn.propTypes = {
   onClick: PropTypes.func,
+  onMouseUp: PropTypes.func,
+  onMouseDown: PropTypes.func,
   children: PropTypes.any,
   className: PropTypes.string,
   disabled: PropTypes.bool,
 }
 TertiaryBtn.propTypes = {
   onClick: PropTypes.func,
+  onMouseUp: PropTypes.func,
+  onMouseDown: PropTypes.func,
   children: PropTypes.any,
   className: PropTypes.string,
   mono: PropTypes.bool,
@@ -260,6 +285,8 @@ TertiaryBtn.propTypes = {
 }
 SecondaryBtn.propTypes = {
   onClick: PropTypes.func,
+  onMouseUp: PropTypes.func,
+  onMouseDown: PropTypes.func,
   children: PropTypes.any,
   className: PropTypes.string,
   mono: PropTypes.bool,
@@ -267,6 +294,8 @@ SecondaryBtn.propTypes = {
 }
 PrimaryBtn.propTypes = {
   onClick: PropTypes.func,
+  onMouseUp: PropTypes.func,
+  onMouseDown: PropTypes.func,
   children: PropTypes.any,
   className: PropTypes.string,
   mono: PropTypes.bool,

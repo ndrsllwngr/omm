@@ -8,7 +8,6 @@ import React from "react";
 import { AutoplayProvider } from "@/components/context/autoplayContext";
 import { ViewsProvider } from "@/components/context/viewsContext";
 import { ApolloWrapper } from "./apolloWrapper";
-import { ViewOnlyCanvasProvider } from "@/components/context/viewOnlyCanvasContext";
 
 addDecorator((story) => (
   <ApolloWrapper>
@@ -17,9 +16,7 @@ addDecorator((story) => (
           <AutoplayProvider>
             <ViewsProvider>
               <FabricProvider>
-                <ViewOnlyCanvasProvider>
                   {story()}
-                </ViewOnlyCanvasProvider>
               </FabricProvider>
             </ViewsProvider>
           </AutoplayProvider>

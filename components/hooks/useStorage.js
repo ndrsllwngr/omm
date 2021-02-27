@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 import firebase from '@/lib/firebase'
 import { MEDIA_TYPE, STORAGE_COLLECTION } from '@/lib/constants'
 import { useAuth } from '@/components/context/authContext'

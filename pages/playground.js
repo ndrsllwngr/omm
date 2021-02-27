@@ -3,8 +3,6 @@ import { HtmlHead } from '@/components/HtmlHead'
 import { Navbar } from '@/components/Navbar'
 import { ProtectedRoute } from '@/components/context/authContext'
 import { TemplateDetails } from '@/components/TemplateDetails'
-import { SpeechToText } from '@/components/SpeechToText'
-import { TextToSpeech } from '@/components/TextToSpeech'
 
 import PropTypes from 'prop-types'
 
@@ -30,12 +28,6 @@ const PlaygroundPage = () => {
         <Navbar />
         <Section title={'GetTemplateDetails'}>
           <TemplateDetails templateID="601c28dd66e382182031253d" />
-        </Section>
-        <Section title={'SpeechToText'}>
-          <SpeechToText />
-        </Section>
-        <Section title={'TextToSpeech'}>
-          <TextToSpeech />
         </Section>
       </ProtectedRoute>
     </>
