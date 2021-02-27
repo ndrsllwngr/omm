@@ -32,7 +32,18 @@ export const ALL_PERSONAL_MEMES_QUERY = gql`
       template {
         id {
           _id
+          createdAt
+          createdBy {
+            _id
+          }
+          height
+          img
+          mediaType
+          type
+          url
+          width
         }
+        url
       }
       title
       upVotes {
@@ -70,7 +81,18 @@ const UPDATE_MEME = gql`
       template {
         id {
           _id
+          createdAt
+          createdBy {
+            _id
+          }
+          height
+          img
+          mediaType
+          type
+          url
+          width
         }
+        url
       }
       title
       upVotes {

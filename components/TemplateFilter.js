@@ -7,6 +7,19 @@ export const ALL_PUBLIC_TEMPLATES_QUERY = gql`
   query getAllTemplates($query: MemeQueryInput, $sortBy: MemeSortByInput) {
     memes(query: $query, sortBy: $sortBy) {
       template {
+        id {
+          _id
+          createdAt
+          createdBy {
+            _id
+          }
+          height
+          img
+          mediaType
+          type
+          url
+          width
+        }
         url
       }
     }

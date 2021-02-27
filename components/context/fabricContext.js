@@ -1,7 +1,7 @@
 import React, { useCallback, createContext, useState, useContext, useRef, useMemo } from 'react'
 import { fabric } from 'fabric'
 import PropTypes from 'prop-types'
-import { FONT_FAMILY, VISIBILITY } from '@/lib/constants'
+import { FONT_FAMILY, MEDIA_TYPE, VISIBILITY } from '@/lib/constants'
 // import { initAligningGuidelines } from '@/components/meme/Guidelines'
 
 const FabricJsonContext = createContext({})
@@ -81,18 +81,51 @@ export const FabricProvider = ({ children }) => {
 
   const loadFromJSON = useCallback(
     (meme) => {
-      console.log({ src: 'loadFromJSON.updateTemplate', template: meme.template })
-      setTemplate(meme.template)
+      console.log({ src: 'loadFromJSON.updateTemplate', meme })
+      setTemplate(meme.template.id)
       const json = JSON.parse(meme.json)
       let c = new fabric.Canvas(canvasRef.current)
       const jsonStr = JSON.stringify(json)
       c.loadFromJSON(
         jsonStr,
-        () => {
-          c.renderAll.bind(c)
-          c.setWidth(json.width)
-          c.setHeight(json.height)
-        },
+        meme.template.id.mediaType === MEDIA_TYPE.VIDEO
+          ? function canvasLoaded() {
+              c.renderAll.bind(c)
+              let objs = json['objects']
+              for (let i = 0; i < objs.length; i++) {
+                if (objs[i].hasOwnProperty('video_src')) {
+                  function getVideoElement(element) {
+                    let videoE = document.createElement('video')
+                    videoE.width = element.width
+                    videoE.height = element.height
+                    videoE.muted = true
+                    //videoE.crossOrigin = 'anonymous'
+                    let source = document.createElement('source')
+                    source.src = element.video_src
+                    source.type = 'video/mp4'
+                    videoE.appendChild(source)
+                    return videoE
+                  }
+                  let videoE = getVideoElement(objs[i])
+                  let fab_video = new fabric.Image(videoE, {
+                    left: objs[i]['left'],
+                    top: objs[i]['top'],
+                  })
+                  c.add(fab_video)
+                  fab_video.getElement().play()
+                  fabric.util.requestAnimFrame(function render() {
+                    c.renderAll()
+                    fabric.util.requestAnimFrame(render)
+                  })
+                }
+              }
+            }
+          : () => {
+              c.renderAll.bind(c)
+              c.setWidth(json.width)
+              c.setHeight(json.height)
+            },
+
         function (o, object) {
           fabric.log('fabric.log', o, object)
         }
@@ -135,6 +168,9 @@ export const FabricProvider = ({ children }) => {
         img.top = centerShiftY
         img.left = centerShiftX
         img.setCoords()
+        if (template.mediaType === (MEDIA_TYPE.VIDEO || MEDIA_TYPE.GIF)) {
+          img.objectCaching = false
+        }
         customSelect(img)
         img.set({ id: 'TEMPLATE' })
         canvas.add(img)
@@ -145,27 +181,58 @@ export const FabricProvider = ({ children }) => {
       if (canvas && canvasRef.current) {
         const canvasObjects = canvas.getObjects('image')
         const templateIndex = canvasObjects.find((el) => el.id === 'TEMPLATE')
-        if (!templateIndex) {
-          console.log('MemeEditor.useEffect: CREATE template', template.url)
-          if (canvas.getObjects)
+        if (templateIndex) {
+          canvas.remove(templateIndex)
+        }
+
+        console.log('MemeEditor.useEffect: CREATE template', template.url)
+        if (canvas.getObjects) {
+          if (template.mediaType === MEDIA_TYPE.VIDEO) {
+            console.log('')
+            function getVideoElement(element) {
+              let videoE = document.createElement('video')
+              videoE.width = element.width
+              videoE.height = element.height
+              videoE.muted = true
+              //videoE.crossOrigin = 'anonymous'
+              let source = document.createElement('source')
+              source.src = element.url
+              source.type = 'video/mp4'
+              videoE.appendChild(source)
+              return videoE
+            }
+            let url_mp4 = template.url
+
+            let videoE = getVideoElement(template)
+            let fab_video = new fabric.Image(videoE, { left: 0, top: 0 })
+            fab_video.set({ id: 'TEMPLATE', video_src: url_mp4 })
+            canvas.add(fab_video)
+            fab_video.getElement().play()
+            fabric.util.requestAnimFrame(function render() {
+              canvas.renderAll()
+              fabric.util.requestAnimFrame(render)
+            })
+            // https://itnext.io/video-element-serialization-and-deserialization-of-canvas-fc5dbf47666d
+            // fabric.Object.prototype.toObject = (function (toObject) {
+            //   return function (propertiesToInclude) {
+            //     propertiesToInclude = (propertiesToInclude || []).concat(['video_src'])
+            //     return toObject.apply(this, [propertiesToInclude])
+            //   }
+            // })(fabric.Object.prototype.toObject)
+          } else {
             new fabric.Image.fromURL(template.url, (img) => {
               insertImage(img, canvas)
             })
-        } else {
-          // TODO copy meme and changing template afterwards is not working
-          console.log(
-            'MemeEditor.useEffect: REPLACE template',
-            template.url,
-            templateIndex,
-            templateIndex.url
-          )
-          templateIndex.setSrc(template.url)
-          canvas.remove(templateIndex)
-          new fabric.Image.fromURL(template.url, (img) => {
-            insertImage(img, canvas)
-          })
+          }
         }
-        console.log({ src: 'MemeEditor.useEffect', canvas, canvasObjects, templateIndex, template })
+        console.log({
+          src: 'MemeEditor.updateTemplate',
+          canvas,
+          canvasObjects,
+          templateIndex,
+          template,
+          canvasRef,
+        })
       }
     },
     [canvas, canvasRef, setTemplate]

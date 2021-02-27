@@ -47,6 +47,16 @@ const ADD_MEME = gql`
       template {
         id {
           _id
+          createdAt
+          createdBy {
+            _id
+          }
+          height
+          img
+          mediaType
+          type
+          url
+          width
         }
         url
       }
@@ -120,6 +130,7 @@ export const MemeEditor = () => {
       'id',
       'preserveObjectStacking',
       'enableRetinaScaling',
+      'video_src',
     ])
     setSvgExport(svg)
     setJsonExport(json)
@@ -142,6 +153,7 @@ export const MemeEditor = () => {
       'id',
       'preserveObjectStacking',
       'enableRetinaScaling',
+      'video_src',
     ])
     const svg = canvas.toSVG()
     console.log('generateMeme', auth.getUser())
@@ -181,7 +193,7 @@ export const MemeEditor = () => {
       .catch((e) => console.error(e))
   }
 
-  const clearAll = () => canvas.getObjects().forEach((obj) => canvas.remove(obj))
+  const clearAll = () => canvas?.getObjects()?.forEach((obj) => canvas.remove(obj))
 
   // const canvasEvents = () => {
   //   canvas.getObjects().forEach((obj) => console.log(obj))
