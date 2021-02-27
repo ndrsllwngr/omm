@@ -12300,6 +12300,11 @@ react-sizeme@^2.6.7:
     shallowequal "^1.1.0"
     throttle-debounce "^2.1.0"
 
+react-speech-recognition@3.7.0:
+  version "3.7.0"
+  resolved "https://registry.yarnpkg.com/react-speech-recognition/-/react-speech-recognition-3.7.0.tgz#3b4ad5e8ffb141f4c7dbb3020be0f28dae0e8dbf"
+  integrity sha512-apJhZ94GCnW8/6qIbnWHZrZqgDfYyuvVzU1WdEOuDHLeIgQ5CSe3l7IwXbkvxXqYQp4/7DmYbOmvXt2rRahXyQ==
+
 react-style-singleton@^2.1.0:
   version "2.1.1"
   resolved "https://registry.yarnpkg.com/react-style-singleton/-/react-style-singleton-2.1.1.tgz#ce7f90b67618be2b6b94902a30aaea152ce52e66"
