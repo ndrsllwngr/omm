@@ -43,7 +43,14 @@ export const TemplateCollection = () => {
           data.templates.map((template, i) => (
             <button key={i} onClick={() => updateTemplate(template)}>
               {template.mediaType === MEDIA_TYPE.VIDEO ? (
-                <video preload="auto" width="150" height="150" controls={true} autoPlay={true}>
+                <video
+                  preload="auto"
+                  width="150"
+                  height="150"
+                  controls={true}
+                  autoPlay={false}
+                  muted={true}
+                >
                   <source src={template.url} type="video/mp4" />
                 </video>
               ) : (
