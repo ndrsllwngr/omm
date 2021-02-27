@@ -1,0 +1,14 @@
+version: "3.3"
+
+services:
+  omm:
+    ports:
+      - 3000:3000
+    build: .
+    volumes:
+      - .:/usr/src/app
+      - ./node_modules:/usr/src/app/node_modules
+      - ./.next:/usr/src/app/.next
+    env_file:
+      - .env
+      - .env.local
