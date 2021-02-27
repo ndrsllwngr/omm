@@ -41,10 +41,10 @@ cp .env.local.example .env.local
 
 ### Docker
 - `docker build . -t omm:latest` - Builds docker image with name `omm` and tag `latest`
-- `docker run -p 80:3000 omm:latest` - Runs docker image with name `omm` and tag `latest` and maps container port `3000` to port `80` (go to http://localhost)
+- `docker run -p 80:3000 omm:latest` - Runs docker image with name `omm` and tag `latest` and maps container port `3000` to port `80` (go to [http://localhost:80](http://localhost:80))
 - `docker image save -o omm:latest.tar omm:latest ` - Saves the docker image with name `omm` and tag `latest` to the file `omm:latest.tar`
 - `docker load -i omm:latest.tar` - Loads the docker image from the file `omm:latest.tar` into the local docker instance (execute run afterwards to run it)
-- `docker compose up` - Use `docker compose` to build & run the application (on http://localhost) - **recommended for development**
+- `docker compose up` - Use `docker compose` to build & run the application (on [http://localhost:80](http://localhost:80)) - **recommended for development**
 
 ### Dependency management
 - `yarn add <package...>` - Installs the “latest” version of the package.
