@@ -20,17 +20,17 @@ export const TemplateStackedBarChart = ({ ups, downs, templateViews, totalViews 
         upVotes: ups,
         downVotes: downs,
         templateViews: 0,
-        totalViewsWithoutCurrentMeme: 0,
+        totalViewsWithoutCurrentTemplate: 0,
       },
       {
         type: 'Views',
         upVotes: 0,
         downVotes: 0,
         templateViews: templateViews,
-        totalViewsWithoutCurrentMeme: totalViews - templateViews,
+        totalViewsWithoutCurrentTemplate: totalViews - templateViews,
       },
     ]
-    console.log('votes,', ups)
+    console.log({ data })
     const svg = select(svgRef.current)
     //const views = [{ templateviews: templateViews, totalViews: totalViews }]
     //const view_keys = ['templateViews', 'totalViews']

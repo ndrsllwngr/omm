@@ -123,7 +123,7 @@ const TemplateDetailsInner = ({ templateId }) => {
         setViews(vs)
         setTotalViews(total)
         console.log('res: ', memesFromTemplateIDs)
-        console.log('ups, downs, views:', ups, downs, vs)
+        console.log({ ups, downs, vs, total })
       }
     }
   }, [data, loading, error, calculationIsDone, setCalculationIsDone, memesFromTemplate, templateId])
