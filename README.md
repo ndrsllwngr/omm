@@ -9,6 +9,7 @@
   - [Project feature checklist (excel sheet)](#project-feature-checklist-excel-sheet)
   - [External services](#external-services)
   - [Live Version](#live-version)
+  - [Tests](#tests)
   - [Dependency licenses](#dependency-licenses)
   - [Docker Image](#docker-image)
     - [Commands](#commands)
@@ -41,6 +42,9 @@
 
 ## Live Version
 - go to https://omm.vercel.app/
+
+## Tests
+- test can be executed with `yarn cy:run` (Cypress)
 ## Dependency licenses
 - full list [/license-check.txt](/license-check.txt)
 ```bash
