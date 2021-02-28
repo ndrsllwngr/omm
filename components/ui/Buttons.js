@@ -1,6 +1,18 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 
+/*
+This components provides the functionality and styling of our UI-System.
+It includes:
+  - UI Buttons in three different looks to improve UX (Primary, Secondary & Ternary Style)
+  - Vote Buttons
+  - Icon Buttons used to navigate within the "Single Meme" page
+  - Badges, used in the filter section
+
+ All Buttons provide light- and darkmode as well as mono style
+ Each group of Buttons provides its own baseclass
+ */
+
 //Usable by all UI Elements
 const globalColors = 'bg-black dark:bg-white hover:bg-gray-700 dark:hover:bg-gray-300'
 

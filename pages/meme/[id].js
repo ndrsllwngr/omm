@@ -9,6 +9,9 @@ import { VISIBILITY } from '@/lib/constants'
 import { useAuth } from '@/components/context/authContext'
 import { FilterSection } from '@/components/FilterSection'
 
+/*
+Page to present a single meme
+ */
 export default function SingleView() {
   return (
     <>
@@ -20,7 +23,7 @@ export default function SingleView() {
     </>
   )
 }
-
+//Query to load the current meme from its id
 export const CURRENT_MEME = gql`
   query getCurrentMeme($meme: ObjectId) {
     memes(query: { _id: $meme }) {
@@ -78,12 +81,19 @@ export const CURRENT_MEME = gql`
   }
 `
 
+/*
+Function to generate the inner wrapper of the single view page
+ */
 const SingleViewInner = () => {
+  //Get authorization
   const auth = useAuth()
+  //Get router
   const router = useRouter()
+  //Get sorting
   const { sort } = useSortContext()
+  //Get filter
   const { filter, yesterday, template } = useFilterContext()
-
+  //Query current meme from database
   const { loading, error, data, networkStatus } = useQuery(CURRENT_MEME, {
     variables: { meme: router.query.id },
     notifyOnNetworkStatusChange: false,

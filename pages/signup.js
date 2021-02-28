@@ -3,6 +3,9 @@ import Link from 'next/link'
 import SignupForm from '@/components/forms/SignupForm'
 import { Navbar } from '@/components/Navbar'
 
+/*
+Sign up Page
+ */
 export default function SignUp() {
   return (
     <>

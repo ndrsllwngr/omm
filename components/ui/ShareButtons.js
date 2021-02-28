@@ -14,9 +14,17 @@ import {
   WhatsappIcon,
 } from 'react-share'
 import PropTypes from 'prop-types'
-//https://www.npmjs.com/package/react-share
+
+/*
+Implementing the share buttons, we use a external library (react-share), which provides wrapper and icons for social media links
+https://www.npmjs.com/package/react-share
+ */
+
 export const ShareButtons = ({ id }) => {
+  //Get URL of given meme
   const url = `${window.location.origin}` + '/meme/' + `${id}`
+
+  //Inline css style as a constant string
   const style =
     'w-8 h-8 mx-1 rounded-full bg-black hover:bg-gray-700 text-white dark:bg-white dark:text-black dark:hover:bg-gray-300 fill-current '
   return (

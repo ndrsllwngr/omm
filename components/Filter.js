@@ -3,11 +3,17 @@ import { FILTER } from '@/lib/constants'
 import { useFilterContext } from '@/components/context/viewsContext'
 import { Badge } from '@/components/ui/Buttons'
 
+//Define all available filter types
 const supportedFilter = [FILTER.HOT, FILTER.TRENDING, FILTER.FRESH, FILTER.NONE]
-//http://react.tips/radio-buttons-in-reactjs/
+
+/*
+Components handles and displays available filter options
+ */
 export const Filter = () => {
+  //Get filter context
   const { filter, setFilter } = useFilterContext()
 
+  //Function to set filter changes in the context
   const handleFilterChange = (newFilter) => {
     if (filter !== newFilter) {
       setFilter(newFilter)

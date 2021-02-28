@@ -5,7 +5,9 @@ import { useDetectOutsideClick } from '@/components/hooks/useDetectOutsideClick'
 import { MemeRenderer } from '@/components/MemeRenderer'
 import PropTypes from 'prop-types'
 import { VISIBILITY } from '@/lib/constants'
+// Timeout
 const TIMEOUT_IN_MS = 1000
+// Fulltext search query
 export const FEED_SEARCH_QUERY = gql`
   query searchQuery($search: String!, $conditions: String, $sorts: String) {
     searchMemesByTitle(input: { sorts: $sorts, searchString: $search, conditions: $conditions }) {
@@ -30,12 +32,21 @@ export const FEED_SEARCH_QUERY = gql`
     }
   }
 `
-//https://github.com/howtographql/react-apollo/blob/master/src/components/Search.js
+/*
+Component to search for memes by title.
+incremental search with one second delay
+https://github.com/howtographql/react-apollo/blob/master/src/components/Search.js
+ */
 export const Search = () => {
+  // Reference to html element holding inpout field
   const searchContainerRef = useRef(null)
+  // Reference to setTimeout function
   const timeOut = useRef(null)
+  // Get outside click detection hook to close search result dropdown
   const [isActive, setIsActive] = useDetectOutsideClick(searchContainerRef, false)
+  // Query loading searched memes
   const [executeSearch, { data }] = useLazyQuery(FEED_SEARCH_QUERY)
+
   const memes = data?.searchMemesByTitle
   useEffect(() => {
     return () => {
@@ -43,6 +54,7 @@ export const Search = () => {
     }
   }, [data])
 
+  // Clearing setTimeout
   const clearTimer = useCallback(() => {
     clearTimeout(timeOut.current)
   }, [timeOut])
@@ -82,7 +94,9 @@ export const Search = () => {
     </div>
   )
 }
-
+/*
+Dropdown to display given search results
+ */
 export const SearchResultDropdown = ({ memes = [] }) => {
   return (
     <ul

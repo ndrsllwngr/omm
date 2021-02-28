@@ -17,9 +17,12 @@ import { MemeDetails } from '@/components/MemeDetails'
 import { DownloadMeme } from '@/components/DownloadMeme'
 
 export const SingleMeme = ({ meme, enableLink }) => {
+  //Get authentication
   const auth = useAuth()
   const { setJson } = useFabricJson()
+  //Get Next Router
   const router = useRouter()
+  //Get Votes
   const { upVote, downVote, getVoteState } = useVoting()
   return (
     <div className="flex-col max-w-md">
