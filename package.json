@@ -25,6 +25,8 @@
     "build-storybook": "build-storybook",
     "license:full": "license-checker > ./license-check.txt",
     "license:summary": "license-checker --summary",
+    "cy:open": "cypress open",
+    "cy:run": "cypress run",
     "vercel-build": "yum install libuuid-devel libmount-devel && cp /lib64/{libuuid,libmount,libblkid}.so.1 node_modules/canvas/build/Release/ && npm run build"
   },
   "browserslist": {
@@ -50,7 +52,6 @@
     "canvas": "2.6.1",
     "cookie-cutter": "0.2.0",
     "cors": "2.8.5",
-    "cypress": "6.5.0",
     "d3": "6.5.0",
     "date-fns": "2.17.0",
     "deepmerge": "4.2.2",
@@ -107,6 +108,7 @@
     "autoprefixer": "9.8.6",
     "babel-eslint": "10.1.0",
     "babel-loader": "8.2.2",
+    "cypress": "6.5.0",
     "dotenv-webpack": "6.0.2",
     "eslint": "7.21.0",
     "eslint-config-prettier": "8.1.0",
