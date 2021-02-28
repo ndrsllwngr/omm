@@ -23,25 +23,36 @@ export default async function memeHandler(req, res) {
         break
       }
 
+      //Get the json for the canvas from the meme
       const memeJSON = JSON.parse(meme.json)
+      //Get the width & height for the canvas from the meme
       const width = memeJSON.width
       const height = memeJSON.height
 
+      // Get fabric
       const fabric = getFabric()
+      // Create a new canvas with the desired sizes
       const canvas = new fabric.StaticCanvas(null, { width: width, height: height })
 
+      // Set the response header
       res.setHeader('Content-Type', 'image/png')
+      // If the download flag is set -> set the download header
       if (download === 'true') {
         res.setHeader('Content-disposition', `attachment; filename=${id}.png`)
       }
 
+      // Load the JSON on the canvas
       canvas.loadFromJSON(memeJSON, () => {
+        // Render the canvas
         canvas.renderAll()
 
+        //Create a .png stream from the canvas
         const stream = canvas.createPNGStream()
+        //Write the Stream to the response
         stream.on('data', (chunk) => {
           res.write(chunk)
         })
+        // When Stream is done end the response
         stream.on('end', () => {
           res.end()
         })
