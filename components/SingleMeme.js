@@ -46,7 +46,7 @@ export const SingleMeme = ({ meme, enableLink }) => {
         {/*TODO Add captions to speech output*/}
         <TextToSpeech
           value={
-            meme.title ? ['Title: ', meme.title, 'Image: ', meme.template.id.name].join(',') : ''
+            meme.title ? ['Title: ', meme.title, 'Image: ', meme.template?.name].join(',') : ''
           }
         />
       </div>

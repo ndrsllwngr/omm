@@ -26,22 +26,20 @@ export const ALL_PUBLIC_MEMES_QUERY = gql`
       json
       svg
       template {
-        id {
+        _id
+        createdAt
+        createdBy {
           _id
-          createdAt
-          createdBy {
-            _id
-          }
-          height
-          img
-          mediaType
-          type
-          url
-          width
-          name
         }
+        height
+        img
+        mediaType
+        type
         url
+        width
+        name
       }
+      captions
       title
       upVotes {
         _id
@@ -78,7 +76,7 @@ export const TemplateDetails = ({ templateID }) => {
       if (!loading && !error && data?.memes?.length > 0) {
         for (let i = 0; i < data.memes.length; i++) {
           total += data.memes[i].views
-          if (data.memes[i].template?.id?._id === templateID) {
+          if (data.memes[i].template?._id === templateID) {
             console.log('enter true templateid')
             memesFromTemplateIDs.push(data.memes[i])
             ups += data.memes[i].upVotes.length

@@ -82,13 +82,13 @@ export const FabricProvider = ({ children }) => {
   const loadFromJSON = useCallback(
     (meme) => {
       console.log({ src: 'loadFromJSON.updateTemplate', meme })
-      setTemplate(meme.template.id)
+      setTemplate(meme.template)
       const json = JSON.parse(meme.json)
       let c = new fabric.Canvas(canvasRef.current)
       const jsonStr = JSON.stringify(json)
       c.loadFromJSON(
         jsonStr,
-        meme.template.id.mediaType === MEDIA_TYPE.VIDEO
+        meme.template.mediaType === MEDIA_TYPE.VIDEO
           ? function canvasLoaded() {
               c.renderAll.bind(c)
               let objs = json['objects']

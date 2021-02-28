@@ -4,25 +4,20 @@ import { useDetectOutsideClick } from '@/components/hooks/useDetectOutsideClick'
 import { gql, useQuery } from '@apollo/client'
 
 export const ALL_PUBLIC_TEMPLATES_QUERY = gql`
-  query getAllTemplates($query: MemeQueryInput, $sortBy: MemeSortByInput) {
-    memes(query: $query, sortBy: $sortBy) {
-      template {
-        id {
-          _id
-          createdAt
-          createdBy {
-            _id
-          }
-          height
-          img
-          mediaType
-          type
-          url
-          width
-          name
-        }
-        url
+  query getAllTemplates($query: TemplateQueryInput, $sortBy: TemplateSortByInput) {
+    templates(query: $query, sortBy: $sortBy) {
+      _id
+      createdAt
+      createdBy {
+        _id
       }
+      height
+      img
+      mediaType
+      type
+      url
+      width
+      name
     }
   }
 `
@@ -34,7 +29,7 @@ export const TemplateFilter = () => {
   })
 
   useEffect(() => {
-    console.log({ DATA: data })
+    console.log({ src: 'TemplateFilter', data })
   }, [data])
 
   const { template, setTemplate } = useTemplateContext()
@@ -100,21 +95,17 @@ export const TemplateFilter = () => {
                 Reset
               </div>
 
-              {data.memes.map((meme, index) => {
-                console.log({ URL: meme.template?.id })
-
-                return (
-                  <div
-                    key={index}
-                    //setzt heir ne id rein
-                    onClick={() => handleTemplateChange(meme.template?.id)}
-                    className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900"
-                    role="menuitem"
-                  >
-                    <img className={'w-full'} src={meme.template?.id?.url} />
-                  </div>
-                )
-              })}
+              {data.templates.map((template, index) => (
+                <div
+                  key={index}
+                  //setzt heir ne id rein
+                  onClick={() => handleTemplateChange(template)}
+                  className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900"
+                  role="menuitem"
+                >
+                  <img className={'w-full'} src={template.url} />
+                </div>
+              ))}
             </div>
           </div>
         )}

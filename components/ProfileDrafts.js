@@ -28,22 +28,20 @@ export const ALL_PERSONAL_MEME_DRAFTS_QUERY = gql`
       isDraft
       svg
       template {
-        id {
+        _id
+        createdAt
+        createdBy {
           _id
-          createdAt
-          createdBy {
-            _id
-          }
-          height
-          img
-          mediaType
-          type
-          url
-          width
-          name
         }
+        height
+        img
+        mediaType
+        type
         url
+        width
+        name
       }
+      captions
       title
       upVotes {
         _id
