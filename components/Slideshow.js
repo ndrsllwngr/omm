@@ -173,7 +173,7 @@ export const Slideshow = ({ meme, sort, filter, yesterday, template }) => {
       </div>
       <SingleMeme meme={meme} />
       {meme.visibility !== VISIBILITY.PUBLIC &&
-        meme.createdBy._id.toString() === auth.getUser().id.toString() && (
+        meme.createdBy._id.toString() === auth.getUser()?.id?.toString() && (
           <select
             value={meme.visibility}
             onChange={(e) =>
