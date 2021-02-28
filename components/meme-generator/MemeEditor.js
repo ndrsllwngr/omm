@@ -225,6 +225,71 @@ export const MemeEditor = () => {
       .catch((e) => console.error(e))
   }
 
+  const generateMemeOnServerSide = ({ isDraft = false }) => {
+    const canvasAsJson = canvas.toJSON([
+      'width',
+      'height',
+      'id',
+      'preserveObjectStacking',
+      'enableRetinaScaling',
+      'video_src',
+      'crossOrigin',
+    ])
+    const captions = canvasAsJson.objects
+      ?.filter((obj) => obj.type === 'textbox')
+      .map((obj) => {
+        if (obj.text && obj.text !== '') return obj.text
+      })
+    const svg = canvas.toSVG()
+    console.log({
+      src: 'generateMeme',
+      user: auth.getUser(),
+      captions: captions,
+      json: canvasAsJson,
+    })
+    const newObj = {
+      title,
+      commentCount: 0,
+      createdAt: new Date(),
+      createdBy: { $oid: auth.getUser().id },
+      visibility: visibility,
+      upVotes: [],
+      downVotes: [],
+      forkedBy: [],
+      isDraft: isDraft,
+      points: 0,
+      views: 0,
+      forkedFrom: isCopy ? { $oid: isCopy } : null,
+      template: template._id ? { $oid: template._id } : null,
+      url: '', // TODO if a real png was created (requirement)
+      captions: captions,
+      svg,
+      json: JSON.stringify(canvasAsJson),
+    }
+    console.log({ src: 'MemeEditor.generateMeme', newObj, svg })
+    const getRootUrl = () => {
+      return window.location.origin
+        ? window.location.origin + '/'
+        : window.location.protocol + '/' + window.location.host + '/'
+    }
+    fetch(`${getRootUrl()}api/meme`, {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(newObj),
+    })
+      .then((r) => r.json())
+      .then((r) => {
+        console.log({ r })
+        if (isDraft) {
+          router.push(`/profile`)
+        } else {
+          setSort(SORT.LATEST)
+          router.push(`/meme/${r._id}`)
+        }
+      })
+      .catch((e) => console.error(e))
+  }
+
   const clearAll = () => canvas?.getObjects()?.forEach((obj) => canvas.remove(obj))
 
   // const canvasEvents = () => {
@@ -289,7 +354,13 @@ export const MemeEditor = () => {
           <option value={VISIBILITY.PRIVATE}>Private</option>
         </select>
         <Button onClick={() => generateMeme({ isDraft: true })}>Save as Draft</Button>
+        <Button onClick={() => generateMemeOnServerSide({ isDraft: true })}>
+          Save as Draft (Server)
+        </Button>
         <Button onClick={() => generateMeme({ isDraft: false })}>Generate</Button>
+        <Button onClick={() => generateMemeOnServerSide({ isDraft: false })}>
+          Generate (Server)
+        </Button>
       </div>
       {previewMode && (
         <>
