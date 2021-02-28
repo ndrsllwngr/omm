@@ -12,6 +12,21 @@ export const FEED_SEARCH_QUERY = gql`
       _id
       title
       svg
+      template {
+        _id
+        createdAt
+        createdBy {
+          _id
+        }
+        type
+        mediaType
+        img
+        url
+        width
+        height
+        name
+      }
+      json
     }
   }
 `
