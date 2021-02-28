@@ -14,6 +14,7 @@ import { memeType, templateType } from '@/components/types/types'
 import { Comment, CommentInput } from '@/components/Comment'
 import { useAuth } from '@/components/context/authContext'
 
+// Query Meme
 const FETCH_MEME = gql`
   query FetchMeme($memeId: ObjectId!, $conditions: String, $sorts: String, $next: Boolean) {
     fetchMeme(input: { meme_id: $memeId, sorts: $sorts, conditions: $conditions, next: $next }) {
@@ -21,7 +22,7 @@ const FETCH_MEME = gql`
     }
   }
 `
-
+// Query a random meme
 const FETCH_RANDOM_MEME = gql`
   query FetchRandomMeme($memeId: ObjectId!, $conditions: String) {
     fetchRandomMeme(input: { meme_id: $memeId, conditions: $conditions }) {
@@ -29,7 +30,6 @@ const FETCH_RANDOM_MEME = gql`
     }
   }
 `
-
 const UPDATE_MEME = gql`
   mutation updateMeme($query: MemeQueryInput, $set: MemeUpdateInput!) {
     updateOneMeme(query: $query, set: $set) {
@@ -77,10 +77,15 @@ const UPDATE_MEME = gql`
     }
   }
 `
-
+/*
+Provides all functionality to navigate through the single meme page
+ */
 export const Slideshow = ({ meme, sort, filter, yesterday, template }) => {
+  // Get view count
   const viewCount = useViewCount()
+  // Get authorization
   const auth = useAuth()
+
   const [updateOneMeme] = useMutation(UPDATE_MEME)
   useEffect(() => {
     viewCount.addView(meme._id)
@@ -205,6 +210,9 @@ Slideshow.propTypes = {
   template: templateType,
 }
 
+/*
+Navigation to browse through memes
+ */
 const MemeNavigation = ({ prevMeme, nextMeme, loadingNext, randomMeme }) => {
   // useEffect(() => {
   //   console.log({ src: 'MemeNavigation', meme, prevMeme, nextMeme, randomMeme })
@@ -242,9 +250,13 @@ MemeNavigation.propTypes = {
   loadingNext: PropTypes.bool,
   randomMeme: memeType,
 }
-
+/*
+Button to navigate to next or previous meme
+ */
 export const SlideshowButton = ({ name, targetMemeId, disabled }) => {
+  // Get router
   const router = useRouter()
+  // Get function to disable autoplay
   const { disableAutoplay } = useAutoplay()
 
   if (targetMemeId === null || disabled)
@@ -280,8 +292,11 @@ SlideshowButton.propTypes = {
   targetMemeId: PropTypes.string,
   disabled: PropTypes.bool,
 }
-
+/*
+Button to navigate to a random meme
+ */
 export const RandomMemeButton = ({ randomMeme }) => {
+  // Get function to disable autoplay
   const { disableAutoplay } = useAutoplay()
 
   if (!randomMeme?._id) {
@@ -305,8 +320,11 @@ export const RandomMemeButton = ({ randomMeme }) => {
 RandomMemeButton.propTypes = {
   randomMeme: memeType,
 }
-
+/*
+Button to change the autoplay order from sequential to random
+ */
 export const AutoplaySortButton = () => {
+  // Get order and function to toggle autoplay order
   const { order, toggleAutoplayOrder } = useAutoplay()
   return (
     <ToggleIconBtn
@@ -319,7 +337,11 @@ export const AutoplaySortButton = () => {
     </ToggleIconBtn>
   )
 }
+/*
+Button to play or pause autoplay
+ */
 export const AutoplayActionButton = ({ nextMeme, randomMeme, loadingNext }) => {
+  //Get autoplay functions and states
   const {
     order,
     isPlaying,
