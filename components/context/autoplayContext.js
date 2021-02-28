@@ -5,6 +5,7 @@ import { AUTOPLAY_ORDER } from '@/lib/constants'
 
 // Autoplay timeout
 const TIMEOUT_IN_MS = 3000
+// Create autoplay context
 export const AutoplayContext = createContext({})
 
 /*
@@ -12,17 +13,23 @@ Context to handle autoplay
 https://kentcdodds.com/blog/how-to-use-react-context-effectively
  */
 export const AutoplayProvider = ({ children }) => {
+  // Init play state
   const [isPlaying, setIsPlaying] = useState(false)
+  // Init order state
   const [order, setOrder] = useState(AUTOPLAY_ORDER.ORDERED)
+  // Get router
   const router = useRouter()
+  // Init reference for timeout function
   const timeOut = useRef(null)
+  // Init reference to next id
   const queuedNextId = useRef(null)
-
+  // Clear setTimeout
   const clearTimer = useCallback(() => {
     clearTimeout(timeOut.current)
     queuedNextId.current = null
   }, [timeOut])
 
+  // Trigger next slide including setTimeout from autoplay
   const triggerNextSlide = useCallback(
     (nextId) => {
       if (!queuedNextId.current) {
@@ -39,11 +46,12 @@ export const AutoplayProvider = ({ children }) => {
     [timeOut, router, queuedNextId]
   )
 
+  // Disable autoplay
   const disableAutoplay = useCallback(() => {
     setIsPlaying(false)
     clearTimer()
   }, [setIsPlaying, clearTimer])
-
+  // Start and pause autoplay
   const toggleAutoplay = useCallback(() => {
     if (isPlaying) {
       disableAutoplay()
@@ -51,7 +59,7 @@ export const AutoplayProvider = ({ children }) => {
       setIsPlaying(true)
     }
   }, [setIsPlaying, isPlaying, disableAutoplay])
-
+  // Change autoplay order
   const toggleAutoplayOrder = useCallback(() => {
     order === AUTOPLAY_ORDER.RANDOM
       ? setOrder(AUTOPLAY_ORDER.ORDERED)
@@ -59,6 +67,7 @@ export const AutoplayProvider = ({ children }) => {
     clearTimer()
   }, [order, setOrder, clearTimer])
 
+  // Check if next page is not a meme
   useEffect(() => {
     if (router.pathname !== '/meme/[id]') {
       if (isPlaying) {
@@ -85,7 +94,7 @@ export const AutoplayProvider = ({ children }) => {
     </AutoplayContext.Provider>
   )
 }
-
+// Export autoplay context
 export const useAutoplay = () => {
   const context = useContext(AutoplayContext)
   if (!context) {

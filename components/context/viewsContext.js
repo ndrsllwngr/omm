@@ -2,18 +2,21 @@ import React, { useContext, useState, createContext, useEffect } from 'react'
 import Proptypes from 'prop-types'
 import { SORT, FILTER } from '@/lib/constants'
 
+// Init contexts
 export const SortContext = createContext({})
-export const ReloadContext = createContext({})
 export const FilterContext = createContext({})
 export const TemplateContext = createContext({})
 
+/*
+Context to handle filter and sorting
+ */
 export const ViewsProvider = ({ children }) => {
   const [sort, setSort] = useState(SORT.LATEST)
   const [filter, setFilter] = useState(FILTER.NONE)
   const [template, setTemplate] = useState(null)
-  const [reload, setReload] = useState(false)
   const [yesterday, setYesterday] = useState(null)
 
+  // Calculate datetime for time depended filtering
   useEffect(() => {
     const yesterdayDate = new Date(Date.now() - 24 * 3600 * 1000)
     setYesterday(yesterdayDate.toISOString())
@@ -22,14 +25,12 @@ export const ViewsProvider = ({ children }) => {
   return (
     <TemplateContext.Provider value={{ template, setTemplate }}>
       <FilterContext.Provider value={{ filter, setFilter, yesterday, template }}>
-        <SortContext.Provider value={{ sort, setSort }}>
-          <ReloadContext.Provider value={{ reload, setReload }}>{children}</ReloadContext.Provider>
-        </SortContext.Provider>
+        <SortContext.Provider value={{ sort, setSort }}>{children}</SortContext.Provider>
       </FilterContext.Provider>
     </TemplateContext.Provider>
   )
 }
-
+// Export sort context
 export const useSortContext = () => {
   const context = useContext(SortContext)
   if (!context) {
@@ -37,6 +38,7 @@ export const useSortContext = () => {
   }
   return context
 }
+// Export filter context
 export const useFilterContext = () => {
   const context = useContext(FilterContext)
   if (!context) {
@@ -44,14 +46,7 @@ export const useFilterContext = () => {
   }
   return context
 }
-export const useReloadContext = () => {
-  const context = useContext(ReloadContext)
-  if (!context) {
-    throw new Error(`useReloadContext must be used within a ViewsProvider`)
-  }
-  return context
-}
-
+// Export template filter context
 export const useTemplateContext = () => {
   const context = useContext(TemplateContext)
   if (!context) {

@@ -4,7 +4,7 @@ import { Sort } from '@/components/Sort'
 import React from 'react'
 
 /*
-This Component provides all components used to filter or sort
+Wrapper Component for template filter, filter and sorting
  */
 export const FilterSection = () => {
   return (
