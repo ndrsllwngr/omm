@@ -32,6 +32,7 @@
 
 ## Project feature checklist (excel sheet)
 - see [project_features_checklist.xlsx](/project_features_checklist.xlsx)
+- test can be executed with `yarn cy:run` (Cypress)
 
 ## External services
 - see https://docs.google.com/document/d/1BYGGoQ5xQih6ejDzN7d47otp-3Bx6y5KeCHntpYQpRY/edit?usp=sharing for how to setup and use them
