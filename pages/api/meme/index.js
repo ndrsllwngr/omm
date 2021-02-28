@@ -17,11 +17,14 @@ export default async function memeHandler(req, res) {
   switch (method) {
     case 'PUT':
       let meme = req.body
-
+      // Remove any existing id
       delete meme['_id']
+      // Parse ObjectIDs
       meme.template = new ObjectID(meme.template.$oid)
       meme.createdBy = new ObjectID(meme.createdBy.$oid)
+      // Set createdAt
       meme.createdAt = new Date()
+      // Reset variables
       meme.comments = []
       meme.commentCount = 0
       meme.upVotes = []
@@ -29,7 +32,10 @@ export default async function memeHandler(req, res) {
       meme.points = 0
       meme.views = 0
 
+      // Insert into mongoDB
       let result = await memeCollection.insertOne(meme)
+
+      // Return inserted Object
       res.json(result.ops[0])
       break
 
