@@ -14,7 +14,6 @@ export const config = {
 
 export default async function memeHandler(req, res) {
   const {
-    //TODO filter & search
     query: { search, limit },
     method,
   } = req
