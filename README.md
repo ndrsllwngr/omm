@@ -10,6 +10,7 @@
   - [External services](#external-services)
   - [Docker Image](#docker-image)
   - [Live Version](#live-version)
+  - [Sitemap](#sitemap)
   - [Tech-Stack](#tech-stack)
   - [Getting started](#getting-started)
     - [System Requirements](#system-requirements)
@@ -51,7 +52,7 @@ $ license-checker --summary
 ├─ BSD: 1
 ├─ (MIT OR WTFPL): 1
 ├─ BSD*: 1
-├─ UNLICENSED: 1
+├─ UNLICENSED: 1 (OUR OWN PROJECT)
 ├─ AFLv2.1,BSD: 1
 ├─ ODC-By-1.0: 1
 ├─ WTFPL: 1
@@ -75,6 +76,30 @@ $ license-checker --summary
 
 ## Live Version
 - go to https://omm.vercel.app/
+
+## Sitemap
+```js
+22:17:35.313  	Page                                                           Size     First Load JS
+22:17:35.313  	┌ ○ /                                                          956 B           326 kB
+22:17:35.314  	├   /_app                                                      0 B             275 kB
+22:17:35.314  	├ ○ /403                                                       162 B           275 kB
+22:17:35.314  	├ ○ /404                                                       955 B           276 kB
+22:17:35.314  	├ λ /api/cors                                                  0 B             275 kB
+22:17:35.314  	├ λ /api/meme                                                  0 B             275 kB
+22:17:35.314  	├ λ /api/meme/[id]                                             0 B             275 kB
+22:17:35.314  	├ λ /api/meme/image/[id]                                       0 B             275 kB
+22:17:35.314  	├ λ /api/meme/set                                              0 B             275 kB
+22:17:35.314  	├ ○ /create                                                    225 kB          531 kB
+22:17:35.314  	├ ○ /login                                                     1.36 kB         283 kB
+22:17:35.314  	├ ○ /meme/[id]                                                 4.23 kB         330 kB
+22:17:35.314  	├ ○ /profile                                                   5.55 kB         284 kB
+22:17:35.314  	└ ○ /signup                                                    1.41 kB         283 kB
+22:17:35.315  	λ  (Lambda)  server-side renders at runtime (uses getInitialProps or getServerSideProps)
+22:17:35.315  	○  (Static)  automatically rendered as static HTML (uses no initial props)
+22:17:35.315  	●  (SSG)     automatically generated as static HTML + JSON (uses getStaticProps)
+22:17:35.315  	   (ISR)     incremental static regeneration (uses revalidate in getStaticProps)
+```
+- to explore our api please make use of [rest-api.postman_collection.json](/rest-api.postman_collection.json) and import it into [Postman](https://www.postman.com/)
 
 ## Tech-Stack
 - [Next.js](https://nextjs.org/)
