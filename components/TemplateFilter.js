@@ -56,7 +56,7 @@ export const TemplateFilter = () => {
   return (
     <div className="flex flex-row justify-end items-center">
       <div className="flex relative">
-        <img className="h-8" src={template} />
+        <img className="h-8" src={template?.url} />
         <button
           type="button"
           className="inline-flex justify-center w-full border-b-2 shadow-sm px-4 py-2 bg-transparent text-sm font-medium text-black dark:text-white focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-200 focus:ring-gray-200"
@@ -93,7 +93,7 @@ export const TemplateFilter = () => {
               aria-labelledby="options-menu"
             >
               <div
-                onClick={() => handleTemplateChange('')}
+                onClick={() => handleTemplateChange(null)}
                 className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900"
                 role="menuitem"
               >
@@ -101,17 +101,17 @@ export const TemplateFilter = () => {
               </div>
 
               {data.memes.map((meme, index) => {
-                console.log({ URL: meme.template?.url })
+                console.log({ URL: meme.template?.id })
 
                 return (
                   <div
                     key={index}
                     //setzt heir ne id rein
-                    onClick={() => handleTemplateChange(meme.template?.url)}
+                    onClick={() => handleTemplateChange(meme.template?.id)}
                     className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900"
                     role="menuitem"
                   >
-                    <img className={'w-full'} src={meme.template?.url} />
+                    <img className={'w-full'} src={meme.template?.id?.url} />
                   </div>
                 )
               })}

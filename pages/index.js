@@ -12,14 +12,14 @@ import { FilterSection } from '@/components/FilterSection'
 // https://dzone.com/articles/fast-paging-with-mongodb
 const LandingPage = () => {
   const { sort } = useSortContext()
-  const { filter, yesterday } = useFilterContext()
+  const { filter, yesterday, template } = useFilterContext()
   return (
     <>
       <HtmlHead />
       <Navbar />
       <div className={'max-w-7xl mx-auto mt-4'}>
         <FilterSection />
-        <LandingPageInner sort={sort} filter={filter} yesterday={yesterday} />
+        <LandingPageInner sort={sort} filter={filter} yesterday={yesterday} template={template} />
       </div>
     </>
   )
@@ -76,9 +76,12 @@ export const ALL_PUBLIC_MEMES_QUERY = gql`
 `
 
 // eslint-disable-next-line react/prop-types
-const LandingPageInner = ({ sort, filter, yesterday }) => {
+const LandingPageInner = ({ sort, filter, yesterday, template }) => {
   const { loading, error, data, networkStatus } = useQuery(ALL_PUBLIC_MEMES_QUERY, {
-    variables: { query: translateFilter(filter, yesterday), sortBy: translateSort(sort) },
+    variables: {
+      query: translateFilter({ filterEnum: filter, yesterday, template }),
+      sortBy: translateSort(sort),
+    },
     notifyOnNetworkStatusChange: true,
   })
   const loadingMoreMemes = networkStatus === NetworkStatus.fetchMore
