@@ -30,22 +30,20 @@ export const ALL_PERSONAL_MEMES_QUERY = gql`
       points
       svg
       template {
-        id {
+        _id
+        createdAt
+        createdBy {
           _id
-          createdAt
-          createdBy {
-            _id
-          }
-          height
-          img
-          mediaType
-          type
-          url
-          width
-          name
         }
+        height
+        img
+        mediaType
+        type
         url
+        width
+        name
       }
+      captions
       title
       upVotes {
         _id
@@ -80,21 +78,20 @@ const UPDATE_MEME = gql`
       points
       svg
       template {
-        id {
+        _id
+        createdAt
+        createdBy {
           _id
-          createdAt
-          createdBy {
-            _id
-          }
-          height
-          img
-          mediaType
-          type
-          url
-          width
         }
+        height
+        img
+        mediaType
+        type
         url
+        width
+        name
       }
+      captions
       title
       upVotes {
         _id

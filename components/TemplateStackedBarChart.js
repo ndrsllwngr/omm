@@ -4,7 +4,7 @@ import { select, axisBottom, axisRight, scaleLinear, scaleBand, stack, max } fro
 
 export const TemplateStackedBarChart = ({ ups, downs, templateViews, totalViews }) => {
   const svgRef = useRef()
-  const allKeys = ['upVotes', 'downVotes', 'templateViews', 'totalViewsWithoutCurrentMeme']
+  const allKeys = ['upVotes', 'downVotes', 'templateViews', 'totalViewsWithoutCurrentTemplate']
   const colors = {
     upVotes: 'steelblue',
     downVotes: 'rgba(198, 45, 205, 0.8)',
@@ -80,7 +80,6 @@ export const TemplateStackedBarChart = ({ ups, downs, templateViews, totalViews 
   return (
     <div>
       <div id="stackedBar">
-        <h2>Bar Chart</h2>
         <svg ref={svgRef}>
           <g className="x-axis" />
           <g className="y-axis" />

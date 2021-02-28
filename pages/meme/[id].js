@@ -52,22 +52,20 @@ export const CURRENT_MEME = gql`
       json
       svg
       template {
-        id {
+        _id
+        createdAt
+        createdBy {
           _id
-          createdAt
-          createdBy {
-            _id
-          }
-          height
-          img
-          mediaType
-          type
-          url
-          width
-          name
         }
+        height
+        img
+        mediaType
+        type
         url
+        width
+        name
       }
+      captions
       title
       upVotes {
         _id

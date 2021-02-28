@@ -45,21 +45,20 @@ const ADD_MEME = gql`
         _id
       }
       template {
-        id {
+        _id
+        createdAt
+        createdBy {
           _id
-          createdAt
-          createdBy {
-            _id
-          }
-          height
-          img
-          mediaType
-          type
-          url
-          width
         }
+        height
+        img
+        mediaType
+        type
         url
+        width
+        name
       }
+      captions
       svg
     }
   }
@@ -170,24 +169,21 @@ export const MemeEditor = () => {
       points: 0,
       views: 0,
       forkedFrom: isCopy ? { link: isCopy } : null,
-      template: {
-        id: template._id
-          ? { link: template._id }
-          : {
-              create: {
-                createdAt: new Date(),
-                createdBy: { link: auth.getUser().id },
-                type: 'EXTERNAL',
-                mediaType: MEDIA_TYPE.IMAGE,
-                img: STORAGE_COLLECTION.TEMPLATES + '/', // TODO, do we even need this one?
-                url: template.url,
-                width: template.width,
-                height: template.height,
-                name: template.name,
-              },
+      template: template._id
+        ? { link: template._id }
+        : {
+            create: {
+              createdAt: new Date(),
+              createdBy: { link: auth.getUser().id },
+              type: 'EXTERNAL',
+              mediaType: MEDIA_TYPE.IMAGE,
+              img: STORAGE_COLLECTION.TEMPLATES + '/', // TODO, do we even need this one?
+              url: template.url,
+              width: template.width,
+              height: template.height,
+              name: template.name,
             },
-        url: template.url,
-      },
+          },
       url: '', // TODO if a real png was created (requirement)
       svg,
       json: JSON.stringify(canvasAsJson),

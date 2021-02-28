@@ -5,7 +5,7 @@ import { MEDIA_TYPE } from '@/lib/constants'
 import { ViewOnlyCanvas } from '@/components/meme-generator/ViewOnlyCanvas'
 
 export const MemeRenderer = ({ meme }) => {
-  if (meme.template.id.mediaType === MEDIA_TYPE.VIDEO) {
+  if (meme.template.mediaType === MEDIA_TYPE.VIDEO) {
     return (
       <>
         <ViewOnlyCanvas meme={meme} />

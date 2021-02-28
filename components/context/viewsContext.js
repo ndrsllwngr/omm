@@ -10,7 +10,7 @@ export const TemplateContext = createContext({})
 export const ViewsProvider = ({ children }) => {
   const [sort, setSort] = useState(SORT.LATEST)
   const [filter, setFilter] = useState(FILTER.NONE)
-  const [template, setTemplate] = useState('')
+  const [template, setTemplate] = useState(null)
   const [reload, setReload] = useState(false)
   const [yesterday, setYesterday] = useState(null)
 
@@ -21,7 +21,7 @@ export const ViewsProvider = ({ children }) => {
 
   return (
     <TemplateContext.Provider value={{ template, setTemplate }}>
-      <FilterContext.Provider value={{ filter, setFilter, yesterday }}>
+      <FilterContext.Provider value={{ filter, setFilter, yesterday, template }}>
         <SortContext.Provider value={{ sort, setSort }}>
           <ReloadContext.Provider value={{ reload, setReload }}>{children}</ReloadContext.Provider>
         </SortContext.Provider>

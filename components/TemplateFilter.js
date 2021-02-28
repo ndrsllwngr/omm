@@ -4,25 +4,20 @@ import { useDetectOutsideClick } from '@/components/hooks/useDetectOutsideClick'
 import { gql, useQuery } from '@apollo/client'
 
 export const ALL_PUBLIC_TEMPLATES_QUERY = gql`
-  query getAllTemplates($query: MemeQueryInput, $sortBy: MemeSortByInput) {
-    memes(query: $query, sortBy: $sortBy) {
-      template {
-        id {
-          _id
-          createdAt
-          createdBy {
-            _id
-          }
-          height
-          img
-          mediaType
-          type
-          url
-          width
-          name
-        }
-        url
+  query getAllTemplates($query: TemplateQueryInput, $sortBy: TemplateSortByInput) {
+    templates(query: $query, sortBy: $sortBy) {
+      _id
+      createdAt
+      createdBy {
+        _id
       }
+      height
+      img
+      mediaType
+      type
+      url
+      width
+      name
     }
   }
 `
@@ -34,7 +29,7 @@ export const TemplateFilter = () => {
   })
 
   useEffect(() => {
-    console.log({ DATA: data })
+    console.log({ src: 'TemplateFilter', data })
   }, [data])
 
   const { template, setTemplate } = useTemplateContext()
@@ -56,7 +51,7 @@ export const TemplateFilter = () => {
   return (
     <div className="flex flex-row justify-end items-center">
       <div className="flex relative">
-        <img className="h-8" src={template} />
+        <img className="h-8" src={template?.url} />
         <button
           type="button"
           className="inline-flex justify-center w-full border-b-2 shadow-sm px-4 py-2 bg-transparent text-sm font-medium text-black dark:text-white focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-200 focus:ring-gray-200"
@@ -93,28 +88,24 @@ export const TemplateFilter = () => {
               aria-labelledby="options-menu"
             >
               <div
-                onClick={() => handleTemplateChange('')}
+                onClick={() => handleTemplateChange(null)}
                 className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900"
                 role="menuitem"
               >
                 Reset
               </div>
 
-              {data.memes.map((meme, index) => {
-                console.log({ URL: meme.template?.url })
-
-                return (
-                  <div
-                    key={index}
-                    //setzt heir ne id rein
-                    onClick={() => handleTemplateChange(meme.template?.url)}
-                    className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900"
-                    role="menuitem"
-                  >
-                    <img className={'w-full'} src={meme.template?.url} />
-                  </div>
-                )
-              })}
+              {data.templates.map((template, index) => (
+                <div
+                  key={index}
+                  //setzt heir ne id rein
+                  onClick={() => handleTemplateChange(template)}
+                  className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900"
+                  role="menuitem"
+                >
+                  <img className={'w-full'} src={template.url} />
+                </div>
+              ))}
             </div>
           </div>
         )}
