@@ -14,19 +14,19 @@ export default async function memeHandler(req, res) {
 
   switch (method) {
     case 'GET':
-      // Get meme from Firestore
+      // Get meme from database
       const meme = await memeCollection.findOne({ _id: new ObjectID(id) }, {})
-      // When meme doesn't exist return 404
+      // If meme doesn't exist return 404
       if (!meme) {
         res.status(404).end(`Meme with id ${id} Not Found`)
         break
       }
 
-      // Add download URL to response
-      //TODO improve download URL by dynamically adding HOST_NAME
+      // Add download URL to response (for debugging)
+      //TODO maybe improve download URL by dynamically adding HOST_NAME
       meme.downloadURL = `http://localhost:3000/api/meme/image/${meme._id}?download=true`
-      // Add embed URL to response
-      //TODO dynamically add HOST_NAME
+      // Add embed URL to response (for debugging)
+      //TODO maybe dynamically add HOST_NAME
       meme.embedURL = `http://localhost:3000/api/meme/image/${meme._id}`
       // Return meme data
       res.status(200).json(meme)
