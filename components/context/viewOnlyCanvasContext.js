@@ -25,6 +25,9 @@ export const ViewOnlyCanvasProvider = ({ children }) => {
               c.renderAll.bind(c)
               let objs = json['objects']
               for (let i = 0; i < objs.length; i++) {
+                // if (objs[i].hasOwnProperty('image')) {
+                //   crossOrigin: 'anonymous'
+                // }
                 if (objs[i].hasOwnProperty('video_src')) {
                   function getVideoElement(element) {
                     let videoE = document.createElement('video')
@@ -44,8 +47,10 @@ export const ViewOnlyCanvasProvider = ({ children }) => {
                   let fab_video = new fabric.Image(videoE, {
                     left: objs[i]['left'],
                     top: objs[i]['top'],
+                    angle: objs[i]['angle'],
                     selectable: false,
                     objectCaching: false,
+                    crossOrigin: 'anonymous',
                   })
                   c.add(fab_video)
                   fab_video.getElement().play()

@@ -172,7 +172,7 @@ export const FabricProvider = ({ children }) => {
           img.objectCaching = false
         }
         customSelect(img)
-        img.set({ id: 'TEMPLATE' })
+        img.set({ id: 'TEMPLATE', crossOrigin: 'anonymous' })
         canvas.add(img)
         canvas.sendToBack(img)
         canvas.renderAll()
@@ -205,7 +205,7 @@ export const FabricProvider = ({ children }) => {
 
             let videoE = getVideoElement(template)
             let fab_video = new fabric.Image(videoE, { left: 0, top: 0 })
-            fab_video.set({ id: 'TEMPLATE', video_src: url_mp4 })
+            fab_video.set({ id: 'TEMPLATE', video_src: url_mp4, crossOrigin: 'anonymous' })
             canvas.add(fab_video)
             fab_video.getElement().play()
             fabric.util.requestAnimFrame(function render() {
@@ -220,9 +220,13 @@ export const FabricProvider = ({ children }) => {
             //   }
             // })(fabric.Object.prototype.toObject)
           } else {
-            new fabric.Image.fromURL(template.url, (img) => {
-              insertImage(img, canvas)
-            })
+            new fabric.Image.fromURL(
+              template.url,
+              (img) => {
+                insertImage(img, canvas)
+              },
+              { crossOrigin: 'Anonymous' }
+            )
           }
         }
         console.log({

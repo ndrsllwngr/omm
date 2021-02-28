@@ -10,7 +10,7 @@ export const TextToSpeech = ({ value = '' }) => {
 
   return (
     <div>
-      <TertiaryBtn onClick={() => speak({ text: value, rate, pitch })}>🗣</TertiaryBtn>
+      <TertiaryBtn onClick={() => speak({ text: value, rate, pitch })}>🗣 TextToSpeech</TertiaryBtn>
     </div>
   )
 }

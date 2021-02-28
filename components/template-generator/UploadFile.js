@@ -14,7 +14,7 @@ const allTypes = [...imageTypes, ...videoTypes]
 
 export const UploadFile = ({ showDialog, closeDialog }) => {
   const { file, progress, error, createTemplate, resetState } = useStorage()
-  const [name, setName] = useState(null)
+  const [name, setName] = useState('')
   const [genericFile, setGenericFile] = useState(null)
   const [imageFile, setImageFile] = useState(null)
   const [videoFile, setVideoFile] = useState(null)
@@ -25,7 +25,7 @@ export const UploadFile = ({ showDialog, closeDialog }) => {
   }, [])
 
   const resetLocalState = () => {
-    setName(null)
+    setName('')
     setImageFile(null)
     setVideoFile(null)
     setMetadata(null)

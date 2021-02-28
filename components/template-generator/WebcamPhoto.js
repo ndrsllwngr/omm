@@ -10,7 +10,7 @@ import { MEDIA_TYPE } from '@/lib/constants'
 export const WebcamPhoto = ({ showDialog, closeDialog }) => {
   const [playing, setPlaying] = useState(false)
   const { createTemplate } = useStorage()
-  const [name, setName] = useState(null)
+  const [name, setName] = useState('')
   const [width] = useState(500)
   const [height] = useState(500)
 
@@ -19,7 +19,7 @@ export const WebcamPhoto = ({ showDialog, closeDialog }) => {
   }, [])
 
   const resetLocalState = () => {
-    setName(null)
+    setName('')
   }
 
   const startVideo = () => {

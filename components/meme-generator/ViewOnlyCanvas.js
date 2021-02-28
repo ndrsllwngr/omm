@@ -17,7 +17,7 @@ export const ViewOnlyCanvas = ({ meme }) => {
   )
 }
 
-const ViewOnlyCanvasInner = ({ meme }) => {
+export const ViewOnlyCanvasInner = ({ meme }) => {
   const { json, setJson } = useViewOnlyCanvasJson()
   const { canvas, initCanvas, loadFromJSON, canvasRef, resetCanvas } = useViewOnlyCanvasCanvas()
 

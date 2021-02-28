@@ -93,13 +93,17 @@ export const MemeEditor = () => {
 
   const addImg = (e, url) => {
     e.preventDefault()
-    new fabric.Image.fromURL(url, (img) => {
-      img.scale(0.75)
-      customSelect(img)
-      canvas.add(img)
-      canvas.renderAll()
-      setImgURL('')
-    })
+    new fabric.Image.fromURL(
+      url,
+      (img) => {
+        img.scale(0.75)
+        customSelect(img)
+        canvas.add(img)
+        canvas.renderAll()
+        setImgURL('')
+      },
+      { crossOrigin: 'Anonymous' }
+    )
     console.log({ src: 'MemeEditor.addImg', url, canvas })
   }
 
@@ -130,6 +134,7 @@ export const MemeEditor = () => {
       'preserveObjectStacking',
       'enableRetinaScaling',
       'video_src',
+      'crossOrigin',
     ])
     setSvgExport(svg)
     setJsonExport(json)
@@ -158,6 +163,7 @@ export const MemeEditor = () => {
       'preserveObjectStacking',
       'enableRetinaScaling',
       'video_src',
+      'crossOrigin',
     ])
     const captions = canvasAsJson.objects
       ?.filter((obj) => obj.type === 'textbox')

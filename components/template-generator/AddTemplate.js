@@ -30,6 +30,7 @@ export const AddTemplate = () => {
       updateShowDialog((draft) => {
         draft[dialogName] = false
       })
+      //router.reload()
     },
     [updateShowDialog]
   )
