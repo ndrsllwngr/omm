@@ -13,6 +13,7 @@ import { ShareButtons } from '@/components/ui/ShareButtons'
 import { TertiaryBtn, VoteDownBtn, VoteUpBtn } from '@/components/ui/Buttons'
 import { useAuth } from '@/components/context/authContext'
 import { TextToSpeech } from '@/components/TextToSpeech'
+import { MemeDetails } from '@/components/MemeDetails'
 
 export const SingleMeme = ({ meme, enableLink }) => {
   const auth = useAuth()
@@ -37,16 +38,25 @@ export const SingleMeme = ({ meme, enableLink }) => {
             </a>
           </Link>
         ) : (
-          <a>
+          <>
             <h1 className={'text-lg font-bold text-black dark:text-white truncate'}>
               {meme.title}
             </h1>
-          </a>
+            <MemeDetails memeId={meme._id} />
+          </>
         )}
-        {/*TODO Add captions to speech output*/}
         <TextToSpeech
           value={
-            meme.title ? ['Title: ', meme.title, 'Image: ', meme.template?.name].join(',') : ''
+            meme.title
+              ? [
+                  'Title: ',
+                  meme.title,
+                  'Image: ',
+                  meme.template?.name,
+                  'Captions: ',
+                  meme.captions,
+                ].join(',')
+              : ''
           }
         />
       </div>
