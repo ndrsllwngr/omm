@@ -42,7 +42,7 @@ export default function AuthContextComp({ children }) {
           return loginEmailPassword({ email, password })
         })
         .then((authUser) => {
-          // Insert the ne users custom user data into the user collection
+          // Insert the new users custom user data into the mongoDB user collection
           return insertOneUser({
             variables: {
               user: {
@@ -62,7 +62,7 @@ export default function AuthContextComp({ children }) {
   const loginEmailPassword = ({ email, password }) => {
     // Create a user password credential Object
     const credentials = Realm.Credentials.emailPassword(email, password)
-    // Try to login with the provided credentials
+    // Try to login to realm with the provided credentials
     return app.logIn(credentials)
   }
 
