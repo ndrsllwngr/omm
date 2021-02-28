@@ -1,16 +1,17 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { PrimaryBtn, TertiaryBtn } from '@/components/ui/Buttons'
+import { compressAccurately, dataURLtoFile, downloadFile, EImageType } from 'image-conversion'
 import { Dialog } from '@reach/dialog'
 import VisuallyHidden from '@reach/visually-hidden'
 import { IoClose } from 'react-icons/io5'
 import PropTypes from 'prop-types'
 import { memeType } from '@/components/types/types'
+import { MixedCheckbox } from '@reach/checkbox'
 import {
   useViewOnlyCanvasCanvas,
   ViewOnlyCanvasProvider,
 } from '@/components/context/viewOnlyCanvasContext'
 import { ViewOnlyCanvasInner } from '@/components/meme-generator/ViewOnlyCanvas'
-import { compressAccurately, dataURLtoFile, downloadFile, EImageType } from 'image-conversion'
 
 export const DownloadMemeModal = ({ meme, showDialog, closeDialog }) => {
   return (
@@ -38,16 +39,31 @@ export const DownloadMemeModal = ({ meme, showDialog, closeDialog }) => {
 
 const DownloadMemeInner = ({ meme }) => {
   const { canvasRef } = useViewOnlyCanvasCanvas()
+  const [size, setSize] = useState(50)
+  const [useCompression, setUseCompression] = useState(false)
+
+  const getRootUrl = () => {
+    return window.location.origin
+      ? window.location.origin + '/'
+      : window.location.protocol + '/' + window.location.host + '/'
+  }
+
   const compressBlob = ({ blob }) => {
-    console.log({ blob })
-    compressAccurately(blob, {
-      size: 20, // image size, e.g. 20 = 20 kb
-      accuracy: 0.99,
-      scale: 1,
-      type: EImageType.PNG,
-    }).then((res) => {
-      downloadFile(res, `${meme._id}.png`)
-    })
+    if (!useCompression) {
+      console.log({ src: 'no compression', blob })
+      downloadFile(blob, `${meme._id}.png`)
+    } else {
+      console.log({ src: 'compression', blob, size })
+      // image size, e.g. 20 = 20 kb
+      compressAccurately(blob, {
+        size: size,
+        scale: 1,
+        accuracy: 0.99,
+        //type: EImageType.PNG,
+      }).then((res) => {
+        downloadFile(res, `${meme._id}.png`)
+      })
+    }
   }
   const compressDataUrl = ({ dataUrl }) => {
     console.log({ dataUrl })
@@ -56,24 +72,49 @@ const DownloadMemeInner = ({ meme }) => {
   return (
     <>
       <ViewOnlyCanvasInner meme={meme} />
-
-      <PrimaryBtn
-        onClick={() => {
-          compressDataUrl({ dataUrl: canvasRef.current.toDataURL('image/png', 1.0) })
-        }}
-      >
-        Download (Client)
-      </PrimaryBtn>
-      <PrimaryBtn
-        onClick={() => {
-          fetch(`http://localhost:3000/api/meme/image/${meme._id}`)
-            .then((res) => res.blob())
-            .then((blob) => compressBlob({ blob }))
-            .catch((e) => console.error(e))
-        }}
-      >
-        Download (Server)
-      </PrimaryBtn>
+      <div className={'flex flex-row'}>
+        <div>
+          <label>
+            <MixedCheckbox
+              value={useCompression}
+              checked={useCompression}
+              onChange={(e) => setUseCompression(e.target.checked)}
+            />
+            Compress file
+          </label>
+          {useCompression && (
+            <>
+              <h4>File size in kb</h4>
+              <input
+                type={'number'}
+                value={size}
+                onChange={(e) => setSize(parseInt(e.target.value))}
+                step={1}
+                min={0}
+              />
+            </>
+          )}
+        </div>
+      </div>
+      <div className={'flex flex-row'}>
+        <PrimaryBtn
+          onClick={() => {
+            compressDataUrl({ dataUrl: canvasRef.current.toDataURL('image/png', 1.0) })
+          }}
+        >
+          Download (Client)
+        </PrimaryBtn>
+        <PrimaryBtn
+          onClick={() => {
+            fetch(`${getRootUrl()}api/meme/image/${meme._id}`)
+              .then((res) => res.blob())
+              .then((blob) => compressBlob({ blob }))
+              .catch((e) => console.error(e))
+          }}
+        >
+          Download (Server)
+        </PrimaryBtn>
+      </div>
     </>
   )
 }

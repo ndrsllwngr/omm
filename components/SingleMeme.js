@@ -63,11 +63,13 @@ export const SingleMeme = ({ meme, enableLink }) => {
               value={
                 meme.title
                   ? [
-                      'Title: ',
+                      'You are on the omm page.',
+                      'You are viewing a meme.',
+                      'The meme title is ',
                       meme.title,
-                      'Image: ',
+                      'It contains a image which can be described as ',
                       meme.template?.name,
-                      'Captions: ',
+                      'and it contains the following captions: ',
                       meme.captions,
                     ].join(',')
                   : ''
