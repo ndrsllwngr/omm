@@ -10,7 +10,7 @@ import { IoHelp, IoPlay, IoPause, IoArrowForward, IoArrowBack, IoShuffle } from 
 import { gql, useMutation, useQuery } from '@apollo/client'
 import { getNavigationQueryVariables } from '@/lib/utils'
 import { useViewCount } from '@/components/hooks/useViewCount'
-import { memeType } from '@/components/types/types'
+import { memeType, templateType } from '@/components/types/types'
 import { Comment, CommentInput } from '@/components/Comment'
 import { useAuth } from '@/components/context/authContext'
 
@@ -78,7 +78,7 @@ const UPDATE_MEME = gql`
   }
 `
 
-export const Slideshow = ({ meme, sort, filter, yesterday }) => {
+export const Slideshow = ({ meme, sort, filter, yesterday, template }) => {
   const viewCount = useViewCount()
   const auth = useAuth()
   const [updateOneMeme] = useMutation(UPDATE_MEME)
@@ -90,7 +90,13 @@ export const Slideshow = ({ meme, sort, filter, yesterday }) => {
 
   const { loading: loadingPrev, error: errorPrev, data: dataPrev } = useQuery(FETCH_MEME, {
     variables: {
-      ...getNavigationQueryVariables({ meme, sortEnum: sort, filterEnum: filter, yesterday }),
+      ...getNavigationQueryVariables({
+        meme,
+        sortEnum: sort,
+        filterEnum: filter,
+        yesterday,
+        template: template,
+      }),
       next: false,
     },
     notifyOnNetworkStatusChange: true,
@@ -99,7 +105,13 @@ export const Slideshow = ({ meme, sort, filter, yesterday }) => {
 
   const { loading: loadingNext, error: errorNext, data: dataNext } = useQuery(FETCH_MEME, {
     variables: {
-      ...getNavigationQueryVariables({ meme, sortEnum: sort, filterEnum: filter, yesterday }),
+      ...getNavigationQueryVariables({
+        meme,
+        sortEnum: sort,
+        filterEnum: filter,
+        yesterday,
+        template: template,
+      }),
       next: true,
     },
     notifyOnNetworkStatusChange: true,
@@ -107,7 +119,13 @@ export const Slideshow = ({ meme, sort, filter, yesterday }) => {
   })
 
   const { data: randomMeme } = useQuery(FETCH_RANDOM_MEME, {
-    variables: getNavigationQueryVariables({ meme, sortEnum: sort, filterEnum: filter, yesterday }),
+    variables: getNavigationQueryVariables({
+      meme,
+      sortEnum: sort,
+      filterEnum: filter,
+      yesterday,
+      template: template,
+    }),
     notifyOnNetworkStatusChange: true,
     fetchPolicy: 'no-cache',
   })
@@ -184,6 +202,7 @@ Slideshow.propTypes = {
   sort: PropTypes.string,
   filter: PropTypes.string,
   yesterday: PropTypes.string,
+  template: templateType,
 }
 
 const MemeNavigation = ({ prevMeme, nextMeme, loadingNext, randomMeme }) => {
