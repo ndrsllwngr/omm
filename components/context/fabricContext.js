@@ -190,9 +190,14 @@ export const FabricProvider = ({ children }) => {
           if (template.mediaType === MEDIA_TYPE.VIDEO) {
             console.log('')
             function getVideoElement(element) {
+              const hRatio = canvas.getWidth() / element.width
+              const vRatio = canvas.getHeight() / element.height
+              const ratio = Math.min(hRatio, vRatio)
+              const centerShiftX = (canvas.getWidth() - element.width * ratio) / 2
+              const centerShiftY = (canvas.getHeight() - element.height * ratio) / 2
               let videoE = document.createElement('video')
-              videoE.width = element.width
-              videoE.height = element.height
+              videoE.width = element.height * ratio
+              videoE.height = element.height * ratio
               videoE.muted = true
               //videoE.crossOrigin = 'anonymous'
               let source = document.createElement('source')
@@ -204,8 +209,19 @@ export const FabricProvider = ({ children }) => {
             let url_mp4 = template.url
 
             let videoE = getVideoElement(template)
-            let fab_video = new fabric.Image(videoE, { left: 0, top: 0 })
+            const hRatio = canvas.getWidth() / template.width
+            const vRatio = canvas.getHeight() / template.height
+            const ratio = Math.min(hRatio, vRatio)
+            const centerShiftX = (canvas.getWidth() - template.width * ratio) / 2
+            const centerShiftY = (canvas.getHeight() - template.height * ratio) / 2
+            let fab_video = new fabric.Image(videoE, {
+              left: centerShiftX,
+              top: centerShiftY,
+              width: template.width * ratio,
+              height: template.height * ratio,
+            })
             fab_video.set({ id: 'TEMPLATE', video_src: url_mp4, crossOrigin: 'anonymous' })
+            fab_video.setCoords()
             canvas.add(fab_video)
             fab_video.getElement().play()
             fabric.util.requestAnimFrame(function render() {
