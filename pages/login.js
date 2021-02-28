@@ -3,6 +3,9 @@ import React from 'react'
 import LoginForm from '@/components/forms/LoginForm'
 import { Navbar } from '@/components/Navbar'
 
+/*
+Login Page
+ */
 export default function Login() {
   return (
     <>

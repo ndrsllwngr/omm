@@ -2,6 +2,9 @@ import React from 'react'
 import { HtmlHead } from '@/components/HtmlHead'
 import { Navbar } from '@/components/Navbar'
 
+/*
+Unauthorized page
+ */
 const UnauthorizedPage = () => {
   return (
     <>

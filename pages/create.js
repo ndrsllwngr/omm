@@ -7,6 +7,9 @@ import { ProtectedRoute } from '@/components/context/authContext'
 import { ImgFlipCollection } from '@/components/meme-generator/ImgFlipCollection'
 import { AddTemplate } from '@/components/template-generator/AddTemplate'
 
+/*
+Meme create page
+ */
 const CreatePage = () => {
   const [openTab, setOpenTab] = useState(1)
 

@@ -8,10 +8,14 @@ import { useFilterContext, useSortContext } from '@/components/context/viewsCont
 import { translateFilter, translateSort } from '@/lib/utils'
 import { FilterSection } from '@/components/FilterSection'
 
-// https://github.com/danbovey/react-infinite-scroller
+/*
+Landing page (Overview)
+ */
 // https://dzone.com/articles/fast-paging-with-mongodb
 const LandingPage = () => {
+  //Loading sorting information from context
   const { sort } = useSortContext()
+  //Loading filter information from context
   const { filter, yesterday, template } = useFilterContext()
   return (
     <>
@@ -24,7 +28,7 @@ const LandingPage = () => {
     </>
   )
 }
-
+//Query to load all public memes with given filter and sort parameter
 export const ALL_PUBLIC_MEMES_QUERY = gql`
   query getAllPublicMemes($query: MemeQueryInput, $sortBy: MemeSortByInput) {
     memes(query: $query, sortBy: $sortBy) {
@@ -75,6 +79,7 @@ export const ALL_PUBLIC_MEMES_QUERY = gql`
 
 // eslint-disable-next-line react/prop-types
 const LandingPageInner = ({ sort, filter, yesterday, template }) => {
+  //Query data from Database
   const { loading, error, data, networkStatus } = useQuery(ALL_PUBLIC_MEMES_QUERY, {
     variables: {
       query: translateFilter({ filterEnum: filter, yesterday, template }),
@@ -84,9 +89,12 @@ const LandingPageInner = ({ sort, filter, yesterday, template }) => {
   })
   const loadingMoreMemes = networkStatus === NetworkStatus.fetchMore
 
+  /*
   useEffect(() => {
     console.log({ src: 'LandingPageInner', data, error, loading })
   }, [data, error, loading])
+
+   */
 
   if (error) return <div>Error loading memes.</div>
   if (loading && !loadingMoreMemes) return <div>Loading</div>
@@ -104,7 +112,9 @@ const LandingPageInner = ({ sort, filter, yesterday, template }) => {
   )
 }
 
-/*const LandingPageInner = () => {
+/*
+  // https://github.com/danbovey/react-infinite-scroller
+  const LandingPageInner = () => {
   const { dbMemes: memes, triggerNextMemes, endOfFiles, updateMemes } = useDatabaseMemes()
   if (!memes || !(memes.length > 0))
     return <div className={'text-black dark:text-white'}>loading...</div>

@@ -1,6 +1,10 @@
 import React from 'react'
 import Document, { Html, Head, Main, NextScript } from 'next/document'
 
+/*
+Class provided by Next.
+Wrapper for global html head elements
+ */
 class NextSite extends Document {
   render() {
     return (

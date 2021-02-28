@@ -8,6 +8,9 @@ import { FabricProvider } from '@/components/context/fabricContext'
 import { AutoplayProvider } from '@/components/context/autoplayContext'
 import { ViewsProvider } from '@/components/context/viewsContext'
 
+/*
+App Wrapper including all context provider
+ */
 // eslint-disable-next-line react/prop-types
 export default function App({ Component, pageProps }) {
   const apolloClient = useApollo(pageProps)

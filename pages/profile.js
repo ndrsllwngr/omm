@@ -6,6 +6,9 @@ import { ProfileDrafts } from '@/components/ProfileDrafts'
 import { ProfileInfo } from '@/components/ProfileInfo'
 import { ProfileMemeHistory } from '@/components/ProfileMemeHistory'
 
+/*
+Users profile page
+ */
 const ProfilePage = () => {
   return (
     <>

@@ -16,9 +16,12 @@ import { TextToSpeech } from '@/components/TextToSpeech'
 import { MemeDetails } from '@/components/MemeDetails'
 
 export const SingleMeme = ({ meme, enableLink }) => {
+  //Get authentication
   const auth = useAuth()
   const { setJson } = useFabricJson()
+  //Get Next Router
   const router = useRouter()
+  //Get Votes
   const { upVote, downVote, getVoteState } = useVoting()
   return (
     <div className="flex-col max-w-md">

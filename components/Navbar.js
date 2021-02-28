@@ -7,15 +7,21 @@ import { PrimaryBtn, TertiaryBtn } from '@/components/ui/Buttons'
 import { useDetectOutsideClick } from '@/components/hooks/useDetectOutsideClick'
 import { Search } from '@/components/Search'
 
+/*
+Responsive navbar including navigation buttons and search
 //https://tailwindcomponents.com/component/responsive-navbar-2
+//https://codepen.io/codetimeio/pen/RYMqvL
+ */
 export const Navbar = () => {
+  //Init reference to html element
   const toggleRef = useRef(null)
+  //Get outside click detection hook to close menu dropdown on mobile
   const [isOpen, setIsOpen] = useDetectOutsideClick(toggleRef, false)
+  //Open and close dropdown
   const handleToggle = () => {
     setIsOpen(!isOpen)
   }
   return (
-    //https://codepen.io/codetimeio/pen/RYMqvL
     <header className="p-4 pb-0 bg-custom-gray shadow-lg border-b md:border-b-0 ">
       <div className="max-w-7xl mx-auto md:pb-4 md:flex md:items-center md:justify-between ">
         {/*Logo */}
