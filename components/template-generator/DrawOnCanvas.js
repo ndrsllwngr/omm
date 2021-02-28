@@ -9,14 +9,14 @@ import { MEDIA_TYPE } from '@/lib/constants'
 
 export const DrawOnCanvas = ({ showDialog, closeDialog }) => {
   const { createTemplate } = useStorage()
-  const [name, setName] = useState(null)
+  const [name, setName] = useState('')
   const [width] = useState(500)
   const [height] = useState(500)
   const [isDrawing, setIsDrawing] = useState(false)
   const canvasRef = useRef(null)
 
   const resetLocalState = () => {
-    setName(null)
+    setName('')
   }
 
   useEffect(() => {

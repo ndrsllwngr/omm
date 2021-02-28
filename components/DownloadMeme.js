@@ -8,7 +8,7 @@ export const DownloadMeme = ({ meme }) => {
 
   return (
     <>
-      <TertiaryBtn onClick={() => setShowDialog(true)}>Download</TertiaryBtn>
+      <TertiaryBtn onClick={() => setShowDialog(true)}>🏞 Download</TertiaryBtn>
       <>
         <DownloadMemeModal
           showDialog={showDialog}

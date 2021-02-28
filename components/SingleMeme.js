@@ -40,18 +40,16 @@ export const SingleMeme = ({ meme, enableLink }) => {
               </a>
             </Link>
             <TextToSpeech
-              value={
-                meme.title
-                  ? [
-                      'Title: ',
-                      meme.title,
-                      'Image: ',
-                      meme.template?.name,
-                      'Captions: ',
-                      meme.captions,
-                    ].join(',')
-                  : ''
-              }
+              value={[
+                'You are on the omm landing page.',
+                'You are viewing a meme.',
+                'The meme title is ',
+                meme.title,
+                'It contains a image which can be described as ',
+                meme.template?.name,
+                'and it contains the following captions: ',
+                meme.captions,
+              ].join(',')}
             />
           </>
         ) : (
@@ -59,24 +57,22 @@ export const SingleMeme = ({ meme, enableLink }) => {
             <h1 className={'text-lg font-bold text-black dark:text-white truncate'}>
               {meme.title}
             </h1>
-            <TextToSpeech
-              value={
-                meme.title
-                  ? [
-                      'You are on the omm page.',
-                      'You are viewing a meme.',
-                      'The meme title is ',
-                      meme.title,
-                      'It contains a image which can be described as ',
-                      meme.template?.name,
-                      'and it contains the following captions: ',
-                      meme.captions,
-                    ].join(',')
-                  : ''
-              }
-            />
-            <MemeDetails memeId={meme._id} />
-            <DownloadMeme meme={meme} />
+            <div className={'flex flex-row'}>
+              <TextToSpeech
+                value={[
+                  'You are on the omm page.',
+                  'You are viewing a meme.',
+                  'The meme title is ',
+                  meme.title,
+                  'It contains a image which can be described as ',
+                  meme.template?.name,
+                  'and it contains the following captions: ',
+                  meme.captions,
+                ].join(',')}
+              />
+              <MemeDetails memeId={meme._id} />
+              <DownloadMeme meme={meme} />
+            </div>
           </>
         )}
       </div>

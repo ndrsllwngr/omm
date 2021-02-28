@@ -8,7 +8,7 @@ export const MemeDetails = ({ memeId }) => {
 
   return (
     <>
-      <TertiaryBtn onClick={() => setShowDialog(true)}>ℹ️</TertiaryBtn>
+      <TertiaryBtn onClick={() => setShowDialog(true)}>ℹ️ Details</TertiaryBtn>
       <>
         <MemeDetailsModal
           showDialog={showDialog}

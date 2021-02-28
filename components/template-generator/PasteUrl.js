@@ -9,13 +9,13 @@ import { MEDIA_TYPE } from '@/lib/constants'
 
 export const PasteUrl = ({ showDialog, closeDialog }) => {
   const [url, setUrl] = useState('')
-  const [name, setName] = useState(null)
+  const [name, setName] = useState('')
   const [width] = useState(null)
   const [height] = useState(null)
   const { createExternalTemplate } = useStorage()
 
   const resetLocalState = () => {
-    setName(null)
+    setName('')
   }
 
   const handleSubmit = (evt) => {
