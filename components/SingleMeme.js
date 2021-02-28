@@ -14,6 +14,7 @@ import { TertiaryBtn, VoteDownBtn, VoteUpBtn } from '@/components/ui/Buttons'
 import { useAuth } from '@/components/context/authContext'
 import { TextToSpeech } from '@/components/TextToSpeech'
 import { MemeDetails } from '@/components/MemeDetails'
+import { DownloadMeme } from '@/components/DownloadMeme'
 
 export const SingleMeme = ({ meme, enableLink }) => {
   const auth = useAuth()
@@ -30,35 +31,52 @@ export const SingleMeme = ({ meme, enableLink }) => {
       </p>
       <div className={'flex flex-row flex-wrap items-start'}>
         {enableLink ? (
-          <Link href={`/meme/${meme._id}`}>
-            <a>
-              <h1 className={'text-lg font-bold text-black dark:text-white truncate'}>
-                {meme.title}
-              </h1>
-            </a>
-          </Link>
+          <>
+            <Link href={`/meme/${meme._id}`}>
+              <a>
+                <h1 className={'text-lg font-bold text-black dark:text-white truncate'}>
+                  {meme.title}
+                </h1>
+              </a>
+            </Link>
+            <TextToSpeech
+              value={
+                meme.title
+                  ? [
+                      'Title: ',
+                      meme.title,
+                      'Image: ',
+                      meme.template?.name,
+                      'Captions: ',
+                      meme.captions,
+                    ].join(',')
+                  : ''
+              }
+            />
+          </>
         ) : (
           <>
             <h1 className={'text-lg font-bold text-black dark:text-white truncate'}>
               {meme.title}
             </h1>
+            <TextToSpeech
+              value={
+                meme.title
+                  ? [
+                      'Title: ',
+                      meme.title,
+                      'Image: ',
+                      meme.template?.name,
+                      'Captions: ',
+                      meme.captions,
+                    ].join(',')
+                  : ''
+              }
+            />
             <MemeDetails memeId={meme._id} />
+            <DownloadMeme meme={meme} />
           </>
         )}
-        <TextToSpeech
-          value={
-            meme.title
-              ? [
-                  'Title: ',
-                  meme.title,
-                  'Image: ',
-                  meme.template?.name,
-                  'Captions: ',
-                  meme.captions,
-                ].join(',')
-              : ''
-          }
-        />
       </div>
 
       {enableLink ? (
