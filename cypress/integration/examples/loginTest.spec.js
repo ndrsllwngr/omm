@@ -1,5 +1,5 @@
 describe('Cypress Demo-Login', () => {
-  it('sign up scenario', () => {
+  it('login scenario', () => {
     cy.visit('https://omm.vercel.app/')
     cy.get('.hover\\3Atext-gray-300').click()
     cy.get('#email').type('newuser123@testing.com')
