@@ -33,7 +33,7 @@ export const TemplateDetailsModal = ({ templateId, showDialog, closeDialog }) =>
 
 export const ALL_PUBLIC_MEMES_QUERY = gql`
   query getAllPublicMemes {
-    memes {
+    memes(query: { visibility: "PUBLIC", isDraft: false }, sortBy: CREATEDAT_DESC) {
       _id
       commentCount
       createdAt
@@ -122,8 +122,7 @@ const TemplateDetailsInner = ({ templateId }) => {
         setDownVotes(downs)
         setViews(vs)
         setTotalViews(total)
-        console.log('res: ', memesFromTemplateIDs)
-        console.log({ ups, downs, vs, total })
+        console.log({ src: 'TemplateDetailsInner', ups, downs, vs, total, memesFromTemplateIDs })
       }
     }
   }, [data, loading, error, calculationIsDone, setCalculationIsDone, memesFromTemplate, templateId])
