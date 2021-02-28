@@ -21,6 +21,7 @@ export default async function memeHandler(req, res) {
   // Initialize mongodb variables
   const db = await getMongoDBClient()
   const memeCollection = db.collection(MONGODB_COLLECTION.MEMES)
+  //Get the fabric instance (for canvases)
   const fabric = getFabric()
   // Initialize archiver
   const archiver = Archiver('zip', {
@@ -32,15 +33,20 @@ export default async function memeHandler(req, res) {
     // https://www.npmjs.com/package/archiver
     // https://www.npmjs.com/package/fabric
     case 'GET':
+      // Get limit
       const lim = parseInt(limit)
+      // If lilit is negative or 0 -> return error
       if (lim && lim <= 0) {
         res.status(400).end('Limit has to be a positive number')
         break
       }
 
+      //Regex for searching for the titles
       const re = '(?i)' + search
+      // The corresponding query
       const query = { title: { $regex: re } }
 
+      // Get the memes from the database
       const memes = await (lim
         ? memeCollection.find(query).limit(lim)
         : memeCollection.find(query)
@@ -48,6 +54,7 @@ export default async function memeHandler(req, res) {
 
       console.log({ memes: memes.map((meme) => meme.title), query })
 
+      // If no memes were found return 404
       if (memes.length <= 0) {
         res.status(404).end('No memes matching the provided criteria found')
         break
@@ -56,32 +63,42 @@ export default async function memeHandler(req, res) {
       // Set headers for response
       res.setHeader('Content-Type', 'application/zip')
       res.setHeader('Content-disposition', 'attachment; filename=memes.zip')
-      // Send the file to the route output.
+      // Pipe a new zip file to the route output.
       archiver.pipe(res)
 
+      // Create a Image from each meme and create a list of promises to wait for all memes to be successfully done
       const imageTasks = memes.map((meme) => {
         return new Promise((resolve, reject) => {
+          //Get the json for the canvas from the meme
           const memeJSON = JSON.parse(meme.json)
+          //Get the width & height for the canvas from the meme
           const width = memeJSON.width
           const height = memeJSON.height
 
+          // Create a new canvas with the desired sizes
           const canvas = new fabric.StaticCanvas(null, { width: width, height: height })
 
+          // Load the JSON on the canvas
           canvas.loadFromJSON(memeJSON, () => {
+            // Render the canvas
             canvas.renderAll()
 
+            //Create a .png stream from the canvas
             const stream = canvas.createPNGStream()
+            // Resolve the Promise when the Stream / Meme creation is done
             stream.on('end', resolve)
+
+            // Resolve the Promise when the Stream fails
             stream.on('error', reject)
+            // Append the Stream / File to the zip
             archiver.append(stream, { name: `${meme._id.toString()}.png` })
           })
         })
       })
-      // Finalize stream
+      // Wait for all the images to be successfully created & finalize the zip
       Promise.all(imageTasks).then(() => {
         archiver.finalize()
       })
-
       break
 
     // Using:
