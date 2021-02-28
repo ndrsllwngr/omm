@@ -16,8 +16,17 @@ export default async function memeHandler(req, res) {
       // Remove any existing id
       delete meme['_id']
       // Parse ObjectIDs
-      meme.template = new ObjectID(meme.template.$oid)
+      if (meme.template?.$oid) {
+        meme.template = new ObjectID(meme.template.$oid)
+      } else {
+        delete meme['template']
+      }
       meme.createdBy = new ObjectID(meme.createdBy.$oid)
+      if (meme.forkedFrom?.$oid) {
+        meme.forkedFrom = new ObjectID(meme.forkedFrom.$oid)
+      } else {
+        delete meme['forkedFrom']
+      }
       // Set createdAt
       meme.createdAt = new Date()
       // Reset variables
