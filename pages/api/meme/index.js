@@ -11,6 +11,7 @@ export default async function memeHandler(req, res) {
 
   switch (method) {
     case 'PUT':
+      // Get the meme from the request body
       let meme = req.body
       // Remove any existing id
       delete meme['_id']

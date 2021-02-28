@@ -1,6 +1,7 @@
 import { gql, useMutation } from '@apollo/client'
 import { useAuth } from '@/components/context/authContext'
 
+// Mutation for adding comments
 const ADD_COMMENT = gql`
   mutation AddComment(
     $meme_id: ObjectId!
@@ -26,9 +27,11 @@ const ADD_COMMENT = gql`
 export const useComments = () => {
   const [addCommentMutation] = useMutation(ADD_COMMENT)
 
+  // Get authentication provider
   const auth = useAuth()
 
   const addComment = (meme, text) => {
+    // If a the usser is logged in add a comment to the meme
     if (auth.isAuthenticated()) {
       console.log({ meme, text })
       addCommentMutation({
