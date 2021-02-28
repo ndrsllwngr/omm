@@ -2,6 +2,7 @@ import React, { useEffect } from 'react'
 import { useTemplate } from '@/components/context/fabricContext'
 import { gql, NetworkStatus, useQuery } from '@apollo/client'
 import { MEDIA_TYPE } from '@/lib/constants'
+import { TemplateDetails } from '@/components/meme-generator/TemplateDetails'
 
 export const ALL_TEMPLATES = gql`
   query getAllTemplates {
@@ -42,22 +43,25 @@ export const TemplateCollection = () => {
       <div>
         {data &&
           data.templates.map((template, i) => (
-            <button key={i} onClick={() => updateTemplate(template)}>
-              {template.mediaType === MEDIA_TYPE.VIDEO ? (
-                <video
-                  preload="auto"
-                  width="150"
-                  height="150"
-                  controls={true}
-                  autoPlay={false}
-                  muted={true}
-                >
-                  <source src={template.url} type="video/mp4" />
-                </video>
-              ) : (
-                <img src={template.url} alt="uploaded image" width="150" height="150" />
-              )}
-            </button>
+            <div key={i} className={'flex flex-row'}>
+              <TemplateDetails templateId={template._id} />
+              <button onClick={() => updateTemplate(template)}>
+                {template.mediaType === MEDIA_TYPE.VIDEO ? (
+                  <video
+                    preload="auto"
+                    width="150"
+                    height="150"
+                    controls={true}
+                    autoPlay={false}
+                    muted={true}
+                  >
+                    <source src={template.url} type="video/mp4" />
+                  </video>
+                ) : (
+                  <img src={template.url} alt="uploaded image" width="150" height="150" />
+                )}
+              </button>
+            </div>
           ))}
       </div>
     </>
