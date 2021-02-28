@@ -5,9 +5,8 @@ import PropTypes from 'prop-types'
 // import firebase from '@/lib/firebase'
 // import { IoCloud } from 'react-icons/io5'
 import { SORT } from '@/lib/constants'
-//https://tailwindui.com/components/application-ui/elements/dropdowns
-//https://letsbuildui.dev/articles/building-a-dropdown-menu-component-with-react-hooks
 
+//Define all available sorting option
 const supportedSorts = [
   SORT.LATEST,
   SORT.OLDEST,
@@ -16,12 +15,21 @@ const supportedSorts = [
   SORT.MOST_POINTS,
   SORT.LEAST_POINTS,
 ]
+/*
+Component includes all functionality to sort memes
+https://tailwindui.com/components/application-ui/elements/dropdowns
+https://letsbuildui.dev/articles/building-a-dropdown-menu-component-with-react-hooks
+ */
 export const Sort = ({ enableNotification = false }) => {
+  //Init reference to html element
   const dropdownRef = useRef(null)
+  // Get outside click detection hook to close dropdown
   const [isActive, setIsActive] = useDetectOutsideClick(dropdownRef, false)
+  // Open and close dropdown
   const onClick = () => setIsActive(!isActive)
+  // Get sorting state and set function from context
   const { sort, setSort } = useSortContext()
-
+  // Handles sorting changes
   const handleClick = (newSort) => {
     setIsActive(false)
     if (newSort !== sort) {

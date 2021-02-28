@@ -3,7 +3,7 @@ import { useTemplateContext } from '@/components/context/viewsContext'
 import { useDetectOutsideClick } from '@/components/hooks/useDetectOutsideClick'
 import { gql, useQuery } from '@apollo/client'
 import { MEDIA_TYPE } from '@/lib/constants'
-
+//Query all templates
 export const ALL_PUBLIC_TEMPLATES_QUERY = gql`
   query getAllTemplates($query: TemplateQueryInput, $sortBy: TemplateSortByInput) {
     templates(query: $query, sortBy: $sortBy) {
@@ -22,7 +22,7 @@ export const ALL_PUBLIC_TEMPLATES_QUERY = gql`
     }
   }
 `
-
+// Get templates from database
 export const TemplateFilter = () => {
   const { data } = useQuery(ALL_PUBLIC_TEMPLATES_QUERY, {
     notifyOnNetworkStatusChange: true,
@@ -32,12 +32,15 @@ export const TemplateFilter = () => {
     console.log({ src: 'TemplateFilter', data })
   }, [data])
 
+  // Get template state and set function from context
   const { template, setTemplate } = useTemplateContext()
-
+  // Init reference to html element
   const dropdownRef = useRef(null)
+  // Get outside click detection hook to close dropdown
   const [isActive, setIsActive] = useDetectOutsideClick(dropdownRef, false)
+  // Open and close dropdown
   const onClick = () => setIsActive(!isActive)
-
+  // Handles changes to template filter
   const handleTemplateChange = (newTemplate) => {
     if (template !== newTemplate) {
       setTemplate(newTemplate)

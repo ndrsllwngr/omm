@@ -3,11 +3,14 @@ import Proptypes from 'prop-types'
 import { useRouter } from 'next/router'
 import { AUTOPLAY_ORDER } from '@/lib/constants'
 
-// https://kentcdodds.com/blog/how-to-use-react-context-effectively
-
+// Autoplay timeout
 const TIMEOUT_IN_MS = 3000
 export const AutoplayContext = createContext({})
 
+/*
+Context to handle autoplay
+https://kentcdodds.com/blog/how-to-use-react-context-effectively
+ */
 export const AutoplayProvider = ({ children }) => {
   const [isPlaying, setIsPlaying] = useState(false)
   const [order, setOrder] = useState(AUTOPLAY_ORDER.ORDERED)

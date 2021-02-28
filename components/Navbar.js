@@ -13,11 +13,11 @@ Responsive navbar including navigation buttons and search
 //https://codepen.io/codetimeio/pen/RYMqvL
  */
 export const Navbar = () => {
-  //Init reference to html element
+  // Init reference to html element
   const toggleRef = useRef(null)
-  //Get outside click detection hook to close menu dropdown on mobile
+  // Get outside click detection hook to close menu dropdown on mobile
   const [isOpen, setIsOpen] = useDetectOutsideClick(toggleRef, false)
-  //Open and close dropdown
+  // Open and close dropdown
   const handleToggle = () => {
     setIsOpen(!isOpen)
   }
