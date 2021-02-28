@@ -79,8 +79,13 @@ export const Navbar = () => {
   )
 }
 
+/*
+Navigation buttons as independent function
+ */
 const NavButtons = ({ className }) => {
+  // Get authorization
   const auth = useAuth()
+  // Mounting state
   const [mounted, setMounted] = useState(false)
   // When mounted on client, now we can show the UI
   useEffect(() => setMounted(true), [])
