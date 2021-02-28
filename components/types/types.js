@@ -10,6 +10,7 @@ export const templateType = shape({
   img: string, // path to storage
   height: number,
   width: number,
+  name: string,
 })
 
 export const userType = shape({
@@ -32,13 +33,11 @@ export const memeType = shape({
   views: number,
   visibility: string,
   points: number,
-  template: shape({
-    id: string,
-    url: string,
-  }),
+  template: templateType,
   url: string, // if a real png was created (requirement)
   svg: string,
   json: string,
+  captions: arrayOf(string),
 })
 
 // TODO atm these are identical
