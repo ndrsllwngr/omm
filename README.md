@@ -79,7 +79,7 @@ $ license-checker --summary
 ```
 
 ## Docker Image
-- file []()
+- docker image as file can be downloaded from here https://drive.google.com/drive/folders/10GZ_PgiUscj-LYwj_HrRKs0vfIs66_yY
 - `docker load -i omm:latest.tar` - Loads the docker image from the file `omm:latest.tar` into the local docker instance (execute run afterwards to run it)
 - else see the docker compose up command below
 
