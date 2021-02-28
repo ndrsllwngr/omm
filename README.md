@@ -6,17 +6,19 @@
 ## ToC
 - [Meme generator](#meme-generator)
   - [ToC](#toc)
-  - [Dependency licenses](#dependency-licenses)
+  - [Project feature checklist (excel sheet)](#project-feature-checklist-excel-sheet)
   - [External services](#external-services)
-  - [Docker Image](#docker-image)
   - [Live Version](#live-version)
+  - [Dependency licenses](#dependency-licenses)
+  - [Docker Image](#docker-image)
+    - [Commands](#commands)
   - [Sitemap](#sitemap)
   - [Tech-Stack](#tech-stack)
   - [Getting started](#getting-started)
     - [System Requirements](#system-requirements)
     - [Setup](#setup)
     - [Firebase Configuration](#firebase-configuration)
-  - [Commands](#commands)
+  - [Commands](#commands-1)
     - [Application](#application)
     - [Docker](#docker)
     - [Dependency management](#dependency-management)
@@ -28,7 +30,16 @@
   - [Contributors](#contributors)
     - [Individual contributions](#individual-contributions)
 
+## Project feature checklist (excel sheet)
+- see [project_features_checklist.xlsx](/project_features_checklist.xlsx)
 
+## External services
+- see https://docs.google.com/document/d/1BYGGoQ5xQih6ejDzN7d47otp-3Bx6y5KeCHntpYQpRY/edit?usp=sharing for how to setup and use them
+- backup see [pdf file](/OMM%20Realm%20&%20Firebase%20Documentation.pdf)
+- we use mongodb realm and firestore, therefore a internet connection is needed
+
+## Live Version
+- go to https://omm.vercel.app/
 ## Dependency licenses
 - full list [/license-check.txt](/license-check.txt)
 ```bash
@@ -67,15 +78,17 @@ $ license-checker --summary
 └─ (MIT OR GPL-3.0): 1
 ```
 
-## External services
-- see https://docs.google.com/document/d/1BYGGoQ5xQih6ejDzN7d47otp-3Bx6y5KeCHntpYQpRY/edit?usp=sharing for how to setup and use them
-- backup see [pdf file](/OMM%20Realm%20&%20Firebase%20Documentation.pdf)
-
 ## Docker Image
 - file []()
+- `docker load -i omm:latest.tar` - Loads the docker image from the file `omm:latest.tar` into the local docker instance (execute run afterwards to run it)
+- else see the docker compose up command below
 
-## Live Version
-- go to https://omm.vercel.app/
+### Commands
+- `docker build . -t omm:latest` - Builds docker image with name `omm` and tag `latest`
+- `docker run -p 80:3000 omm:latest` - Runs docker image with name `omm` and tag `latest` and maps container port `3000` to port `80` (go to [http://localhost:80](http://localhost:80))
+- `docker image save -o omm:latest.tar omm:latest ` - Saves the docker image with name `omm` and tag `latest` to the file `omm:latest.tar`
+- `docker load -i omm:latest.tar` - Loads the docker image from the file `omm:latest.tar` into the local docker instance (execute run afterwards to run it)
+- `docker compose up` - Use `docker compose` to build & run the application (on [http://localhost:3000](http://localhost:3000)) - **recommended for development**
 
 ## Sitemap
 ```js
