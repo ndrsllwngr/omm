@@ -1,10 +1,5 @@
-import Archiver from 'archiver'
 import { MONGODB_COLLECTION } from '@/lib/constants'
 import { getMongoDBClient } from '@/lib/mongoDB'
-import IncomingForm from 'formidable-serverless'
-import unzipper from 'unzipper'
-import { clearDirectory, getCustomFSPath, customFs } from '@/lib/customFs'
-import { getFabric } from '@/lib/canvas'
 import ObjectID from 'bson-objectid'
 
 export default async function memeHandler(req, res) {
