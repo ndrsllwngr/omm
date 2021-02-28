@@ -38,7 +38,7 @@ module.exports = (phase, { defaultConfig }) => {
       return config
     },
     images: {
-      domains: ['i.imgflip.com'],
+      domains: ['i.imgflip.com', 'firebasestorage.googleapis.com'],
     },
   }
   return withBundleAnalyzer(customConfig)

@@ -101,8 +101,8 @@ export const MemeEditor = () => {
         canvas.add(img)
         canvas.renderAll()
         setImgURL('')
-      },
-      { crossOrigin: 'Anonymous' }
+      }
+      //{ crossOrigin: 'Anonymous' }
     )
     console.log({ src: 'MemeEditor.addImg', url, canvas })
   }

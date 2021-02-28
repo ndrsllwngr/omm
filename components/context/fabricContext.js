@@ -172,7 +172,7 @@ export const FabricProvider = ({ children }) => {
           img.objectCaching = false
         }
         customSelect(img)
-        img.set({ id: 'TEMPLATE', crossOrigin: 'anonymous' })
+        img.set({ id: 'TEMPLATE' })
         canvas.add(img)
         canvas.sendToBack(img)
         canvas.renderAll()
@@ -224,8 +224,8 @@ export const FabricProvider = ({ children }) => {
               template.url,
               (img) => {
                 insertImage(img, canvas)
-              },
-              { crossOrigin: 'Anonymous' }
+              }
+              //{ crossOrigin: 'Anonymous' }
             )
           }
         }
