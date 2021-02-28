@@ -9,7 +9,7 @@ It includes:
   - Icon Buttons used to navigate within the "Single Meme" page
   - Badges, used in the filter section
 
- All Buttons provide light- and darkmode as well as mono style
+ All Buttons provide light- and dark mode as well as mono style
  Each group of Buttons provides its own baseclass
  */
 

@@ -67,6 +67,7 @@ export const AutoplayProvider = ({ children }) => {
     clearTimer()
   }, [order, setOrder, clearTimer])
 
+  // function to check if next page is not a meme
   useEffect(() => {
     if (router.pathname !== '/meme/[id]') {
       if (isPlaying) {
