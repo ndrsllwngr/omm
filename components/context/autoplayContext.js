@@ -23,13 +23,13 @@ export const AutoplayProvider = ({ children }) => {
   const timeOut = useRef(null)
   // Init reference to next id
   const queuedNextId = useRef(null)
-  // Function to clear setTimeout
+  // Clear setTimeout
   const clearTimer = useCallback(() => {
     clearTimeout(timeOut.current)
     queuedNextId.current = null
   }, [timeOut])
 
-  // Function to trigger next slide including setTimeout
+  // Trigger next slide including setTimeout from autoplay
   const triggerNextSlide = useCallback(
     (nextId) => {
       if (!queuedNextId.current) {
@@ -46,12 +46,12 @@ export const AutoplayProvider = ({ children }) => {
     [timeOut, router, queuedNextId]
   )
 
-  // Function to disable autoplay
+  // Disable autoplay
   const disableAutoplay = useCallback(() => {
     setIsPlaying(false)
     clearTimer()
   }, [setIsPlaying, clearTimer])
-  // Function to start and pause autoplay
+  // Start and pause autoplay
   const toggleAutoplay = useCallback(() => {
     if (isPlaying) {
       disableAutoplay()
@@ -59,7 +59,7 @@ export const AutoplayProvider = ({ children }) => {
       setIsPlaying(true)
     }
   }, [setIsPlaying, isPlaying, disableAutoplay])
-  // Function to change the autoplay order
+  // Change autoplay order
   const toggleAutoplayOrder = useCallback(() => {
     order === AUTOPLAY_ORDER.RANDOM
       ? setOrder(AUTOPLAY_ORDER.ORDERED)
@@ -67,7 +67,7 @@ export const AutoplayProvider = ({ children }) => {
     clearTimer()
   }, [order, setOrder, clearTimer])
 
-  // function to check if next page is not a meme
+  // Check if next page is not a meme
   useEffect(() => {
     if (router.pathname !== '/meme/[id]') {
       if (isPlaying) {

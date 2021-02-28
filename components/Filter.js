@@ -10,7 +10,7 @@ const supportedFilter = [FILTER.HOT, FILTER.TRENDING, FILTER.FRESH, FILTER.NONE]
 Components handles and displays available filter options
  */
 export const Filter = () => {
-  //Get filter context
+  //Get filter state and set function
   const { filter, setFilter } = useFilterContext()
 
   //Function to set filter changes in the context
