@@ -3,6 +3,79 @@
 - Online Multimedia - Group project (2020/2021)
 - Preview: https://omm.vercel.app/
 
+## ToC
+- [Meme generator](#meme-generator)
+  - [ToC](#toc)
+  - [Dependency licenses](#dependency-licenses)
+  - [External services](#external-services)
+  - [Docker Image](#docker-image)
+  - [Live Version](#live-version)
+  - [Tech-Stack](#tech-stack)
+  - [Getting started](#getting-started)
+    - [System Requirements](#system-requirements)
+    - [Setup](#setup)
+    - [Firebase Configuration](#firebase-configuration)
+  - [Commands](#commands)
+    - [Application](#application)
+    - [Docker](#docker)
+    - [Dependency management](#dependency-management)
+    - [Custom](#custom)
+  - [Miscellaneous](#miscellaneous)
+    - [Absolute Imports and Aliases](#absolute-imports-and-aliases)
+    - [Inspiration](#inspiration)
+    - [Resources](#resources)
+  - [Contributors](#contributors)
+    - [Individual contributions](#individual-contributions)
+
+
+## Dependency licenses
+- full list [/license-check.txt](/license-check.txt)
+```bash
+$ license-checker --summary
+├─ MIT: 1643
+├─ ISC: 133
+├─ Apache-2.0: 106
+├─ BSD-3-Clause: 80
+├─ BSD-2-Clause: 41
+├─ MIT*: 8
+├─ CC0-1.0: 4
+├─ Public Domain: 3
+├─ 0BSD: 3
+├─ (MIT OR CC0-1.0): 3
+├─ Unlicense: 2
+├─ CC-BY-4.0: 2
+├─ (MIT OR Apache-2.0): 1
+├─ MPL-2.0: 1
+├─ Custom: http://github.com/substack/node-bufferlist: 1
+├─ Apache*: 1
+├─ BSD: 1
+├─ (MIT OR WTFPL): 1
+├─ BSD*: 1
+├─ UNLICENSED: 1
+├─ AFLv2.1,BSD: 1
+├─ ODC-By-1.0: 1
+├─ WTFPL: 1
+├─ (BSD-3-Clause OR GPL-2.0): 1
+├─ (WTFPL OR MIT): 1
+├─ (MIT AND Zlib): 1
+├─ (BSD-2-Clause OR MIT OR Apache-2.0): 1
+├─ Custom: https://unpkg.com/realm-web: 1
+├─ (MIT AND BSD-3-Clause): 1
+├─ CC-BY-3.0: 1
+├─ (MIT AND CC-BY-3.0): 1
+└─ (MIT OR GPL-3.0): 1
+```
+
+## External services
+- see https://docs.google.com/document/d/1BYGGoQ5xQih6ejDzN7d47otp-3Bx6y5KeCHntpYQpRY/edit?usp=sharing for how to setup and use them
+- backup see [pdf file](/OMM%20Realm%20&%20Firebase%20Documentation.pdf)
+
+## Docker Image
+- file []()
+
+## Live Version
+- go to https://omm.vercel.app/
+
 ## Tech-Stack
 - [Next.js](https://nextjs.org/)
 - [React](https://reactjs.org/)
@@ -11,7 +84,7 @@
 ## Getting started
 
 ### System Requirements
-- [Node.js 12.16](https://nodejs.org/en/) or later
+- [Node.js v14.15.1](https://nodejs.org/en/) or later
 - MacOS, Windows (including WSL), and Linux are supported
 
 ### Setup
