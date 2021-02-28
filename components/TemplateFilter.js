@@ -2,6 +2,7 @@ import React, { useEffect, useRef } from 'react'
 import { useTemplateContext } from '@/components/context/viewsContext'
 import { useDetectOutsideClick } from '@/components/hooks/useDetectOutsideClick'
 import { gql, useQuery } from '@apollo/client'
+import { MEDIA_TYPE } from '@/lib/constants'
 
 export const ALL_PUBLIC_TEMPLATES_QUERY = gql`
   query getAllTemplates($query: TemplateQueryInput, $sortBy: TemplateSortByInput) {
@@ -22,7 +23,6 @@ export const ALL_PUBLIC_TEMPLATES_QUERY = gql`
   }
 `
 
-// TODO query templates collection
 export const TemplateFilter = () => {
   const { data } = useQuery(ALL_PUBLIC_TEMPLATES_QUERY, {
     notifyOnNetworkStatusChange: true,
@@ -38,12 +38,9 @@ export const TemplateFilter = () => {
   const [isActive, setIsActive] = useDetectOutsideClick(dropdownRef, false)
   const onClick = () => setIsActive(!isActive)
 
-  /*const [selectedTemplate, setSelectedTemplate] = useState('')*/
-
   const handleTemplateChange = (newTemplate) => {
     if (template !== newTemplate) {
       setTemplate(newTemplate)
-      /*setSelectedTemplate(newTemplate)*/
       setIsActive(false)
     }
   }
@@ -51,7 +48,19 @@ export const TemplateFilter = () => {
   return (
     <div className="flex flex-row justify-end items-center">
       <div className="flex relative">
-        <img className="h-8" src={template?.url} />
+        {template?.mediaType === MEDIA_TYPE.IMAGE && <img className={'h-8'} src={template?.url} />}
+        {template?.mediaType === MEDIA_TYPE.VIDEO && (
+          <video
+            preload="auto"
+            width="32"
+            height="32"
+            controls={false}
+            autoPlay={false}
+            muted={true}
+          >
+            <source src={template?.url} type="video/mp4" />
+          </video>
+        )}
         <button
           type="button"
           className="inline-flex justify-center w-full border-b-2 shadow-sm px-4 py-2 bg-transparent text-sm font-medium text-black dark:text-white focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-200 focus:ring-gray-200"
@@ -61,7 +70,6 @@ export const TemplateFilter = () => {
           onClick={onClick}
         >
           Select Template
-          {/* <!-- Heroicon name: chevron-down --> */}
           <svg
             className="-mr-1 ml-2 h-5 w-5"
             xmlns="http://www.w3.org/2000/svg"
@@ -98,12 +106,25 @@ export const TemplateFilter = () => {
               {data.templates.map((template, index) => (
                 <div
                   key={index}
-                  //setzt heir ne id rein
                   onClick={() => handleTemplateChange(template)}
                   className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900"
                   role="menuitem"
                 >
-                  <img className={'w-full'} src={template.url} />
+                  {template.mediaType === MEDIA_TYPE.IMAGE && (
+                    <img className={'w-full'} src={template.url} />
+                  )}
+                  {template.mediaType === MEDIA_TYPE.VIDEO && (
+                    <video
+                      preload="auto"
+                      width="150"
+                      height="150"
+                      controls={false}
+                      autoPlay={false}
+                      muted={true}
+                    >
+                      <source src={template.url} type="video/mp4" />
+                    </video>
+                  )}
                 </div>
               ))}
             </div>

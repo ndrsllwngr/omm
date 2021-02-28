@@ -82,7 +82,7 @@ const SingleViewInner = () => {
   const auth = useAuth()
   const router = useRouter()
   const { sort } = useSortContext()
-  const { filter, yesterday } = useFilterContext()
+  const { filter, yesterday, template } = useFilterContext()
 
   const { loading, error, data, networkStatus } = useQuery(CURRENT_MEME, {
     variables: { meme: router.query.id },
@@ -116,7 +116,13 @@ const SingleViewInner = () => {
       <HtmlHead
         title={`Meme · ${data && data.memes[0].title ? data.memes[0].title : 'Untitled'}`}
       />
-      <Slideshow meme={data.memes[0]} sort={sort} filter={filter} yesterday={yesterday} />
+      <Slideshow
+        meme={data.memes[0]}
+        sort={sort}
+        filter={filter}
+        yesterday={yesterday}
+        template={template}
+      />
     </>
   )
 }
