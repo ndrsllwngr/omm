@@ -68,8 +68,8 @@ export const FabricProvider = ({ children }) => {
         width: options.width,
         left: 0,
       })
-      c.add(textBoxTop)
       c.add(textBoxBottom)
+      c.add(textBoxTop)
       c.renderAll()
       setCanvas(c)
       setTitle('')

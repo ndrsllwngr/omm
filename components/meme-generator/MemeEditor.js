@@ -133,7 +133,12 @@ export const MemeEditor = () => {
     ])
     setSvgExport(svg)
     setJsonExport(json)
-    console.log({ src: 'MemeEditor.exportSVG', svg, json })
+    const text = json.objects
+      ?.filter((obj) => obj.type === 'textbox')
+      .map((obj) => {
+        if (obj.text && obj.text !== '') return obj.text
+      })
+    console.log({ src: 'MemeEditor.exportSVG', svg, json, text })
   }
 
   const handlePreview = () => {
@@ -154,8 +159,18 @@ export const MemeEditor = () => {
       'enableRetinaScaling',
       'video_src',
     ])
+    const captions = canvasAsJson.objects
+      ?.filter((obj) => obj.type === 'textbox')
+      .map((obj) => {
+        if (obj.text && obj.text !== '') return obj.text
+      })
     const svg = canvas.toSVG()
-    console.log('generateMeme', auth.getUser())
+    console.log({
+      src: 'generateMeme',
+      user: auth.getUser(),
+      captions: captions,
+      json: canvasAsJson,
+    })
     const newObj = {
       title,
       commentCount: 0,
@@ -185,6 +200,7 @@ export const MemeEditor = () => {
             },
           },
       url: '', // TODO if a real png was created (requirement)
+      captions: captions,
       svg,
       json: JSON.stringify(canvasAsJson),
     }
