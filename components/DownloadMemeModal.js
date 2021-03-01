@@ -65,6 +65,12 @@ const DownloadMemeInner = ({ meme }) => {
       })
     }
   }
+  function convertCanvasToImage(canvas) {
+    let image = new Image()
+    image.src = canvas.toDataURL('image/png')
+    image.crossOrigin = 'anonymous'
+    return image
+  }
   const compressDataUrl = ({ dataUrl }) => {
     console.log({ dataUrl })
     dataURLtoFile(dataUrl, EImageType.PNG).then((blob) => compressBlob({ blob }))
@@ -99,6 +105,7 @@ const DownloadMemeInner = ({ meme }) => {
       <div className={'flex flex-row'}>
         <PrimaryBtn
           onClick={() => {
+            //compressBlob({ blob: convertCanvasToImage(canvasRef.current) })
             compressDataUrl({ dataUrl: canvasRef.current.toDataURL('image/png', 1.0) })
           }}
         >

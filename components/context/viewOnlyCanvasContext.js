@@ -6,6 +6,16 @@ import { MEDIA_TYPE } from '@/lib/constants'
 const ViewOnlyCanvasJsonContext = createContext({})
 const ViewOnlyCanvasCanvasContext = createContext({})
 
+export const getImage = (url) => {
+  return new Promise((resolve, reject) => {
+    let img = new Image()
+    img.onload = () => resolve(img)
+    img.onerror = reject
+    img.setAttribute('crossOrigin', 'anonymous')
+    img.src = url
+  })
+}
+
 // https://github.com/saninmersion/react-context-fabricjs
 export const ViewOnlyCanvasProvider = ({ children }) => {
   const [canvas, setCanvas] = useState(null)
@@ -15,7 +25,17 @@ export const ViewOnlyCanvasProvider = ({ children }) => {
   const loadFromJSON = useCallback(
     (meme) => {
       console.log({ src: 'loadFromJSON.updateTemplate', meme })
-      const json = JSON.parse(meme.json)
+      let json = JSON.parse(meme.json)
+      for (let i = 0; i < json.objects.length; i++) {
+        if (json.objects[i].type === 'image') {
+          console.log(json.objects[i])
+          //json.objects[i].crossOrigin = 'anonymous'
+          delete json.objects[i].crossOrigin
+          json.objects[i].crossOrigin = 'anonymous'
+          //json.objects[i].crossOrigin = 'Anonymous'
+        }
+      }
+      console.log({ src: 'crossOrigin json', json })
       let c = new fabric.StaticCanvas(canvasRef.current)
       const jsonStr = JSON.stringify(json)
       c.loadFromJSON(
@@ -25,9 +45,9 @@ export const ViewOnlyCanvasProvider = ({ children }) => {
               c.renderAll.bind(c)
               let objs = json['objects']
               for (let i = 0; i < objs.length; i++) {
-                // if (objs[i].hasOwnProperty('image')) {
-                //   crossOrigin: 'anonymous'
-                // }
+                if (objs[i].hasOwnProperty('image')) {
+                  objs[i].crossOrigin = 'anonymous'
+                }
                 if (objs[i].hasOwnProperty('video_src')) {
                   function getVideoElement(element) {
                     let videoE = document.createElement('video')
@@ -66,9 +86,13 @@ export const ViewOnlyCanvasProvider = ({ children }) => {
               c.setWidth(json.width)
               c.setHeight(json.height)
             },
-        function (o, object) {
-          object.set('selectable', false)
-          fabric.log('fabric.log', o, object)
+        async (o, object) => {
+          if (object.type === 'image') {
+            const imagecore = await getImage(object.src)
+            object.crossOrigin = 'anonymous'
+            object._element = imagecore
+            console.log({ src: 'async (o, object)', o, object, imagecore })
+          }
         }
       )
       c.renderAll()
