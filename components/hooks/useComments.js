@@ -31,9 +31,9 @@ export const useComments = () => {
   const auth = useAuth()
 
   const addComment = (meme, text) => {
-    // If a the usser is logged in add a comment to the meme
+    // If a the user is logged in add a comment to the meme
     if (auth.isAuthenticated()) {
-      console.log({ meme, text })
+      // console.log({ meme, text, user: auth.getUser() })
       addCommentMutation({
         variables: {
           meme_id: meme._id,

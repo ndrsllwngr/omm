@@ -18,7 +18,7 @@ const ADD_USER = gql`
     }
   }
 `
-// Creae a new context
+// Create a new context
 export const AuthContext = createContext({ user: null })
 
 export default function AuthContextComp({ children }) {
@@ -46,6 +46,7 @@ export default function AuthContextComp({ children }) {
           return insertOneUser({
             variables: {
               user: {
+                _id: authUser.id,
                 createdAt: new Date(),
                 name: name,
                 email: email,
