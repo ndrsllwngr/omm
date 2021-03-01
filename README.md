@@ -12,14 +12,13 @@
   - [Tests](#tests)
   - [Dependency licenses](#dependency-licenses)
   - [Docker Image](#docker-image)
-    - [Commands](#commands)
   - [Sitemap](#sitemap)
   - [Tech-Stack](#tech-stack)
   - [Getting started](#getting-started)
     - [System Requirements](#system-requirements)
     - [Setup](#setup)
     - [Firebase Configuration](#firebase-configuration)
-  - [Commands](#commands-1)
+  - [Commands](#commands)
     - [Application](#application)
     - [Docker](#docker)
     - [Dependency management](#dependency-management)
@@ -85,15 +84,7 @@ $ license-checker --summary
 
 ## Docker Image
 - docker image as file can be downloaded from here https://drive.google.com/drive/folders/10GZ_PgiUscj-LYwj_HrRKs0vfIs66_yY
-- `docker load -i omm:latest.tar` - Loads the docker image from the file `omm:latest.tar` into the local docker instance (execute run afterwards to run it)
-- else see the docker compose up command below
-
-### Commands
-- `docker build . -t omm:latest` - Builds docker image with name `omm` and tag `latest`
-- `docker run -p 80:3000 omm:latest` - Runs docker image with name `omm` and tag `latest` and maps container port `3000` to port `80` (go to [http://localhost:80](http://localhost:80))
-- `docker image save -o omm:latest.tar omm:latest ` - Saves the docker image with name `omm` and tag `latest` to the file `omm:latest.tar`
-- `docker load -i omm:latest.tar` - Loads the docker image from the file `omm:latest.tar` into the local docker instance (execute run afterwards to run it)
-- `docker compose up` - Use `docker compose` to build & run the application (on [http://localhost:3000](http://localhost:3000)) - **recommended for development**
+- see the section [Docker](#docker) for more information
 
 ## Sitemap
 ```js
