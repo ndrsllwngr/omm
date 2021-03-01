@@ -37,11 +37,11 @@
 Since we use cloud-based services such as MongoDB Atlas, an internet connection is required.
 
 ### How to run the project?
-- You can access a live version of this project on https://omm.vercel.app/
+- You can access a live version of this project on https://omm.vercel.app/ 🚀
 - You can run the project locally via either of the following options (internet connection is required)
   - download the pre-built [docker image](https://drive.google.com/file/d/1AR0QVOZGtnCaUxOxx_95HMZeORahmobw/view?usp=sharing) and run the following command `docker load -i omm-latest.tar && docker run -p 80:3000 omm:latest` and afterwards visit [http://localhost:80](http://localhost:80)
-  - navigate into the "omm-main" folder and run `docker compose up` and afterwards visit [http://localhost:3000/](http://localhost:3000/)
-  - navigate into the "omm-main" folder and run `yarn install && yarn dev` and afterwards visit [http://localhost:3000/](http://localhost:3000/)
+  - run `docker compose up` and afterwards visit [http://localhost:3000/](http://localhost:3000/)
+  - run `yarn install && yarn build && yarn start` and afterwards visit [http://localhost:3000/](http://localhost:3000/)
   - for more details see [Getting started](#getting-started)
 
 ### How to run cypress tests?
