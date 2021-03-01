@@ -187,7 +187,7 @@ See [Which external services do we use? How to setup and configure these service
 - Cypress
 - Storybook
 - Fabric.js
-- many more...
+- ... [package.json](/package.json)
 ### Absolute Imports and Aliases
 - https://nextjs.org/blog/next-9-4#absolute-imports-and-aliases
 - [`jsconfig`](https://code.visualstudio.com/docs/languages/jsconfig#_jsconfig-options) / [`tsconfig`](https://www.typescriptlang.org/tsconfig#baseUrl)
