@@ -17,7 +17,8 @@ export const ViewOnlyCanvas = ({ meme }) => {
   )
 }
 
-export const ViewOnlyCanvasInner = ({ meme }) => {
+export const ViewOnlyCanvasInner = ({ meme = {} }) => {
+  const { width, height } = JSON.parse(meme?.json)
   const { json, setJson } = useViewOnlyCanvasJson()
   const { canvas, initCanvas, loadFromJSON, canvasRef, resetCanvas } = useViewOnlyCanvasCanvas()
 
@@ -26,10 +27,11 @@ export const ViewOnlyCanvasInner = ({ meme }) => {
   }, [resetCanvas])
 
   useLayoutEffect(() => {
+    console.log({ width, height })
     setJson(meme)
   }, [setJson, meme])
 
-  useLayoutEffect(() => {
+  useEffect(() => {
     console.log({ src: 'ViewOnlyCanvas.useLayoutEffect', json, canvas, canvasRef })
     if (!canvas && canvasRef.current) {
       if (json) {
@@ -42,7 +44,7 @@ export const ViewOnlyCanvasInner = ({ meme }) => {
   return (
     <>
       <div>
-        <canvas ref={canvasRef} id="view-only-canvas" width={800} height={400} />
+        <canvas ref={canvasRef} id="view-only-canvas" width={width} height={height} />
       </div>
     </>
   )
