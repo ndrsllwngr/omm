@@ -193,8 +193,8 @@ export const FabricProvider = ({ children }) => {
               const hRatio = canvas.getWidth() / element.width
               const vRatio = canvas.getHeight() / element.height
               const ratio = Math.min(hRatio, vRatio)
-              const centerShiftX = (canvas.getWidth() - element.width * ratio) / 2
-              const centerShiftY = (canvas.getHeight() - element.height * ratio) / 2
+              //const centerShiftX = (canvas.getWidth() - element.width * ratio) / 2
+              //const centerShiftY = (canvas.getHeight() - element.height * ratio) / 2
               let videoE = document.createElement('video')
               videoE.width = element.height * ratio
               videoE.height = element.height * ratio

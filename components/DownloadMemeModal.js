@@ -65,12 +65,7 @@ const DownloadMemeInner = ({ meme }) => {
       })
     }
   }
-  function convertCanvasToImage(canvas) {
-    let image = new Image()
-    image.src = canvas.toDataURL('image/png')
-    image.crossOrigin = 'anonymous'
-    return image
-  }
+
   const compressDataUrl = ({ dataUrl }) => {
     console.log({ dataUrl })
     dataURLtoFile(dataUrl, EImageType.PNG).then((blob) => compressBlob({ blob }))
