@@ -6,7 +6,7 @@ import { MemeRenderer } from '@/components/MemeRenderer'
 import PropTypes from 'prop-types'
 import { VISIBILITY } from '@/lib/constants'
 // Timeout
-const TIMEOUT_IN_MS = 1000
+const TIMEOUT_IN_MS = 200
 // Fulltext search query
 export const FEED_SEARCH_QUERY = gql`
   query searchQuery($search: String!, $conditions: String, $sorts: String) {
