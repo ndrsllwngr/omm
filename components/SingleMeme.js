@@ -44,13 +44,12 @@ export const SingleMeme = ({ meme, enableLink }) => {
             </Link>
             <TextToSpeech
               value={[
-                'You are on the omm landing page.',
-                'You are viewing a meme.',
-                'The meme title is ',
+                'You are viewing a meme on the landing page.',
+                'Its title is',
                 meme.title,
-                'It contains a image which can be described as ',
+                'The meme contains an image which can be described as',
                 meme.template?.name,
-                'and it contains the following captions: ',
+                'It contains the following captions',
                 meme.captions,
               ].join(',')}
             />
@@ -63,13 +62,12 @@ export const SingleMeme = ({ meme, enableLink }) => {
             <div className={'flex flex-row'}>
               <TextToSpeech
                 value={[
-                  'You are on the omm page.',
-                  'You are viewing a meme.',
-                  'The meme title is ',
+                  'You are viewing a meme on the single view page.',
+                  'Its title is',
                   meme.title,
-                  'It contains a image which can be described as ',
+                  'The meme contains an image which can be described as',
                   meme.template?.name,
-                  'and it contains the following captions: ',
+                  'It contains the following captions',
                   meme.captions,
                 ].join(',')}
               />
