@@ -3,7 +3,7 @@
 - Online Multimedia - Group project (2020/2021)
 - Live version https://omm.vercel.app/
 
----
+![](docs/Screen%20Shot%202021-03-01%20at%2020.08.43.png)
 
 - [It's fine! - A meme site.](#its-fine---a-meme-site)
   - [Introduction](#introduction)
@@ -157,7 +157,7 @@ See [Which external services do we use? How to setup and configure these service
 - `yarn export` - (Do not use this command, since we are using APIs) Runs next export, which allows you to export your app to static HTML, which can be run standalone without the need of a Node.js server.
 - `yarn storybook` - Runs storybook which starts the component explorer
 - `yarn build:analyze` - Runs Webpack Bundle Analyzer, which outputs HTML files for server bundle and the browser bundle.
-- `yarn cy:run` - Runs cypress test.
+- `yarn cy:run` - Runs cypress tests.
 
 ### Docker
 - `docker build . -t omm:latest` - Builds docker image with name `omm` and tag `latest`
