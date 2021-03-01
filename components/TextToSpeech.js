@@ -6,11 +6,27 @@ import { TertiaryBtn } from '@/components/ui/Buttons'
 export const TextToSpeech = ({ value = '' }) => {
   const [pitch] = useState(1)
   const [rate] = useState(1)
-  const { speak } = useSpeechSynthesis()
+  const { speak, voices, speaking, cancel } = useSpeechSynthesis()
 
   return (
     <div>
-      <TertiaryBtn onClick={() => speak({ text: value, rate, pitch })}>🗣 TextToSpeech</TertiaryBtn>
+      <TertiaryBtn
+        onClick={() => {
+          if (speaking) {
+            cancel()
+            return
+          }
+          //console.log(voices)
+          speak({
+            text: value,
+            rate,
+            pitch,
+            voice: voices[7],
+          })
+        }}
+      >
+        🗣 TextToSpeech
+      </TertiaryBtn>
     </div>
   )
 }

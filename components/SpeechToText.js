@@ -16,7 +16,7 @@ export const SpeechToText = ({ onChange = noop, showOutput = false }) => {
   return (
     <>
       <TertiaryBtn
-        onMouseDown={() => listen('en-US')}
+        onMouseDown={() => listen({ interimResults: true, lang: 'en-US' })}
         onMouseUp={stop}
         className={'flex flex-row items-center'}
       >
