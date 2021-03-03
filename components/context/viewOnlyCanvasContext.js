@@ -40,7 +40,7 @@ export const ViewOnlyCanvasProvider = ({ children }) => {
       const jsonStr = JSON.stringify(json)
       c.loadFromJSON(
         jsonStr,
-        meme.template.mediaType === MEDIA_TYPE.VIDEO
+        meme.template?.mediaType === MEDIA_TYPE.VIDEO
           ? function canvasLoaded() {
               c.renderAll.bind(c)
               let objs = json['objects']
