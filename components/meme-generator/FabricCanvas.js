@@ -111,7 +111,7 @@ export const FabricCanvas = () => {
           <canvas
             ref={canvasRef}
             id="fabric-canvas"
-            width={800}
+            width={500}
             height={400}
             style={{ border: '1px solid red' }}
           />

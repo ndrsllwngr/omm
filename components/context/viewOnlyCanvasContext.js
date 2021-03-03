@@ -43,6 +43,8 @@ export const ViewOnlyCanvasProvider = ({ children }) => {
         meme.template?.mediaType === MEDIA_TYPE.VIDEO
           ? function canvasLoaded() {
               c.renderAll.bind(c)
+              c.setWidth(json.width)
+              c.setHeight(json.height)
               let objs = json['objects']
               for (let i = 0; i < objs.length; i++) {
                 if (objs[i].hasOwnProperty('image')) {
@@ -51,6 +53,7 @@ export const ViewOnlyCanvasProvider = ({ children }) => {
                 if (objs[i].hasOwnProperty('video_src')) {
                   function getVideoElement(element) {
                     let videoE = document.createElement('video')
+                    // console.log({ element, videoE })
                     videoE.width = element.width
                     videoE.height = element.height
                     videoE.muted = true // TODO @NDRS OMG I NEED TO FIX THAT!
@@ -61,6 +64,7 @@ export const ViewOnlyCanvasProvider = ({ children }) => {
                     source.src = element.video_src
                     source.type = 'video/mp4'
                     videoE.appendChild(source)
+                    // console.log({ element, source, videoE })
                     return videoE
                   }
                   let videoE = getVideoElement(objs[i])
@@ -72,6 +76,7 @@ export const ViewOnlyCanvasProvider = ({ children }) => {
                     objectCaching: false,
                     crossOrigin: 'anonymous',
                   })
+                  // console.log({ fab_video })
                   c.add(fab_video)
                   fab_video.getElement().play()
                   fabric.util.requestAnimFrame(function render() {
@@ -86,12 +91,15 @@ export const ViewOnlyCanvasProvider = ({ children }) => {
               c.setWidth(json.width)
               c.setHeight(json.height)
             },
-        async (o, object) => {
+        (o, object) => {
           if (object.type === 'image') {
-            const imagecore = await getImage(object.src)
-            object.crossOrigin = 'anonymous'
-            object._element = imagecore
-            console.log({ src: 'async (o, object)', o, object, imagecore })
+            getImage(object.src)
+              .then((imageCore) => {
+                object.crossOrigin = 'anonymous'
+                object._element = imageCore
+                console.log({ src: 'async (o, object)', o, object, imageCore })
+              })
+              .catch((e) => console.error({ src: 'getImage', e }))
           }
         }
       )
