@@ -59,7 +59,7 @@ export const ViewOnlyCanvasProvider = ({ children }) => {
                     videoE.muted = true // TODO @NDRS OMG I NEED TO FIX THAT!
                     videoE.loop = true
                     videoE.controls = true
-                    videoE.crossOrigin = 'anonymous'
+                    //videoE.crossOrigin = 'anonymous'
                     let source = document.createElement('source')
                     source.src = element.video_src
                     source.type = 'video/mp4'
