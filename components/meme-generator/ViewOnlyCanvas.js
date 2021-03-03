@@ -27,11 +27,11 @@ export const ViewOnlyCanvasInner = ({ meme = {} }) => {
   }, [resetCanvas])
 
   useLayoutEffect(() => {
-    console.log({ width, height })
+    //console.log({ width, height })
     setJson(meme)
   }, [setJson, meme])
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     console.log({ src: 'ViewOnlyCanvas.useLayoutEffect', json, canvas, canvasRef })
     if (!canvas && canvasRef.current) {
       if (json) {

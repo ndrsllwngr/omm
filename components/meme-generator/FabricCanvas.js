@@ -111,8 +111,8 @@ export const FabricCanvas = () => {
           <canvas
             ref={canvasRef}
             id="fabric-canvas"
-            width={size.width}
-            height={size.height}
+            width={500}
+            height={400}
             style={{ border: '1px solid red' }}
           />
         </ResizableBox>
