@@ -53,18 +53,18 @@ export const ViewOnlyCanvasProvider = ({ children }) => {
                 if (objs[i].hasOwnProperty('video_src')) {
                   function getVideoElement(element) {
                     let videoE = document.createElement('video')
-                    console.log({ element, videoE })
+                    // console.log({ element, videoE })
                     videoE.width = element.width
                     videoE.height = element.height
                     videoE.muted = true // TODO @NDRS OMG I NEED TO FIX THAT!
                     videoE.loop = true
                     videoE.controls = true
-                    //videoE.crossOrigin = 'anonymous'
+                    videoE.crossOrigin = 'anonymous'
                     let source = document.createElement('source')
                     source.src = element.video_src
                     source.type = 'video/mp4'
                     videoE.appendChild(source)
-                    console.log({ element, source, videoE })
+                    // console.log({ element, source, videoE })
                     return videoE
                   }
                   let videoE = getVideoElement(objs[i])
@@ -76,7 +76,7 @@ export const ViewOnlyCanvasProvider = ({ children }) => {
                     objectCaching: false,
                     crossOrigin: 'anonymous',
                   })
-                  console.log({ fab_video })
+                  // console.log({ fab_video })
                   c.add(fab_video)
                   fab_video.getElement().play()
                   fabric.util.requestAnimFrame(function render() {
