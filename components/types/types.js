@@ -1,10 +1,17 @@
 import { shape, string, arrayOf, any, number, object, bool } from 'prop-types'
 
+export const userType = shape({
+  id: string,
+  email: string,
+  name: string,
+  uid: string, // TODO why do we need this?
+})
+
 export const templateType = shape({
   id: string,
   title: string,
   createdAt: any,
-  createdBy: string,
+  createdBy: userType,
   type: string, // STORAGE || EXTERNAL
   url: string,
   img: string, // path to storage
@@ -13,22 +20,15 @@ export const templateType = shape({
   name: string,
 })
 
-export const userType = shape({
-  id: string,
-  email: string,
-  name: string,
-  uid: string, // TODO why do we need this?
-})
-
 export const memeType = shape({
   _id: string,
   title: string,
   createdAt: any,
-  createdBy: any,
+  createdBy: userType,
   upVotes: arrayOf(object),
   downVotes: arrayOf(object),
   forkedBy: arrayOf(userType),
-  forkedFrom: string,
+  forkedFrom: userType,
   isDraft: bool,
   views: number,
   visibility: string,

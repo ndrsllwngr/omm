@@ -91,12 +91,15 @@ export const ViewOnlyCanvasProvider = ({ children }) => {
               c.setWidth(json.width)
               c.setHeight(json.height)
             },
-        async (o, object) => {
+        (o, object) => {
           if (object.type === 'image') {
-            const imagecore = await getImage(object.src)
-            object.crossOrigin = 'anonymous'
-            object._element = imagecore
-            console.log({ src: 'async (o, object)', o, object, imagecore })
+            getImage(object.src)
+              .then((imageCore) => {
+                object.crossOrigin = 'anonymous'
+                object._element = imageCore
+                console.log({ src: 'async (o, object)', o, object, imageCore })
+              })
+              .catch((e) => console.error({ src: 'getImage', e }))
           }
         }
       )
