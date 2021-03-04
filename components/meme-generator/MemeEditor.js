@@ -4,6 +4,7 @@ import SVG from 'react-inlinesvg'
 import { FabricCanvas } from '@/components/meme-generator/FabricCanvas'
 import { TextToolbar } from '@/components/meme-generator/TextToolbar'
 import {
+  emptyTemplateState,
   useFabricCanvas,
   useTemplate,
   useTitle,
@@ -16,6 +17,7 @@ import { FONT_FAMILY, MEDIA_TYPE, SORT, STORAGE_COLLECTION, VISIBILITY } from '@
 import PropTypes from 'prop-types'
 import { useSortContext } from '@/components/context/viewsContext'
 import { gql, useMutation } from '@apollo/client'
+import { TextOnlyDialog } from '@/components/ui/TextOnlyDialog'
 
 const ADD_MEME = gql`
   mutation AddMeme($meme: MemeInsertInput!) {
@@ -82,7 +84,7 @@ export const MemeEditor = () => {
   const [insertOneMeme] = useMutation(ADD_MEME)
   const { canvas, isCopy } = useFabricCanvas()
   const [imgURL, setImgURL] = useState('')
-  const { template } = useTemplate()
+  const { template, updateTemplate } = useTemplate()
   const { title, setTitle } = useTitle()
   const { visibility, setVisibility } = useVisibility()
   const [svgExport, setSvgExport] = useState('')
@@ -90,6 +92,7 @@ export const MemeEditor = () => {
   const [previewMode, setPreviewMode] = useState(false)
   const { setSort } = useSortContext()
   const auth = useAuth()
+  const [showWarning, setShowWarning] = useState(false)
 
   const addImg = (e, url) => {
     e.preventDefault()
@@ -156,6 +159,11 @@ export const MemeEditor = () => {
   }
 
   const generateMeme = ({ isDraft = false }) => {
+    console.log('generateMeme', { 'template._id': template._id, template }, { isDraft, title })
+    if (template?.url === null || (!isDraft && title === '')) {
+      setShowWarning(true)
+      return
+    }
     const canvasAsJson = canvas.toJSON([
       'width',
       'height',
@@ -226,6 +234,15 @@ export const MemeEditor = () => {
   }
 
   const generateMemeOnServerSide = ({ isDraft = false }) => {
+    console.log(
+      'generateMemeOnServerSide',
+      { 'template._id': template._id, template },
+      { isDraft, title }
+    )
+    if (template?.url === null || (!isDraft && title === '')) {
+      setShowWarning(true)
+      return
+    }
     const canvasAsJson = canvas.toJSON([
       'width',
       'height',
@@ -290,7 +307,10 @@ export const MemeEditor = () => {
       .catch((e) => console.error(e))
   }
 
-  const clearAll = () => canvas?.getObjects()?.forEach((obj) => canvas.remove(obj))
+  const clearAll = () => {
+    canvas?.getObjects()?.forEach((obj) => canvas.remove(obj))
+    updateTemplate(emptyTemplateState)
+  }
 
   // const canvasEvents = () => {
   //   canvas.getObjects().forEach((obj) => console.log(obj))
@@ -375,6 +395,19 @@ export const MemeEditor = () => {
             </pre>
           </div>
         </>
+      )}
+      {showWarning && (
+        <TextOnlyDialog
+          showDialog={showWarning}
+          closeDialog={() => setShowWarning(false)}
+          message={(template.url
+            ? ''
+            : 'Template is missing. Please select a template before generating a meme.'
+          ).concat(
+            ' ',
+            title === '' ? 'Title is empty. Please add a title before generating a meme.' : ''
+          )}
+        />
       )}
     </div>
   )

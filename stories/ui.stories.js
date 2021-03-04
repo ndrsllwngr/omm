@@ -20,6 +20,7 @@ import {
   IoShuffle,
 } from 'react-icons/io5'
 import { ShareButtons } from '@/components/ui/ShareButtons'
+import { TextOnlyDialog } from '@/components/ui/TextOnlyDialog'
 
 export default { title: 'UI' }
 
@@ -82,3 +83,7 @@ export const toggleStateIconBtn = () => (
 export const badge = () => <Badge>Badge</Badge>
 
 export const shareBtns = () => <ShareButtons id={123456} />
+
+export const textOnlyDialog = () => (
+  <TextOnlyDialog showDialog={true} closeDialog={() => {}} message={'Lorem ipsum.'} />
+)

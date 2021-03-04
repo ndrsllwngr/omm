@@ -12,10 +12,9 @@ const TitleContext = createContext({})
 const VisibilityContext = createContext({})
 
 // TODO verify that this is everything we need
-const emptyState = {
-  id: null,
-  url:
-    'https://firebasestorage.googleapis.com/v0/b/online-multimedia.appspot.com/o/templates%2Fv3ZLEFAnGCJr1PMsdaPO?alt=media&token=d53c3291-070a-4064-a9d5-6e17d0f75e93',
+export const emptyTemplateState = {
+  _id: null,
+  url: null,
 }
 
 const textOptions = {
@@ -38,7 +37,7 @@ export const FabricProvider = ({ children }) => {
   const [isCopy, setIsCopy] = useState(null)
   const canvasRef = useRef(null)
   const [activeObject, setActiveObject] = useState(null)
-  const [templateContext, setTemplateContext] = useState(emptyState)
+  const [templateContext, setTemplateContext] = useState(emptyTemplateState)
   const [template, setTemplate] = useMemo(() => [templateContext, setTemplateContext], [
     templateContext,
   ])
@@ -73,10 +72,11 @@ export const FabricProvider = ({ children }) => {
       c.renderAll()
       setCanvas(c)
       setTitle('')
+      setTemplate(emptyTemplateState)
       setVisibility(VISIBILITY.PUBLIC)
       console.log({ src: 'FabricProvider.initCanvas', options, canvas, canvasRef })
     },
-    [canvasRef, canvas]
+    [canvasRef, canvas, setTemplate]
   )
 
   const loadFromJSON = useCallback(

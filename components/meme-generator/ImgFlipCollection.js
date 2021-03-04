@@ -22,7 +22,7 @@ export const ImgFlipCollection = () => {
             key={i}
             onClick={() =>
               updateTemplate({
-                id: null,
+                _id: null,
                 url: meme.url,
                 width: meme.width,
                 height: meme.height,

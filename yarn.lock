@@ -2364,18 +2364,6 @@
   resolved "https://registry.yarnpkg.com/@protobufjs/utf8/-/utf8-1.1.0.tgz#a777360b5b39a1a2e5106f8e858f2fd2d060c570"
   integrity sha1-p3c2C1s5oaLlEG+OhY8v0tBgxXA=
 
-"@reach/alert-dialog@0.13.2":
-  version "0.13.2"
-  resolved "https://registry.yarnpkg.com/@reach/alert-dialog/-/alert-dialog-0.13.2.tgz#dda953e06deda11aca82ccf61b83ab65ec7b527b"
-  integrity sha512-K6f1o92apK7dvs/NSxV7YC7Nf82KtMS0PkVRjMoOQq1O70Lw8vScpJ0XgN3fSz14N9V1ZEpgtVNWK8PM/qgUoQ==
-  dependencies:
-    "@reach/auto-id" "0.13.2"
-    "@reach/dialog" "0.13.2"
-    "@reach/utils" "0.13.2"
-    invariant "^2.2.4"
-    prop-types "^15.7.2"
-    tslib "^2.1.0"
-
 "@reach/auto-id@0.13.2":
   version "0.13.2"
   resolved "https://registry.yarnpkg.com/@reach/auto-id/-/auto-id-0.13.2.tgz#6c7fe7142285707b0f38b2f556f32accb467df32"
