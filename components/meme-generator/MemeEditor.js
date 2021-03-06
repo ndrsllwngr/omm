@@ -175,6 +175,7 @@ export const MemeEditor = () => {
     ])
     const captions = canvasAsJson.objects
       ?.filter((obj) => obj.type === 'textbox')
+      .filter((obj) => obj.text !== null)
       .map((obj) => {
         if (obj.text && obj.text !== '') return obj.text
       })
@@ -254,6 +255,7 @@ export const MemeEditor = () => {
     ])
     const captions = canvasAsJson.objects
       ?.filter((obj) => obj.type === 'textbox')
+      .filter((obj) => obj.text !== null)
       .map((obj) => {
         if (obj.text && obj.text !== '') return obj.text
       })
