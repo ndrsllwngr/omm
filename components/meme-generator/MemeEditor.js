@@ -175,10 +175,8 @@ export const MemeEditor = () => {
     ])
     const captions = canvasAsJson.objects
       ?.filter((obj) => obj.type === 'textbox')
-      .filter((obj) => obj.text !== null)
-      .map((obj) => {
-        if (obj.text && obj.text !== '') return obj.text
-      })
+      .filter((obj) => obj.text !== null && obj.text !== undefined && obj.text !== '')
+      .map((obj) => obj.text)
     const svg = canvas.toSVG()
     console.log({
       src: 'generateMeme',
@@ -255,10 +253,8 @@ export const MemeEditor = () => {
     ])
     const captions = canvasAsJson.objects
       ?.filter((obj) => obj.type === 'textbox')
-      .filter((obj) => obj.text !== null)
-      .map((obj) => {
-        if (obj.text && obj.text !== '') return obj.text
-      })
+      .filter((obj) => obj.text !== null && obj.text !== undefined && obj.text !== '')
+      .map((obj) => obj.text)
     const svg = canvas.toSVG()
     console.log({
       src: 'generateMeme',
