@@ -96,7 +96,10 @@ const LandingPageInner = ({ sort, filter, yesterday, template }) => {
 
    */
 
-  if (error) return <div>Error loading memes.</div>
+  if (error) {
+    console.error(error)
+    return <div>Error loading memes.</div>
+  }
   if (loading && !loadingMoreMemes) return <div>Loading</div>
 
   // TODO add InfiniteScroll or pagination

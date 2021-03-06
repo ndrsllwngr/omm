@@ -78,7 +78,10 @@ export const ProfileDrafts = ({ className }) => {
     console.log({ src: 'ProfileDrafts', data, error, loading })
   }, [data, error, loading])
 
-  if (error) return <div>Error loading drafts.</div>
+  if (error) {
+    console.error(error)
+    return <div>Error loading drafts.</div>
+  }
   if (loading && !loadingMoreDrafts) return <div>Loading</div>
   return (
     <div className={className}>

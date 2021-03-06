@@ -126,7 +126,10 @@ export const ProfileMemeHistory = ({ className }) => {
     console.log({ src: 'ProfileMemeHistory', data, error, loading })
   }, [data, error, loading])
 
-  if (error) return <div>Error loading memes.</div>
+  if (error) {
+    console.error(error)
+    return <div>Error loading memes.</div>
+  }
   if (loading && !loadingMoreDrafts) return <div>Loading</div>
   return (
     <div className={className}>

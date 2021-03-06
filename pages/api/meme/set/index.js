@@ -35,7 +35,7 @@ export default async function memeHandler(req, res) {
     case 'GET':
       // Get limit
       const lim = parseInt(limit)
-      // If lilit is negative or 0 -> return error
+      // If limit is negative or 0 -> return error
       if (lim && lim <= 0) {
         res.status(400).end('Limit has to be a positive number')
         break

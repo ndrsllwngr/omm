@@ -101,7 +101,10 @@ const SingleViewInner = () => {
 
   const loadingMoreMemes = networkStatus === NetworkStatus.fetchMore
 
-  if (error) return <div>Error loading memes.</div>
+  if (error) {
+    console.error(error)
+    return <div>Error loading memes.</div>
+  }
   if (loading && !loadingMoreMemes)
     return (
       <>
