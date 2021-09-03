@@ -66,7 +66,7 @@
     "fs-monkey": "1.0.1",
     "graphql": "15.5.0",
     "image-conversion": "2.1.1",
-    "immer": "8.0.1",
+    "immer": "9.0.6",
     "jimp": "0.16.1",
     "lodash": "4.17.21",
     "memfs": "3.2.0",
