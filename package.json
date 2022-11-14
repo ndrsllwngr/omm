@@ -71,7 +71,7 @@
     "lodash": "4.17.21",
     "memfs": "3.2.0",
     "mongodb": "3.6.4",
-    "next": "10.0.5",
+    "next": "10.2.3",
     "next-themes": "0.0.12",
     "prop-types": "15.7.2",
     "puppeteer": "8.0.0",
@@ -99,7 +99,7 @@
   },
   "devDependencies": {
     "@next/bundle-analyzer": "10.0.7",
-    "@storybook/addon-essentials": "6.1.20",
+    "@storybook/addon-essentials": "6.5.13",
     "@storybook/addon-links": "6.1.20",
     "@storybook/react": "6.1.20",
     "@svgr/webpack": "5.5.0",
