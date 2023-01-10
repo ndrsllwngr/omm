@@ -60,7 +60,7 @@
     "fabric": "4.3.1",
     "file-saver": "2.0.5",
     "firebase": "8.2.9",
-    "firebase-admin": "9.5.0",
+    "firebase-admin": "11.4.1",
     "formidable-serverless": "1.1.1",
     "framer-motion": "3.7.0",
     "fs-monkey": "1.0.1",
